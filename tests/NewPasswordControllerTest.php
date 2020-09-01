@@ -82,9 +82,6 @@ class NewPasswordControllerTest extends OrchestraTestCase
     {
         Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
 
-        $guard = $this->mock(StatefulGuard::class);
-        $user = Mockery::mock(Authenticatable::class);
-
         $broker->shouldReceive('reset')->andReturnUsing(function ($input, $callback) {
             return Password::INVALID_TOKEN;
         });

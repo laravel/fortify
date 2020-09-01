@@ -31,7 +31,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
     {
         $this->loadLaravelMigrations(['--database' => 'testbench']);
 
-        $user = TestAuthenticationSessionUser::forceCreate([
+        TestAuthenticationSessionUser::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
@@ -55,7 +55,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
             $table->text('two_factor_secret')->nullable();
         });
 
-        $user = TestTwoFactorAuthenticationSessionUser::forceCreate([
+        TestTwoFactorAuthenticationSessionUser::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
@@ -74,7 +74,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
     {
         $this->loadLaravelMigrations(['--database' => 'testbench']);
 
-        $user = TestAuthenticationSessionUser::forceCreate([
+        TestAuthenticationSessionUser::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
