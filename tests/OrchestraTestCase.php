@@ -8,11 +8,6 @@ use Orchestra\Testbench\TestCase;
 
 abstract class OrchestraTestCase extends TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
     public function tearDown(): void
     {
         Mockery::close();
