@@ -50,7 +50,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     if (Features::enabled(Features::registration())) {
         Route::get('/register', 'RegisteredUserController@create')
                     ->middleware(['guest'])
-                    ->name('register');
+                    ->name('register.show');
 
         Route::post('/register', 'RegisteredUserController@store')
                     ->middleware(['guest'])
