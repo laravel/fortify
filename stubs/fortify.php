@@ -37,7 +37,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | This value defines which model attribute should be considered as your
-    | application's "useranme" field. Typically, this might be the email
+    | application's "username" field. Typically, this might be the email
     | address of the users but you are free to change this value here.
     |
     */
