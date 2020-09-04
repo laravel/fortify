@@ -117,6 +117,19 @@ class Fortify
     }
 
     /**
+     * Specify which view should be used as the password verification prompt.
+     *
+     * @param  string  $view
+     * @return void
+     */
+    public static function verifyPasswordView($view)
+    {
+        app()->singleton(VerifyPasswordViewResponse::class, function () use ($view) {
+            return new SimpleViewResponse($view);
+        });
+    }
+
+    /**
      * Specify which view should be used as the request password reset link view.
      *
      * @param  string  $view
