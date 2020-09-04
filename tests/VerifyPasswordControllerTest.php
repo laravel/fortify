@@ -2,7 +2,6 @@
 
 namespace Laravel\Fortify\Tests;
 
-use Mockery;
 use Illuminate\Foundation\Auth\User;
 use Laravel\Fortify\Contracts\VerifyPasswordViewResponse;
 
@@ -15,7 +14,6 @@ class VerifyPasswordControllerTest extends OrchestraTestCase
         $this->mock(VerifyPasswordViewResponse::class)
             ->shouldReceive('toResponse')
             ->andReturn(response('hello world'));
-
 
         $response = $this->withoutExceptionHandling()->actingAs($this->user)->get(
             '/user/password/verify'
@@ -32,7 +30,7 @@ class VerifyPasswordControllerTest extends OrchestraTestCase
             ->withSession(['url.intended' => 'http://foo.com/bar'])
             ->post(
                 '/user/password/verify',
-                ['password' => 'secret',]
+                ['password' => 'secret']
             );
 
         $response->assertSessionHas('auth.password_confirmed_at');
@@ -46,7 +44,7 @@ class VerifyPasswordControllerTest extends OrchestraTestCase
             ->withSession(['url.intended' => 'http://foo.com/bar'])
             ->post(
                 '/user/password/verify',
-                ['password' => 'invalid',]
+                ['password' => 'invalid']
             );
 
         $response->assertSessionHasErrors(['password']);
@@ -60,7 +58,7 @@ class VerifyPasswordControllerTest extends OrchestraTestCase
         $response = $this->actingAs($this->user)
             ->postJson(
                 '/user/password/verify',
-                ['password' => 'secret',]
+                ['password' => 'secret']
             );
         $response->assertStatus(201);
     }
@@ -70,7 +68,7 @@ class VerifyPasswordControllerTest extends OrchestraTestCase
         $response = $this->actingAs($this->user)
             ->postJson(
                 '/user/password/verify',
-                ['password' => 'invalid',]
+                ['password' => 'invalid']
             );
 
         $response->assertJsonValidationErrors('password');

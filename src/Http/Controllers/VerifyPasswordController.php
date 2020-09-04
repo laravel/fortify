@@ -2,17 +2,17 @@
 
 namespace Laravel\Fortify\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Laravel\Fortify\Contracts\FailedPasswordVerifyResponse;
 use Laravel\Fortify\Contracts\PasswordVerifiedResponse;
 use Laravel\Fortify\Contracts\VerifyPasswordViewResponse;
-use Laravel\Fortify\Contracts\FailedPasswordVerifyResponse;
 
 class VerifyPasswordController extends Controller
 {
-   /**
+    /**
      * The guard implementation.
      *
      * @var \Illuminate\Contracts\Auth\StatefulGuard
@@ -36,7 +36,7 @@ class VerifyPasswordController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Laravel\Fortify\Contracts\VerifyPasswordViewResponse
      */
-    public function show(Request $request, VerifyPasswordViewResponse $response) : VerifyPasswordViewResponse
+    public function show(Request $request, VerifyPasswordViewResponse $response): VerifyPasswordViewResponse
     {
         return $response;
     }
@@ -47,12 +47,12 @@ class VerifyPasswordController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Contracts\Support\Responsable
      */
-    public function store(Request $request) : Responsable
+    public function store(Request $request): Responsable
     {
         $username = config('fortify.username');
         if ($status = $this->guard->validate([
             $username => $request->user()->{$username},
-            'password' => $request->input('password')
+            'password' => $request->input('password'),
         ])) {
             $request->session()->put('auth.password_confirmed_at', time());
         }
