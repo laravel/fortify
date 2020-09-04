@@ -33,9 +33,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if (! $this->app->configurationIsCached()) {
-            $this->mergeConfigFrom(__DIR__.'/../config/fortify.php', 'fortify');
-        }
+        $this->mergeConfigFrom(__DIR__.'/../config/fortify.php', 'fortify');
 
         $this->registerResponseBindings();
 
