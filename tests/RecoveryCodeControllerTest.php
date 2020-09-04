@@ -27,7 +27,7 @@ class RecoveryCodeControllerTest extends OrchestraTestCase
         $user->fresh();
 
         $this->assertNotNull($user->two_factor_recovery_codes);
-        $this->assertTrue(is_array(json_decode(decrypt($user->two_factor_recovery_codes), true)));
+        $this->assertIsArray(json_decode(decrypt($user->two_factor_recovery_codes), true));
     }
 
     protected function getPackageProviders($app)

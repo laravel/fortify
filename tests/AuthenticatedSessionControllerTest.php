@@ -180,7 +180,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
         $response->assertRedirect('/home');
         $this->assertNotNull(Auth::getUser());
-        $this->assertFalse(in_array('valid-code', json_decode(decrypt($user->fresh()->two_factor_recovery_codes), true)));
+        $this->assertNotContains('valid-code', json_decode(decrypt($user->fresh()->two_factor_recovery_codes), true));
     }
 
     public function test_two_factor_challenge_can_fail_via_recovery_code()
