@@ -45,8 +45,7 @@ class RegisteredUserController extends Controller
      * Create a new registered user.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Laravel\Fortify\Contracts\ValidateUserRegistration  $validate
-     * @param  \Laravel\Fortify\Contracts\CreatesNewUsers  $register
+     * @param  \Laravel\Fortify\Contracts\CreatesNewUsers  $creator
      * @return \Laravel\Fortify\Contracts\RegisterResponse
      */
     public function store(Request $request,

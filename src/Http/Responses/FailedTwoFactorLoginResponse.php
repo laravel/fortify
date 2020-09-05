@@ -3,7 +3,6 @@
 namespace Laravel\Fortify\Http\Responses;
 
 use Illuminate\Contracts\Support\Responsable;
-use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
 class FailedTwoFactorLoginResponse implements Responsable
