@@ -99,6 +99,10 @@ class FortifyServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/../database/migrations' => database_path('migrations'),
             ], 'fortify-migrations');
+
+            $this->publishes([
+                __DIR__.'/../routes/routes.php' => base_path('routes/fortify'),
+            ], 'fortify-routes');
         }
     }
 
