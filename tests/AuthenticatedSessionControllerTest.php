@@ -144,7 +144,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
-            'two_factor_secret' => encrypt('test-secret'),
+            'two_factor_secret' => encrypt('test-secret', false),
         ]);
 
         $response = $this->withSession([
@@ -168,7 +168,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
-            'two_factor_recovery_codes' => encrypt(json_encode(['invalid-code', 'valid-code'])),
+            'two_factor_recovery_codes' => encrypt(json_encode(['invalid-code', 'valid-code']), false),
         ]);
 
         $response = $this->withSession([
@@ -180,7 +180,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
         $response->assertRedirect('/home');
         $this->assertNotNull(Auth::getUser());
-        $this->assertNotContains('valid-code', json_decode(decrypt($user->fresh()->two_factor_recovery_codes), true));
+        $this->assertNotContains('valid-code', json_decode(decrypt($user->fresh()->two_factor_recovery_codes, false), true));
     }
 
     public function test_two_factor_challenge_can_fail_via_recovery_code()
@@ -194,7 +194,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
-            'two_factor_recovery_codes' => encrypt(json_encode(['invalid-code', 'valid-code'])),
+            'two_factor_recovery_codes' => encrypt(json_encode(['invalid-code', 'valid-code']), false),
         ]);
 
         $response = $this->withSession([

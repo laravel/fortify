@@ -19,7 +19,7 @@ trait TwoFactorAuthenticatable
      */
     public function recoveryCodes()
     {
-        return json_decode(decrypt($this->two_factor_recovery_codes), true);
+        return json_decode(decrypt($this->two_factor_recovery_codes, false), true);
     }
 
     /**
@@ -34,8 +34,8 @@ trait TwoFactorAuthenticatable
             'two_factor_recovery_codes' => encrypt(str_replace(
                 $code,
                 RecoveryCode::generate(),
-                decrypt($this->two_factor_recovery_codes)
-            )),
+                decrypt($this->two_factor_recovery_codes, false)
+            ), false),
         ])->save();
     }
 
@@ -66,7 +66,7 @@ trait TwoFactorAuthenticatable
         return app(TwoFactorAuthenticationProvider::class)->qrCodeUrl(
             config('app.name'),
             $this->email,
-            decrypt($this->two_factor_secret)
+            decrypt($this->two_factor_secret, false)
         );
     }
 }

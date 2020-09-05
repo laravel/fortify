@@ -22,7 +22,7 @@ class RecoveryCodeController extends Controller
         }
 
         return response()->json(json_decode(decrypt(
-            $request->user()->two_factor_recovery_codes
+            $request->user()->two_factor_recovery_codes, false
         ), true));
     }
 

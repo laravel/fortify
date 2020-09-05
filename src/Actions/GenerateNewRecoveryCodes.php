@@ -18,7 +18,7 @@ class GenerateNewRecoveryCodes
         $user->forceFill([
             'two_factor_recovery_codes' => encrypt(json_encode(Collection::times(8, function () {
                 return RecoveryCode::generate();
-            })->all())),
+            })->all()), false),
         ])->save();
     }
 }

@@ -29,7 +29,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
 
         $this->assertNotNull($user->two_factor_secret);
         $this->assertNotNull($user->two_factor_recovery_codes);
-        $this->assertIsArray(json_decode(decrypt($user->two_factor_recovery_codes), true));
+        $this->assertIsArray(json_decode(decrypt($user->two_factor_recovery_codes, false), true));
         $this->assertNotNull($user->twoFactorQrCodeSvg());
     }
 
@@ -42,8 +42,8 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
-            'two_factor_secret' => encrypt('foo'),
-            'two_factor_recovery_codes' => encrypt(json_encode([])),
+            'two_factor_secret' => encrypt('foo', false),
+            'two_factor_recovery_codes' => encrypt(json_encode([]), false),
         ]);
 
         $response = $this->withoutExceptionHandling()->actingAs($user)->deleteJson(
