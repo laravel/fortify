@@ -2,7 +2,6 @@
 
 namespace Laravel\Fortify\Http\Responses;
 
-use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\FailedPasswordResetResponse as FailedPasswordResetResponseContract;
 
