@@ -56,7 +56,7 @@ class LoginRateLimiter
      */
     public function availableIn(Request $request)
     {
-        $this->limiter->availableIn($this->throttleKey($request));
+        return $this->limiter->availableIn($this->throttleKey($request));
     }
 
     /**
