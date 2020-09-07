@@ -49,7 +49,7 @@ class LoginRateLimiter
     }
 
     /**
-     * Determine the numebr of seconds until logging in is available again.
+     * Determine the number of seconds until logging in is available again.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return int
