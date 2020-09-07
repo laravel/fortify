@@ -50,6 +50,7 @@ class VerifyPasswordController extends Controller
     public function store(Request $request): Responsable
     {
         $username = config('fortify.username');
+
         if ($status = $this->guard->validate([
             $username => $request->user()->{$username},
             'password' => $request->input('password'),
