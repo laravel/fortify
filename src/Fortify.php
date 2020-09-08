@@ -17,6 +17,13 @@ use Laravel\Fortify\Http\Responses\SimpleViewResponse;
 class Fortify
 {
     /**
+     * Indicates if Fortify routes will be registered.
+     *
+     * @var bool
+     */
+    public static $registersRoutes = true;
+
+    /**
      * Get the username used for authentication.
      */
     public static function username(): string
@@ -171,5 +178,17 @@ class Fortify
     public static function resetUserPasswordsUsing(string $callback)
     {
         return app()->singleton(ResetsUserPasswords::class, $callback);
+    }
+
+    /**
+     * Configure Fortify to not register its routes.
+     *
+     * @return static
+     */
+    public static function ignoreRoutes()
+    {
+        static::$registersRoutes = false;
+
+        return new static;
     }
 }
