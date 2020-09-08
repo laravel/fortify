@@ -84,7 +84,7 @@ class RedirectIfTwoFactorAuthenticatable
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  mixed  $user
-     * @return \Illuminate\Http\Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function twoFactorChallengeResponse($request, $user)
     {
