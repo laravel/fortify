@@ -18,7 +18,7 @@ class SimpleViewResponse implements
     VerifyEmailViewResponse
 {
     /**
-     * The name of the view or callable used to generate the view.
+     * The name of the view or the callable used to generate the view.
      *
      * @var callable|string
      */
@@ -43,7 +43,7 @@ class SimpleViewResponse implements
      */
     public function toResponse($request)
     {
-        return is_callable($this->view)
+        return is_callable($this->view) && ! is_string($this->view)
                     ? call_user_func($this->view, $request)
                     : view($this->view, ['request' => $request]);
     }
