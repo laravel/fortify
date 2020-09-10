@@ -61,7 +61,7 @@ class Fortify
     /**
      * Specify which view should be used as the login view.
      *
-     * @param  string  $view
+     * @param  callable|string  $view
      * @return void
      */
     public static function loginView($view)
@@ -74,7 +74,7 @@ class Fortify
     /**
      * Specify which view should be used as the two factor authentication challenge view.
      *
-     * @param  string  $view
+     * @param  callable|string  $view
      * @return void
      */
     public static function twoFactorChallengeView($view)
@@ -87,7 +87,7 @@ class Fortify
     /**
      * Specify which view should be used as the new password view.
      *
-     * @param  string  $view
+     * @param  callable|string  $view
      * @return void
      */
     public static function resetPasswordView($view)
@@ -100,7 +100,7 @@ class Fortify
     /**
      * Specify which view should be used as the registration view.
      *
-     * @param  string  $view
+     * @param  callable|string  $view
      * @return void
      */
     public static function registerView($view)
@@ -113,7 +113,7 @@ class Fortify
     /**
      * Specify which view should be used as the email verification prompt.
      *
-     * @param  string  $view
+     * @param  callable|string  $view
      * @return void
      */
     public static function verifyEmailView($view)
@@ -126,7 +126,7 @@ class Fortify
     /**
      * Specify which view should be used as the request password reset link view.
      *
-     * @param  string  $view
+     * @param  callable|string  $view
      * @return void
      */
     public static function requestPasswordResetLinkView($view)
