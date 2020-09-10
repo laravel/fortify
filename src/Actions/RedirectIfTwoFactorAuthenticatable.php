@@ -66,7 +66,7 @@ class RedirectIfTwoFactorAuthenticatable
     protected function validateCredentials($request)
     {
         if (Fortify::$authenticateUsingCallback) {
-            return tap(call_user_func(Fortify::$authenticateUsingCallback, $request), function ($user) {
+            return tap(call_user_func(Fortify::$authenticateUsingCallback, $request), function ($user) use ($request) {
                 if (! $user) {
                     $this->throwFailedAuthenticationException($request);
                 }
