@@ -24,7 +24,7 @@ class Fortify
     public static $authenticateThroughCallback;
 
     /**
-     * The callback that is repsonsible for validating authentication credentials, if applicable.
+     * The callback that is responsible for validating authentication credentials, if applicable.
      *
      * @var callable|null
      */
