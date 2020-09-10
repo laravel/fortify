@@ -21,7 +21,14 @@ class Fortify
      *
      * @var callable|null
      */
-    public static $loginThroughCallback;
+    public static $authenticateThroughCallback;
+
+    /**
+     * The callback that is repsonsible for validating authentication credentials, if applicable.
+     *
+     * @var callable|null
+     */
+    public static $authenticateUsingCallback;
 
     /**
      * Indicates if Fortify routes will be registered.
@@ -151,7 +158,29 @@ class Fortify
      */
     public static function loginThrough(callable $callback)
     {
-        static::$loginThroughCallback = $callback;
+        return static::authenticateThrough($callback);
+    }
+
+    /**
+     * Register a callback that is responsible for building the authentication pipeline array.
+     *
+     * @param  callable  $callback
+     * @return void
+     */
+    public static function authenticateThrough(callable $callback)
+    {
+        static::$authenticateThroughCallback = $callback;
+    }
+
+    /**
+     * Register a callback that is responsible for validating incoming authentication credentials.
+     *
+     * @param  callable  $callback
+     * @return void
+     */
+    public static function authenticateUsing(callable $callback)
+    {
+        static::$authenticateUsingCallback = $callback;
     }
 
     /**

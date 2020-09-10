@@ -47,9 +47,7 @@ class RedirectIfTwoFactorAuthenticatable
      */
     public function handle($request, $next)
     {
-        $user = $this->validateCredentials(
-            $request, $this->guard->getProvider()->getModel()
-        );
+        $user = $this->validateCredentials($request);
 
         if (optional($user)->two_factor_secret &&
             in_array(TwoFactorAuthenticatable::class, class_uses_recursive($user))) {
@@ -63,20 +61,42 @@ class RedirectIfTwoFactorAuthenticatable
      * Attempt to validate the incoming credentials.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  string  $model
      * @return mixed
      */
-    protected function validateCredentials($request, $model)
+    protected function validateCredentials($request)
     {
+        if (Fortify::$authenticateUsingCallback) {
+            return tap(call_user_func(Fortify::$authenticateUsingCallback, $request), function ($user) {
+                if (! $user) {
+                    $this->throwFailedAuthenticationException($request);
+                }
+            });
+        }
+
+        $model = $this->guard->getProvider()->getModel();
+
         return tap($model::where(Fortify::username(), $request->{Fortify::username()})->first(), function ($user) use ($request) {
             if (! $user || ! Hash::check($request->password, $user->password)) {
-                $this->limiter->increment($request);
-
-                throw ValidationException::withMessages([
-                    Fortify::username() => [trans('auth.failed')],
-                ]);
+                $this->throwFailedAuthenticationException($request);
             }
         });
+    }
+
+    /**
+     * Throw a failed authentication validation exception.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function throwFailedAuthenticationException($request)
+    {
+        $this->limiter->increment($request);
+
+        throw ValidationException::withMessages([
+            Fortify::username() => [trans('auth.failed')],
+        ]);
     }
 
     /**
