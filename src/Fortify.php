@@ -17,6 +17,13 @@ use Laravel\Fortify\Http\Responses\SimpleViewResponse;
 class Fortify
 {
     /**
+     * The callback that is responsible for building the authentication pipeline array, if applicable.
+     *
+     * @var callable|null
+     */
+    public static $loginThroughCallback;
+
+    /**
      * Indicates if Fortify routes will be registered.
      *
      * @var bool
@@ -134,6 +141,17 @@ class Fortify
         app()->singleton(RequestPasswordResetLinkViewResponse::class, function () use ($view) {
             return new SimpleViewResponse($view);
         });
+    }
+
+    /**
+     * Register a callback that is responsible for building the authentication pipeline array.
+     *
+     * @param  callable  $callback
+     * @return void
+     */
+    public static function loginThrough(callable $callback)
+    {
+        static::$loginThroughCallback = $callback;
     }
 
     /**
