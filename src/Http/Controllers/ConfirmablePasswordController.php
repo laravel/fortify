@@ -76,7 +76,7 @@ class ConfirmablePasswordController extends Controller
         return call_user_func(
             Fortify::$confirmPasswordsUsingCallback,
             $request->user(),
-            $request
+            $request->input('password')
         );
     }
 }
