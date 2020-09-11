@@ -50,7 +50,7 @@ class Fortify
      */
     public static function email(): string
     {
-        return config('fortify.emailaddress', 'email');
+        return config('fortify.email_address', 'email');
     }
 
     /**
