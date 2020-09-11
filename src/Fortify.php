@@ -32,6 +32,13 @@ class Fortify
     public static $authenticateUsingCallback;
 
     /**
+     * The callback that is responsible for confirming user passwords.
+     *
+     * @var callable|null
+     */
+    public static $confirmPasswordsUsingCallback;
+
+    /**
      * Indicates if Fortify routes will be registered.
      *
      * @var bool
@@ -195,6 +202,17 @@ class Fortify
     public static function authenticateUsing(callable $callback)
     {
         static::$authenticateUsingCallback = $callback;
+    }
+
+    /**
+     * Register a callback that is responsible for confirming existing user passwords as valid.
+     *
+     * @param  callable  $callback
+     * @return void
+     */
+    public static function confirmPasswordsUsing(callable $callback)
+    {
+        static::$confirmPasswordsUsingCallback = $callback;
     }
 
     /**

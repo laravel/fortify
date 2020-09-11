@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller;
 use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
 use Laravel\Fortify\Contracts\FailedPasswordConfirmationResponse;
 use Laravel\Fortify\Contracts\PasswordConfirmedResponse;
+use Laravel\Fortify\Fortify;
 
 class ConfirmablePasswordController extends Controller
 {
@@ -48,16 +49,26 @@ class ConfirmablePasswordController extends Controller
      */
     public function store(Request $request)
     {
-        $username = config('fortify.username');
+        if (Fortify::$confirmPasswordsUsingCallback) {
+            $confirmed = call_user_func(
+                Fortify::$confirmPasswordsUsingCallback,
+                $request->user(),
+                $request
+            );
+        } else {
+            $username = config('fortify.username');
 
-        if ($status = $this->guard->validate([
-            $username => $request->user()->{$username},
-            'password' => $request->input('password'),
-        ])) {
+            $confirmed = $this->guard->validate([
+                $username => $request->user()->{$username},
+                'password' => $request->input('password')
+            ]);
+        }
+
+        if ($confirmed) {
             $request->session()->put('auth.password_confirmed_at', time());
         }
 
-        return $status
+        return $confirmed
                     ? app(PasswordConfirmedResponse::class)
                     : app(FailedPasswordConfirmationResponse::class);
     }

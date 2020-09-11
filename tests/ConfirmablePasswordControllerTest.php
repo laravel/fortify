@@ -4,6 +4,7 @@ namespace Laravel\Fortify\Tests;
 
 use Illuminate\Foundation\Auth\User;
 use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
+use Laravel\Fortify\Fortify;
 
 class ConfirmablePasswordControllerTest extends OrchestraTestCase
 {
@@ -66,6 +67,26 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
         $response->assertSessionMissing('auth.password_confirmed_at');
         $response->assertRedirect();
         $this->assertNotEquals($response->getTargetUrl(), 'http://foo.com/bar');
+    }
+
+    public function test_password_confirmation_can_be_customized()
+    {
+        Fortify::$confirmPasswordsUsingCallback = function () {
+            return true;
+        };
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($this->user)
+            ->withSession(['url.intended' => 'http://foo.com/bar'])
+            ->post(
+                '/user/confirm-password',
+                ['password' => 'invalid']
+            );
+
+        $response->assertSessionHas('auth.password_confirmed_at');
+        $response->assertRedirect('http://foo.com/bar');
+
+        Fortify::$confirmPasswordsUsingCallback = null;
     }
 
     public function test_password_can_be_confirmed_with_json()
