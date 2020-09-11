@@ -46,7 +46,7 @@ class Fortify
     public static $registersRoutes = true;
 
     /**
-     * Get the email address column name
+     * Get the email address column name.
      */
     public static function email(): string
     {
