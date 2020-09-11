@@ -46,6 +46,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Email Address
+    |--------------------------------------------------------------------------
+    |
+    | Out of the box, Fortify expects forgot password and reset password
+    | requests to have a field set named 'email'. If your application
+    | needs another name, you are free to set the name of it here.
+    |
+    */
+    'email_address' => 'email',
+
+    /*
+    |--------------------------------------------------------------------------
     | Home Path
     |--------------------------------------------------------------------------
     |
