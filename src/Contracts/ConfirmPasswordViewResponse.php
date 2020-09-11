@@ -4,7 +4,7 @@ namespace Laravel\Fortify\Contracts;
 
 use Illuminate\Contracts\Support\Responsable;
 
-interface VerifyPasswordViewResponse extends Responsable
+interface ConfirmPasswordViewResponse extends Responsable
 {
     //
 }

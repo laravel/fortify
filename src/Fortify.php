@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify;
 
+use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Fortify\Contracts\LoginViewResponse;
 use Laravel\Fortify\Contracts\RegisterViewResponse;
@@ -138,14 +139,14 @@ class Fortify
     }
 
     /**
-     * Specify which view should be used as the password verification prompt.
+     * Specify which view should be used as the password confirmation prompt.
      *
-     * @param  string  $view
+     * @param  callable|string  $view
      * @return void
      */
-    public static function verifyPasswordView($view)
+    public static function confirmPasswordView($view)
     {
-        app()->singleton(VerifyPasswordViewResponse::class, function () use ($view) {
+        app()->singleton(ConfirmPasswordViewResponse::class, function () use ($view) {
             return new SimpleViewResponse($view);
         });
     }

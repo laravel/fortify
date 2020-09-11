@@ -3,14 +3,13 @@
 namespace Laravel\Fortify\Http\Controllers;
 
 use Illuminate\Contracts\Auth\StatefulGuard;
-use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Laravel\Fortify\Contracts\FailedPasswordVerifyResponse;
-use Laravel\Fortify\Contracts\PasswordVerifiedResponse;
-use Laravel\Fortify\Contracts\VerifyPasswordViewResponse;
+use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
+use Laravel\Fortify\Contracts\FailedPasswordConfirmationResponse;
+use Laravel\Fortify\Contracts\PasswordConfirmedResponse;
 
-class VerifyPasswordController extends Controller
+class ConfirmablePasswordController extends Controller
 {
     /**
      * The guard implementation.
@@ -31,23 +30,23 @@ class VerifyPasswordController extends Controller
     }
 
     /**
-     * Show the verify password view.
+     * Show the confirm password view.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Laravel\Fortify\Contracts\VerifyPasswordViewResponse
      */
-    public function show(Request $request, VerifyPasswordViewResponse $response): VerifyPasswordViewResponse
+    public function show(Request $request)
     {
-        return $response;
+        return app(ConfirmPasswordViewResponse::class);
     }
 
     /**
-     * Verify the user's password.
+     * Confirm the user's password.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Contracts\Support\Responsable
      */
-    public function store(Request $request): Responsable
+    public function store(Request $request)
     {
         $username = config('fortify.username');
 
@@ -59,7 +58,7 @@ class VerifyPasswordController extends Controller
         }
 
         return $status
-                    ? app(PasswordVerifiedResponse::class)
-                    : app(FailedPasswordVerifyResponse::class);
+                    ? app(PasswordConfirmedResponse::class)
+                    : app(FailedPasswordConfirmationResponse::class);
     }
 }

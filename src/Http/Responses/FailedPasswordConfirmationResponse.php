@@ -4,9 +4,9 @@ namespace Laravel\Fortify\Http\Responses;
 
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
-use Laravel\Fortify\Contracts\FailedPasswordVerifyResponse as FailedPasswordVerifyResponseContract;
+use Laravel\Fortify\Contracts\FailedPasswordConfirmationResponse as FailedPasswordConfirmationResponseContract;
 
-class FailedPasswordVerifyResponse implements FailedPasswordVerifyResponseContract
+class FailedPasswordConfirmationResponse implements FailedPasswordConfirmationResponseContract
 {
     /**
      * Create an HTTP response that represents the object.

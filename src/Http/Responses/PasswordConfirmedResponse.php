@@ -3,9 +3,9 @@
 namespace Laravel\Fortify\Http\Responses;
 
 use Illuminate\Http\Response;
-use Laravel\Fortify\Contracts\PasswordVerifiedResponse as PasswordVerifiedResponseContract;
+use Laravel\Fortify\Contracts\PasswordConfirmedResponse as PasswordConfirmedResponseContract;
 
-class PasswordVerifiedResponse implements PasswordVerifiedResponseContract
+class PasswordConfirmedResponse implements PasswordConfirmedResponseContract
 {
     /**
      * Create an HTTP response that represents the object.
