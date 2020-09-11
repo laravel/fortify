@@ -34,7 +34,7 @@ class ConfirmablePasswordController extends Controller
      * Show the confirm password view.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Laravel\Fortify\Contracts\VerifyPasswordViewResponse
+     * @return \Laravel\Fortify\Contracts\ConfirmPasswordViewResponse
      */
     public function show(Request $request)
     {

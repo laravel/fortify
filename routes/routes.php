@@ -91,6 +91,10 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     Route::post('/user/confirm-password', 'ConfirmablePasswordController@store')
                     ->middleware(['auth']);
 
+    Route::get('/user/confirmed-password-status', 'ConfirmedPasswordStatusController@show')
+                    ->middleware(['auth'])
+                    ->name('password.confirmation');
+
     // Two Factor Authentication...
     if (Features::enabled(Features::twoFactorAuthentication())) {
         Route::post('/user/two-factor-authentication', 'TwoFactorAuthenticationController@store')
