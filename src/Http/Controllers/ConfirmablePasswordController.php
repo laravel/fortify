@@ -5,10 +5,10 @@ namespace Laravel\Fortify\Http\Controllers;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Laravel\Fortify\Actions\ConfirmPassword;
 use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
 use Laravel\Fortify\Contracts\FailedPasswordConfirmationResponse;
 use Laravel\Fortify\Contracts\PasswordConfirmedResponse;
-use Laravel\Fortify\Fortify;
 
 class ConfirmablePasswordController extends Controller
 {
@@ -49,12 +49,9 @@ class ConfirmablePasswordController extends Controller
      */
     public function store(Request $request)
     {
-        $username = config('fortify.username');
-
-        $confirmed = is_null(Fortify::$confirmPasswordsUsingCallback) ?  $this->guard->validate([
-            $username => $request->user()->{$username},
-            'password' => $request->input('password')
-        ]) : $this->confirmPasswordUsingCustomCallback($request);
+        $confirmed = app(ConfirmPassword::class)(
+            $this->guard, $request->user(), $request->input('password')
+        );
 
         if ($confirmed) {
             $request->session()->put('auth.password_confirmed_at', time());
@@ -63,20 +60,5 @@ class ConfirmablePasswordController extends Controller
         return $confirmed
                     ? app(PasswordConfirmedResponse::class)
                     : app(FailedPasswordConfirmationResponse::class);
-    }
-
-    /**
-     * Confirm the user's password using a custom callback.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return bool
-     */
-    protected function confirmPasswordUsingCustomCallback(Request $request)
-    {
-        return call_user_func(
-            Fortify::$confirmPasswordsUsingCallback,
-            $request->user(),
-            $request->input('password')
-        );
     }
 }
