@@ -49,20 +49,12 @@ class ConfirmablePasswordController extends Controller
      */
     public function store(Request $request)
     {
-        if (Fortify::$confirmPasswordsUsingCallback) {
-            $confirmed = call_user_func(
-                Fortify::$confirmPasswordsUsingCallback,
-                $request->user(),
-                $request
-            );
-        } else {
-            $username = config('fortify.username');
+        $username = config('fortify.username');
 
-            $confirmed = $this->guard->validate([
-                $username => $request->user()->{$username},
-                'password' => $request->input('password')
-            ]);
-        }
+        $confirmed = is_null(Fortify::$confirmPasswordsUsingCallback) ?  $this->guard->validate([
+            $username => $request->user()->{$username},
+            'password' => $request->input('password')
+        ]) : $this->confirmPasswordUsingCustomCallback($request);
 
         if ($confirmed) {
             $request->session()->put('auth.password_confirmed_at', time());
@@ -71,5 +63,20 @@ class ConfirmablePasswordController extends Controller
         return $confirmed
                     ? app(PasswordConfirmedResponse::class)
                     : app(FailedPasswordConfirmationResponse::class);
+    }
+
+    /**
+     * Confirm the user's password using a custom callback.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    protected function confirmPasswordUsingCustomCallback(Request $request)
+    {
+        return call_user_func(
+            Fortify::$confirmPasswordsUsingCallback,
+            $request->user(),
+            $request
+        );
     }
 }
