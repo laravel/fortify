@@ -100,7 +100,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
 
     public function test_password_can_be_reset_with_custom_email_address_column()
     {
-        Config::set('fortify.emailaddress', 'emailAddress');
+        Config::set('fortify.email_address', 'emailAddress');
         Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
 
         $guard = $this->mock(StatefulGuard::class);

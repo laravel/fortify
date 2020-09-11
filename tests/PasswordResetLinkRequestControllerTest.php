@@ -66,7 +66,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
 
     public function test_reset_link_email_column_can_be_customized()
     {
-        Config::set('fortify.emailaddress', 'emailAddress');
+        Config::set('fortify.email_address', 'emailAddress');
         Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
 
         $broker->shouldReceive('sendResetLink')->andReturn(Password::RESET_LINK_SENT);
