@@ -46,6 +46,14 @@ class Fortify
     public static $registersRoutes = true;
 
     /**
+     * Get the email address column name
+     */
+    public static function email(): string
+    {
+        return config('fortify.emailaddress', 'email');
+    }
+
+    /**
      * Get the username used for authentication.
      */
     public static function username(): string
