@@ -16,7 +16,7 @@ class ConfirmedPasswordStatusController extends Controller
     public function show(Request $request)
     {
         return response()->json([
-            'confirmed' => (time() - $request->session()->get('auth.password_confirmed_at', 0)) < $request->input('seconds', 900),
+            'confirmed' => (time() - $request->session()->get('auth.password_confirmed_at', 0)) < $request->input('seconds', config('auth.password_timeout', 900)),
         ]);
     }
 }
