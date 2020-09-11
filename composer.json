@@ -17,7 +17,7 @@
         "php": "^7.3",
         "ext-json": "*",
         "bacon/bacon-qr-code": "^2.0",
-        "pragmarx/google2fa": "^7.0"
+        "pragmarx/google2fa": "^7.0|^8.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.0",
