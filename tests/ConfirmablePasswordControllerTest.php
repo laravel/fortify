@@ -10,7 +10,7 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
 {
     protected $user;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 

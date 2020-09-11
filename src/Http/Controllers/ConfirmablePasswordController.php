@@ -51,9 +51,9 @@ class ConfirmablePasswordController extends Controller
     {
         $username = config('fortify.username');
 
-        $confirmed = is_null(Fortify::$confirmPasswordsUsingCallback) ?  $this->guard->validate([
+        $confirmed = is_null(Fortify::$confirmPasswordsUsingCallback) ? $this->guard->validate([
             $username => $request->user()->{$username},
-            'password' => $request->input('password')
+            'password' => $request->input('password'),
         ]) : $this->confirmPasswordUsingCustomCallback($request);
 
         if ($confirmed) {
