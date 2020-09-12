@@ -48,9 +48,9 @@ class Fortify
     /**
      * Get the name of the email address request variable.
      */
-    public static function emailAddress()
+    public static function email()
     {
-        return config('fortify.email_address', 'email');
+        return config('fortify.email', 'email');
     }
 
     /**

@@ -54,7 +54,7 @@ return [
     | needs another name, you are free to set the name of it here.
     |
     */
-    'email_address' => 'email',
+    'email' => 'email',
 
     /*
     |--------------------------------------------------------------------------

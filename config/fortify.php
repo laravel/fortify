@@ -6,7 +6,7 @@ return [
     'guard' => 'web',
     'passwords' => 'users',
     'username' => 'email',
-    'email_address' => 'email',
+    'email' => 'email',
     'home' => '/home',
     'limiters' => [
         'login' => null,

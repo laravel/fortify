@@ -33,13 +33,13 @@ class PasswordResetLinkController extends Controller
      */
     public function store(Request $request): Responsable
     {
-        $request->validate([Fortify::emailAddress() => 'required|email']);
+        $request->validate([Fortify::email() => 'required|email']);
 
         // We will send the password reset link to this user. Once we have attempted
         // to send the link, we will examine the response then see the message we
         // need to show to the user. Finally, we'll send out a proper response.
         $status = $this->broker()->sendResetLink(
-            $request->only(Fortify::emailAddress())
+            $request->only(Fortify::email())
         );
 
         return $status == Password::RESET_LINK_SENT
