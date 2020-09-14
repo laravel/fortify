@@ -266,7 +266,7 @@ class Fortify
      */
     public static function ignoreRoutes()
     {
-        static::$registersRoutes = false;
+        config(['fortify.routes' => false]);
 
         return new static;
     }

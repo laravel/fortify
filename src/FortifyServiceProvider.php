@@ -118,14 +118,16 @@ class FortifyServiceProvider extends ServiceProvider
      */
     protected function configureRoutes()
     {
-        if (Fortify::$registersRoutes) {
-            Route::group([
-                'namespace' => 'Laravel\Fortify\Http\Controllers',
-                'domain' => config('fortify.domain', null),
-                'prefix' => config('fortify.path'),
-            ], function () {
-                $this->loadRoutesFrom(__DIR__.'/../routes/routes.php');
-            });
+        if ($this->app->routesAreCached() || config('fortify.routes') === false) {
+            return;
         }
+
+        Route::group([
+            'namespace' => 'Laravel\Fortify\Http\Controllers',
+            'domain' => config('fortify.domain', null),
+            'prefix' => config('fortify.path'),
+        ], function () {
+            $this->loadRoutesFrom(__DIR__.'/../routes/routes.php');
+        });
     }
 }
