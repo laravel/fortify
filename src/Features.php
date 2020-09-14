@@ -137,7 +137,9 @@ class Features
      */
     public static function twoFactorAuthentication(array $options = [])
     {
-        static::$featureOptions['two-factor-authentication'] = $options;
+        if (! empty($options)) {
+            static::$featureOptions['two-factor-authentication'] = $options;
+        }
 
         return 'two-factor-authentication';
     }
