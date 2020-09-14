@@ -2,7 +2,6 @@
 
 namespace Laravel\Fortify\Http\Responses;
 
-use Illuminate\Contracts\Support\Responsable;
 use Laravel\Fortify\Contracts\TwoFactorLoginResponse as TwoFactorLoginResponseContract;
 
 class TwoFactorLoginResponse implements TwoFactorLoginResponseContract
