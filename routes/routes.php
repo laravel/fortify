@@ -97,19 +97,23 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
 
     // Two Factor Authentication...
     if (Features::enabled(Features::twoFactorAuthentication())) {
+        $twoFactorMiddleware = Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword')
+                        ? ['auth', 'password.confirm']
+                        : ['auth'];
+
         Route::post('/user/two-factor-authentication', 'TwoFactorAuthenticationController@store')
-                    ->middleware(['auth', 'password.confirm']);
+                    ->middleware($twoFactorMiddleware);
 
         Route::delete('/user/two-factor-authentication', 'TwoFactorAuthenticationController@destroy')
-                    ->middleware(['auth', 'password.confirm']);
+                    ->middleware($twoFactorMiddleware);
 
         Route::get('/user/two-factor-qr-code', 'TwoFactorQrCodeController@show')
-                    ->middleware(['auth', 'password.confirm']);
+                    ->middleware($twoFactorMiddleware);
 
         Route::get('/user/two-factor-recovery-codes', 'RecoveryCodeController@index')
-                    ->middleware(['auth', 'password.confirm']);
+                    ->middleware($twoFactorMiddleware);
 
         Route::post('/user/two-factor-recovery-codes', 'RecoveryCodeController@store')
-                    ->middleware(['auth', 'password.confirm']);
+                    ->middleware($twoFactorMiddleware);
     }
 });
