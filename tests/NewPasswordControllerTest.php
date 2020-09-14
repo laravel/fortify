@@ -5,6 +5,7 @@ namespace Laravel\Fortify\Tests;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Password;
 use Laravel\Fortify\Contracts\ResetPasswordViewResponse;
 use Laravel\Fortify\Contracts\ResetsUserPasswords;
@@ -95,5 +96,38 @@ class NewPasswordControllerTest extends OrchestraTestCase
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors('email');
+    }
+
+    public function test_password_can_be_reset_with_customized_email_address_field()
+    {
+        Config::set('fortify.email', 'emailAddress');
+        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
+
+        $guard = $this->mock(StatefulGuard::class);
+        $user = Mockery::mock(Authenticatable::class);
+
+        $user->shouldReceive('setRememberToken')->once();
+        $user->shouldReceive('save')->once();
+
+        $guard->shouldReceive('login')->never();
+
+        $updater = $this->mock(ResetsUserPasswords::class);
+        $updater->shouldReceive('reset')->once()->with($user, Mockery::type('array'));
+
+        $broker->shouldReceive('reset')->andReturnUsing(function ($input, $callback) use ($user) {
+            $callback($user, 'password');
+
+            return Password::PASSWORD_RESET;
+        });
+
+        $response = $this->withoutExceptionHandling()->post('/reset-password', [
+            'token' => 'token',
+            'emailAddress' => 'taylor@laravel.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('/login');
     }
 }

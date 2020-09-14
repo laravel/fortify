@@ -13,6 +13,7 @@ use Laravel\Fortify\Contracts\FailedPasswordResetResponse;
 use Laravel\Fortify\Contracts\PasswordResetResponse;
 use Laravel\Fortify\Contracts\ResetPasswordViewResponse;
 use Laravel\Fortify\Contracts\ResetsUserPasswords;
+use Laravel\Fortify\Fortify;
 
 class NewPasswordController extends Controller
 {
@@ -55,14 +56,14 @@ class NewPasswordController extends Controller
     {
         $request->validate([
             'token' => 'required',
-            'email' => 'required|email',
+            Fortify::email() => 'required|email',
         ]);
 
         // Here we will attempt to reset the user's password. If it is successful we
         // will update the password on an actual user model and persist it to the
         // database. Otherwise we will parse the error and return the response.
         $status = $this->broker()->reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
+            $request->only(Fortify::email(), 'password', 'password_confirmation', 'token'),
             function ($user, $password) use ($request) {
                 app(ResetsUserPasswords::class)->reset($user, $request->all());
 

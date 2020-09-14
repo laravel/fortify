@@ -47,10 +47,22 @@ class Fortify
 
     /**
      * Get the username used for authentication.
+     *
+     * @return string
      */
-    public static function username(): string
+    public static function username()
     {
         return config('fortify.username', 'email');
+    }
+
+    /**
+     * Get the name of the email address request variable / field.
+     *
+     * @return string
+     */
+    public static function email()
+    {
+        return config('fortify.email', 'email');
     }
 
     /**
