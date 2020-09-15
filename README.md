@@ -29,6 +29,10 @@ You may use Fortify (without Jetstream) to serve a headless authentication backe
     - [Customizing User Authentication](#customizing-user-authentication)
 - [Registration](#registration)
     - [Customizing Registration](#customizing-registration)
+- [Password Reset](#password-reset)
+    - [Requesting A Password Reset Link](#requesting-a-password-reset-link)
+    - [Resetting The Password](#resetting-the-password)
+    - [Customizing Password Resets](#customizing-password-resets)
 
 <a name="installation"></a>
 ### Installation
@@ -79,6 +83,8 @@ Fortify will take care of generating the `/login` route that returns this view. 
 
 If the login attempt is successful, Fortify will redirect you to the URI configured via the `home` configuration option within your `fortify` configuration file. If the login request was an XHR request, a `200` HTTP response will be returned.
 
+If the request was not successful, the user will be redirect back to the login screen and the validation errors will be available to you via the shared `$errors` Blade template variable. Or, in the case of an XHR request, the validation errors will be returned with the `422` HTTP response.
+
 <a name="customizing-user-authentication"></a>
 #### Customizing User Authentication
 
@@ -121,10 +127,82 @@ Fortify will take care of generating the `/register` route that returns this vie
 
 If the registration attempt is successful, Fortify will redirect you to the URI configured via the `home` configuration option within your `fortify` configuration file. If the login request was an XHR request, a `200` HTTP response will be returned.
 
+If the request was not successful, the user will be redirect back to the registration screen and the validation errors will be available to you via the shared `$errors` Blade template variable. Or, in the case of an XHR request, the validation errors will be returned with the `422` HTTP response.
+
 <a name="customizing-registration"></a>
 #### Customizing Registration
 
 The user validation and creation process may be customized by modifying the `App\Actions\CreateNewUser` action.
+
+<a name="password-reset"></a>
+### Password Reset
+
+<a name="requesting-a-password-reset-link"></a>
+#### Requesting A Password Reset Link
+
+To begin implementing password reset functionality, we need to instruct Fortify how to return our "forgot password" view. Remember, Fortify is a headless authentication library. If you would like a frontend implementation of Fortify that is already completed for you, you should use [Laravel Jetstream](https://jetstream.laravel.com).
+
+All of the authentication view's rendering logic may be customized using the appropriate methods available via the `Laravel\Fortify\Fortify` class. Typically, you should call this method from the `boot` method of your `FortifyServiceProvider`:
+
+```php
+use Laravel\Fortify\Fortify;
+
+Fortify::requestPasswordResetLinkView(function () {
+    return view('auth.forgot-password');
+});
+```
+
+Fortify will take care of generating the `/forgot-password` route that returns this view. Your `forgot-password` template should include a form that makes a POST request to `/forgot-password`. The `/forgot-password` endpoint expects a string `email` field. The name of this field / database column should match the `email` value of the `fortify` configuration file.
+
+If the password reset link request was successful, Fortify will redirect back to the `/forgot-password` route and send an email to the user with a secure link they can use to reset their password. If the request was an XHR request, a `200` HTTP response will be returned.
+
+After being redirected back to the `/forgot-password` route after a successful request, the `status` session variable may be used to display the status of the password reset link request attempt:
+
+```html
+@if (session('status'))
+    <div class="mb-4 font-medium text-sm text-green-600">
+        {{ session('status') }}
+    </div>
+@endif
+```
+
+If the request was not successful, the user will be redirect back to the request password reset link screen and the validation errors will be available to you via the shared `$errors` Blade template variable. Or, in the case of an XHR request, the validation errors will be returned with the `422` HTTP response.
+
+<a name="resetting-the-password"></a>
+#### Resetting The Password
+
+To finish implementing password reset functionality, we need to instruct Fortify how to return our "reset password" view. Remember, Fortify is a headless authentication library. If you would like a frontend implementation of Fortify that is already completed for you, you should use [Laravel Jetstream](https://jetstream.laravel.com).
+
+All of the authentication view's rendering logic may be customized using the appropriate methods available via the `Laravel\Fortify\Fortify` class. Typically, you should call this method from the `boot` method of your `FortifyServiceProvider`:
+
+```php
+use Laravel\Fortify\Fortify;
+
+Fortify::resetPasswordView(function () {
+    return view('auth.reset-password');
+});
+```
+
+Fortify will take care of generating the route to display this view. Your `reset-password` template should include a form that makes a POST request to `/reset-password`. The `/reset-password` endpoint expects a string `email` field, a `password` field, a `password_confirmation` field, and a hidden field named `token` that contains the value of `$request->route('token')`. The name of the "email" field / database column should match the `email` value of the `fortify` configuration file.
+
+If the password reset request was successful, Fortify will redirect back to the `/login` route so that the user can login with their new password. In addition a `status` session variable will be set so that you may display the successful status of the reset on your login screen:
+
+```html
+@if (session('status'))
+    <div class="mb-4 font-medium text-sm text-green-600">
+        {{ session('status') }}
+    </div>
+@endif
+```
+
+If the request was an XHR request, a `200` HTTP response will be returned.
+
+If the request was not successful, the user will be redirect back to the reset password screen and the validation errors will be available to you via the shared `$errors` Blade template variable. Or, in the case of an XHR request, the validation errors will be returned with the `422` HTTP response.
+
+<a name="customizing-password-resets"></a>
+#### Customizing Password Resets
+
+The password reset process may be customized by modifying the `App\Actions\ResetUserPassword` action.
 
 ## Contributing
 
