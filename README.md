@@ -21,6 +21,8 @@ Laravel Fortify is a frontend agnostic authentication backend for Laravel. Forti
 
 ## Using Fortify For Headless Authentication
 
+> **Note:** Want an example of implementing each of these authentication related views? Check out their [Blade based Jetstream implementations](https://github.com/laravel/jetstream/tree/1.x/stubs/resources/views/auth)!
+
 You may use Fortify (without Jetstream) to serve a headless authentication backend for your Laravel application. In this scenario, you are required to build your own templates using the frontend stack of your choice (Blade, Vue, etc.)
 
 - [Installation](#installation)
