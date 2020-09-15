@@ -239,7 +239,7 @@ Fortify::verifyEmailView(function () {
 });
 ```
 
-Fortify will take care of generating the route to display this view when a user is redirected to the `/email/verify` URI by Laravel's built-in `verified` middleware.
+Fortify will take care of generating the route to display this view when a user is redirected to the `/email/verify` endpoint by Laravel's built-in `verified` middleware.
 
 Your `verify-email` template should include an informational message instructing the user to click the email verification link that was sent to their email address. You may optionally add a button to this template that triggers a POST request to `/email/verification-notification`. When this endpoint receives a request, a new verification email link will be emailed to the user, allowing the user to get a new verification link if the previous one was accidentally deleted or lost.
 
