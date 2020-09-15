@@ -23,6 +23,14 @@ Laravel Fortify is a frontend agnostic authentication backend for Laravel. Forti
 
 You may use Fortify (without Jetstream) to serve a headless authentication backend for your Laravel application. In this scenario, you are required to build your own templates using the frontend stack of your choice (Blade, Vue, etc.)
 
+- [Installation](#installation)
+- [The Fortify Service Provider](#the-fortify-service-provider)
+- [Authentication](#authentication)
+    - [Customizing User Authentication](#customizing-user-authentication)
+- [Registration](#registration)
+    - [Customizing Registration](#customizing-registration)
+
+<a name="installation"></a>
 ### Installation
 
 To get started, install Fortify using Composer:
@@ -45,12 +53,14 @@ Next, you should migrate your database:
 php artisan migrate
 ```
 
-### The Fortify Service Provider
+<a name="the-fortify-service-provider"></a>
+#### The Fortify Service Provider
 
 The `vendor:publish` command discussed above will also publish the `app/Providers/FortifyServiceProvider` file. You should ensure this file is registered within the `providers` array of your `app` configuration file.
 
 This service provider registers the actions that Fortify published, instructing Fortify to use them when their respective tasks are executed by Fortify.
 
+<a name="authentication"></a>
 ### Authentication
 
 To get started, we need to instruct Fortify how to return our `login` view. Remember, Fortify is a headless authentication library. If you would like a frontend implementation of Fortify that is already completed for you, you should use [Laravel Jetstream](https://jetstream.laravel.com).
@@ -69,6 +79,7 @@ Fortify will take care of generating the `/login` route that returns this view. 
 
 If the login attempt is successful, Fortify will redirect you to the URI configured via the `home` configuration option within your `fortify` configuration file. If the login request was an XHR request, a `200` HTTP response will be returned.
 
+<a name="customizing-user-authentication"></a>
 #### Customizing User Authentication
 
 Sometimes, you may wish to have full customization over how login credentials are authenticated and users are retrieved. Thankfully, Fortify allows you to easily accomplish this using the `Fortify::authenticateUsing` method.
@@ -91,6 +102,7 @@ Fortify::authenticateUsing(function (Request $request) {
 })
 ```
 
+<a name="registration"></a>
 ### Registration
 
 To begin implementing registration functionality, we need to instruct Fortify how to return our `register` view. Remember, Fortify is a headless authentication library. If you would like a frontend implementation of Fortify that is already completed for you, you should use [Laravel Jetstream](https://jetstream.laravel.com).
@@ -109,6 +121,7 @@ Fortify will take care of generating the `/register` route that returns this vie
 
 If the registration attempt is successful, Fortify will redirect you to the URI configured via the `home` configuration option within your `fortify` configuration file. If the login request was an XHR request, a `200` HTTP response will be returned.
 
+<a name="customizing-registration"></a>
 #### Customizing Registration
 
 The user validation and creation process may be customized by modifying the `App\Actions\CreateNewUser` action.
