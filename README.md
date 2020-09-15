@@ -34,6 +34,8 @@ You may use Fortify (without Jetstream) to serve a headless authentication backe
     - [Requesting A Password Reset Link](#requesting-a-password-reset-link)
     - [Resetting The Password](#resetting-the-password)
     - [Customizing Password Resets](#customizing-password-resets)
+- [Email Verification](#email-verification)
+    - [Protecting Routes](#email-verification-protecting-routes)
 
 <a name="installation"></a>
 ### Installation
@@ -217,6 +219,40 @@ If the request was not successful, the user will be redirect back to the reset p
 #### Customizing Password Resets
 
 The password reset process may be customized by modifying the `App\Actions\ResetUserPassword` action.
+
+<a name="email-verification"></a>
+### Email Verification
+
+After registration, you may wish for users to verify their email address before they continue accessing your application. To get started, ensure the `emailVerification` feature is enabled in your `fortify` configuration file's `features` array. Next, you should ensure that your `App\Models\User` class implements the `MustVerifyEmail` interface. This interface is already imported into this model for you.
+
+Once these two setup steps have been completed, newly registered users will receive an email prompting them to verify their email address ownership. However, we need to inform Fortify how to display the email verification screen which informs the user that they need to go click the verification link in the email.
+
+All of the authentication view's rendering logic may be customized using the appropriate methods available via the `Laravel\Fortify\Fortify` class. Typically, you should call this method from the `boot` method of your `FortifyServiceProvider`:
+
+```php
+use Laravel\Fortify\Fortify;
+
+Fortify::verifyEmailView(function () {
+    return view('auth.verify-email');
+});
+```
+
+Fortify will take care of generating the route to display this view when a user is redirected to the `/email/verify` URI by Laravel's built-in `verified` middleware.
+
+Your `verify-email` template should include an informational message instructing the user to click the email verification link that was sent to their email address. You may optionally add a button to this template that triggers a POST request to `/email/verification-notification`. When this endpoint receives a request, a new verification email link will be emailed to the user, allowing the user to get a new verification link if the previous one was accidentally deleted or lost.
+
+If the request to resend the verification link email was successful, Fortify will redirect back to the `/email/verify` endpoint with a `status` session variable, allowing you to display an informational message to the user informing them the operation was successful. If the request was an XHR request, a `202` HTTP response will be returned.
+
+<a name="email-verification-protecting-routes"></a>
+#### Protecting Routes
+
+To specify that a route or group of routes requires that the user has previously verified their email address, you should attach Laravel's built-in `verified` middleware to the route:
+
+```php
+Route::get('/dashboard', function () {
+    // ...
+})->middleware(['verified']);
+```
 
 ## Contributing
 
