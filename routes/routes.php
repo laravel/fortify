@@ -74,11 +74,11 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
 
     // Email Verification...
     if (Features::enabled(Features::emailVerification())) {
-        Route::get('/email/verify', EmailVerificationPromptController::class)
+        Route::get('/email/verify', [EmailVerificationPromptController::class, '__invoke'])
             ->middleware(['auth'])
             ->name('verification.notice');
 
-        Route::get('/email/verify/{id}/{hash}', VerifyEmailController::class)
+        Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
             ->middleware(['auth', 'signed', 'throttle:6,1'])
             ->name('verification.verify');
 
