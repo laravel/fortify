@@ -18,7 +18,6 @@ use Laravel\Fortify\Http\Controllers\TwoFactorAuthenticationController;
 use Laravel\Fortify\Http\Controllers\TwoFactorQrCodeController;
 use Laravel\Fortify\Http\Controllers\VerifyEmailController;
 
-
 Route::group(['middleware' => config('fortify.middleware', ['web'])], function () {
     // Authentication...
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])
