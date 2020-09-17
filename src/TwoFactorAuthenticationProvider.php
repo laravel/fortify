@@ -61,7 +61,7 @@ class TwoFactorAuthenticationProvider implements TwoFactorAuthenticationProvider
     }
 
     /**
-     * Provide current otp code based on secret
+     * Provide current otp code based on secret.
      *
      * @param  string $secret
      * @return string

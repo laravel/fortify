@@ -32,7 +32,7 @@ interface TwoFactorAuthenticationProvider
     public function verify($secret, $code, $ts = null);
 
     /**
-     * Provide current otp code based on secret
+     * Provide current otp code based on secret.
      *
      * @param  string $secret
      * @return string
