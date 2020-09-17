@@ -53,10 +53,10 @@ class TwoFactorAuthenticationProvider implements TwoFactorAuthenticationProvider
      *
      * @param  string  $secret
      * @param  string  $code
-     * @return bool
+     * @return int|bool
      */
-    public function verify($secret, $code)
+    public function verify($secret, $code, $timestamp = null)
     {
-        return $this->engine->verifyKey($secret, $code);
+        return $this->engine->verifyKeyNewer($secret, $code, $timestamp);
     }
 }

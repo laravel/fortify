@@ -26,7 +26,8 @@ interface TwoFactorAuthenticationProvider
      *
      * @param  string  $secret
      * @param  string  $code
-     * @return bool
+     * @param  string  $timestamp
+     * @return int|bool
      */
-    public function verify($secret, $code);
+    public function verify($secret, $code, $timestamp = null);
 }

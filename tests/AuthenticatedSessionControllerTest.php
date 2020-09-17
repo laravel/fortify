@@ -6,12 +6,13 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
-use Laravel\Fortify\Contracts\LoginViewResponse;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
+use Laravel\Fortify\Contracts\LoginViewResponse;
 use Laravel\Fortify\FortifyServiceProvider;
 use Laravel\Fortify\LoginRateLimiter;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Mockery;
+use PragmaRX\Google2FA\Google2FA;
 
 class AuthenticatedSessionControllerTest extends OrchestraTestCase
 {
@@ -155,6 +156,43 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         ]);
 
         $response->assertRedirect('/home');
+    }
+
+    public function test_two_factor_challenge_cannot_use_same_code_again()
+    {
+        app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
+
+        $this->loadLaravelMigrations(['--database' => 'testbench']);
+        $this->artisan('migrate', ['--database' => 'testbench'])->run();
+
+        $tfaEngine = app(Google2FA::class);
+
+        $user = TestTwoFactorAuthenticationSessionUser::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+            'two_factor_secret' => encrypt($tfaEngine->generateSecretKey()),
+        ]);
+
+        $currentOtp = $tfaEngine->getCurrentOtp(decrypt($user->two_factor_secret));
+
+        // real check against otp code first time
+        $this->withSession([
+            'login.id' => $user->id,
+            'login.remember' => false,
+        ])->post('/two-factor-challenge', [
+            'code' => $currentOtp,
+        ])->assertRedirect('/home');
+
+        auth()->logout();
+
+        // recheck against otp code to confirm it cannot be used again
+        $this->withSession([
+            'login.id' => $user->id,
+            'login.remember' => false,
+        ])->post('/two-factor-challenge', [
+            'code' => $currentOtp,
+        ])->assertRedirect('/login');
     }
 
     public function test_two_factor_challenge_can_be_passed_via_recovery_code()
