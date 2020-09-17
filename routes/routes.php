@@ -32,13 +32,6 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
             $limiter ? 'throttle:'.$limiter : null,
         ]));
 
-    Route::get('/two-factor-challenge', [TwoFactorAuthenticatedSessionController::class, 'create'])
-        ->middleware(['guest'])
-        ->name('two-factor.login');
-
-    Route::post('/two-factor-challenge', [TwoFactorAuthenticatedSessionController::class, 'store'])
-        ->middleware(['guest']);
-
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 
@@ -112,6 +105,13 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
 
     // Two Factor Authentication...
     if (Features::enabled(Features::twoFactorAuthentication())) {
+        Route::get('/two-factor-challenge', [TwoFactorAuthenticatedSessionController::class, 'create'])
+            ->middleware(['guest'])
+            ->name('two-factor.login');
+
+        Route::post('/two-factor-challenge', [TwoFactorAuthenticatedSessionController::class, 'store'])
+            ->middleware(['guest']);
+
         $twoFactorMiddleware = Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword')
             ? ['auth', 'password.confirm']
             : ['auth'];
