@@ -148,5 +148,4 @@ class EnableTwoFactorAuthentication
             throw new SecretKeyTooShortException();
         }
     }
-
 }
