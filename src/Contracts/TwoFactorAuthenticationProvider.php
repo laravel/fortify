@@ -30,12 +30,4 @@ interface TwoFactorAuthenticationProvider
      * @return int|bool
      */
     public function verify($secret, $code, $ts = null);
-
-    /**
-     * Provide current otp code based on secret.
-     *
-     * @param  string $secret
-     * @return string
-     */
-    public function getCurrentOtp($secret);
 }

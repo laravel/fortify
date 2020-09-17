@@ -2,16 +2,17 @@
 
 namespace Laravel\Fortify\Tests;
 
-use Illuminate\Contracts\Auth\Authenticatable;
+use Mockery;
+use PragmaRX\Google2FA\Google2FA;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Fortify\LoginRateLimiter;
 use Illuminate\Support\Facades\Schema;
+use Laravel\Fortify\FortifyServiceProvider;
+use Laravel\Fortify\TwoFactorAuthenticatable;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Laravel\Fortify\Contracts\LoginViewResponse;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
-use Laravel\Fortify\FortifyServiceProvider;
-use Laravel\Fortify\LoginRateLimiter;
-use Laravel\Fortify\TwoFactorAuthenticatable;
-use Mockery;
 
 class AuthenticatedSessionControllerTest extends OrchestraTestCase
 {
@@ -164,7 +165,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $this->loadLaravelMigrations(['--database' => 'testbench']);
         $this->artisan('migrate', ['--database' => 'testbench'])->run();
 
-        $tfaEngine = app(TwoFactorAuthenticationProvider::class);
+        $tfaEngine = app(Google2FA::class);
 
         $user = TestTwoFactorAuthenticationSessionUser::forceCreate([
             'name' => 'Taylor Otwell',
@@ -173,7 +174,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
             'two_factor_secret' => encrypt($tfaEngine->generateSecretKey()),
         ]);
 
-        $currentOtp = $tfaEngine->getCurrentOtp($user->two_factor_secret);
+        $currentOtp = $tfaEngine->getCurrentOtp(decrypt($user->two_factor_secret));
 
         // real check against otp code first time
         $this->withSession([

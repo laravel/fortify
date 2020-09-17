@@ -59,15 +59,4 @@ class TwoFactorAuthenticationProvider implements TwoFactorAuthenticationProvider
     {
         return $this->engine->verifyKeyNewer($secret, $code, $ts);
     }
-
-    /**
-     * Provide current otp code based on secret.
-     *
-     * @param  string $secret
-     * @return string
-     */
-    public function getCurrentOtp($secret)
-    {
-        return $this->engine->getCurrentOtp(decrypt($secret));
-    }
 }
