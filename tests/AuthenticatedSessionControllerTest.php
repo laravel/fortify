@@ -2,18 +2,17 @@
 
 namespace Laravel\Fortify\Tests;
 
-use Mockery;
-use Carbon\Carbon;
-use PragmaRX\Google2FA\Google2FA;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Fortify\LoginRateLimiter;
 use Illuminate\Support\Facades\Schema;
-use Laravel\Fortify\FortifyServiceProvider;
-use Laravel\Fortify\TwoFactorAuthenticatable;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Laravel\Fortify\Contracts\LoginViewResponse;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
+use Laravel\Fortify\FortifyServiceProvider;
+use Laravel\Fortify\LoginRateLimiter;
+use Laravel\Fortify\TwoFactorAuthenticatable;
+use Mockery;
+use PragmaRX\Google2FA\Google2FA;
 
 class AuthenticatedSessionControllerTest extends OrchestraTestCase
 {
