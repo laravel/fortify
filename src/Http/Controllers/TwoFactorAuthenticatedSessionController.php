@@ -50,11 +50,18 @@ class TwoFactorAuthenticatedSessionController extends Controller
     public function store(TwoFactorLoginRequest $request)
     {
         $user = $request->challengedUser();
+        $timestamp = false;
 
         if ($code = $request->validRecoveryCode()) {
             $user->replaceRecoveryCode($code);
-        } elseif (! $request->hasValidCode()) {
+        } elseif (! $timestamp = $request->hasValidCode()) {
             return app(FailedTwoFactorLoginResponse::class);
+        }
+
+        if ($timestamp) {
+            $user->forceFill([
+                'two_factor_timestamp' => $timestamp,
+            ])->save();
         }
 
         $this->guard->login($user, $request->remember());

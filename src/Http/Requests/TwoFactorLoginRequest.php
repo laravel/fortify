@@ -50,13 +50,19 @@ class TwoFactorLoginRequest extends FormRequest
     /**
      * Determine if the request has a valid two factor code.
      *
-     * @return bool
+     * @return int|bool
      */
     public function hasValidCode()
     {
-        return $this->code && app(TwoFactorAuthenticationProvider::class)->verify(
-            decrypt($this->challengedUser()->two_factor_secret), $this->code
-        );
+        if ($this->code) {
+            return app(TwoFactorAuthenticationProvider::class)->verify(
+                decrypt($this->challengedUser()->two_factor_secret),
+                $this->code,
+                $this->challengedUser()->two_factor_timestamp
+            );
+        }
+
+        return false;
     }
 
     /**
