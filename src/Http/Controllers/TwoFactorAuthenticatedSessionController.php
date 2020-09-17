@@ -59,9 +59,7 @@ class TwoFactorAuthenticatedSessionController extends Controller
         }
 
         if ($timestamp) {
-            $user->forceFill([
-                'two_factor_timestamp' => $timestamp,
-            ])->save();
+            cache()->put("user-{$user->id}-2fa-timestamp", $timestamp, now()->addMinutes(5));
         }
 
         $this->guard->login($user, $request->remember());

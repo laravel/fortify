@@ -54,11 +54,19 @@ class TwoFactorLoginRequest extends FormRequest
      */
     public function hasValidCode()
     {
+        $timestamp = 1;
+        $user = $this->challengedUser();
+
+        $timestampKey = "user-{$user->id}-2fa-timestamp";
+        if (cache()->has($timestampKey)) {
+            $timestamp = cache()->get($timestampKey);
+        }
+
         if ($this->code) {
             return app(TwoFactorAuthenticationProvider::class)->verify(
-                decrypt($this->challengedUser()->two_factor_secret),
+                decrypt($user->two_factor_secret),
                 $this->code,
-                $this->challengedUser()->two_factor_timestamp
+                $timestamp
             );
         }
 
