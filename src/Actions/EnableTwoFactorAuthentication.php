@@ -31,7 +31,7 @@ class EnableTwoFactorAuthentication
     }
 
     /**
-     * Enable two factor authentication for the user after checking if a optional given secret is valid
+     * Enable two factor authentication for the user after checking if a optional given secret is valid.
      *
      * @param  mixed  $user
      * @param ?string $secret
@@ -47,7 +47,7 @@ class EnableTwoFactorAuthentication
         }
 
         $user->forceFill([
-            'two_factor_secret' => (!$secret ? encrypt($this->provider->generateSecretKey()) : encrypt($secret)),
+            'two_factor_secret' => (! $secret ? encrypt($this->provider->generateSecretKey()) : encrypt($secret)),
             'two_factor_recovery_codes' => encrypt(json_encode(Collection::times(8, function () {
                 return RecoveryCode::generate();
             })->all())),
