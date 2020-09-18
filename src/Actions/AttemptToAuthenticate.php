@@ -71,7 +71,7 @@ class AttemptToAuthenticate
         $user = call_user_func(Fortify::$authenticateUsingCallback, $request);
 
         if (! $user) {
-            return $this->throwFailedAuthenticationException();
+            return $this->throwFailedAuthenticationException($request);
         }
 
         $this->guard->login($user, $request->filled('remember'));
