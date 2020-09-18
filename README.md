@@ -51,7 +51,7 @@ composer require laravel/fortify
 Next, publish Fortify's resources:
 
 ```bash
-php artisan vendor:publish --provider="Laravel\\Fortify\\FortifyServiceProvider"
+php artisan vendor:publish --provider="Laravel\Fortify\FortifyServiceProvider"
 ```
 
 This command will publish Fortify's actions to your `app/Actions` directory. This directory will be created if it does not exist. In addition, Fortify's configuration file and migrations will be published.
