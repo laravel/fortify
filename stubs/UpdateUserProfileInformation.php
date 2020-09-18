@@ -37,9 +37,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             ])->save();
 
             $user->sendEmailVerificationNotification();
-        }
-
-        else {
+        } else {
             $user->forceFill([
                 'name' => $input['name'],
                 'email' => $input['email'],
