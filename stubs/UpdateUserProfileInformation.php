@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
@@ -29,19 +30,15 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             ],
         ])->validateWithBag('updateProfileInformation');
 
-        if ($input['email'] != $user->email & new User instanceof MustVerifyEmail) {
-            $user->forceFill([
-                'name' => $input['name'],
-                'email' => $input['email'],
-                // 'email_verified_at' => null, // If uncommented, this will force user to verify email before being able to navigate to any route requiring auth
-            ])->save();
-
+        if ($input['email'] !== $user->email &&
+            $user instanceof MustVerifyEmail) {
             $user->sendEmailVerificationNotification();
-        } else {
-            $user->forceFill([
-                'name' => $input['name'],
-                'email' => $input['email'],
-            ])->save();
         }
+
+        $user->forceFill([
+            'name' => $input['name'],
+            'email' => $input['email'],
+            'email_verified_at' => null,
+        ])->save();
     }
 }
