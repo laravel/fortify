@@ -196,8 +196,8 @@ All of the authentication view's rendering logic may be customized using the app
 ```php
 use Laravel\Fortify\Fortify;
 
-Fortify::resetPasswordView(function () {
-    return view('auth.reset-password');
+Fortify::resetPasswordView(function ($request) {
+    return view('auth.reset-password', ['request' => $request]);
 });
 ```
 
