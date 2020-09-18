@@ -9,6 +9,7 @@ use Laravel\Fortify\Contracts\RequestPasswordResetLinkViewResponse;
 use Laravel\Fortify\Contracts\ResetPasswordViewResponse;
 use Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse;
 use Laravel\Fortify\Contracts\VerifyEmailViewResponse;
+use Illuminate\View\View;
 
 class SimpleViewResponse implements
     LoginViewResponse,
@@ -45,8 +46,15 @@ class SimpleViewResponse implements
      */
     public function toResponse($request)
     {
-        return is_callable($this->view) && ! is_string($this->view)
-                    ? call_user_func($this->view, $request)
-                    : view($this->view, ['request' => $request]);
+        $response = call_user_func($this->view, $request);
+
+        if (
+            ! $response instanceof View
+            && method_exists($response, 'toResponse')
+        ) {
+            return $response->toResponse($request);
+        }
+
+        return $response;
     }
 }
