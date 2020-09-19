@@ -64,7 +64,7 @@ class NewPasswordController extends Controller
         // database. Otherwise we will parse the error and return the response.
         $status = $this->broker()->reset(
             $request->only(Fortify::email(), 'password', 'password_confirmation', 'token'),
-            function ($user, $password) use ($request) {
+            function ($user) use ($request) {
                 app(ResetsUserPasswords::class)->reset($user, $request->all());
 
                 app(CompletePasswordReset::class)($this->guard, $user);
