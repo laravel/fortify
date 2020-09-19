@@ -18,7 +18,7 @@ use Laravel\Fortify\Http\Controllers\TwoFactorAuthenticationController;
 use Laravel\Fortify\Http\Controllers\TwoFactorQrCodeController;
 use Laravel\Fortify\Http\Controllers\VerifyEmailController;
 
-Route::group(['middleware' => config('fortify.middleware', ['web'])], function () {
+Route::middleware(config('fortify.middleware'))->group(function () {
     // Authentication...
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])
         ->middleware(['guest'])
@@ -29,7 +29,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     Route::post('/login', [AuthenticatedSessionController::class, 'store'])
         ->middleware(array_filter([
             'guest',
-            $limiter ? 'throttle:'.$limiter : null,
+            $limiter ? 'throttle:' . $limiter : null,
         ]));
 
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])

@@ -20,6 +20,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Fortify Routes Middleware
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify which middleware Fortify will use while processing
+    | the requested route. This configured value must be an array. You may
+    | change the middleware listed below as required.
+    |
+    */
+
+    'middleware' => ['web'],
+
+    /*
+    |--------------------------------------------------------------------------
     | Fortify Password Broker
     |--------------------------------------------------------------------------
     |
