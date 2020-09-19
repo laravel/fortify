@@ -30,15 +30,18 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             ],
         ])->validateWithBag('updateProfileInformation');
 
-        if ($input['email'] !== $user->email &&
-            $user instanceof MustVerifyEmail) {
+        if ($input['email'] !== $user->email && $user instanceof MustVerifyEmail) {
+            $user->forceFill([
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'email_verified_at' => null,
+            ])->save();
             $user->sendEmailVerificationNotification();
         }
 
         $user->forceFill([
             'name' => $input['name'],
-            'email' => $input['email'],
-            'email_verified_at' => null,
+            'email' => $input['email']
         ])->save();
     }
 }
