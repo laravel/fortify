@@ -89,8 +89,8 @@ class Password implements Rule
                 return __('The :attribute must be at least '.$this->length.' characters and contain at least one number.');
 
             case $this->requireSpecialCharacter
-                && !$this->requireUppercase
-                && !$this->requireNumeric:
+                && ! $this->requireUppercase
+                && ! $this->requireNumeric:
                 return __('The :attribute must be at least '.$this->length.' characters and contain at least one special character.');
 
             case $this->requireUppercase
