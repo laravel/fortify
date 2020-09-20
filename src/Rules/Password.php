@@ -67,13 +67,13 @@ class Password implements Rule
         }
 
         if ($this->requireUppercase && ! $this->requireNumeric) {
-            return __('The :attribute must be at least '.$this->length.' characters and contain at least one uppercase character.');
+            return __('The :attribute must be at least :length characters and contain at least one uppercase character.', ['length' => $this->length]);
         } elseif ($this->requireNumeric && ! $this->requireUppercase) {
-            return __('The :attribute must be at least '.$this->length.' characters and contain at least one number.');
+            return __('The :attribute must be at least :length characters and contain at least one number.', ['length' => $this->length]);
         } elseif ($this->requireUppercase && $this->requireNumeric) {
-            return __('The :attribute must be at least '.$this->length.' characters and contain at least one uppercase character and number.');
+            return __('The :attribute must be at least :length characters and contain at least one uppercase character and number.', ['length' => $this->length]);
         } else {
-            return __('The :attribute must be at least '.$this->length.' characters.');
+            return __('The :attribute must be at least :length characters.', ['length' => $this->length]);
         }
     }
 
