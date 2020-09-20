@@ -78,34 +78,34 @@ class Password implements Rule
         }
 
         switch (1) {
-            case ($this->requireUppercase
+            case $this->requireUppercase
                 && ! $this->requireNumeric
-                && ! $this->requireSpecialCharacter):
+                && ! $this->requireSpecialCharacter:
                 return __('The :attribute must be at least '.$this->length.' characters and contain at least one uppercase character.');
 
-            case ($this->requireNumeric
+            case $this->requireNumeric
                 && ! $this->requireUppercase
-                && ! $this->requireSpecialCharacter):
+                && ! $this->requireSpecialCharacter:
                 return __('The :attribute must be at least '.$this->length.' characters and contain at least one number.');
 
-            case ($this->requireSpecialCharacter
+            case $this->requireSpecialCharacter
                 && !$this->requireUppercase
-                && !$this->requireNumeric):
+                && !$this->requireNumeric:
                 return __('The :attribute must be at least '.$this->length.' characters and contain at least one special character.');
 
-            case ($this->requireUppercase
+            case $this->requireUppercase
                 && $this->requireNumeric
-                && ! $this->requireSpecialCharacter):
+                && ! $this->requireSpecialCharacter:
                 return __('The :attribute must be at least '.$this->length.' characters and contain at least one uppercase character and number.');
 
-            case ($this->requireUppercase
+            case $this->requireUppercase
                 && $this->requireSpecialCharacter
-                && ! $this->requireNumeric):
+                && ! $this->requireNumeric:
                 return __('The :attribute must be at least '.$this->length.' characters and contain at least one uppercase character and special character.');
 
-            case ($this->requireUppercase
+            case $this->requireUppercase
                 && $this->requireNumeric
-                && $this->requireSpecialCharacter):
+                && $this->requireSpecialCharacter:
                 return __('The :attribute must be at least '.$this->length.' characters and contain at least one uppercase character, one number and special character.');
 
             default:
