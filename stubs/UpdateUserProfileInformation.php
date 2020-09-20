@@ -36,6 +36,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 'email' => $input['email'],
                 'email_verified_at' => null,
             ])->save();
+
             $user->sendEmailVerificationNotification();
 
             return;
