@@ -68,7 +68,7 @@ class AttemptToAuthenticate
      */
     protected function handleUsingCustomCallback($request, $next)
     {
-        $user = call_user_func(Fortify::$authenticateUsingCallback, $request);
+        $user = call_user_func(Fortify::$authenticateUsingCallback, $request, $this->limiter);
 
         if (! $user) {
             return $this->throwFailedAuthenticationException($request);
