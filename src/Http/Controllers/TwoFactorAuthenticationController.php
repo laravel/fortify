@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Laravel\Fortify\Actions\DisableTwoFactorAuthentication;
@@ -21,7 +22,7 @@ class TwoFactorAuthenticationController extends Controller
         $enable($request->user());
 
         return $request->wantsJson()
-                    ? response('', 200)
+                    ? new JsonResponse('', 200)
                     : back()->with('status', 'two-factor-authentication-enabled');
     }
 
@@ -37,7 +38,7 @@ class TwoFactorAuthenticationController extends Controller
         $disable($request->user());
 
         return $request->wantsJson()
-                    ? response('', 200)
+                    ? new JsonResponse('', 200)
                     : back()->with('status', 'two-factor-authentication-disabled');
     }
 }

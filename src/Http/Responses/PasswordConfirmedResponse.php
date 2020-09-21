@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify\Http\Responses;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Laravel\Fortify\Contracts\PasswordConfirmedResponse as PasswordConfirmedResponseContract;
 
@@ -16,7 +17,7 @@ class PasswordConfirmedResponse implements PasswordConfirmedResponseContract
     public function toResponse($request)
     {
         return $request->wantsJson()
-                    ? new Response('', 201)
+                    ? new JsonResponse('', 201)
                     : redirect()->intended(config('fortify.home'));
     }
 }

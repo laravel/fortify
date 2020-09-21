@@ -2,8 +2,8 @@
 
 namespace Laravel\Fortify\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 
@@ -22,7 +22,7 @@ class ProfileInformationController extends Controller
         $updater->update($request->user(), $request->all());
 
         return $request->wantsJson()
-                    ? new Response('', 200)
+                    ? new JsonResponse('', 200)
                     : back()->with('status', 'profile-information-updated');
     }
 }

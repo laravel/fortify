@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Laravel\Fortify\Actions\GenerateNewRecoveryCodes;
@@ -38,7 +39,7 @@ class RecoveryCodeController extends Controller
         $generate($request->user());
 
         return $request->wantsJson()
-                    ? response('', 200)
+                    ? new JsonResponse('', 200)
                     : back()->with('status', 'recovery-codes-generated');
     }
 }
