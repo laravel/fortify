@@ -115,15 +115,24 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\LoginRateLimiter;
 
-Fortify::authenticateUsing(function (Request $request) {
-    $user = User::where('email', $request->email)->first();
+Fortify::authenticateUsing(function (Request $request, LoginRateLimiter $limiter) {
+    $user = User::where(config('fortify.username'), $request->{config('fortify.username')})->first();
 
-    if ($user &&
-        Hash::check($request->password, $user->password)) {
-        return $user;
+    if($user){
+        if(!$user->active){ 
+            $limiter->increment($request);
+            throw ValidationException::withMessages([
+                'inactive' => [trans('auth.inactive')],
+            ]);
+        }
+
+        if (Hash::check($request->password, $user->password)) {
+            return $user;
+        }
     }
-})
+});
 ```
 
 <a name="registration"></a>
