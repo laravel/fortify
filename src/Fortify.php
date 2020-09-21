@@ -90,6 +90,7 @@ class Fortify
         static::requestPasswordResetLinkView($prefix.'forgot-password');
         static::resetPasswordView($prefix.'reset-password');
         static::verifyEmailView($prefix.'verify-email');
+        static::confirmPasswordView($prefix.'confirm-password');
     }
 
     /**
