@@ -116,6 +116,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\LoginRateLimiter;
+use Illuminate\Validation\ValidationException;
 
 Fortify::authenticateUsing(function (Request $request, LoginRateLimiter $limiter) {
     $user = User::where(config('fortify.username'), $request->{config('fortify.username')})->first();
