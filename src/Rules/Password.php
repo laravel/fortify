@@ -77,7 +77,7 @@ class Password implements Rule
             return $this->message;
         }
 
-        switch (1) {
+        switch (true) {
             case $this->requireUppercase
                 && ! $this->requireNumeric
                 && ! $this->requireSpecialCharacter:
