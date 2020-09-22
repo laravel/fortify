@@ -102,21 +102,21 @@ class Password implements Rule
             case $this->requireUppercase
                 && $this->requireNumeric
                 && ! $this->requireSpecialCharacter:
-                return __('The :attribute must be at least :length characters and contain at least one uppercase character and number.', [
+                return __('The :attribute must be at least :length characters and contain at least one uppercase character and one number.', [
                     'length' => $this->length,
                 ]);
 
             case $this->requireUppercase
                 && $this->requireSpecialCharacter
                 && ! $this->requireNumeric:
-                return __('The :attribute must be at least :length characters and contain at least one uppercase character and special character.', [
+                return __('The :attribute must be at least :length characters and contain at least one uppercase character and one special character.', [
                     'length' => $this->length,
                 ]);
 
             case $this->requireUppercase
                 && $this->requireNumeric
                 && $this->requireSpecialCharacter:
-                return __('The :attribute must be at least :length characters and contain at least one uppercase character, one number and special character.', [
+                return __('The :attribute must be at least :length characters and contain at least one uppercase character, one number, and one special character.', [
                     'length' => $this->length,
                 ]);
 
