@@ -1,6 +1,47 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.4.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.5.0...1.x)
+
+
+## [v1.5.0 (2020-09-22)](https://github.com/laravel/fortify/compare/v1.4.3...v1.5.0)
+
+### Added
+- Add option to force the password to have a special character ([#65](https://github.com/laravel/fortify/pull/65))
+
+### Fixed
+- Allow 'confirmPasswordView' to use view prefixes ([#71](https://github.com/laravel/fortify/pull/71))
+- Send JSON response if request is an AJAX request ([#75](https://github.com/laravel/fortify/pull/75))
+
+
+## [v1.4.3 (2020-09-20)](https://github.com/laravel/fortify/compare/v1.4.2...v1.4.3)
+
+### Fixed
+- Fix flawed logic in the `UpdateUserProfileInformation` action ([#68](https://github.com/laravel/fortify/pull/68), [fea6473](https://github.com/laravel/fortify/commit/fea64739156be75d9d382ca680afaf33c16cce3f), [91518af](https://github.com/laravel/fortify/commit/91518afbf3ce33d3e6b2a36b032e67e8474367e9))
+
+
+## [v1.4.2 (2020-09-20)](https://github.com/laravel/fortify/compare/v1.4.1...v1.4.2)
+
+### Changed
+- Remove unnecessary bag ([85a7dfb](https://github.com/laravel/fortify/commit/85a7dfbc75229782a2cb985366a6565792c541be))
+
+### Fixed
+- Fix test bug when use sqlite database ([#69](https://github.com/laravel/fortify/pull/69))
+
+
+## [v1.4.1 (2020-09-18)](https://github.com/laravel/fortify/compare/v1.4.0...v1.4.1)
+
+### Added
+- Allow the expected email address request variable to be changed ([#28](https://github.com/laravel/fortify/pull/28))
+- Update configuration stub with middleware option ([#55](https://github.com/laravel/fortify/pull/55))
+
+### Changed
+- Make routes more dynamic ([#41](https://github.com/laravel/fortify/pull/41))
+- Add illuminate/support dependency ([#46](https://github.com/laravel/fortify/pull/46))
+- Resend email verification after user update ([#52](https://github.com/laravel/fortify/pull/52), [951d943](https://github.com/laravel/fortify/commit/951d943defb44cb44fd92b719ca2db2dba1f297c))
+
+### Fixed
+- Only register two-factor-challenge routes if TFA feature enabled ([#44](https://github.com/laravel/fortify/pull/44))
+- Added missing request to the throwFailedAuthenticationException method ([#61](https://github.com/laravel/fortify/pull/61))
 
 
 ## [v1.4.0 (2020-09-14)](https://github.com/laravel/fortify/compare/v1.3.1...v1.4.0)
