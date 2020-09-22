@@ -4,8 +4,10 @@ use Laravel\Fortify\Features;
 
 return [
     'guard' => 'web',
+    'middleware' => ['web'],
     'passwords' => 'users',
     'username' => 'email',
+    'email' => 'email',
     'home' => '/home',
     'limiters' => [
         'login' => null,

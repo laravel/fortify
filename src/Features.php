@@ -2,8 +2,17 @@
 
 namespace Laravel\Fortify;
 
+use Illuminate\Support\Arr;
+
 class Features
 {
+    /**
+     * The options enabled for a given feature.
+     *
+     * @var array
+     */
+    protected static $featureOptions = [];
+
     /**
      * Determine if the given feature is enabled.
      *
@@ -13,6 +22,19 @@ class Features
     public static function enabled(string $feature)
     {
         return in_array($feature, config('fortify.features', []));
+    }
+
+    /**
+     * Determine if the feature is enabled and has a given option enabled.
+     *
+     * @param  string  $feature
+     * @param  string  $option
+     * @return bool
+     */
+    public static function optionEnabled(string $feature, string $option)
+    {
+        return static::enabled($feature) &&
+               Arr::get(static::$featureOptions, $feature.'.'.$option) === true;
     }
 
     /**
@@ -113,8 +135,12 @@ class Features
      *
      * @return string
      */
-    public static function twoFactorAuthentication()
+    public static function twoFactorAuthentication(array $options = [])
     {
+        if (! empty($options)) {
+            static::$featureOptions['two-factor-authentication'] = $options;
+        }
+
         return 'two-factor-authentication';
     }
 }

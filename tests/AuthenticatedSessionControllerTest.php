@@ -7,11 +7,11 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Laravel\Fortify\Contracts\LoginViewResponse;
-use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
 use Laravel\Fortify\FortifyServiceProvider;
 use Laravel\Fortify\LoginRateLimiter;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Mockery;
+use PragmaRX\Google2FA\Google2FA;
 
 class AuthenticatedSessionControllerTest extends OrchestraTestCase
 {
@@ -136,22 +136,22 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $this->loadLaravelMigrations(['--database' => 'testbench']);
         $this->artisan('migrate', ['--database' => 'testbench'])->run();
 
-        $this->mock(TwoFactorAuthenticationProvider::class, function ($mock) {
-            $mock->shouldReceive('verify')->andReturn(true);
-        });
+        $tfaEngine = app(Google2FA::class);
+        $userSecret = $tfaEngine->generateSecretKey();
+        $validOtp = $tfaEngine->getCurrentOtp($userSecret);
 
         $user = TestTwoFactorAuthenticationSessionUser::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
-            'two_factor_secret' => encrypt('test-secret'),
+            'two_factor_secret' => encrypt($userSecret),
         ]);
 
         $response = $this->withSession([
             'login.id' => $user->id,
             'login.remember' => false,
         ])->withoutExceptionHandling()->post('/two-factor-challenge', [
-            'code' => '123456',
+            'code' => $validOtp,
         ]);
 
         $response->assertRedirect('/home');

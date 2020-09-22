@@ -33,16 +33,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Username
+    | Username / Email
     |--------------------------------------------------------------------------
     |
     | This value defines which model attribute should be considered as your
     | application's "username" field. Typically, this might be the email
     | address of the users but you are free to change this value here.
     |
+    | Out of the box, Fortify expects forgot password and reset password
+    | requests to have a field named 'email'. If the application uses
+    | another name for the field you may define it below as needed.
+    |
     */
 
     'username' => 'email',
+
+    'email' => 'email',
 
     /*
     |--------------------------------------------------------------------------
@@ -56,6 +62,19 @@ return [
     */
 
     'home' => RouteServiceProvider::HOME,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Fortify Routes Middleware
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify which middleware Fortify will assign to the routes
+    | that it registers with the application. If necessary, you may change
+    | these middleware but typically this provided default is preferred.
+    |
+    */
+
+    'middleware' => ['web'],
 
     /*
     |--------------------------------------------------------------------------
@@ -89,7 +108,9 @@ return [
         // Features::emailVerification(),
         Features::updateProfileInformation(),
         Features::updatePasswords(),
-        Features::twoFactorAuthentication(),
+        Features::twoFactorAuthentication([
+            'confirmPassword' => true,
+        ]),
     ],
 
 ];

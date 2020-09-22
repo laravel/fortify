@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify;
 
+use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Fortify\Contracts\LoginViewResponse;
 use Laravel\Fortify\Contracts\RegisterViewResponse;
@@ -17,6 +18,27 @@ use Laravel\Fortify\Http\Responses\SimpleViewResponse;
 class Fortify
 {
     /**
+     * The callback that is responsible for building the authentication pipeline array, if applicable.
+     *
+     * @var callable|null
+     */
+    public static $authenticateThroughCallback;
+
+    /**
+     * The callback that is responsible for validating authentication credentials, if applicable.
+     *
+     * @var callable|null
+     */
+    public static $authenticateUsingCallback;
+
+    /**
+     * The callback that is responsible for confirming user passwords.
+     *
+     * @var callable|null
+     */
+    public static $confirmPasswordsUsingCallback;
+
+    /**
      * Indicates if Fortify routes will be registered.
      *
      * @var bool
@@ -25,10 +47,22 @@ class Fortify
 
     /**
      * Get the username used for authentication.
+     *
+     * @return string
      */
-    public static function username(): string
+    public static function username()
     {
         return config('fortify.username', 'email');
+    }
+
+    /**
+     * Get the name of the email address request variable / field.
+     *
+     * @return string
+     */
+    public static function email()
+    {
+        return config('fortify.email', 'email');
     }
 
     /**
@@ -56,12 +90,13 @@ class Fortify
         static::requestPasswordResetLinkView($prefix.'forgot-password');
         static::resetPasswordView($prefix.'reset-password');
         static::verifyEmailView($prefix.'verify-email');
+        static::confirmPasswordView($prefix.'confirm-password');
     }
 
     /**
      * Specify which view should be used as the login view.
      *
-     * @param  string  $view
+     * @param  callable|string  $view
      * @return void
      */
     public static function loginView($view)
@@ -74,7 +109,7 @@ class Fortify
     /**
      * Specify which view should be used as the two factor authentication challenge view.
      *
-     * @param  string  $view
+     * @param  callable|string  $view
      * @return void
      */
     public static function twoFactorChallengeView($view)
@@ -87,7 +122,7 @@ class Fortify
     /**
      * Specify which view should be used as the new password view.
      *
-     * @param  string  $view
+     * @param  callable|string  $view
      * @return void
      */
     public static function resetPasswordView($view)
@@ -100,7 +135,7 @@ class Fortify
     /**
      * Specify which view should be used as the registration view.
      *
-     * @param  string  $view
+     * @param  callable|string  $view
      * @return void
      */
     public static function registerView($view)
@@ -113,7 +148,7 @@ class Fortify
     /**
      * Specify which view should be used as the email verification prompt.
      *
-     * @param  string  $view
+     * @param  callable|string  $view
      * @return void
      */
     public static function verifyEmailView($view)
@@ -124,9 +159,22 @@ class Fortify
     }
 
     /**
+     * Specify which view should be used as the password confirmation prompt.
+     *
+     * @param  callable|string  $view
+     * @return void
+     */
+    public static function confirmPasswordView($view)
+    {
+        app()->singleton(ConfirmPasswordViewResponse::class, function () use ($view) {
+            return new SimpleViewResponse($view);
+        });
+    }
+
+    /**
      * Specify which view should be used as the request password reset link view.
      *
-     * @param  string  $view
+     * @param  callable|string  $view
      * @return void
      */
     public static function requestPasswordResetLinkView($view)
@@ -134,6 +182,50 @@ class Fortify
         app()->singleton(RequestPasswordResetLinkViewResponse::class, function () use ($view) {
             return new SimpleViewResponse($view);
         });
+    }
+
+    /**
+     * Register a callback that is responsible for building the authentication pipeline array.
+     *
+     * @param  callable  $callback
+     * @return void
+     */
+    public static function loginThrough(callable $callback)
+    {
+        return static::authenticateThrough($callback);
+    }
+
+    /**
+     * Register a callback that is responsible for building the authentication pipeline array.
+     *
+     * @param  callable  $callback
+     * @return void
+     */
+    public static function authenticateThrough(callable $callback)
+    {
+        static::$authenticateThroughCallback = $callback;
+    }
+
+    /**
+     * Register a callback that is responsible for validating incoming authentication credentials.
+     *
+     * @param  callable  $callback
+     * @return void
+     */
+    public static function authenticateUsing(callable $callback)
+    {
+        static::$authenticateUsingCallback = $callback;
+    }
+
+    /**
+     * Register a callback that is responsible for confirming existing user passwords as valid.
+     *
+     * @param  callable  $callback
+     * @return void
+     */
+    public static function confirmPasswordsUsing(callable $callback)
+    {
+        static::$confirmPasswordsUsingCallback = $callback;
     }
 
     /**

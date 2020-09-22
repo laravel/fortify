@@ -2,9 +2,10 @@
 
 namespace Laravel\Fortify\Http\Responses;
 
-use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Http\JsonResponse;
+use Laravel\Fortify\Contracts\TwoFactorLoginResponse as TwoFactorLoginResponseContract;
 
-class TwoFactorLoginResponse implements Responsable
+class TwoFactorLoginResponse implements TwoFactorLoginResponseContract
 {
     /**
      * Create an HTTP response that represents the object.
@@ -15,7 +16,7 @@ class TwoFactorLoginResponse implements Responsable
     public function toResponse($request)
     {
         return $request->wantsJson()
-                    ? response('', 204)
+                    ? new JsonResponse('', 204)
                     : redirect(config('fortify.home'));
     }
 }

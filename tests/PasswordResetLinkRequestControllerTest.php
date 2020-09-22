@@ -3,6 +3,7 @@
 namespace Laravel\Fortify\Tests;
 
 use Illuminate\Contracts\Auth\PasswordBroker;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Password;
 use Laravel\Fortify\Contracts\RequestPasswordResetLinkViewResponse;
 use Mockery;
@@ -61,5 +62,21 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors('email');
+    }
+
+    public function test_reset_link_can_be_successfully_requested_with_customized_email_field()
+    {
+        Config::set('fortify.email', 'emailAddress');
+        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
+
+        $broker->shouldReceive('sendResetLink')->andReturn(Password::RESET_LINK_SENT);
+
+        $response = $this->from(url('/forgot-password'))
+            ->post('/forgot-password', ['emailAddress' => 'taylor@laravel.com']);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('/forgot-password');
+        $response->assertSessionHasNoErrors();
+        $response->assertSessionHas('status', trans(Password::RESET_LINK_SENT));
     }
 }
