@@ -12,10 +12,10 @@ class ConfirmPassword
      *
      * @param  \Illuminate\Contracts\Auth\StatefulGuard  $guard
      * @param  mixed  $user
-     * @param  string  $password
+     * @param  string|null  $password
      * @return bool
      */
-    public function __invoke(StatefulGuard $guard, $user, string $password)
+    public function __invoke(StatefulGuard $guard, $user, ?string $password = null)
     {
         $username = config('fortify.username');
 
@@ -29,10 +29,10 @@ class ConfirmPassword
      * Confirm the user's password using a custom callback.
      *
      * @param  mixed  $user
-     * @param  string  $password
+     * @param  string|null  $password
      * @return bool
      */
-    protected function confirmPasswordUsingCustomCallback($user, string $password)
+    protected function confirmPasswordUsingCustomCallback($user, ?string $password = null)
     {
         return call_user_func(
             Fortify::$confirmPasswordsUsingCallback,
