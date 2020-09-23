@@ -29,10 +29,10 @@ class ConfirmPassword
      * Confirm the user's password using a custom callback.
      *
      * @param  mixed  $user
-     * @param  string  $password
+     * @param  string|null  $password
      * @return bool
      */
-    protected function confirmPasswordUsingCustomCallback($user, string $password)
+    protected function confirmPasswordUsingCustomCallback($user, ?string $password = null)
     {
         return call_user_func(
             Fortify::$confirmPasswordsUsingCallback,

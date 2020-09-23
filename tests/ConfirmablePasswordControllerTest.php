@@ -105,6 +105,26 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
         Fortify::$confirmPasswordsUsingCallback = null;
     }
 
+    public function test_password_confirmation_can_be_customized_and_fail_without_password()
+    {
+        Fortify::$confirmPasswordsUsingCallback = function () {
+            return true;
+        };
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($this->user)
+            ->withSession(['url.intended' => 'http://foo.com/bar'])
+            ->post(
+                '/user/confirm-password',
+                ['password' => null]
+            );
+
+        $response->assertSessionHas('auth.password_confirmed_at');
+        $response->assertRedirect('http://foo.com/bar');
+
+        Fortify::$confirmPasswordsUsingCallback = null;
+    }
+
     public function test_password_can_be_confirmed_with_json()
     {
         $response = $this->actingAs($this->user)
