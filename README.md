@@ -150,7 +150,7 @@ If the request was not successful, the user will be redirect back to the registr
 <a name="customizing-registration"></a>
 #### Customizing Registration
 
-The user validation and creation process may be customized by modifying the `App\Actions\CreateNewUser` action.
+The user validation and creation process may be customized by modifying the `App\Actions\Fortify\CreateNewUser` action.
 
 <a name="password-reset"></a>
 ### Password Reset
