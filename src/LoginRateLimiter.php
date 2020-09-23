@@ -27,6 +27,17 @@ class LoginRateLimiter
     }
 
     /**
+     * Get the number of attempts for the given key.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return mixed
+     */
+    public function attempts(Request $request)
+    {
+        return $this->limiter->attempts($this->throttleKey($request));
+    }
+
+    /**
      * Determine if the user has too many failed login attempts.
      *
      * @param  \Illuminate\Http\Request  $request
