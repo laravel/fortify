@@ -53,7 +53,7 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
         $response->assertRedirect('http://foo.com/bar');
     }
 
-    public function test_password_confirmation_can_fail()
+    public function test_password_confirmation_can_fail_with_an_invalid_password()
     {
         $response = $this->withoutExceptionHandling()
             ->actingAs($this->user)
@@ -61,6 +61,22 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
             ->post(
                 '/user/confirm-password',
                 ['password' => 'invalid']
+            );
+
+        $response->assertSessionHasErrors(['password']);
+        $response->assertSessionMissing('auth.password_confirmed_at');
+        $response->assertRedirect();
+        $this->assertNotEquals($response->getTargetUrl(), 'http://foo.com/bar');
+    }
+
+    public function test_password_confirmation_can_fail_without_a_password()
+    {
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($this->user)
+            ->withSession(['url.intended' => 'http://foo.com/bar'])
+            ->post(
+                '/user/confirm-password',
+                ['password' => null]
             );
 
         $response->assertSessionHasErrors(['password']);
