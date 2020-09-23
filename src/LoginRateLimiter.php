@@ -47,7 +47,18 @@ class LoginRateLimiter
     {
         $this->limiter->hit($this->throttleKey($request), 60);
     }
-
+    
+    /**
+     * Get the number of attempts for the given key.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return mixed
+     */
+    public function attempts(Request $request)
+    {
+        return $this->limiter->attempts($this->throttleKey($request));
+    }
+    
     /**
      * Determine the number of seconds until logging in is available again.
      *
