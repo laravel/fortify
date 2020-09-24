@@ -82,6 +82,7 @@ class FortifyServiceProvider extends ServiceProvider
     {
         $this->configurePublishing();
         $this->configureRoutes();
+        $this->loadTranslations();
     }
 
     /**
@@ -108,6 +109,10 @@ class FortifyServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/../database/migrations' => database_path('migrations'),
             ], 'fortify-migrations');
+
+            $this->publishes([
+                __DIR__.'/../resources/lang' => resource_path('lang/vendor/fortify'),
+            ], 'fortify-translations');
         }
     }
 
@@ -127,5 +132,15 @@ class FortifyServiceProvider extends ServiceProvider
                 $this->loadRoutesFrom(__DIR__.'/../routes/routes.php');
             });
         }
+    }
+
+    /**
+     * Load translations offered by the package.
+     *
+     * @return void
+     */
+    protected function loadTranslations()
+    {
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'fortify');
     }
 }

@@ -81,47 +81,47 @@ class Password implements Rule
             case $this->requireUppercase
                 && ! $this->requireNumeric
                 && ! $this->requireSpecialCharacter:
-                return __('The :attribute must be at least :length characters and contain at least one uppercase character.', [
+                return __('fortify::validation.password.uppercase', [
                     'length' => $this->length,
                 ]);
 
             case $this->requireNumeric
                 && ! $this->requireUppercase
                 && ! $this->requireSpecialCharacter:
-                return __('The :attribute must be at least :length characters and contain at least one number.', [
+                return __('fortify::validation.password.numeric', [
                     'length' => $this->length,
                 ]);
 
             case $this->requireSpecialCharacter
                 && ! $this->requireUppercase
                 && ! $this->requireNumeric:
-                return __('The :attribute must be at least :length characters and contain at least one special character.', [
+                return __('fortify::validation.password.special_character', [
                     'length' => $this->length,
                 ]);
 
             case $this->requireUppercase
                 && $this->requireNumeric
                 && ! $this->requireSpecialCharacter:
-                return __('The :attribute must be at least :length characters and contain at least one uppercase character and one number.', [
+                return __('fortify::validation.password.uppercase_or_numeric', [
                     'length' => $this->length,
                 ]);
 
             case $this->requireUppercase
                 && $this->requireSpecialCharacter
                 && ! $this->requireNumeric:
-                return __('The :attribute must be at least :length characters and contain at least one uppercase character and one special character.', [
+                return __('fortify::validation.password.uppercase_or_special_character', [
                     'length' => $this->length,
                 ]);
 
             case $this->requireUppercase
                 && $this->requireNumeric
                 && $this->requireSpecialCharacter:
-                return __('The :attribute must be at least :length characters and contain at least one uppercase character, one number, and one special character.', [
+                return __('fortify::validation.passwor  d.uppercase_or_numeric_or_special_character', [
                     'length' => $this->length,
                 ]);
 
             default:
-                return __('The :attribute must be at least :length characters.', [
+                return __('fortify::validation.password.min', [
                     'length' => $this->length,
                 ]);
         }
