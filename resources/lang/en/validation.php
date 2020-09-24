@@ -20,5 +20,5 @@ return [
         'uppercase_or_numeric' => 'The :attribute must be at least :length characters and contain at least one uppercase character and one number.',
         'uppercase_or_special_character' => 'The :attribute must be at least :length characters and contain at least one uppercase character and one special character.',
         'uppercase_or_numeric_or_special_character' => 'The :attribute must be at least :length characters and contain at least one uppercase character, one number, and one special character.',
-    ]
+    ],
 ];
