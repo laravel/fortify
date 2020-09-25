@@ -93,18 +93,6 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
             ->name('user-password.update');
     }
 
-    // Password Confirmation...
-    Route::get('/user/confirm-password', [ConfirmablePasswordController::class, 'show'])
-        ->middleware(['auth'])
-        ->name('password.confirm');
-
-    Route::post('/user/confirm-password', [ConfirmablePasswordController::class, 'store'])
-        ->middleware(['auth']);
-
-    Route::get('/user/confirmed-password-status', [ConfirmedPasswordStatusController::class, 'show'])
-        ->middleware(['auth'])
-        ->name('password.confirmation');
-
     // Two Factor Authentication...
     if (Features::enabled(Features::twoFactorAuthentication())) {
         Route::get('/two-factor-challenge', [TwoFactorAuthenticatedSessionController::class, 'create'])
@@ -132,5 +120,17 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
 
         Route::post('/user/two-factor-recovery-codes', [RecoveryCodeController::class, 'store'])
             ->middleware($twoFactorMiddleware);
+
+        // Password Confirmation...
+        Route::get('/user/confirm-password', [ConfirmablePasswordController::class, 'show'])
+            ->middleware(['auth'])
+            ->name('password.confirm');
+
+        Route::post('/user/confirm-password', [ConfirmablePasswordController::class, 'store'])
+            ->middleware(['auth']);
+
+        Route::get('/user/confirmed-password-status', [ConfirmedPasswordStatusController::class, 'show'])
+            ->middleware(['auth'])
+            ->name('password.confirmation');
     }
 });
