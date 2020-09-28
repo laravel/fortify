@@ -31,4 +31,15 @@ class CreateNewUser implements CreatesNewUsers
             'password' => Hash::make($input['password']),
         ]);
     }
+
+    /**
+     * The user has been created.
+     *
+     * @param  \App\Models\User  $user
+     * @return mixed
+     */
+    public function created($user)
+    {
+        //
+    }
 }

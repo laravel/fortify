@@ -11,4 +11,12 @@ interface CreatesNewUsers
      * @return mixed
      */
     public function create(array $input);
+
+    /**
+     * The user has been created.
+     *
+     * @param  mixed  $user
+     * @return mixed
+     */
+    public function created($user);
 }
