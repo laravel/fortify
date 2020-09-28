@@ -26,7 +26,9 @@ class RegisteredUserControllerTest extends OrchestraTestCase
     {
         $this->mock(CreatesNewUsers::class)
                     ->shouldReceive('create')
-                    ->andReturn(Mockery::mock(Authenticatable::class));
+                    ->andReturn(Mockery::mock(Authenticatable::class))
+                    ->shouldReceive('created')
+                    ->andReturnNull();
 
         $this->mock(StatefulGuard::class)
                     ->shouldReceive('login')
