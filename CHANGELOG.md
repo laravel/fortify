@@ -1,6 +1,16 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.5.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.6.0...1.x)
+
+
+## [v1.6.0 (2020-09-29)](https://github.com/laravel/fortify/compare/v1.5.0...v1.6.0)
+
+### Added
+- Add `attempts` method to rate limiter ([#85](https://github.com/laravel/fortify/pull/85))
+- Add name to Profile update and Password update routes ([#89](https://github.com/laravel/fortify/pull/89))
+
+### Fixed
+- Fix for empty password during confirmation ([#87](https://github.com/laravel/fortify/pull/87))
 
 
 ## [v1.5.0 (2020-09-22)](https://github.com/laravel/fortify/compare/v1.4.3...v1.5.0)
