@@ -52,8 +52,9 @@ class RegisteredUserController extends Controller
                           CreatesNewUsers $creator): RegisterResponse
     {
         event(new Registered($user = $creator->create($request->all())));
-
-        $this->guard->login($user);
+        
+        if(config('fortify.disable_login_after_registration') !== true)
+            $this->guard->login($user);
 
         return app(RegisterResponse::class);
     }
