@@ -24,14 +24,14 @@ class Password implements Rule
     /**
      * Indicates if the password must contain one numeric digit.
      *
-     * @var int
+     * @var bool
      */
     protected $requireNumeric = false;
 
     /**
      * Indicates if the password must contain one special character.
      *
-     * @var int
+     * @var bool
      */
     protected $requireSpecialCharacter = false;
 
