@@ -23,6 +23,6 @@ class ProfileInformationController extends Controller
 
         return $request->wantsJson()
                     ? new JsonResponse('', 200)
-                    : back()->with('status', 'profile-information-updated');
+                    : back()->with('status', __('Profile information updated successfully'));
     }
 }
