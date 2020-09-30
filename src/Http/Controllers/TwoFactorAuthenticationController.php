@@ -23,7 +23,7 @@ class TwoFactorAuthenticationController extends Controller
 
         return $request->wantsJson()
                     ? new JsonResponse('', 200)
-                    : back()->with('status', 'two-factor-authentication-enabled');
+                    : back()->with('status', __('Two factor authentication enabled successfully'));
     }
 
     /**
@@ -39,6 +39,6 @@ class TwoFactorAuthenticationController extends Controller
 
         return $request->wantsJson()
                     ? new JsonResponse('', 200)
-                    : back()->with('status', 'two-factor-authentication-disabled');
+                    : back()->with('status', __('Two factor authentication disabled successfully'));
     }
 }
