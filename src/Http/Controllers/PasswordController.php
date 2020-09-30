@@ -22,6 +22,6 @@ class PasswordController extends Controller
 
         return $request->wantsJson()
                     ? new JsonResponse('', 200)
-                    : back()->with('status', 'password-updated');
+                    : back()->with('status', __('Password updated successfully'));
     }
 }
