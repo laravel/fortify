@@ -40,6 +40,6 @@ class RecoveryCodeController extends Controller
 
         return $request->wantsJson()
                     ? new JsonResponse('', 200)
-                    : back()->with('status', 'recovery-codes-generated');
+                    : back()->with('status', __('Recovery codes generated successfully'));
     }
 }
