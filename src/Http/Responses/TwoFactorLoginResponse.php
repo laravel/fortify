@@ -17,6 +17,6 @@ class TwoFactorLoginResponse implements TwoFactorLoginResponseContract
     {
         return $request->wantsJson()
                     ? new JsonResponse('', 204)
-                    : redirect(config('fortify.home'));
+                    : redirect()->intended(config('fortify.home'));
     }
 }
