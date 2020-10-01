@@ -3,7 +3,6 @@
 namespace Laravel\Fortify\Http\Controllers;
 
 use Illuminate\Contracts\Auth\StatefulGuard;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse;
 use Laravel\Fortify\Contracts\TwoFactorLoginResponse;
@@ -33,11 +32,21 @@ class TwoFactorAuthenticatedSessionController extends Controller
     /**
      * Show the two factor authentication challenge view.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Laravel\Fortify\Http\Requests\TwoFactorLoginRequest  $request
      * @return \Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse
      */
-    public function create(Request $request): TwoFactorChallengeViewResponse
+    public function create(TwoFactorLoginRequest $request)
     {
+        if ($this->isRecentlyConfirmed()) {
+            $user = $request->challengedUser();
+
+            if ($request->session()->pull('2fa.user_id') === $user->id) {
+                $this->guard->login($user, $request->remember());
+
+                return app(TwoFactorLoginResponse::class);
+            }
+        }
+
         return app(TwoFactorChallengeViewResponse::class);
     }
 
@@ -59,6 +68,22 @@ class TwoFactorAuthenticatedSessionController extends Controller
 
         $this->guard->login($user, $request->remember());
 
+        if ($request->filled('remember2fa')) {
+            $request->session()->put(['2fa' => [
+                'confirmed_at' => time(),
+                'user_id' => $user->getKey(),
+            ]]);
+        } else {
+            $request->session()->forget('2fa');
+        }
+
         return app(TwoFactorLoginResponse::class);
+    }
+
+    protected function isRecentlyConfirmed()
+    {
+        $maximumSecondsSinceConfirmation = config('fortify.two_factor_timeout', 0);
+
+        return (time() - session('2fa.confirmed_at', 0)) < $maximumSecondsSinceConfirmation;
     }
 }

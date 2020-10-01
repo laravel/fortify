@@ -96,11 +96,17 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): LogoutResponse
     {
+        $two_factor_backup = $request->session()->pull('2fa', null);
+
         $this->guard->logout();
 
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+
+        if ($two_factor_backup) {
+            $request->session()->put(['2fa' => $two_factor_backup]);
+        }
 
         return app(LogoutResponse::class);
     }

@@ -20,4 +20,5 @@ return [
         Features::updatePasswords(),
         Features::twoFactorAuthentication(),
     ],
+    'two_factor_timeout' => 604800,
 ];
