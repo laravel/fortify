@@ -51,6 +51,7 @@ class SimpleViewResponse implements
         }
 
         $response = call_user_func($this->view, $request);
+
         if ($response instanceof Responsable) {
             return $response->toResponse($request);
         }
