@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify\Http\Responses;
 
+use Illuminate\Contracts\Support\Responsable;
 use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
 use Laravel\Fortify\Contracts\LoginViewResponse;
 use Laravel\Fortify\Contracts\RegisterViewResponse;
@@ -45,8 +46,16 @@ class SimpleViewResponse implements
      */
     public function toResponse($request)
     {
-        return is_callable($this->view) && ! is_string($this->view)
-                    ? call_user_func($this->view, $request)
-                    : view($this->view, ['request' => $request]);
+        if (! is_callable($this->view) || is_string($this->view)) {
+            return view($this->view, ['request' => $request]);
+        }
+
+        $response = call_user_func($this->view, $request);
+
+        if ($response instanceof Responsable) {
+            return $response->toResponse($request);
+        }
+
+        return $response;
     }
 }
