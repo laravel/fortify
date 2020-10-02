@@ -5,8 +5,8 @@ namespace Laravel\Fortify\Http\Requests;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Laravel\Fortify\Contracts\FailedTwoFactorLoginResponse;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
-use Laravel\Fortify\Http\Responses\FailedTwoFactorLoginResponse;
 
 class TwoFactorLoginRequest extends FormRequest
 {
