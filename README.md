@@ -5,13 +5,13 @@
         <img src="https://github.com/laravel/fortify/workflows/tests/badge.svg" alt="Build Status">
     </a>
     <a href="https://packagist.org/packages/laravel/fortify">
-        <img src="https://poser.pugx.org/laravel/fortify/d/total.svg" alt="Total Downloads">
+        <img src="https://img.shields.io/packagist/dt/laravel/fortify" alt="Total Downloads">
     </a>
     <a href="https://packagist.org/packages/laravel/fortify">
-        <img src="https://poser.pugx.org/laravel/fortify/v/stable.svg" alt="Latest Stable Version">
+        <img src="https://img.shields.io/packagist/v/laravel/fortify" alt="Latest Stable Version">
     </a>
     <a href="https://packagist.org/packages/laravel/fortify">
-        <img src="https://poser.pugx.org/laravel/fortify/license.svg" alt="License">
+        <img src="https://img.shields.io/packagist/l/laravel/fortify" alt="License">
     </a>
 </p>
 
