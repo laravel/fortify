@@ -82,6 +82,18 @@ The `fortify` configuration file contains a `features` configuration array. This
 
 If you are not using Laravel Jetstream, you should implement user profile updates, password updates, and two-factor authentication yourself.
 
+If you wish to enable or disable features on a per-environment basis, you may pass an options array to each Fortify feature:
+
+
+    'features' => [
+        Features::registration(),
+        Features::resetPasswords(),
+        Features::emailVerification([
+            'enabled' => env('EMAIL_VERIFICATION', true)
+        ]),
+        Features::updatePasswords()
+    ],
+
 <a name="authentication"></a>
 ### Authentication
 
