@@ -83,61 +83,91 @@ class Features
     /**
      * Enable the registration feature.
      *
+     * @param array $options
      * @return string
      */
-    public static function registration()
+    public static function registration(array $options = [])
     {
+        if(! empty($options) && isset($options['enabled'])) {
+            return $options['enabled'] === true ? 'registration' : null;
+        }
+
         return 'registration';
     }
 
     /**
      * Enable the password reset feature.
      *
-     * @return string
+     * @param array $options
+     * @return string|null
      */
-    public static function resetPasswords()
+    public static function resetPasswords(array $options = [])
     {
+        if(! empty($options) && isset($options['enabled'])) {
+            return $options['enabled'] === true ? 'reset-passwords' : null;
+        }
+
         return 'reset-passwords';
     }
 
     /**
      * Enable the email verification feature.
      *
-     * @return string
+     * @param array $options
+     * @return string|null
      */
-    public static function emailVerification()
+    public static function emailVerification(array $options = [])
     {
+        if(! empty($options) && isset($options['enabled'])) {
+            return $options['enabled'] === true ? 'email-verification' : null;
+        }
+
         return 'email-verification';
     }
 
     /**
      * Enable the update profile information feature.
      *
-     * @return string
+     * @param array $options
+     * @return string|null
      */
-    public static function updateProfileInformation()
+    public static function updateProfileInformation(array $options = [])
     {
+        if(! empty($options) && isset($options['enabled'])) {
+            return $options['enabled'] === true ? 'update-profile-information' : null;
+        }
+
         return 'update-profile-information';
     }
 
     /**
      * Enable the update password feature.
      *
-     * @return string
+     * @param array $options
+     * @return string|null
      */
-    public static function updatePasswords()
+    public static function updatePasswords(array $options = [])
     {
+        if(! empty($options) && isset($options['enabled'])) {
+            return $options['enabled'] === true ? 'update-passwords' : null;
+        }
+
         return 'update-passwords';
     }
 
     /**
      * Enable the two factor authentication feature.
      *
+     * @param array $options
      * @return string
      */
     public static function twoFactorAuthentication(array $options = [])
     {
         if (! empty($options)) {
+            if(isset($options['enabled']) && $options['enabled'] === false) {
+                return null;
+            }
+
             static::$featureOptions['two-factor-authentication'] = $options;
         }
 
