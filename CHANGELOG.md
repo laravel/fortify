@@ -1,6 +1,17 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.6.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.6.1...1.x)
+
+
+## [v1.6.1 (2020-10-05)](https://github.com/laravel/fortify/compare/v1.6.0...v1.6.1)
+
+### Added
+- Add FailedTwoFactorLoginResponse contract ([#106](https://github.com/laravel/fortify/pull/106))
+
+### Changed
+- Redirect to intended after two factor login ([#105](https://github.com/laravel/fortify/pull/105))
+- Allow Fortify views to accept `Responsable` objects ([#107](https://github.com/laravel/fortify/pull/107))
+- Use the `Rule::unique` for new user validation ([#108](https://github.com/laravel/fortify/pull/108))
 
 
 ## [v1.6.0 (2020-09-29)](https://github.com/laravel/fortify/compare/v1.5.0...v1.6.0)
