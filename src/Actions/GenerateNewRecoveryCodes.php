@@ -8,7 +8,7 @@ use Laravel\Fortify\RecoveryCode;
 class GenerateNewRecoveryCodes
 {
     /**
-     * Disable two factor authentication for the user.
+     * Generate new recovery codes for the user.
      *
      * @param  mixed  $user
      * @return void
