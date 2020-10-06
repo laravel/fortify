@@ -19,27 +19,31 @@
 
 Laravel Fortify is a frontend agnostic authentication backend for Laravel. Fortify powers the registration, authentication, and two-factor authentication features of [Laravel Jetstream](https://github.com/laravel/jetstream).
 
-## Using Fortify For Headless Authentication
+- [Official Documentation](#official-documentation)
+    - [Installation](#installation)
+        - [The Fortify Service Provider](#the-fortify-service-provider)
+        - [Fortify Features](#fortify-features)
+    - [Authentication](#authentication)
+        - [Customizing User Authentication](#customizing-user-authentication)
+    - [Registration](#registration)
+        - [Customizing Registration](#customizing-registration)
+    - [Password Reset](#password-reset)
+        - [Requesting A Password Reset Link](#requesting-a-password-reset-link)
+        - [Resetting The Password](#resetting-the-password)
+        - [Customizing Password Resets](#customizing-password-resets)
+    - [Email Verification](#email-verification)
+        - [Protecting Routes](#email-verification-protecting-routes)
+- [Contributing](#contributing)
+- [Code of Conduct](#code-of-conduct)
+- [Security Vulnerabilities](#security-vulnerabilities)
+- [License](#license)
+
+## Official Documentation
 
 > **Note:** Want an example of implementing each of these authentication related views? Check out their [Blade based Jetstream implementations](https://github.com/laravel/jetstream/tree/1.x/stubs/resources/views/auth)!
 
 You may use Fortify (without Jetstream) to serve a headless authentication backend for your Laravel application. In this scenario, you are required to build your own templates using the frontend stack of your choice (Blade, Vue, etc.)
 
-- [Installation](#installation)
-    - [The Fortify Service Provider](#the-fortify-service-provider)
-    - [Fortify Features](#fortify-features)
-- [Authentication](#authentication)
-    - [Customizing User Authentication](#customizing-user-authentication)
-- [Registration](#registration)
-    - [Customizing Registration](#customizing-registration)
-- [Password Reset](#password-reset)
-    - [Requesting A Password Reset Link](#requesting-a-password-reset-link)
-    - [Resetting The Password](#resetting-the-password)
-    - [Customizing Password Resets](#customizing-password-resets)
-- [Email Verification](#email-verification)
-    - [Protecting Routes](#email-verification-protecting-routes)
-
-<a name="installation"></a>
 ### Installation
 
 To get started, install Fortify using Composer:
@@ -62,14 +66,12 @@ Next, you should migrate your database:
 php artisan migrate
 ```
 
-<a name="the-fortify-service-provider"></a>
 #### The Fortify Service Provider
 
 The `vendor:publish` command discussed above will also publish the `app/Providers/FortifyServiceProvider` file. You should ensure this file is registered within the `providers` array of your `app` configuration file.
 
 This service provider registers the actions that Fortify published, instructing Fortify to use them when their respective tasks are executed by Fortify.
 
-<a name="fortify-features"></a>
 #### Fortify Features
 
 The `fortify` configuration file contains a `features` configuration array. This array defines which backend routes / features Fortify will expose by default. If you are not using Fortify in combination with [Laravel Jetstream](https://jetstream.laravel.com), we recommend that you only enable the following features, which is the same feature set available in previous Laravel authentication scaffolding packages:
@@ -82,7 +84,6 @@ The `fortify` configuration file contains a `features` configuration array. This
 
 If you are not using Laravel Jetstream, you should implement user profile updates, password updates, and two-factor authentication yourself.
 
-<a name="authentication"></a>
 ### Authentication
 
 To get started, we need to instruct Fortify how to return our `login` view. Remember, Fortify is a headless authentication library. If you would like a frontend implementation of Fortify that is already completed for you, you should use [Laravel Jetstream](https://jetstream.laravel.com).
@@ -103,7 +104,6 @@ If the login attempt is successful, Fortify will redirect you to the URI configu
 
 If the request was not successful, the user will be redirect back to the login screen and the validation errors will be available to you via the shared `$errors` Blade template variable. Or, in the case of an XHR request, the validation errors will be returned with the `422` HTTP response.
 
-<a name="customizing-user-authentication"></a>
 #### Customizing User Authentication
 
 Fortify will automatically retrieve and authenticate the user based on the provided credentials and the authentication guard that is configured for your application. However, you may sometimes wish to have full customization over how login credentials are authenticated and users are retrieved. Thankfully, Fortify allows you to easily accomplish this using the `Fortify::authenticateUsing` method.
@@ -126,7 +126,6 @@ Fortify::authenticateUsing(function (Request $request) {
 })
 ```
 
-<a name="registration"></a>
 ### Registration
 
 To begin implementing registration functionality, we need to instruct Fortify how to return our `register` view. Remember, Fortify is a headless authentication library. If you would like a frontend implementation of Fortify that is already completed for you, you should use [Laravel Jetstream](https://jetstream.laravel.com).
@@ -147,15 +146,12 @@ If the registration attempt is successful, Fortify will redirect you to the URI 
 
 If the request was not successful, the user will be redirect back to the registration screen and the validation errors will be available to you via the shared `$errors` Blade template variable. Or, in the case of an XHR request, the validation errors will be returned with the `422` HTTP response.
 
-<a name="customizing-registration"></a>
 #### Customizing Registration
 
 The user validation and creation process may be customized by modifying the `App\Actions\Fortify\CreateNewUser` action.
 
-<a name="password-reset"></a>
 ### Password Reset
 
-<a name="requesting-a-password-reset-link"></a>
 #### Requesting A Password Reset Link
 
 To begin implementing password reset functionality, we need to instruct Fortify how to return our "forgot password" view. Remember, Fortify is a headless authentication library. If you would like a frontend implementation of Fortify that is already completed for you, you should use [Laravel Jetstream](https://jetstream.laravel.com).
@@ -186,7 +182,6 @@ After being redirected back to the `/forgot-password` route after a successful r
 
 If the request was not successful, the user will be redirect back to the request password reset link screen and the validation errors will be available to you via the shared `$errors` Blade template variable. Or, in the case of an XHR request, the validation errors will be returned with the `422` HTTP response.
 
-<a name="resetting-the-password"></a>
 #### Resetting The Password
 
 To finish implementing password reset functionality, we need to instruct Fortify how to return our "reset password" view. Remember, Fortify is a headless authentication library. If you would like a frontend implementation of Fortify that is already completed for you, you should use [Laravel Jetstream](https://jetstream.laravel.com).
@@ -217,12 +212,10 @@ If the request was an XHR request, a `200` HTTP response will be returned.
 
 If the request was not successful, the user will be redirect back to the reset password screen and the validation errors will be available to you via the shared `$errors` Blade template variable. Or, in the case of an XHR request, the validation errors will be returned with the `422` HTTP response.
 
-<a name="customizing-password-resets"></a>
 #### Customizing Password Resets
 
 The password reset process may be customized by modifying the `App\Actions\ResetUserPassword` action.
 
-<a name="email-verification"></a>
 ### Email Verification
 
 After registration, you may wish for users to verify their email address before they continue accessing your application. To get started, ensure the `emailVerification` feature is enabled in your `fortify` configuration file's `features` array. Next, you should ensure that your `App\Models\User` class implements the `MustVerifyEmail` interface. This interface is already imported into this model for you.
@@ -245,7 +238,6 @@ Your `verify-email` template should include an informational message instructing
 
 If the request to resend the verification link email was successful, Fortify will redirect back to the `/email/verify` endpoint with a `status` session variable, allowing you to display an informational message to the user informing them the operation was successful. If the request was an XHR request, a `202` HTTP response will be returned.
 
-<a name="email-verification-protecting-routes"></a>
 #### Protecting Routes
 
 To specify that a route or group of routes requires that the user has previously verified their email address, you should attach Laravel's built-in `verified` middleware to the route:
