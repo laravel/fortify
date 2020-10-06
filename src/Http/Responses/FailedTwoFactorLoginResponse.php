@@ -2,10 +2,10 @@
 
 namespace Laravel\Fortify\Http\Responses;
 
-use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Validation\ValidationException;
+use Laravel\Fortify\Contracts\FailedTwoFactorLoginResponse as FailedTwoFactorLoginResponseContract;
 
-class FailedTwoFactorLoginResponse implements Responsable
+class FailedTwoFactorLoginResponse implements FailedTwoFactorLoginResponseContract
 {
     /**
      * Create an HTTP response that represents the object.
