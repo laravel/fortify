@@ -36,4 +36,20 @@ class EmailVerificationNotificationControllerTest extends OrchestraTestCase
 
         $response->assertRedirect('/home');
     }
+
+    public function test_user_is_redirect_to_intended_url_if_already_verified()
+    {
+        $user = Mockery::mock(Authenticatable::class);
+
+        $user->shouldReceive('hasVerifiedEmail')->andReturn(true);
+        $user->shouldReceive('getAuthIdentifier')->andReturn(1);
+        $user->shouldReceive('sendEmailVerificationNotification')->never();
+
+        $response = $this->from('/email/verify')
+                        ->actingAs($user)
+                        ->withSession(['url.intended' => 'http://foo.com/bar'])
+                        ->post('/email/verification-notification');
+
+        $response->assertRedirect('http://foo.com/bar');
+    }
 }

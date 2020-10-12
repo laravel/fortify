@@ -19,7 +19,7 @@ class EmailVerificationNotificationController extends Controller
         if ($request->user()->hasVerifiedEmail()) {
             return $request->wantsJson()
                         ? new JsonResponse('', 204)
-                        : redirect(config('fortify.home'));
+                        : redirect()->intended(config('fortify.home'));
         }
 
         $request->user()->sendEmailVerificationNotification();
