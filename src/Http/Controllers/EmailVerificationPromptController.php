@@ -17,7 +17,7 @@ class EmailVerificationPromptController extends Controller
     public function __invoke(Request $request)
     {
         return $request->user()->hasVerifiedEmail()
-                    ? redirect(config('fortify.home'))
+                    ? redirect()->intended(config('fortify.home'))
                     : app(VerifyEmailViewResponse::class);
     }
 }

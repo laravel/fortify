@@ -26,9 +26,11 @@ class VerifyEmailControllerTest extends OrchestraTestCase
         $user->shouldReceive('hasVerifiedEmail')->andReturn(false);
         $user->shouldReceive('markEmailAsVerified')->once();
 
-        $response = $this->actingAs($user)->get($url);
+        $response = $this->actingAs($user)
+            ->withSession(['url.intended' => 'http://foo.com/bar'])
+            ->get($url);
 
-        $response->assertStatus(302);
+        $response->assertRedirect('http://foo.com/bar');
     }
 
     public function test_redirected_if_email_is_already_verified()
