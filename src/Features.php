@@ -133,6 +133,7 @@ class Features
     /**
      * Enable the two factor authentication feature.
      *
+     * @param  array  $options
      * @return string
      */
     public static function twoFactorAuthentication(array $options = [])
