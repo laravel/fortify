@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.6.1...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.6.2...1.x)
+
+
+## [v1.6.2 (2020-10-20)](https://github.com/laravel/fortify/compare/v1.6.1...v1.6.2)
+
+### Changed
+- Redirect to intended URL after email verification ([#119](https://github.com/laravel/fortify/pull/119))
+- Only use two factor action when enabled ([#127](https://github.com/laravel/fortify/pull/127))
 
 
 ## [v1.6.1 (2020-10-05)](https://github.com/laravel/fortify/compare/v1.6.0...v1.6.1)
