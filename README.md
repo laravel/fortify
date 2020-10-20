@@ -123,7 +123,7 @@ Fortify::authenticateUsing(function (Request $request) {
         Hash::check($request->password, $user->password)) {
         return $user;
     }
-})
+});
 ```
 
 ### Registration

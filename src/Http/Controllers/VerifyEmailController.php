@@ -18,13 +18,13 @@ class VerifyEmailController extends Controller
     public function __invoke(VerifyEmailRequest $request): RedirectResponse
     {
         if ($request->user()->hasVerifiedEmail()) {
-            return redirect(config('fortify.home').'?verified=1');
+            return redirect()->intended(config('fortify.home').'?verified=1');
         }
 
         if ($request->user()->markEmailAsVerified()) {
             event(new Verified($request->user()));
         }
 
-        return redirect(config('fortify.home').'?verified=1');
+        return redirect()->intended(config('fortify.home').'?verified=1');
     }
 }
