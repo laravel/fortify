@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Laravel\Fortify\Contracts\LoginViewResponse;
+use Laravel\Fortify\Features;
 use Laravel\Fortify\FortifyServiceProvider;
 use Laravel\Fortify\LoginRateLimiter;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -68,6 +69,37 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         ]);
 
         $response->assertRedirect('/two-factor-challenge');
+    }
+
+    public function test_user_can_authenticate_when_two_factor_challenge_is_disabled()
+    {
+        app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
+
+        $features = app('config')->get('fortify.features');
+
+        unset($features[array_search(Features::twoFactorAuthentication(), $features)]);
+
+        app('config')->set('fortify.features', $features);
+
+        $this->loadLaravelMigrations(['--database' => 'testbench']);
+
+        Schema::table('users', function ($table) {
+            $table->text('two_factor_secret')->nullable();
+        });
+
+        TestTwoFactorAuthenticationSessionUser::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+            'two_factor_secret' => 'test-secret',
+        ]);
+
+        $response = $this->withoutExceptionHandling()->post('/login', [
+            'email' => 'taylor@laravel.com',
+            'password' => 'secret',
+        ]);
+
+        $response->assertRedirect('/home');
     }
 
     public function test_validation_exception_returned_on_failure()
