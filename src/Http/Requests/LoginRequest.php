@@ -24,8 +24,10 @@ class LoginRequest extends FormRequest
      */
     public function rules()
     {
+        $username = Fortify::username();
+        $type = $username == 'email' ? 'email' : 'string'; 
         return [
-            Fortify::username() => 'required|string',
+            $username => ['required', $type],
             'password' => 'required|string',
         ];
     }
