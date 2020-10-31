@@ -19,10 +19,14 @@ use Laravel\Fortify\Http\Controllers\TwoFactorQrCodeController;
 use Laravel\Fortify\Http\Controllers\VerifyEmailController;
 
 Route::group(['middleware' => config('fortify.middleware', ['web'])], function () {
+    $disableViews = config('fortify.disable_views');
+
     // Authentication...
-    Route::get('/login', [AuthenticatedSessionController::class, 'create'])
-        ->middleware(['guest'])
-        ->name('login');
+    if (! $disableViews) {
+        Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+            ->middleware(['guest'])
+            ->name('login');
+    }
 
     $limiter = config('fortify.limiters.login');
 
@@ -37,17 +41,19 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
 
     // Password Reset...
     if (Features::enabled(Features::resetPasswords())) {
-        Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
-            ->middleware(['guest'])
-            ->name('password.request');
+        if (! $disableViews) {
+            Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
+                ->middleware(['guest'])
+                ->name('password.request');
+
+            Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+                ->middleware(['guest'])
+                ->name('password.reset');
+        }
 
         Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
             ->middleware(['guest'])
             ->name('password.email');
-
-        Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
-            ->middleware(['guest'])
-            ->name('password.reset');
 
         Route::post('/reset-password', [NewPasswordController::class, 'store'])
             ->middleware(['guest'])
@@ -56,9 +62,11 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
 
     // Registration...
     if (Features::enabled(Features::registration())) {
-        Route::get('/register', [RegisteredUserController::class, 'create'])
-            ->middleware(['guest'])
-            ->name('register');
+        if (! $disableViews) {
+            Route::get('/register', [RegisteredUserController::class, 'create'])
+                ->middleware(['guest'])
+                ->name('register');
+        }
 
         Route::post('/register', [RegisteredUserController::class, 'store'])
             ->middleware(['guest']);
@@ -66,9 +74,11 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
 
     // Email Verification...
     if (Features::enabled(Features::emailVerification())) {
-        Route::get('/email/verify', [EmailVerificationPromptController::class, '__invoke'])
-            ->middleware(['auth'])
-            ->name('verification.notice');
+        if (! $disableViews) {
+            Route::get('/email/verify', [EmailVerificationPromptController::class, '__invoke'])
+                ->middleware(['auth'])
+                ->name('verification.notice');
+        }
 
         Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
             ->middleware(['auth', 'signed', 'throttle:6,1'])
@@ -94,22 +104,26 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     }
 
     // Password Confirmation...
-    Route::get('/user/confirm-password', [ConfirmablePasswordController::class, 'show'])
-        ->middleware(['auth'])
-        ->name('password.confirm');
+    if (! $disableViews) {
+        Route::get('/user/confirm-password', [ConfirmablePasswordController::class, 'show'])
+            ->middleware(['auth'])
+            ->name('password.confirm');
+
+        Route::get('/user/confirmed-password-status', [ConfirmedPasswordStatusController::class, 'show'])
+            ->middleware(['auth'])
+            ->name('password.confirmation');
+    }
 
     Route::post('/user/confirm-password', [ConfirmablePasswordController::class, 'store'])
         ->middleware(['auth']);
 
-    Route::get('/user/confirmed-password-status', [ConfirmedPasswordStatusController::class, 'show'])
-        ->middleware(['auth'])
-        ->name('password.confirmation');
-
     // Two Factor Authentication...
     if (Features::enabled(Features::twoFactorAuthentication())) {
-        Route::get('/two-factor-challenge', [TwoFactorAuthenticatedSessionController::class, 'create'])
-            ->middleware(['guest'])
-            ->name('two-factor.login');
+        if (! $disableViews) {
+            Route::get('/two-factor-challenge', [TwoFactorAuthenticatedSessionController::class, 'create'])
+                ->middleware(['guest'])
+                ->name('two-factor.login');
+        }
 
         Route::post('/two-factor-challenge', [TwoFactorAuthenticatedSessionController::class, 'store'])
             ->middleware(['guest']);
@@ -124,11 +138,13 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         Route::delete('/user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'destroy'])
             ->middleware($twoFactorMiddleware);
 
-        Route::get('/user/two-factor-qr-code', [TwoFactorQrCodeController::class, 'show'])
-            ->middleware($twoFactorMiddleware);
+        if (! $disableViews) {
+            Route::get('/user/two-factor-qr-code', [TwoFactorQrCodeController::class, 'show'])
+                ->middleware($twoFactorMiddleware);
 
-        Route::get('/user/two-factor-recovery-codes', [RecoveryCodeController::class, 'index'])
-            ->middleware($twoFactorMiddleware);
+            Route::get('/user/two-factor-recovery-codes', [RecoveryCodeController::class, 'index'])
+                ->middleware($twoFactorMiddleware);
+        }
 
         Route::post('/user/two-factor-recovery-codes', [RecoveryCodeController::class, 'store'])
             ->middleware($twoFactorMiddleware);

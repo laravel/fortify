@@ -52,6 +52,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Disable Views
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify if the routes returning views should be disabled.
+    | You might want to activate this configuration if you are using your
+    | own front-end and you want to keep your application routes clean.
+    |
+    */
+
+    'disable_views' => false,
+
+    /*
+    |--------------------------------------------------------------------------
     | Home Path
     |--------------------------------------------------------------------------
     |
