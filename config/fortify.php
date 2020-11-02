@@ -8,7 +8,7 @@ return [
     'passwords' => 'users',
     'username' => 'email',
     'email' => 'email',
-    'disable_views' => false,
+    'views' => true,
     'home' => '/home',
     'limiters' => [
         'login' => null,

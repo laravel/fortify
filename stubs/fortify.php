@@ -52,19 +52,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Disable Views
-    |--------------------------------------------------------------------------
-    |
-    | Here you may specify if the routes returning views should be disabled.
-    | You might want to activate this configuration if you are using your
-    | own front-end and you want to keep your application routes clean.
-    |
-    */
-
-    'disable_views' => false,
-
-    /*
-    |--------------------------------------------------------------------------
     | Home Path
     |--------------------------------------------------------------------------
     |
@@ -103,6 +90,19 @@ return [
     'limiters' => [
         'login' => null,
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Register View Routes
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify if the routes returning views should be disabled as
+    | you may not need them when building your own application. This may be
+    | especially true if you're writing a custom single-page application.
+    |
+    */
+
+    'views' => true,
 
     /*
     |--------------------------------------------------------------------------
