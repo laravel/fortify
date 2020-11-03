@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.6.2...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.0...1.x)
+
+
+## [v1.7.0 (2020-11-03)](https://github.com/laravel/fortify/compare/v1.6.2...v1.7.0)
+
+### Added
+- PHP 8 Support ([#130](https://github.com/laravel/fortify/pull/130))
+- Add `views` config option ([#133](https://github.com/laravel/fortify/pull/133), [ff155d0](https://github.com/laravel/fortify/commit/ff155d0e136d67bfd3832e052ed54135525c4569))
 
 
 ## [v1.6.2 (2020-10-20)](https://github.com/laravel/fortify/compare/v1.6.1...v1.6.2)
