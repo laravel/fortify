@@ -97,4 +97,50 @@ class VerifyEmailControllerTest extends OrchestraTestCase
 
         $response->assertStatus(403);
     }
+
+    public function test_the_email_can_be_verified_json_response()
+    {
+        $url = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            [
+                'id' => 1,
+                'hash' => sha1('taylor@laravel.com'),
+            ]
+        );
+
+        $user = Mockery::mock(Authenticatable::class);
+        $user->shouldReceive('getKey')->andReturn(1);
+        $user->shouldReceive('getAuthIdentifier')->andReturn(1);
+        $user->shouldReceive('getEmailForVerification')->andReturn('taylor@laravel.com');
+        $user->shouldReceive('hasVerifiedEmail')->andReturn(false);
+        $user->shouldReceive('markEmailAsVerified')->once();
+
+        $response = $this->actingAs($user)->getJson($url);
+
+        $response->assertStatus(200);
+    }
+
+    public function test_email_is_already_verified_json_response()
+    {
+        $url = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            [
+                'id' => 1,
+                'hash' => sha1('taylor@laravel.com'),
+            ]
+        );
+
+        $user = Mockery::mock(Authenticatable::class);
+        $user->shouldReceive('getKey')->andReturn(1);
+        $user->shouldReceive('getAuthIdentifier')->andReturn(1);
+        $user->shouldReceive('getEmailForVerification')->andReturn('taylor@laravel.com');
+        $user->shouldReceive('hasVerifiedEmail')->andReturn(true);
+        $user->shouldReceive('markEmailAsVerified')->never();
+
+        $response = $this->actingAs($user)->getJson($url);
+
+        $response->assertStatus(200);
+    }
 }
