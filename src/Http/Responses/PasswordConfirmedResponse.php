@@ -3,7 +3,6 @@
 namespace Laravel\Fortify\Http\Responses;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 use Laravel\Fortify\Contracts\PasswordConfirmedResponse as PasswordConfirmedResponseContract;
 
 class PasswordConfirmedResponse implements PasswordConfirmedResponseContract

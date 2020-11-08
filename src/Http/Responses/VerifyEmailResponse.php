@@ -3,9 +3,9 @@
 namespace Laravel\Fortify\Http\Responses;
 
 use Illuminate\Http\JsonResponse;
-use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
+use Laravel\Fortify\Contracts\VerifyEmailResponse as VerifyEmailResponseContract;
 
-class RegisterResponse implements RegisterResponseContract
+class VerifyEmailResponse implements VerifyEmailResponseContract
 {
     /**
      * Create an HTTP response that represents the object.
@@ -16,7 +16,7 @@ class RegisterResponse implements RegisterResponseContract
     public function toResponse($request)
     {
         return $request->wantsJson()
-                    ? new JsonResponse('', 201)
-                    : redirect(config('fortify.home'));
+            ? new JsonResponse('', 200)
+            : redirect()->intended(config('fortify.home') . '?verified=1');
     }
 }
