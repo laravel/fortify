@@ -17,6 +17,6 @@ class VerifyEmailResponse implements VerifyEmailResponseContract
     {
         return $request->wantsJson()
             ? new JsonResponse('', 200)
-            : redirect()->intended(config('fortify.home') . '?verified=1');
+            : redirect()->intended(config('fortify.home').'?verified=1');
     }
 }
