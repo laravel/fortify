@@ -33,7 +33,7 @@ Laravel Fortify is a frontend agnostic authentication backend for Laravel. Forti
         - [Customizing Password Resets](#customizing-password-resets)
     - [Email Verification](#email-verification)
         - [Protecting Routes](#protecting-routes)
-    - [Password Confirmation(#password-confirmation)
+    - [Password Confirmation](#password-confirmation)
 - [Contributing](#contributing)
 - [Code of Conduct](#code-of-conduct)
 - [Security Vulnerabilities](#security-vulnerabilities)
