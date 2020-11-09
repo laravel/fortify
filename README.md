@@ -33,6 +33,7 @@ Laravel Fortify is a frontend agnostic authentication backend for Laravel. Forti
         - [Customizing Password Resets](#customizing-password-resets)
     - [Email Verification](#email-verification)
         - [Protecting Routes](#protecting-routes)
+    - [Password Confirmation](#password-confirmation)
 - [Contributing](#contributing)
 - [Code of Conduct](#code-of-conduct)
 - [Security Vulnerabilities](#security-vulnerabilities)
@@ -247,6 +248,26 @@ Route::get('/dashboard', function () {
     // ...
 })->middleware(['verified']);
 ```
+
+### Password Confirmation
+
+While building your application, you may occasionally have actions that should require the user to confirm their password before the action is performed. Typically, these routes are protected by Laravel's built-in `password.confirm` middleware. To begin implementing password confirmation functionality, we need to instruct Fortify how to return our "password confirmation" view. Remember, Fortify is a headless authentication library. If you would like a frontend implementation of Fortify that is already completed for you, you should use [Laravel Jetstream](https://jetstream.laravel.com/).
+
+All of the authentication view's rendering logic may be customized using the appropriate methods available via the `Laravel\Fortify\Fortify` class. Typically, you should call this method from the `boot` method of your `FortifyServiceProvider`:
+
+```php
+use Laravel\Fortify\Fortify;
+
+Fortify::confirmPasswordView(function () {
+    return view('auth.confirm-password');
+});
+```
+
+Fortify will take care of generating the `/user/confirm-password` route that returns this view. Your `confirm-password` template should include a form that makes a POST request to `/user/confirm-password`. The `/user/confirm-password` action expects a `password` field that contains the user's current password.
+
+If the password matches, Fortify will redirect you to the route the user was attempting to access. If the request was an XHR request, a `200` HTTP response will be returned.
+
+If the request was not successful, the user will be redirected back to the confirm password screen and the validation errors will be available to you via the shared `$errors` Blade template variable. Or, in the case of an XHR request, the validation errors will be returned with the `422` HTTP response.
 
 ## Contributing
 
