@@ -34,6 +34,9 @@ Laravel Fortify is a frontend agnostic authentication backend for Laravel. Forti
     - [Email Verification](#email-verification)
         - [Protecting Routes](#protecting-routes)
     - [Password Confirmation](#password-confirmation)
+    - [Two Factor Authentication](#two-factor-authentication)
+        - [Enabling two factor authentication](#enabling-two-factor-authentication)
+        - [Logging in with two factor authentication](#logging-in-with-two-factor-authentication)
 - [Contributing](#contributing)
 - [Code of Conduct](#code-of-conduct)
 - [Security Vulnerabilities](#security-vulnerabilities)
@@ -268,6 +271,56 @@ Fortify will take care of generating the `/user/confirm-password` route that ret
 If the password matches, Fortify will redirect you to the route the user was attempting to access. If the request was an XHR request, a `200` HTTP response will be returned.
 
 If the request was not successful, the user will be redirected back to the confirm password screen and the validation errors will be available to you via the shared `$errors` Blade template variable. Or, in the case of an XHR request, the validation errors will be returned with the `422` HTTP response.
+
+
+### Two Factor Authentication
+
+An authenticated user may want to secure their account within your application after their session is authenticated. To allow for this Fortify offers a handy Two Factor Authentication built in. For more information on two factor authentication please see [here](https://authy.com/what-is-2fa). Two factor auth in fortify is done with a few simple requests.
+
+
+#### Enabling two factor authentication
+
+To get started, you will need to prepare your Authenticatable model to make use of the TwoFactorAuthenticatable trait.
+
+
+```php
+use Laravel\Fortify\TwoFactorAuthenticatable;
+
+class User extends Authenticatable
+{
+   use Notifiable, TwoFactorAuthenticatable;
+}
+```
+
+You will also need to ensure that the Fortify migrations have been run and your user table has `two_factor_secret` and `two_factor_recovery_codes`. 
+
+To enable two factor authentication, you will need to make a post request to `/user/two-factor-authentication` this will enable an encrypted `two_factor_secret` and create encrypted `two_factor_recovery_codes`. 
+
+To get a QR code to display to the Authenticated user, a get request is made to `user/two-factor-qr-code` which will return an SVG that can be displayed in your UI. 
+
+To get recovery codes a get ret request is made to `/user/two-factor-recovery-codes` which will return an array of recovery codes to display in your UI
+
+> It is advised to only display the QR code and recovery codes when absolutely needed
+
+To disable two factor authentication you can make a `delete` request to the same `/user/two-factor-authentication` endpoint and the `two_factor_secret` and `two_factor_recovery_codes` will be set to `null`. 
+
+To regerate recovery codes a post request is made to `/user/two-factor-recovery-codes` which will return a new array of recovery codes to display in your UI. 
+
+
+#### Logging in with two factor authentication
+
+Once two factor authentication is enabled and the user has either the recovery codes or an authenticator set up, Fortify will automatically route the login to a two factor authentication challenge. 
+
+This route will expect that a post request is made to `/two-factor-challenge` and expects either a `code` or a `recovery_code` in the request data. Fortify will automatically decrypt the code or recovery code and log the user in if the code is correct. An incorrect code will return back with `422` errors. 
+
+You will need to tell Fortify how to load the view to your two factor challenge, this can be done in the `boot` method of the FortifyServiceProvider
+
+```php
+Fortify::twoFactorChallengeView(function () {
+    return view('auth.two-factor-challenge');
+});
+```
+
 
 ## Contributing
 
