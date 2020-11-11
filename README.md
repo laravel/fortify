@@ -162,6 +162,7 @@ To enable two factor authentication, your application should make a POST request
         Two factor authentication has been enabled.
     </div>
 @endif
+```
 
 Next, you should display the two factor authentication QR code for the user to scan into their authenticator application. If you are using Blade to render your application's frontend, you may retrieve the QR code SVG using the `twoFactorQrCodeSvg` method:
 
