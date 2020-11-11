@@ -103,7 +103,7 @@ Fortify::loginView(function () {
 });
 ```
 
-Fortify will take care of generating the `/login` route that returns this view. Your `login` template should include a form that makes a POST request to `/login`. The `/login` action expects a string email address / username and a `password`. The name of the email / username field should match the `username` value of the `fortify` configuration file.
+Fortify will take care of generating the `/login` route that returns this view. Your `login` template should include a form that makes a POST request to `/login`. The `/login` action expects a string email address / username and a `password`. The name of the email / username field should match the `username` value of the `fortify` configuration file. To authenticate with the "remember me" option, include an input with `remember` as the name, set to true or false, along with the request.
 
 If the login attempt is successful, Fortify will redirect you to the URI configured via the `home` configuration option within your `fortify` configuration file. If the login request was an XHR request, a `200` HTTP response will be returned.
 
