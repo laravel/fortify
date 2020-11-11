@@ -25,6 +25,10 @@ Laravel Fortify is a frontend agnostic authentication backend for Laravel. Forti
         - [Fortify Features](#fortify-features)
     - [Authentication](#authentication)
         - [Customizing User Authentication](#customizing-user-authentication)
+    - [Two Factor Authentication](#two-factor-authentication)
+        - [Enabling Two Factor Authentication](#enabling-two-factor-authentication)
+        - [Authenticating With Two Factor Authentication](#authenticating-with-two-factor-authentication)
+        - [Disabling Two Factor Authentication](#disabling-two-factor-authentication)
     - [Registration](#registration)
         - [Customizing Registration](#customizing-registration)
     - [Password Reset](#password-reset)
@@ -103,7 +107,7 @@ Fortify will take care of generating the `/login` route that returns this view. 
 
 If the login attempt is successful, Fortify will redirect you to the URI configured via the `home` configuration option within your `fortify` configuration file. If the login request was an XHR request, a `200` HTTP response will be returned.
 
-If the request was not successful, the user will be redirect back to the login screen and the validation errors will be available to you via the shared `$errors` Blade template variable. Or, in the case of an XHR request, the validation errors will be returned with the `422` HTTP response.
+If the request was not successful, the user will be redirected back to the login screen and the validation errors will be available to you via the shared `$errors` Blade template variable. Or, in the case of an XHR request, the validation errors will be returned with the `422` HTTP response.
 
 #### Customizing User Authentication
 
@@ -127,6 +131,82 @@ Fortify::authenticateUsing(function (Request $request) {
 });
 ```
 
+### Two Factor Authentication
+
+When two factor authentication is enabled, the user is required to input a six digit numeric token during the authentication process. This token is generated using a time-based one-time password (TOTP) that can be retrieved from any TOTP compatible mobile authentication application such as Google Authenticator.
+
+To get started, you should first ensure that your application's `App\Models\User` model uses the `Laravel\Fortify\TwoFactorAuthenticatable` trait:
+
+```php
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\TwoFactorAuthenticatable;
+
+class User extends Authenticatable
+{
+    use Notifiable, TwoFactorAuthenticatable;
+}
+ ```
+
+Next, you should build a screen within your application where users can manage their two factor authentication settings. This screen should allow the user to enable and disable two factor authentication, as well as regenerate their two factor authentication recovery codes.
+
+> By default, the `features` array of the `fortify` configuration file instructs Fortify's two factor authentication settings to require [password confirmation](#password-confirmation) before modification. Therefore, your application should implement Fortify's password confirmation feature before continuing.
+
+#### Enabling Two Factor Authentication
+
+To enable two factor authentication, your application should make a POST request to `/user/two-factor-authentication`. If the request is successful, the user will be redirected back to the previous URL and the `status` session variable will be set to `two-factor-authentication-enabled`. You may detect this `status` session variable within your templates to display the appropriate success message. If the request was an XHR request, `200` HTTP response will be returned:
+
+```html
+@if (session('status') == 'two-factor-authentication-enabled')
+    <div class="mb-4 font-medium text-sm text-green-600">
+        Two factor authentication has been enabled.
+    </div>
+@endif
+
+Next, you should display the two factor authentication QR code for the user to scan into their authenticator application. If you are using Blade to render your application's frontend, you may retrieve the QR code SVG using the `twoFactorQrCodeSvg` method:
+
+```php
+$request->user()->twoFactorQrCodeSvg();
+```
+
+If you are building a JavaScript powered frontend, you may make an XHR GET request to `/user/two-factor-qr-code`. This URL will return a JSON object containing an `svg` key.
+
+You should also display the user's two factor recovery codes. These recovery codes allow the user to authenticate if they lose access to their mobile device. If you are using Blade to render your application's frontend, you may access the recovery codes on the authenticated user:
+
+```php
+(array) $request->user()->two_factor_recovery_codes
+```
+
+If you are building a JavaScript powered frontend, you may make an XHR GET request to `/user/two-factor-recovery-codes`. This URL will return a JSON array containing the users recovery codes.
+
+To regenerate the user's recovery codes, your application should make a POST request to `/user/two-factor-recovery-codes`.
+
+#### Authenticating With Two Factor Authentication
+
+During the authentication process, Fortify will automatically redirect the user to the two factor authentication challenge screen. However, if your application is making an XHR login request, the JSON response returned after a successful authentication attempt will contain a JSON object that has a `two_factor` boolean property. You should inspect this value to know whether you should redirect to your application's two factor authentication challenge screen.
+
+To begin implementing two factor authentication functionality, we need to instruct Fortify how to return our "challenge" view. Remember, Fortify is a headless authentication library. If you would like a frontend implementation of Fortify that is already completed for you, you should use [Laravel Jetstream](https://jetstream.laravel.com/).
+
+All of the authentication view's rendering logic may be customized using the appropriate methods available via the `Laravel\Fortify\Fortify` class. Typically, you should call this method from the `boot` method of your `FortifyServiceProvider`:
+
+```php
+use Laravel\Fortify\Fortify;
+
+Fortify::twoFactorChallengeView(function () {
+    return view('auth.two-factor-challenge');
+});
+```
+
+Fortify will take care of generating the `/two-factor-challenge` route that returns this view. Your `two-factor-challenge` template should include a form that makes a POST request to `/two-factor-challenge`. The `/two-factor-challenge` action expects a `code` field that contains the user's current password, or a `recovery_code` field that contains one of the user's recovery codes.
+
+If the login attempt is successful, Fortify will redirect you to the URI configured via the `home` configuration option within your `fortify` configuration file. If the login request was an XHR request, a `204` HTTP response will be returned.
+
+If the request was not successful, the user will be redirected back to the login screen and the validation errors will be available to you via the shared `$errors` Blade template variable. Or, in the case of an XHR request, the validation errors will be returned with the `422` HTTP response.
+
+#### Disabling Two Factor Authentication
+
+To disable two factor authentication, your application should make a DELETE request to `/user/two-factor-authentication`. Remember, Fortify's two factor authentication endpoints require [password confirmation](#password-confirmation) prior to being called.
+
 ### Registration
 
 To begin implementing registration functionality, we need to instruct Fortify how to return our `register` view. Remember, Fortify is a headless authentication library. If you would like a frontend implementation of Fortify that is already completed for you, you should use [Laravel Jetstream](https://jetstream.laravel.com).
@@ -145,7 +225,7 @@ Fortify will take care of generating the `/register` route that returns this vie
 
 If the registration attempt is successful, Fortify will redirect you to the URI configured via the `home` configuration option within your `fortify` configuration file. If the login request was an XHR request, a `200` HTTP response will be returned.
 
-If the request was not successful, the user will be redirect back to the registration screen and the validation errors will be available to you via the shared `$errors` Blade template variable. Or, in the case of an XHR request, the validation errors will be returned with the `422` HTTP response.
+If the request was not successful, the user will be redirected back to the registration screen and the validation errors will be available to you via the shared `$errors` Blade template variable. Or, in the case of an XHR request, the validation errors will be returned with the `422` HTTP response.
 
 #### Customizing Registration
 
@@ -181,7 +261,7 @@ After being redirected back to the `/forgot-password` route after a successful r
 @endif
 ```
 
-If the request was not successful, the user will be redirect back to the request password reset link screen and the validation errors will be available to you via the shared `$errors` Blade template variable. Or, in the case of an XHR request, the validation errors will be returned with the `422` HTTP response.
+If the request was not successful, the user will be redirected back to the request password reset link screen and the validation errors will be available to you via the shared `$errors` Blade template variable. Or, in the case of an XHR request, the validation errors will be returned with the `422` HTTP response.
 
 #### Resetting The Password
 
@@ -211,7 +291,7 @@ If the password reset request was successful, Fortify will redirect back to the 
 
 If the request was an XHR request, a `200` HTTP response will be returned.
 
-If the request was not successful, the user will be redirect back to the reset password screen and the validation errors will be available to you via the shared `$errors` Blade template variable. Or, in the case of an XHR request, the validation errors will be returned with the `422` HTTP response.
+If the request was not successful, the user will be redirected back to the reset password screen and the validation errors will be available to you via the shared `$errors` Blade template variable. Or, in the case of an XHR request, the validation errors will be returned with the `422` HTTP response.
 
 #### Customizing Password Resets
 
@@ -265,7 +345,7 @@ Fortify::confirmPasswordView(function () {
 
 Fortify will take care of generating the `/user/confirm-password` route that returns this view. Your `confirm-password` template should include a form that makes a POST request to `/user/confirm-password`. The `/user/confirm-password` action expects a `password` field that contains the user's current password.
 
-If the password matches, Fortify will redirect you to the route the user was attempting to access. If the request was an XHR request, a `200` HTTP response will be returned.
+If the password matches, Fortify will redirect you to the route the user was attempting to access. If the request was an XHR request, a `201` HTTP response will be returned.
 
 If the request was not successful, the user will be redirected back to the confirm password screen and the validation errors will be available to you via the shared `$errors` Blade template variable. Or, in the case of an XHR request, the validation errors will be returned with the `422` HTTP response.
 
