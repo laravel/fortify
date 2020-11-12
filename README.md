@@ -131,7 +131,7 @@ Fortify::authenticateUsing(function (Request $request) {
 });
 ```
 
-#### Authentication Guard
+##### Authentication Guard
 
 When customizing the auth guard in your `fortify.php` file make sure that you're using an implementation of a `StatefulGuard` which Fortify needs in order to function properly. For example, the `api` guard uses stateless tokens so it cannot be used in combination with Fortify.
 
