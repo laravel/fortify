@@ -133,7 +133,7 @@ Fortify::authenticateUsing(function (Request $request) {
 
 ##### Authentication Guard
 
-When customizing the auth guard in your `fortify.php` file make sure that you're using an implementation of a `StatefulGuard` which Fortify needs in order to function properly. For example, the `api` guard uses stateless tokens so it cannot be used in combination with Fortify.
+When customizing the authentication guard in your `fortify.php` file make sure that you're using an implementation of a `StatefulGuard` which Fortify needs in order to function properly. For example, Laravel's `api` guard uses stateless tokens so it cannot be used in combination with Fortify. If you are attempting to use Laravel Fortify to authenticate an SPA, you should use Laravel's default `web` guard in combination with [Laravel Sanctum](https://laravel.com/docs/sanctum).
 
 ### Two Factor Authentication
 
