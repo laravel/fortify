@@ -131,6 +131,10 @@ Fortify::authenticateUsing(function (Request $request) {
 });
 ```
 
+#### Authentication Guard
+
+When customizing the auth guard in your `fortify.php` file make sure that you're using an implementation of a `StatefulGuard` which Fortify needs in order to function properly. For example, the `api` guard uses stateless tokens so it cannot be used in combination with Fortify.
+
 ### Two Factor Authentication
 
 When two factor authentication is enabled, the user is required to input a six digit numeric token during the authentication process. This token is generated using a time-based one-time password (TOTP) that can be retrieved from any TOTP compatible mobile authentication application such as Google Authenticator.
