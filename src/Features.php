@@ -2,8 +2,6 @@
 
 namespace Laravel\Fortify;
 
-use Illuminate\Support\Arr;
-
 class Features
 {
     /**
