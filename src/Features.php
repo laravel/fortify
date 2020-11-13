@@ -7,13 +7,6 @@ use Illuminate\Support\Arr;
 class Features
 {
     /**
-     * The options enabled for a given feature.
-     *
-     * @var array
-     */
-    protected static $featureOptions = [];
-
-    /**
      * Determine if the given feature is enabled.
      *
      * @param  string  $feature
@@ -34,7 +27,7 @@ class Features
     public static function optionEnabled(string $feature, string $option)
     {
         return static::enabled($feature) &&
-               Arr::get(static::$featureOptions, $feature.'.'.$option) === true;
+               config("fortify-options.{$feature}.{$option}") === true;
     }
 
     /**
@@ -139,7 +132,7 @@ class Features
     public static function twoFactorAuthentication(array $options = [])
     {
         if (! empty($options)) {
-            static::$featureOptions['two-factor-authentication'] = $options;
+            config(['fortify-options.two-factor-authentication' => $options]);
         }
 
         return 'two-factor-authentication';
