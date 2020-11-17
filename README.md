@@ -23,6 +23,7 @@ Laravel Fortify is a frontend agnostic authentication backend for Laravel. Forti
     - [Installation](#installation)
         - [The Fortify Service Provider](#the-fortify-service-provider)
         - [Fortify Features](#fortify-features)
+        - [Disabling Views](#disabling-views)
     - [Authentication](#authentication)
         - [Customizing User Authentication](#customizing-user-authentication)
     - [Two Factor Authentication](#two-factor-authentication)
@@ -81,13 +82,23 @@ This service provider registers the actions that Fortify published, instructing 
 
 The `fortify` configuration file contains a `features` configuration array. This array defines which backend routes / features Fortify will expose by default. If you are not using Fortify in combination with [Laravel Jetstream](https://jetstream.laravel.com), we recommend that you only enable the following features, which is the same feature set available in previous Laravel authentication scaffolding packages:
 
-    'features' => [
-        Features::registration(),
-        Features::resetPasswords(),
-        Features::emailVerification(),
-    ],
+```php
+'features' => [
+    Features::registration(),
+    Features::resetPasswords(),
+    Features::emailVerification(),
+],
+```
 
 If you are not using Laravel Jetstream, you should implement user profile updates, password updates, and two-factor authentication yourself.
+
+#### Disabling Views
+
+By default, Fortify define routes that are intended to return views, such as a login screen or registration screen. However, if you are building a JavaScript driven single-page application, you may not have any need for these routes. For that reason, you may disable these routes entirely by setting the `views` configuration value within your `config/fortify.php` configuration file to `false`:
+
+```php
+'views' => true,
+```
 
 ### Authentication
 
