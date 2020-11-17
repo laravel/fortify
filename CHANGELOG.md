@@ -1,6 +1,16 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.1...1.x)
+
+
+## [v1.7.1 (2020-11-13)](https://github.com/laravel/fortify/compare/v1.7.0...v1.7.1)
+
+### Changed
+- Add the `prefix` and `domain` configuration options ([#143](https://github.com/laravel/fortify/pull/143))
+- Change how feature options are stored to work with config caching ([b2430958](https://github.com/laravel/fortify/commit/b2430958fa93883ab0e5f0caf486ef3688711608))
+
+### Fixed
+- Fix 2FA disabled routes via `views` config ([#142](https://github.com/laravel/fortify/pull/142))
 
 
 ## [v1.7.0 (2020-11-03)](https://github.com/laravel/fortify/compare/v1.6.2...v1.7.0)
