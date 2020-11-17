@@ -97,7 +97,7 @@ If you are not using Laravel Jetstream, you should implement user profile update
 By default, Fortify define routes that are intended to return views, such as a login screen or registration screen. However, if you are building a JavaScript driven single-page application, you may not have any need for these routes. For that reason, you may disable these routes entirely by setting the `views` configuration value within your `config/fortify.php` configuration file to `false`:
 
 ```php
-'views' => true,
+'views' => false,
 ```
 
 ### Authentication
