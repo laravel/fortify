@@ -105,7 +105,8 @@ class AttemptToAuthenticate
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    protected function fireFailedEvent($request) {
+    protected function fireFailedEvent($request)
+    {
         event(new Failed(config('fortify.guard'), null, [
             Fortify::username() => $request->{Fortify::username()},
             'password' => $request->password,

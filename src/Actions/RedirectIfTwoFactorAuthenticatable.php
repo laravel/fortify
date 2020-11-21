@@ -111,7 +111,8 @@ class RedirectIfTwoFactorAuthenticatable
      * @param  \Illuminate\Contracts\Auth\Authenticatable|null  $user
      * @return void
      */
-    protected function fireFailedEvent($request, $user = null) {
+    protected function fireFailedEvent($request, $user = null)
+    {
         event(new Failed(config('fortify.guard'), $user, [
             Fortify::username() => $request->{Fortify::username()},
             'password' => $request->password,
