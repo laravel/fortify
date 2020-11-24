@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.1...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.2...1.x)
+
+
+## [v1.7.2 (2020-11-24)](https://github.com/laravel/fortify/compare/v1.7.1...v1.7.2)
+
+### Fixed
+- Fix route prefix ([#152](https://github.com/laravel/fortify/pull/152))
+- Fire Failed events ([#154](https://github.com/laravel/fortify/pull/154))
 
 
 ## [v1.7.1 (2020-11-13)](https://github.com/laravel/fortify/compare/v1.7.0...v1.7.1)
