@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify\Actions;
 
+use Illuminate\Auth\Events\Failed;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -68,6 +69,8 @@ class RedirectIfTwoFactorAuthenticatable
         if (Fortify::$authenticateUsingCallback) {
             return tap(call_user_func(Fortify::$authenticateUsingCallback, $request), function ($user) use ($request) {
                 if (! $user) {
+                    $this->fireFailedEvent($request);
+
                     $this->throwFailedAuthenticationException($request);
                 }
             });
@@ -77,6 +80,8 @@ class RedirectIfTwoFactorAuthenticatable
 
         return tap($model::where(Fortify::username(), $request->{Fortify::username()})->first(), function ($user) use ($request) {
             if (! $user || ! Hash::check($request->password, $user->password)) {
+                $this->fireFailedEvent($request, $user);
+
                 $this->throwFailedAuthenticationException($request);
             }
         });
@@ -97,6 +102,21 @@ class RedirectIfTwoFactorAuthenticatable
         throw ValidationException::withMessages([
             Fortify::username() => [trans('auth.failed')],
         ]);
+    }
+
+    /**
+     * Fire the failed authentication attempt event with the given arguments.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Contracts\Auth\Authenticatable|null  $user
+     * @return void
+     */
+    protected function fireFailedEvent($request, $user = null)
+    {
+        event(new Failed(config('fortify.guard'), $user, [
+            Fortify::username() => $request->{Fortify::username()},
+            'password' => $request->password,
+        ]));
     }
 
     /**
