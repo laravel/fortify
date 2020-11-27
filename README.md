@@ -100,7 +100,7 @@ By default, Fortify define routes that are intended to return views, such as a l
 'views' => false,
 ```
 
-Note that disabling views still requires you to define a `password.reset` for resetting passwords. This is because internally Fortify makes use of Laravel's `PasswordBroker` to send a `ResetPassword` notification to the user which makes use of this route to direct the user to the proper page to reset their password.
+> **Note:** If you choose to disable Fortify's views, you should still define a route named `password.reset` that is responsible for displaying your application's "reset password" view. This is necessary because Laravel's `Illuminate\Auth\Notifications\ResetPassword` notification will generate the password reset URL via the `password.reset` named route.
 
 ### Authentication
 
