@@ -100,6 +100,8 @@ By default, Fortify define routes that are intended to return views, such as a l
 'views' => false,
 ```
 
+> **Note:** If you choose to disable Fortify's views, you should still define a route named `password.reset` that is responsible for displaying your application's "reset password" view. This is necessary because Laravel's `Illuminate\Auth\Notifications\ResetPassword` notification will generate the password reset URL via the `password.reset` named route.
+
 ### Authentication
 
 To get started, we need to instruct Fortify how to return our `login` view. Remember, Fortify is a headless authentication library. If you would like a frontend implementation of Fortify that is already completed for you, you should use [Laravel Jetstream](https://jetstream.laravel.com).
