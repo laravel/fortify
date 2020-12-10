@@ -19,12 +19,6 @@
 
 Laravel Fortify is a frontend agnostic authentication backend for Laravel. Fortify powers the registration, authentication, and two-factor authentication features of [Laravel Jetstream](https://github.com/laravel/jetstream).
 
-- [Official Documentation](#official-documentation)
-- [Contributing](#contributing)
-- [Code of Conduct](#code-of-conduct)
-- [Security Vulnerabilities](#security-vulnerabilities)
-- [License](#license)
-
 ## Official Documentation
 
 Documentation for Fortify can be found on the [Laravel website](https://laravel.com/docs/fortify).
