@@ -30,7 +30,6 @@ class RecoveryCodeControllerTest extends OrchestraTestCase
 
         Event::assertDispatched(RecoveryCodesGenerated::class);
 
-
         $user->fresh();
 
         $this->assertNotNull($user->two_factor_recovery_codes);
