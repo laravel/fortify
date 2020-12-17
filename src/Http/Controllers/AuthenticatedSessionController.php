@@ -20,24 +20,6 @@ use Laravel\Fortify\Http\Requests\LoginRequest;
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * The guard implementation.
-     *
-     * @var \Illuminate\Contracts\Auth\StatefulGuard
-     */
-    protected $guard;
-
-    /**
-     * Create a new controller instance.
-     *
-     * @param  \Illuminate\Contracts\Auth\StatefulGuard
-     * @return void
-     */
-    public function __construct(StatefulGuard $guard)
-    {
-        $this->guard = $guard;
-    }
-
-    /**
      * Show the login view.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -93,11 +75,12 @@ class AuthenticatedSessionController extends Controller
      * Destroy an authenticated session.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Contracts\Auth\StatefulGuard $guard
      * @return \Laravel\Fortify\Contracts\LogoutResponse
      */
-    public function destroy(Request $request): LogoutResponse
+    public function destroy(Request $request,StatefulGuard $guard): LogoutResponse
     {
-        $this->guard->logout();
+        $guard->logout();
 
         $request->session()->invalidate();
 

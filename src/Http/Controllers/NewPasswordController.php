@@ -18,24 +18,6 @@ use Laravel\Fortify\Fortify;
 class NewPasswordController extends Controller
 {
     /**
-     * The guard implementation.
-     *
-     * @var \Illuminate\Contracts\Auth\StatefulGuard
-     */
-    protected $guard;
-
-    /**
-     * Create a new controller instance.
-     *
-     * @param  \Illuminate\Contracts\Auth\StatefulGuard
-     * @return void
-     */
-    public function __construct(StatefulGuard $guard)
-    {
-        $this->guard = $guard;
-    }
-
-    /**
      * Show the new password view.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -50,9 +32,10 @@ class NewPasswordController extends Controller
      * Reset the user's password.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Contracts\Auth\StatefulGuard $guard
      * @return \Illuminate\Contracts\Support\Responsable
      */
-    public function store(Request $request): Responsable
+    public function store(Request $request,StatefulGuard $guard): Responsable
     {
         $request->validate([
             'token' => 'required',
@@ -64,10 +47,10 @@ class NewPasswordController extends Controller
         // database. Otherwise we will parse the error and return the response.
         $status = $this->broker()->reset(
             $request->only(Fortify::email(), 'password', 'password_confirmation', 'token'),
-            function ($user) use ($request) {
+            function ($user) use ($request, $guard) {
                 app(ResetsUserPasswords::class)->reset($user, $request->all());
 
-                app(CompletePasswordReset::class)($this->guard, $user);
+                app(CompletePasswordReset::class)($guard, $user);
             }
         );
 
