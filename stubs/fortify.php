@@ -80,6 +80,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Fortify Verify Email
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify whether Fortify will assign the Email Verification
+    | route signed or signed:relative for validating relative urls.
+    */
+
+    'signed' => 'signed',
+
+    /*
+    |--------------------------------------------------------------------------
     | Fortify Routes Middleware
     |--------------------------------------------------------------------------
     |

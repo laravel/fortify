@@ -12,6 +12,7 @@ return [
     'home' => '/home',
     'prefix' => '',
     'domain' => null,
+    'signed' => 'signed',
     'limiters' => [
         'login' => null,
     ],

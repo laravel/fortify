@@ -80,8 +80,10 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
                 ->name('verification.notice');
         }
 
+        $signed = config('fortify.signed');
+
         Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
-            ->middleware(['auth', 'signed', 'throttle:6,1'])
+            ->middleware(['auth', $signed ? $signed : 'signed', 'throttle:6,1'])
             ->name('verification.verify');
 
         Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
