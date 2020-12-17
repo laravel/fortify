@@ -2,6 +2,8 @@
 
 namespace Laravel\Fortify\Actions;
 
+use Laravel\Fortify\Events\TwoFactorDisabled;
+
 class DisableTwoFactorAuthentication
 {
     /**
@@ -16,5 +18,7 @@ class DisableTwoFactorAuthentication
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
         ])->save();
+
+        TwoFactorDisabled::dispatch($user);
     }
 }
