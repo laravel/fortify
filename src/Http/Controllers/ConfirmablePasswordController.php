@@ -30,7 +30,7 @@ class ConfirmablePasswordController extends Controller
      * @param  \Illuminate\Contracts\Auth\StatefulGuard $guard
      * @return \Illuminate\Contracts\Support\Responsable
      */
-    public function store(Request $request,StatefulGuard $guard)
+    public function store(Request $request, StatefulGuard $guard)
     {
         $confirmed = app(ConfirmPassword::class)(
             $guard, $request->user(), $request->input('password')

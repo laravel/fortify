@@ -24,6 +24,7 @@ class RegisteredUserControllerTest extends OrchestraTestCase
 
     public function test_users_can_be_created()
     {
+
         $this->mock(CreatesNewUsers::class)
                     ->shouldReceive('create')
                     ->andReturn(Mockery::mock(Authenticatable::class));

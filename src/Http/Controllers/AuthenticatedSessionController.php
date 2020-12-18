@@ -78,7 +78,7 @@ class AuthenticatedSessionController extends Controller
      * @param  \Illuminate\Contracts\Auth\StatefulGuard $guard
      * @return \Laravel\Fortify\Contracts\LogoutResponse
      */
-    public function destroy(Request $request,StatefulGuard $guard): LogoutResponse
+    public function destroy(Request $request, StatefulGuard $guard): LogoutResponse
     {
         $guard->logout();
 

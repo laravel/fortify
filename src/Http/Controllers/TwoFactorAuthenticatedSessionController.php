@@ -30,7 +30,7 @@ class TwoFactorAuthenticatedSessionController extends Controller
      * @param  \Illuminate\Contracts\Auth\StatefulGuard $guard
      * @return mixed
      */
-    public function store(TwoFactorLoginRequest $request,StatefulGuard $guard)
+    public function store(TwoFactorLoginRequest $request, StatefulGuard $guard)
     {
         $user = $request->challengedUser();
 
