@@ -4,7 +4,7 @@ namespace Laravel\Fortify\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
 
-abstract class TwoFactorEvent
+abstract class TwoFactorAuthenticationEvent
 {
     use Dispatchable;
 

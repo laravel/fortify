@@ -4,8 +4,8 @@ namespace Laravel\Fortify\Tests;
 
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Event;
-use Laravel\Fortify\Events\TwoFactorDisabled;
-use Laravel\Fortify\Events\TwoFactorEnabled;
+use Laravel\Fortify\Events\TwoFactorAuthenticationDisabled;
+use Laravel\Fortify\Events\TwoFactorAuthenticationEnabled;
 use Laravel\Fortify\FortifyServiceProvider;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
@@ -30,7 +30,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
 
         $response->assertStatus(200);
 
-        Event::assertDispatched(TwoFactorEnabled::class);
+        Event::assertDispatched(TwoFactorAuthenticationEnabled::class);
 
         $user->fresh();
 
@@ -61,7 +61,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
 
         $response->assertStatus(200);
 
-        Event::assertDispatched(TwoFactorDisabled::class);
+        Event::assertDispatched(TwoFactorAuthenticationDisabled::class);
 
         $user->fresh();
 
