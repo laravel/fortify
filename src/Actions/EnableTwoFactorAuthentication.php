@@ -4,7 +4,7 @@ namespace Laravel\Fortify\Actions;
 
 use Illuminate\Support\Collection;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
-use Laravel\Fortify\Events\TwoFactorEnabled;
+use Laravel\Fortify\Events\TwoFactorAuthenticationEnabled;
 use Laravel\Fortify\RecoveryCode;
 
 class EnableTwoFactorAuthentication
@@ -42,6 +42,6 @@ class EnableTwoFactorAuthentication
             })->all())),
         ])->save();
 
-        TwoFactorEnabled::dispatch($user);
+        TwoFactorAuthenticationEnabled::dispatch($user);
     }
 }
