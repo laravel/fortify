@@ -3,6 +3,9 @@
 namespace Laravel\Fortify\Tests;
 
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Event;
+use Laravel\Fortify\Events\TwoFactorAuthenticationDisabled;
+use Laravel\Fortify\Events\TwoFactorAuthenticationEnabled;
 use Laravel\Fortify\FortifyServiceProvider;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
@@ -10,6 +13,8 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
 {
     public function test_two_factor_authentication_can_be_enabled()
     {
+        Event::fake();
+
         $this->loadLaravelMigrations(['--database' => 'testbench']);
         $this->artisan('migrate', ['--database' => 'testbench'])->run();
 
@@ -25,6 +30,8 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
 
         $response->assertStatus(200);
 
+        Event::assertDispatched(TwoFactorAuthenticationEnabled::class);
+
         $user->fresh();
 
         $this->assertNotNull($user->two_factor_secret);
@@ -35,6 +42,8 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
 
     public function test_two_factor_authentication_can_be_disabled()
     {
+        Event::fake();
+
         $this->loadLaravelMigrations(['--database' => 'testbench']);
         $this->artisan('migrate', ['--database' => 'testbench'])->run();
 
@@ -51,6 +60,8 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
         );
 
         $response->assertStatus(200);
+
+        Event::assertDispatched(TwoFactorAuthenticationDisabled::class);
 
         $user->fresh();
 
