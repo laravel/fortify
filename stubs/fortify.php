@@ -2,6 +2,7 @@
 
 use App\Providers\RouteServiceProvider;
 use Laravel\Fortify\Features;
+use Laravel\Fortify\Fortify;
 
 return [
 
@@ -139,6 +140,24 @@ return [
         Features::twoFactorAuthentication([
             'confirmPassword' => true,
         ]),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | rules
+    |--------------------------------------------------------------------------
+    |
+    | Some of the Fortify features are optional. You may disable the features
+    | by removing them from this array. You're free to only remove some of
+    | these features or you can even remove all of these if you need to.
+    |
+    */
+
+    'rules' => [
+        'login' => [
+            Fortify::username() => 'required|string',
+            'password' => 'required|string',
+        ]
     ],
 
 ];
