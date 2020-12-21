@@ -18,7 +18,9 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        if (env('MAIL_USERNAME', null) && env('MAIL_PASSWORD', null)) {
+            config(['fortify.features' => array_merge(config('fortify.features', []), [Features::emailVerification()])]);
+        }
     }
 
     /**
