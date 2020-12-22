@@ -27,4 +27,13 @@ class PasswordControllerTest extends OrchestraTestCase
 
         $response->assertStatus(200);
     }
+	
+	public function test_password_update_can_fail_without_current_password()
+	{
+        $user = Mockery::mock(Authenticatable::class);
+
+        $response = $this->withoutExceptionHandling()->actingAs($user)->putJson('/user/password', []);	
+		$response->assertSessionHasErrorsIn('updatePassword',['current_password']);
+
+	}
 }
