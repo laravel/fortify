@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Laravel\Fortify\Actions\EnsureLoginIsNotThrottled;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use Laravel\Fortify\Http\Controllers\ConfirmablePasswordController;
@@ -126,7 +127,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         }
 
         Route::post('/two-factor-challenge', [TwoFactorAuthenticatedSessionController::class, 'store'])
-            ->middleware(['guest']);
+            ->middleware(['guest', EnsureLoginIsNotThrottled::class]);
 
         $twoFactorMiddleware = Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword')
             ? ['auth', 'password.confirm']
