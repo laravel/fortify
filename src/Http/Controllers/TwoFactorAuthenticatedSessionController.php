@@ -9,6 +9,7 @@ use Laravel\Fortify\Contracts\FailedTwoFactorLoginResponse;
 use Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse;
 use Laravel\Fortify\Contracts\TwoFactorLoginResponse;
 use Laravel\Fortify\Http\Requests\TwoFactorLoginRequest;
+use Laravel\Fortify\LoginRateLimiter;
 
 class TwoFactorAuthenticatedSessionController extends Controller
 {
@@ -20,14 +21,23 @@ class TwoFactorAuthenticatedSessionController extends Controller
     protected $guard;
 
     /**
+     * The login rate limiter instance.
+     *
+     * @var \Laravel\Fortify\LoginRateLimiter
+     */
+    protected $limiter;
+
+    /**
      * Create a new controller instance.
      *
-     * @param  \Illuminate\Contracts\Auth\StatefulGuard
+     * @param  \Illuminate\Contracts\Auth\StatefulGuard  $guard
+     * @param  \Laravel\Fortify\LoginRateLimiter|null  $limiter
      * @return void
      */
-    public function __construct(StatefulGuard $guard)
+    public function __construct(StatefulGuard $guard, LoginRateLimiter $limiter = null)
     {
         $this->guard = $guard;
+        $this->limiter = $limiter ?? app(LoginRateLimiter::class);
     }
 
     /**
@@ -58,6 +68,10 @@ class TwoFactorAuthenticatedSessionController extends Controller
         }
 
         $this->guard->login($user, $request->remember());
+
+        $request->session()->regenerate();
+
+        $this->limiter->clear($request);
 
         return app(TwoFactorLoginResponse::class);
     }
