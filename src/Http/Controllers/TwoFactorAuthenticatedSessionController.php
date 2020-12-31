@@ -22,7 +22,7 @@ class TwoFactorAuthenticatedSessionController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  \Illuminate\Contracts\Auth\StatefulGuard
+     * @param  \Illuminate\Contracts\Auth\StatefulGuard  $guard
      * @return void
      */
     public function __construct(StatefulGuard $guard)
@@ -58,6 +58,8 @@ class TwoFactorAuthenticatedSessionController extends Controller
         }
 
         $this->guard->login($user, $request->remember());
+
+        $request->session()->regenerate();
 
         return app(TwoFactorLoginResponse::class);
     }
