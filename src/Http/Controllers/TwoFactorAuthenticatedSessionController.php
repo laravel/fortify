@@ -20,13 +20,6 @@ class TwoFactorAuthenticatedSessionController extends Controller
     protected $guard;
 
     /**
-     * The login rate limiter instance.
-     *
-     * @var \Laravel\Fortify\LoginRateLimiter
-     */
-    protected $limiter;
-
-    /**
      * Create a new controller instance.
      *
      * @param  \Illuminate\Contracts\Auth\StatefulGuard  $guard
