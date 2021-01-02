@@ -32,6 +32,13 @@ class Fortify
     public static $authenticateUsingCallback;
 
     /**
+     * The callback that is responsible for validating authentication credentials at two factor authentication class,
+     * if applicable.
+     * @var callable|null
+     */
+    public static $authenticateTwoFactorUsingCallback;
+
+    /**
      * The callback that is responsible for confirming user passwords.
      *
      * @var callable|null
@@ -215,6 +222,10 @@ class Fortify
     public static function authenticateUsing(callable $callback)
     {
         static::$authenticateUsingCallback = $callback;
+    }
+
+    public static function authenticateTwoFactorUsing(callable $callback){
+        static::$authenticateTwoFactorUsingCallback = $callback;
     }
 
     /**
