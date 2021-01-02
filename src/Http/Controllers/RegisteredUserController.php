@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Laravel\Fortify\Contracts\RedirectAfterRegister;
 use Laravel\Fortify\Contracts\RegisterResponse;
 use Laravel\Fortify\Contracts\RegisterViewResponse;
 
@@ -46,14 +47,15 @@ class RegisteredUserController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Laravel\Fortify\Contracts\CreatesNewUsers  $creator
+     * @param  \Laravel\Fortify\Contracts\RedirectAfterRegister  $redirect
      * @return \Laravel\Fortify\Contracts\RegisterResponse
      */
     public function store(Request $request,
-                          CreatesNewUsers $creator): RegisterResponse
+                          CreatesNewUsers $creator, RedirectAfterRegister $redirect): RegisterResponse
     {
         event(new Registered($user = $creator->create($request->all())));
 
-        $this->guard->login($user);
+        $redirect->afterRegister($this->guard, $user);
 
         return app(RegisterResponse::class);
     }

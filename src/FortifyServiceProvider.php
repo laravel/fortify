@@ -101,6 +101,7 @@ class FortifyServiceProvider extends ServiceProvider
 
             $this->publishes([
                 __DIR__.'/../stubs/CreateNewUser.php' => app_path('Actions/Fortify/CreateNewUser.php'),
+                __DIR__.'/../stubs/RedirectAfterRegister.php' => app_path('Actions/Fortify/RedirectAfterRegister.php'),
                 __DIR__.'/../stubs/FortifyServiceProvider.php' => app_path('Providers/FortifyServiceProvider.php'),
                 __DIR__.'/../stubs/PasswordValidationRules.php' => app_path('Actions/Fortify/PasswordValidationRules.php'),
                 __DIR__.'/../stubs/ResetUserPassword.php' => app_path('Actions/Fortify/ResetUserPassword.php'),

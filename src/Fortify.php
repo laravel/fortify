@@ -14,6 +14,7 @@ use Laravel\Fortify\Contracts\UpdatesUserPasswords;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use Laravel\Fortify\Contracts\VerifyEmailViewResponse;
 use Laravel\Fortify\Http\Responses\SimpleViewResponse;
+use Laravel\Fortify\Contracts\RedirectAfterRegister;
 
 class Fortify
 {
@@ -270,6 +271,16 @@ class Fortify
     public static function resetUserPasswordsUsing(string $callback)
     {
         return app()->singleton(ResetsUserPasswords::class, $callback);
+    }
+
+    /**
+     * Redirect after to register user
+     *
+     * @param string $callback
+     * @return void
+     */
+    public static function redirectAfterRegisterUsing(string $callback){
+        return app()->singleton(RedirectAfterRegister::class, $callback);
     }
 
     /**

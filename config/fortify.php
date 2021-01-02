@@ -10,6 +10,7 @@ return [
     'email' => 'email',
     'views' => true,
     'home' => '/home',
+    'register' => '/home',
     'prefix' => '',
     'domain' => null,
     'limiters' => [
