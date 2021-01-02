@@ -55,6 +55,11 @@ class RegisteredUserController extends Controller
 
         $this->guard->login($user);
 
+
+        if (method_exists(get_class($creator), 'afterRegister')){
+            $creator->afterRegister($user);
+        }
+
         return app(RegisterResponse::class);
     }
 }

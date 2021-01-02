@@ -11,4 +11,12 @@ interface CreatesNewUsers
      * @return mixed
      */
     public function create(array $input);
+
+//    /**
+//     *  Execute After Register User
+//     *
+//     * @param $user
+//     * @return void
+//     */
+//    public function afterRegister($user) : void;
 }
