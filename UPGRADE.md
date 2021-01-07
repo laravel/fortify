@@ -15,7 +15,7 @@ Fortify 1.7.3 includes a security fix to prevent potential brute force attacks a
  ],
  ```
 
-Next, define the `two-factor` rate limiter in your application's `FortifyServiceProvider`:
+Next, define the `two-factor` rate limiter in the `boot` method of your application's `FortifyServiceProvider`:
 
 ```php
 RateLimiter::for('two-factor', function (Request $request) {
