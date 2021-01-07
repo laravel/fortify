@@ -2,26 +2,23 @@
 
 Future upgrade notes will be placed here.
 
+## Upgrading To 1.7.3 From 1.x
 
-## Upgrading To 1.7.3 from 1.x
+### Two Factor Brute Force Attack Security Fix
 
-### Brute Force Attack Security Fix
-
-Fortify v1.7.3 was released with a security fix that fixed a vulnerability with 2FA and a potential Brute Force Attack. To fully enable the security fix you'll need to enable rate limiting in your `fortify.php` config file. Change the following lines below:
-
-```php
-     'limiters' => [
-         'login' => null,
-     ],
-```
-
-To these:
+Fortify 1.7.3 includes a security fix to prevent potential brute force attacks against the two factor authentication code form when a malicious user already knows another user's email address and password. To fully enable the security fix, you will need to enable two factor rate limiting in your application's `fortify.php` configuration file:
 
 ```php
-     'limiters' => [
-         'login' => 'login',
-         'two-factor' => 'two-factor',
-     ],
+ 'limiters' => [
+     'login' => 'login',
+     'two-factor' => 'two-factor',
+ ],
  ```
 
- This will enable rate limiting on the login and Two Factor screens.
+Next, define the `two-factor` rate limiter in your application's `FortifyServiceProvider`:
+
+```php
+RateLimiter::for('two-factor', function (Request $request) {
+    return Limit::perMinute(5)->by($request->session()->get('login.id'));
+});
+```
