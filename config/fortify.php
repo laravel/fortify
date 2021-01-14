@@ -29,11 +29,10 @@ return [
         'login' => [
             Fortify::username() => 'required|string',
             'password' => 'required|string',
-        ], 
+        ],
         'twoFactorLogin' => [
             'code' => 'nullable|string',
             'recovery_code' => 'nullable|string',
-
         ],
     ],
 ];
