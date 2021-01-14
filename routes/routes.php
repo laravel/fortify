@@ -29,6 +29,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     }
 
     $limiter = config('fortify.limiters.login');
+    $twoFactorLimiter = config('fortify.limiters.two-factor');
 
     Route::post('/login', [AuthenticatedSessionController::class, 'store'])
         ->middleware(array_filter([
@@ -126,7 +127,10 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         }
 
         Route::post('/two-factor-challenge', [TwoFactorAuthenticatedSessionController::class, 'store'])
-            ->middleware(['guest']);
+            ->middleware(array_filter([
+                'guest',
+                $twoFactorLimiter ? 'throttle:'.$twoFactorLimiter : null,
+            ]));
 
         $twoFactorMiddleware = Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword')
             ? ['auth', 'password.confirm']

@@ -1,6 +1,25 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.2...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.4...1.x)
+
+
+## [v1.7.4 (2021-01-07)](https://github.com/laravel/fortify/compare/v1.7.3...v1.7.4)
+
+### Fixed
+- Fix missing current password ([#194](https://github.com/laravel/fortify/pull/194))
+
+### Security
+- Revert "Retrieve user through provider" ([#195](https://github.com/laravel/fortify/pull/195))
+
+
+## [v1.7.3 (2021-01-05)](https://github.com/laravel/fortify/compare/v1.7.2...v1.7.3)
+
+### Changed
+- Retrieve user through provider ([#189](https://github.com/laravel/fortify/pull/189))
+
+### Fixed
+- Tweak how rate limiting is implemented ([8609af2](https://github.com/laravel/fortify/commit/8609af2292652234a70e4457d63ff1e10a510631))
+- Fix Two Factor prepare auth session ([#181](https://github.com/laravel/fortify/pull/181))
 
 
 ## [v1.7.2 (2020-11-24)](https://github.com/laravel/fortify/compare/v1.7.1...v1.7.2)
