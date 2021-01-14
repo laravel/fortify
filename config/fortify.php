@@ -1,6 +1,8 @@
 <?php
 
 use Laravel\Fortify\Features;
+use Laravel\Fortify\Fortify;
+
 
 return [
     'guard' => 'web',
@@ -22,5 +24,16 @@ return [
         Features::updateProfileInformation(),
         Features::updatePasswords(),
         Features::twoFactorAuthentication(),
+    ],
+    'rules' => [
+        'login' => [
+            Fortify::username() => 'required|string',
+            'password' => 'required|string',
+        ], 
+        'twoFactorLogin' => [
+            'code' => 'nullable|string',
+            'recovery_code' => 'nullable|string',
+
+        ],
     ],
 ];

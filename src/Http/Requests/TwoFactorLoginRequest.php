@@ -41,10 +41,7 @@ class TwoFactorLoginRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'code' => 'nullable|string',
-            'recovery_code' => 'nullable|string',
-        ];
+        return config('fortify.rules.twoFactorLogin');
     }
 
     /**

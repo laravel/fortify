@@ -2,6 +2,7 @@
 
 use App\Providers\RouteServiceProvider;
 use Laravel\Fortify\Features;
+use Laravel\Fortify\Fortify;
 
 return [
 
@@ -142,4 +143,25 @@ return [
         ]),
     ],
 
+   /*
+    |--------------------------------------------------------------------------
+    | Rules
+    |--------------------------------------------------------------------------
+    |
+    | By default, Here you may specify which rules Fortify will assign to the 
+    | login and two factor login. If necessary, you may change these rules.  
+    | but, typically this provided default is preferred.
+    |
+    */
+
+    'rules' => [
+        'login' => [
+            Fortify::username() => 'required|string',
+            'password' => 'required|string',
+        ], 
+        'twoFactorLogin' => [
+            'code' => 'nullable|string',
+            'recovery_code' => 'nullable|string',
+        ],
+    ],
 ];
