@@ -3,7 +3,6 @@
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
 
-
 return [
     'guard' => 'web',
     'middleware' => ['web'],
