@@ -7,6 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Laravel\Fortify\Contracts\FailedTwoFactorLoginResponse;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
+use Laravel\Fortify\Fortify;
 
 class TwoFactorLoginRequest extends FormRequest
 {
@@ -41,10 +42,7 @@ class TwoFactorLoginRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'code' => 'nullable|string',
-            'recovery_code' => 'nullable|string',
-        ];
+        return Fortify::twoFactorAuthenticationRules();
     }
 
     /**

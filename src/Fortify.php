@@ -53,6 +53,13 @@ class Fortify
     public static $loginRules = null;
 
     /**
+     * The rules responsible for validating two-factor authentication requests.
+     *
+     * @var callable|array
+     */
+    public static $twoFactorAuthenticationRules = null;
+
+    /**
      * Get the username used for authentication.
      *
      * @return string
@@ -127,6 +134,36 @@ class Fortify
         return static::$loginRules ?? [
             static::username() => 'required|string',
             'password' => 'required|string',
+        ];
+    }
+
+    /**
+     * Specify the rules that should be used for validating login requests.
+     *
+     * @param  mixed  $rules
+     * @return void
+     */
+    public static function validateTwoFactorAuthenticationRequestsUsing($rules)
+    {
+        if (is_callable($rules) || is_array($rules)) {
+            static::$twoFactorAuthenticationRules = $rules;
+        }
+    }
+
+    /**
+     * Get the rules used for validating two-factor authentication requests.
+     *
+     * @return array
+     */
+    public static function twoFactorAuthenticationRules()
+    {
+        if (is_callable(static::$twoFactorAuthenticationRules)) {
+            return call_user_func(static::$twoFactorAuthenticationRules);
+        }
+
+        return static::$twoFactorAuthenticationRules ?? [
+            'code' => 'nullable|string',
+            'recovery_code' => 'nullable|string',
         ];
     }
 
