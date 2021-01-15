@@ -46,6 +46,13 @@ class Fortify
     public static $registersRoutes = true;
 
     /**
+     * The rules responsible for validating login requests.
+     *
+     * @var callable|array
+     */
+    public static $loginRules = null;
+
+    /**
      * Get the username used for authentication.
      *
      * @return string
@@ -91,6 +98,36 @@ class Fortify
         static::resetPasswordView($prefix.'reset-password');
         static::verifyEmailView($prefix.'verify-email');
         static::confirmPasswordView($prefix.'confirm-password');
+    }
+
+    /**
+     * Specify the rules that should be used for validating login requests.
+     *
+     * @param  mixed  $rules
+     * @return void
+     */
+    public static function validateLoginRequestsUsing($rules)
+    {
+        if (is_callable($rules) || is_array($rules)) {
+            static::$loginRules = $rules;
+        }
+    }
+
+    /**
+     * Get the rules used for validating login requests.
+     *
+     * @return array
+     */
+    public static function loginRequestRules()
+    {
+        if (is_callable(static::$loginRules)) {
+            return call_user_func(static::$loginRules);
+        }
+
+        return static::$loginRules ?? [
+            static::username() => 'required|string',
+            'password' => 'required|string',
+        ];
     }
 
     /**
