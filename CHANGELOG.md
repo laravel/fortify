@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.4...master))
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.5...master)
+
+
+## [v1.7.5 (2021-01-19)](https://github.com/laravel/fortify/compare/v1.7.4...v1.7.5)
+
+### Fixed
+- Move route outside `$enableViews` ([#203](https://github.com/laravel/fortify/pull/203))
 
 
 ## [v1.7.4 (2021-01-07)](https://github.com/laravel/fortify/compare/v1.7.3...v1.7.4)
