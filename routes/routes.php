@@ -109,11 +109,11 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         Route::get('/user/confirm-password', [ConfirmablePasswordController::class, 'show'])
             ->middleware(['auth'])
             ->name('password.confirm');
-
-        Route::get('/user/confirmed-password-status', [ConfirmedPasswordStatusController::class, 'show'])
-            ->middleware(['auth'])
-            ->name('password.confirmation');
     }
+
+    Route::get('/user/confirmed-password-status', [ConfirmedPasswordStatusController::class, 'show'])
+        ->middleware(['auth'])
+        ->name('password.confirmation');
 
     Route::post('/user/confirm-password', [ConfirmablePasswordController::class, 'store'])
         ->middleware(['auth']);
