@@ -54,7 +54,7 @@ class ConfirmablePasswordController extends Controller
         );
 
         if ($confirmed) {
-            $request->session()->put('auth.password_confirmed_at', time());
+            $request->session()->passwordConfirmed();
         }
 
         return $confirmed
