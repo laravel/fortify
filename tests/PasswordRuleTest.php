@@ -12,6 +12,8 @@ class PasswordRuleTest extends OrchestraTestCase
         $rule = new Password;
 
         $this->assertTrue($rule->passes('password', 'password'));
+        $this->assertTrue($rule->passes('password', 234234234));
+        $this->assertFalse($rule->passes('password', ['foo' => 'bar']));
         $this->assertFalse($rule->passes('password', 'secret'));
 
         $this->assertTrue(Str::contains($rule->message(), 'must be at least 8 characters'));
