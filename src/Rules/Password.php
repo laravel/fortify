@@ -51,6 +51,8 @@ class Password implements Rule
      */
     public function passes($attribute, $value)
     {
+        $value = is_array($value) ? '' : (string) $value;
+
         if ($this->requireUppercase && Str::lower($value) === $value) {
             return false;
         }
