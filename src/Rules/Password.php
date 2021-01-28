@@ -122,6 +122,13 @@ class Password implements Rule
                     'length' => $this->length,
                 ]);
 
+            case $this->requireNumeric
+                && $this->requireSpecialCharacter
+                && ! $this->requireUppercase:
+                return __('The :attribute must be at least :length characters and contain at least one special character and one number.', [
+                    'length' => $this->length,
+                ]);
+
             default:
                 return __('The :attribute must be at least :length characters.', [
                     'length' => $this->length,
