@@ -72,6 +72,16 @@ class Features
     }
 
     /**
+     * Determine if the application can register new users.
+     *
+     * @return bool
+     */
+    public static function hasRegistrationFeatures()
+    {
+        return static::enabled(static::registration());
+    }
+
+    /**
      * Enable the registration feature.
      *
      * @return string
