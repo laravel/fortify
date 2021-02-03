@@ -35,7 +35,8 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         ->middleware(array_filter([
             'guest',
             $limiter ? 'throttle:'.$limiter : null,
-        ]));
+        ]))
+        ->name('post.login');
 
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
@@ -70,7 +71,8 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         }
 
         Route::post('/register', [RegisteredUserController::class, 'store'])
-            ->middleware(['guest']);
+            ->middleware(['guest'])
+            ->name('post.register');
     }
 
     // Email Verification...
@@ -116,7 +118,8 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         ->name('password.confirmation');
 
     Route::post('/user/confirm-password', [ConfirmablePasswordController::class, 'store'])
-        ->middleware(['auth']);
+        ->middleware(['auth'])
+        ->name('post.password.confirmation');
 
     // Two Factor Authentication...
     if (Features::enabled(Features::twoFactorAuthentication())) {
@@ -130,25 +133,31 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
             ->middleware(array_filter([
                 'guest',
                 $twoFactorLimiter ? 'throttle:'.$twoFactorLimiter : null,
-            ]));
+            ]))
+            ->name('post.two-factor.login');
 
         $twoFactorMiddleware = Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword')
             ? ['auth', 'password.confirm']
             : ['auth'];
 
         Route::post('/user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'store'])
-            ->middleware($twoFactorMiddleware);
+            ->middleware($twoFactorMiddleware)
+            ->name('post.two-factor-authentication');
 
         Route::delete('/user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'destroy'])
-            ->middleware($twoFactorMiddleware);
+            ->middleware($twoFactorMiddleware)
+            ->name('delete.two-factor-authentication');
 
         Route::get('/user/two-factor-qr-code', [TwoFactorQrCodeController::class, 'show'])
-            ->middleware($twoFactorMiddleware);
+            ->middleware($twoFactorMiddleware)
+            ->name('two-factor-qr-code');
 
         Route::get('/user/two-factor-recovery-codes', [RecoveryCodeController::class, 'index'])
-            ->middleware($twoFactorMiddleware);
+            ->middleware($twoFactorMiddleware)
+            ->name('two-factor-recovery-codes');
 
         Route::post('/user/two-factor-recovery-codes', [RecoveryCodeController::class, 'store'])
-            ->middleware($twoFactorMiddleware);
+            ->middleware($twoFactorMiddleware)
+            ->name('post.two-factor-recovery-codes');
     }
 });
