@@ -25,7 +25,7 @@ class CreateNewUser implements CreatesNewUsers
             'email' => [
                 'required',
                 'string',
-                'email',
+                'email:filter',
                 'max:255',
                 Rule::unique(User::class),
             ],
