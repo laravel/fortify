@@ -51,6 +51,8 @@ class Password implements Rule
      */
     public function passes($attribute, $value)
     {
+        $value = is_scalar($value) ? (string) $value : '';
+
         if ($this->requireUppercase && Str::lower($value) === $value) {
             return false;
         }
@@ -117,6 +119,13 @@ class Password implements Rule
                 && $this->requireNumeric
                 && $this->requireSpecialCharacter:
                 return __('The :attribute must be at least :length characters and contain at least one uppercase character, one number, and one special character.', [
+                    'length' => $this->length,
+                ]);
+
+            case $this->requireNumeric
+                && $this->requireSpecialCharacter
+                && ! $this->requireUppercase:
+                return __('The :attribute must be at least :length characters and contain at least one special character and one number.', [
                     'length' => $this->length,
                 ]);
 

@@ -12,6 +12,8 @@ class PasswordRuleTest extends OrchestraTestCase
         $rule = new Password;
 
         $this->assertTrue($rule->passes('password', 'password'));
+        $this->assertTrue($rule->passes('password', 234234234));
+        $this->assertFalse($rule->passes('password', ['foo' => 'bar']));
         $this->assertFalse($rule->passes('password', 'secret'));
 
         $this->assertTrue(Str::contains($rule->message(), 'must be at least 8 characters'));
@@ -50,5 +52,19 @@ class PasswordRuleTest extends OrchestraTestCase
 
         $this->assertTrue(Str::contains($rule->message(), 'must be at least 8 characters'));
         $this->assertTrue(Str::contains($rule->message(), 'special character'));
+    }
+
+    public function test_password_rule_can_require_numeric_and_special_characters()
+    {
+        $rule = new Password;
+
+        $rule->length(10)->requireNumeric()->requireSpecialCharacter();
+
+        $this->assertTrue($rule->passes('password', 'password5%'));
+        $this->assertFalse($rule->passes('password', 'my-password'));
+
+        $this->assertTrue(Str::contains($rule->message(), 'must be at least 10 characters'));
+        $this->assertTrue(Str::contains($rule->message(), 'contain at least one special character'));
+        $this->assertTrue(Str::contains($rule->message(), 'and one number'));
     }
 }
