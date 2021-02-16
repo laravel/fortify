@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.5...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.6...1.x)
+
+
+## [v1.7.6 (2021-02-16)](https://github.com/laravel/fortify/compare/v1.7.5...v1.7.6)
+
+### Fixed
+- Fix password rule ([#211](https://github.com/laravel/fortify/pull/211))
+- Adds a missing scenario for the password rule ([#213](https://github.com/laravel/fortify/pull/213))
 
 
 ## [v1.7.5 (2021-01-19)](https://github.com/laravel/fortify/compare/v1.7.4...v1.7.5)
