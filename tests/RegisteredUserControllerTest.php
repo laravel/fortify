@@ -36,4 +36,20 @@ class RegisteredUserControllerTest extends OrchestraTestCase
 
         $response->assertRedirect('/home');
     }
+
+    public function test_users_can_be_created_and_redirected_to_intended_url()
+    {
+        $this->mock(CreatesNewUsers::class)
+                    ->shouldReceive('create')
+                    ->andReturn(Mockery::mock(Authenticatable::class));
+
+        $this->mock(StatefulGuard::class)
+                    ->shouldReceive('login')
+                    ->once();
+
+        $response = $this->withSession(['url.intended' => 'http://foo.com/bar'])
+                        ->post('/register', []);
+
+        $response->assertRedirect('http://foo.com/bar');
+    }
 }

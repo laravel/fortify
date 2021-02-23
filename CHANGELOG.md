@@ -3,6 +3,12 @@
 ## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.6...master)
 
 
+## [v1.7.7 (2021-02-23)](https://github.com/laravel/fortify/compare/v1.7.6...v1.7.7)
+
+### Fixed
+- Redirect to intended URL after registration ([#222](https://github.com/laravel/fortify/pull/222))
+
+
 ## [v1.7.6 (2021-02-16)](https://github.com/laravel/fortify/compare/v1.7.5...v1.7.6)
 
 ### Fixed
