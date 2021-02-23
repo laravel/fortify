@@ -1,6 +1,6 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.6...master)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.7...master)
 
 
 ## [v1.7.7 (2021-02-23)](https://github.com/laravel/fortify/compare/v1.7.6...v1.7.7)
