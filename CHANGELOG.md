@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.6...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.7...1.x)
+
+
+## [v1.7.7 (2021-02-23)](https://github.com/laravel/fortify/compare/v1.7.6...v1.7.7)
+
+### Fixed
+- Redirect to intended URL after registration ([#222](https://github.com/laravel/fortify/pull/222))
 
 
 ## [v1.7.6 (2021-02-16)](https://github.com/laravel/fortify/compare/v1.7.5...v1.7.6)
