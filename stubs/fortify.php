@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'guard' => 'web',
+    'guard' => env('FORTIFY_GUARD', 'web'),
 
     /*
     |--------------------------------------------------------------------------
@@ -29,7 +29,7 @@ return [
     |
     */
 
-    'passwords' => 'users',
+    'passwords' => env('FORTIFY_PASSWORDS', 'users'),
 
     /*
     |--------------------------------------------------------------------------
@@ -46,9 +46,9 @@ return [
     |
     */
 
-    'username' => 'email',
+    'username' => env('FORTIFY_USERNAME_FIELD', 'email'),
 
-    'email' => 'email',
+    'email' => env('FORTIFY_EMAIL_FIELD', 'email'),
 
     /*
     |--------------------------------------------------------------------------
@@ -61,7 +61,7 @@ return [
     |
     */
 
-    'home' => RouteServiceProvider::HOME,
+    'home' => env('FORTIFY_HOME', RouteServiceProvider::HOME),
 
     /*
     |--------------------------------------------------------------------------
@@ -74,9 +74,9 @@ return [
     |
     */
 
-    'prefix' => '',
+    'prefix' => env('FORTIFY_ROUTE_PREFIX', ''),
 
-    'domain' => null,
+    'domain' => env('FORTIFY_SUBDOMAIN', null),
 
     /*
     |--------------------------------------------------------------------------
