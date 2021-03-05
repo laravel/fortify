@@ -240,6 +240,19 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $this->assertNull(Auth::getUser());
     }
 
+    public function test_two_factor_challenge_requires_a_challenged_user()
+    {
+        app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
+
+        $this->loadLaravelMigrations(['--database' => 'testbench']);
+        $this->artisan('migrate', ['--database' => 'testbench'])->run();
+
+        $response = $this->withSession([])->withoutExceptionHandling()->get('/two-factor-challenge');
+
+        $response->assertRedirect('/login');
+        $this->assertNull(Auth::getUser());
+    }
+
     protected function getPackageProviders($app)
     {
         return [FortifyServiceProvider::class];
