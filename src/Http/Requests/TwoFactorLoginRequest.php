@@ -76,6 +76,22 @@ class TwoFactorLoginRequest extends FormRequest
     }
 
     /**
+     * Determine if there is a challenged user in the current session.
+     *
+     * @return bool
+     */
+    public function hasChallengedUser()
+    {
+        try {
+            $user = $this->challengedUser();
+        } catch (HttpResponseException $e) {
+            return false;
+        }
+
+        return $user !== null;
+    }
+
+    /**
      * Get the user that is attempting the two factor challenge.
      *
      * @return mixed
@@ -96,22 +112,6 @@ class TwoFactorLoginRequest extends FormRequest
         }
 
         return $this->challengedUser = $user;
-    }
-
-    /**
-     * Determine if there's a challenged user in the current session.
-     *
-     * @return bool
-     */
-    public function hasChallengedUser()
-    {
-        try {
-            $user = $this->challengedUser();
-        } catch (HttpResponseException $e) {
-            return false;
-        }
-
-        return $user !== null;
     }
 
     /**

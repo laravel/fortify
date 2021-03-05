@@ -3,6 +3,7 @@
 namespace Laravel\Fortify\Http\Controllers;
 
 use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Routing\Controller;
 use Laravel\Fortify\Contracts\FailedTwoFactorLoginResponse;
 use Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse;
@@ -33,12 +34,12 @@ class TwoFactorAuthenticatedSessionController extends Controller
      * Show the two factor authentication challenge view.
      *
      * @param  \Laravel\Fortify\Http\Requests\TwoFactorLoginRequest  $request
-     * @return \Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse|\Illuminate\Http\RedirectResponse
+     * @return \Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse
      */
-    public function create(TwoFactorLoginRequest $request)
+    public function create(TwoFactorLoginRequest $request): TwoFactorChallengeViewResponse
     {
         if (! $request->hasChallengedUser()) {
-            return redirect()->route('login');
+            throw new HttpResponseException(redirect()->route('login'));
         }
 
         return app(TwoFactorChallengeViewResponse::class);
