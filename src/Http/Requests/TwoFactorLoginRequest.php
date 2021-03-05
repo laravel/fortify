@@ -106,12 +106,12 @@ class TwoFactorLoginRequest extends FormRequest
     public function hasChallengedUser()
     {
         try {
-            $this->challengedUser();
+            $user = $this->challengedUser();
         } catch (HttpResponseException $e) {
             return false;
         }
 
-        return true;
+        return $user !== null;
     }
 
     /**
