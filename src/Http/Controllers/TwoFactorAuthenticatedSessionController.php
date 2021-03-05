@@ -3,7 +3,6 @@
 namespace Laravel\Fortify\Http\Controllers;
 
 use Illuminate\Contracts\Auth\StatefulGuard;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Laravel\Fortify\Contracts\FailedTwoFactorLoginResponse;
 use Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse;
