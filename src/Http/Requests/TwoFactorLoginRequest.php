@@ -98,7 +98,6 @@ class TwoFactorLoginRequest extends FormRequest
         return $this->challengedUser = $user;
     }
 
-
     /**
      * Determine if there's a challenged user in the current session.
      *
