@@ -105,7 +105,7 @@ class TwoFactorLoginRequest extends FormRequest
         $model = app(StatefulGuard::class)->getProvider()->getModel();
 
         if (! $this->session()->has('login.id') ||
-            ! $user = $model::find($this->session()->pull('login.id'))) {
+            ! $user = $model::find($this->session()->get('login.id'))) {
             throw new HttpResponseException(
                 app(FailedTwoFactorLoginResponse::class)->toResponse($this)
             );
