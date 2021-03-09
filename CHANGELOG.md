@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.7...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.8...1.x)
+
+
+## [v1.7.8 (2021-03-09)](https://github.com/laravel/fortify/compare/v1.7.7...v1.7.8)
+
+### Fixed
+- Fix two factor form without user ([#233](https://github.com/laravel/fortify/pull/233), [67d7743](https://github.com/laravel/fortify/commit/67d7743c843fa01e2a9c5f089ad4aee3dc561743), [#235](https://github.com/laravel/fortify/pull/235))
 
 
 ## [v1.7.7 (2021-02-23)](https://github.com/laravel/fortify/compare/v1.7.6...v1.7.7)
