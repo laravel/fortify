@@ -82,13 +82,10 @@ class TwoFactorLoginRequest extends FormRequest
      */
     public function hasChallengedUser()
     {
-        try {
-            $user = $this->challengedUser();
-        } catch (HttpResponseException $e) {
-            return false;
-        }
+        $model = app(StatefulGuard::class)->getProvider()->getModel();
 
-        return $user !== null;
+        return $this->session()->has('login.id') &&
+            $model::find($this->session()->get('login.id'));
     }
 
     /**
