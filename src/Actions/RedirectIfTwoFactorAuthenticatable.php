@@ -9,6 +9,7 @@ use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\LoginRateLimiter;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
 
 class RedirectIfTwoFactorAuthenticatable
 {
@@ -132,6 +133,8 @@ class RedirectIfTwoFactorAuthenticatable
             'login.id' => $user->getKey(),
             'login.remember' => $request->filled('remember'),
         ]);
+
+        TwoFactorAuthenticationChallenged::dispatch($user);
 
         return $request->wantsJson()
                     ? response()->json(['two_factor' => true])
