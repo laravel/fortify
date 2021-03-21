@@ -53,8 +53,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         }
 
         Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-            ->middleware(['guest'])
-            ->name('password.email');
+            ->middleware(['guest']);
 
         Route::post('/reset-password', [NewPasswordController::class, 'store'])
             ->middleware(['guest'])
