@@ -55,10 +55,10 @@ class NewPasswordController extends Controller
     public function store(Request $request): Responsable
     {
         $request->validate([
-            'password' => 'required|confirmed',
-            'password_confirmation' => 'required',
             'token' => 'required',
             Fortify::email() => 'required|email',
+            'password' => 'required|confirmed',
+            'password_confirmation' => 'required',
         ]);
 
         // Here we will attempt to reset the user's password. If it is successful we
