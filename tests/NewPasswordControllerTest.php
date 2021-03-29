@@ -61,9 +61,6 @@ class NewPasswordControllerTest extends OrchestraTestCase
     {
         Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
 
-        $guard = $this->mock(StatefulGuard::class);
-        $user = Mockery::mock(Authenticatable::class);
-
         $broker->shouldReceive('reset')->andReturnUsing(function ($input, $callback) {
             return Password::INVALID_TOKEN;
         });
@@ -129,5 +126,16 @@ class NewPasswordControllerTest extends OrchestraTestCase
 
         $response->assertStatus(302);
         $response->assertRedirect('/login');
+    }
+
+    public function test_password_and_password_confirmation_are_required()
+    {
+        $response = $this->post('/reset-password', [
+            'token' => 'token',
+            'email' => 'taylor@laravel.com',
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors(['password', 'password_confirmation']);
     }
 }
