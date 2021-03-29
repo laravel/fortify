@@ -55,6 +55,8 @@ class NewPasswordController extends Controller
     public function store(Request $request): Responsable
     {
         $request->validate([
+            'password' => 'required|confirmed',
+            'password_confirmation' => 'required',
             'token' => 'required',
             Fortify::email() => 'required|email',
         ]);
