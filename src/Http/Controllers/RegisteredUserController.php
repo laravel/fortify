@@ -4,6 +4,7 @@ namespace Laravel\Fortify\Http\Controllers;
 
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
@@ -12,6 +13,8 @@ use Laravel\Fortify\Contracts\RegisterViewResponse;
 
 class RegisteredUserController extends Controller
 {
+    use AuthenticationPipeline;
+
     /**
      * The guard implementation.
      *
@@ -46,15 +49,15 @@ class RegisteredUserController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Laravel\Fortify\Contracts\CreatesNewUsers  $creator
-     * @return \Laravel\Fortify\Contracts\RegisterResponse
+     * @return \Laravel\Fortify\Contracts\RegisterResponse | \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request,
-                          CreatesNewUsers $creator): RegisterResponse
+                          CreatesNewUsers $creator)
     {
         event(new Registered($user = $creator->create($request->all())));
 
-        $this->guard->login($user);
-
-        return app(RegisterResponse::class);
+        return $this->loginPipeline($request)->then(function ($request) {
+            return app(RegisterResponse::class);
+        });
     }
 }
