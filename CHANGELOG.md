@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.8...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.9...1.x)
+
+
+## [v1.7.9 (2021-03-30)](https://github.com/laravel/fortify/compare/v1.7.8...v1.7.9)
+
+### Fixed
+- Require password and confirmation ([#245](https://github.com/laravel/fortify/pull/245))
 
 
 ## [v1.7.8 (2021-03-09)](https://github.com/laravel/fortify/compare/v1.7.7...v1.7.8)
