@@ -4,7 +4,6 @@ namespace Laravel\Fortify\Actions;
 
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Contracts\Auth\StatefulGuard;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\LoginRateLimiter;
