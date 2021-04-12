@@ -38,3 +38,21 @@ Please review [our security policy](https://github.com/laravel/fortify/security/
 ## License
 
 Laravel Fortify is open-sourced software licensed under the [MIT license](LICENSE.md).
+
+## Comments 
+
+There are a small documentation inconsistencies for declaring views. Some code examples are in php 7.4 syntax instead of 7.3. 
+And, having in mind, that Laravel 8 minimum requirement is php 7.3, then syntax from php 7.4 (new features) are not correct in this context.
+
+Code examples that are NOT OK (7.4 syntax used - closure), are for:
+- Login (https://laravel.com/docs/8.x/fortify#authentication)
+- Registration (https://laravel.com/docs/8.x/fortify#registration)
+- Email Verification (https://laravel.com/docs/8.x/fortify#email-verification)
+
+Code examples that are OK (7.3 syntax), are for:
+- Requesting A Password Reset Link (https://laravel.com/docs/8.x/fortify#requesting-a-password-reset-link)
+- Resetting The Password (https://laravel.com/docs/8.x/fortify#resetting-the-password) 
+- ... 
+
+I did not check the whole documentation, so please do that in the context of php syntax (to be valid with php 7.3). 
+Thank you, and best wishes. 
