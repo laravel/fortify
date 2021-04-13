@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.9...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.10...1.x)
+
+
+## [v1.7.10 (2021-04-13)](https://github.com/laravel/fortify/compare/v1.7.9...v1.7.10)
+
+### Fixed
+- Better way of validating credentials ([#248](https://github.com/laravel/fortify/pull/248))
+- Use configured username property for qr code url ([#249](https://github.com/laravel/fortify/pull/249))
 
 
 ## [v1.7.9 (2021-03-30)](https://github.com/laravel/fortify/compare/v1.7.8...v1.7.9)
