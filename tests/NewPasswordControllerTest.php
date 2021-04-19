@@ -128,7 +128,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
         $response->assertRedirect('/login');
     }
 
-    public function test_password_and_password_confirmation_are_required()
+    public function test_password_is_required()
     {
         $response = $this->post('/reset-password', [
             'token' => 'token',
@@ -136,6 +136,6 @@ class NewPasswordControllerTest extends OrchestraTestCase
         ]);
 
         $response->assertStatus(302);
-        $response->assertSessionHasErrors(['password', 'password_confirmation']);
+        $response->assertSessionHasErrors(['password']);
     }
 }
