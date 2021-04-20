@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.10...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.11...1.x)
+
+
+## [v1.7.11 (2021-04-20)](https://github.com/laravel/fortify/compare/v1.7.10...v1.7.11)
+
+### Fixed
+- Remove password confirmation requirement for reset password ([#254](https://github.com/laravel/fortify/pull/254))
 
 
 ## [v1.7.10 (2021-04-13)](https://github.com/laravel/fortify/compare/v1.7.9...v1.7.10)
