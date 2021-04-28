@@ -4,7 +4,9 @@ namespace Laravel\Fortify;
 
 use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Laravel\Fortify\Contracts\LoginResponse;
 use Laravel\Fortify\Contracts\LoginViewResponse;
+use Laravel\Fortify\Contracts\RegisterResponse;
 use Laravel\Fortify\Contracts\RegisterViewResponse;
 use Laravel\Fortify\Contracts\RequestPasswordResetLinkViewResponse;
 use Laravel\Fortify\Contracts\ResetPasswordViewResponse;
@@ -237,6 +239,17 @@ class Fortify
     public static function createUsersUsing(string $callback)
     {
         return app()->singleton(CreatesNewUsers::class, $callback);
+    }
+
+    /**
+     * Register a callback that should be used to redirect user after login.
+     *
+     * @param  callable  $callback
+     * @return void
+     */
+    public static function redirectAfterLoginUsing(callable $callback)
+    {
+        return app()->singleton(LoginResponse::class, $callback);
     }
 
     /**
