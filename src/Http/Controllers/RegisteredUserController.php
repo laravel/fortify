@@ -49,7 +49,7 @@ class RegisteredUserController extends Controller
      * @return \Laravel\Fortify\Contracts\RegisterResponse
      */
     public function store(Request $request,
-                          CreatesNewUsers $creator): RegisterResponse
+                          CreatesNewUsers $creator)
     {
         event(new Registered($user = $creator->create($request->all())));
 
