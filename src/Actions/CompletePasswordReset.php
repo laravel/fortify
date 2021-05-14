@@ -22,7 +22,5 @@ class CompletePasswordReset
         $user->save();
 
         event(new PasswordReset($user));
-
-        // $guard->login($user);
     }
 }
