@@ -23,7 +23,8 @@ class FortifyServiceProviderTest extends OrchestraTestCase
     public function test_customized_views_can_return_their_own_responsable()
     {
         Fortify::loginView(function () {
-            return new class implements Responsable {
+            return new class implements Responsable
+            {
                 public function toResponse($request)
                 {
                     return new JsonResponse(['foo' => 'bar']);
