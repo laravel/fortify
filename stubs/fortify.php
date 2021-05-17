@@ -65,6 +65,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Redirect Paths
+    |--------------------------------------------------------------------------
+    |
+    | Here you may configure the path where users will get redirected after
+    | login, registration and logout
+    |
+    */
+
+    'redirect' => [
+        'login' => RouteServiceProvider::HOME,
+        'registration' => RouteServiceProvider::HOME,
+        'logout' => '/login',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Fortify Routes Prefix / Subdomain
     |--------------------------------------------------------------------------
     |

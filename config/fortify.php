@@ -10,6 +10,11 @@ return [
     'email' => 'email',
     'views' => true,
     'home' => '/home',
+    'redirect' => [
+        'login' => '/home',
+        'registration' => '/home',
+        'logout' => '/login',
+    ],
     'prefix' => '',
     'domain' => null,
     'limiters' => [

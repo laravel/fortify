@@ -17,6 +17,6 @@ class LogoutResponse implements LogoutResponseContract
     {
         return $request->wantsJson()
                     ? new JsonResponse('', 204)
-                    : redirect('/');
+                    : redirect()->intended(config('fortify.redirect.logout'));
     }
 }
