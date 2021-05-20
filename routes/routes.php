@@ -137,16 +137,19 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
             : ['auth'];
 
         Route::post('/user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'store'])
-            ->middleware($twoFactorMiddleware);
+            ->middleware($twoFactorMiddleware)
+            ->name('two-factor.toggle');
 
         Route::delete('/user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'destroy'])
             ->middleware($twoFactorMiddleware);
 
         Route::get('/user/two-factor-qr-code', [TwoFactorQrCodeController::class, 'show'])
-            ->middleware($twoFactorMiddleware);
+            ->middleware($twoFactorMiddleware)
+            ->name('two-factor.qr-code');
 
         Route::get('/user/two-factor-recovery-codes', [RecoveryCodeController::class, 'index'])
-            ->middleware($twoFactorMiddleware);
+            ->middleware($twoFactorMiddleware)
+            ->name('two-factor.recovery-codes');
 
         Route::post('/user/two-factor-recovery-codes', [RecoveryCodeController::class, 'store'])
             ->middleware($twoFactorMiddleware);
