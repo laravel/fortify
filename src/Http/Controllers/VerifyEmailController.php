@@ -6,6 +6,7 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
 use Laravel\Fortify\Http\Requests\VerifyEmailRequest;
+use Illuminate\Http\JsonResponse;
 
 class VerifyEmailController extends Controller
 {
@@ -15,16 +16,20 @@ class VerifyEmailController extends Controller
      * @param  \Laravel\Fortify\Http\Requests\VerifyEmailRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function __invoke(VerifyEmailRequest $request): RedirectResponse
+    public function __invoke(VerifyEmailRequest $request)
     {
         if ($request->user()->hasVerifiedEmail()) {
-            return redirect()->intended(config('fortify.home').'?verified=1');
+            return $request->wantsJson()
+                ? new JsonResponse('', 204)
+                : redirect()->intended(config('fortify.home').'?verified=1');
         }
 
         if ($request->user()->markEmailAsVerified()) {
             event(new Verified($request->user()));
         }
 
-        return redirect()->intended(config('fortify.home').'?verified=1');
+        return $request->wantsJson()
+            ? new JsonResponse('', 202)
+            : redirect()->intended(config('fortify.home').'?verified=1');
     }
 }
