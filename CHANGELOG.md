@@ -1,6 +1,14 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.12...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.13...1.x)
+
+
+## [v1.7.13 (2021-05-25)](https://github.com/laravel/fortify/compare/v1.7.12...v1.7.13)
+
+### Changed
+- Cleanup code ([#261](https://github.com/laravel/fortify/pull/261))
+- Returns JSON response ([#267](https://github.com/laravel/fortify/pull/267))
+- Naming 2FA routes ([#269](https://github.com/laravel/fortify/pull/269))
 
 
 ## [v1.7.12 (2021-04-27)](https://github.com/laravel/fortify/compare/v1.7.11...v1.7.12)
