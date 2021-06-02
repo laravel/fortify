@@ -23,6 +23,20 @@ trait TwoFactorAuthenticatable
     }
 
     /**
+     * Check if two factor authentication is enabled for user.
+     *
+     * @return string|boolean
+     */
+    public function isTwoFactorEnabled()
+    {
+        if (Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmTwoFactor')) {
+            return $this->two_factor_enabled;
+        }
+
+        return $this->two_factor_secret;
+    }
+
+    /**
      * Replace the given recovery code with a new one in the user's stored codes.
      *
      * @param  string  $code
