@@ -23,6 +23,16 @@ trait TwoFactorAuthenticatable
     }
 
     /**
+     * Check if two factor authentication is enabled for user.
+     *
+     * @return string|bool
+     */
+    public function getIsTwoFactorEnabledAttribute()
+    {
+        return ! empty($this->two_factor_secret) && $this->two_factor_confirmed;
+    }
+
+    /**
      * Replace the given recovery code with a new one in the user's stored codes.
      *
      * @param  string  $code

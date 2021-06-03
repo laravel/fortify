@@ -6,7 +6,6 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Schema;
 use Laravel\Fortify\Contracts\LoginViewResponse;
 use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
 use Laravel\Fortify\Features;
@@ -55,10 +54,32 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
 
         $this->loadLaravelMigrations(['--database' => 'testbench']);
+        $this->artisan('migrate', ['--database' => 'testbench'])->run();
 
-        Schema::table('users', function ($table) {
-            $table->text('two_factor_secret')->nullable();
-        });
+        TestTwoFactorAuthenticationSessionUser::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+            'two_factor_secret' => 'test-secret',
+            'two_factor_confirmed' => true,
+        ]);
+
+        $response = $this->withoutExceptionHandling()->post('/login', [
+            'email' => 'taylor@laravel.com',
+            'password' => 'secret',
+        ]);
+
+        $response->assertRedirect('/two-factor-challenge');
+
+        Event::assertDispatched(TwoFactorAuthenticationChallenged::class);
+    }
+
+    public function test_user_can_authenticate_when_two_factor_challenge_is_stored_but_disabled()
+    {
+        app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
+
+        $this->loadLaravelMigrations(['--database' => 'testbench']);
+        $this->artisan('migrate', ['--database' => 'testbench'])->run();
 
         TestTwoFactorAuthenticationSessionUser::forceCreate([
             'name' => 'Taylor Otwell',
@@ -72,9 +93,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
             'password' => 'secret',
         ]);
 
-        $response->assertRedirect('/two-factor-challenge');
-
-        Event::assertDispatched(TwoFactorAuthenticationChallenged::class);
+        $response->assertRedirect('/home');
     }
 
     public function test_user_can_authenticate_when_two_factor_challenge_is_disabled()
@@ -88,16 +107,14 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         app('config')->set('fortify.features', $features);
 
         $this->loadLaravelMigrations(['--database' => 'testbench']);
-
-        Schema::table('users', function ($table) {
-            $table->text('two_factor_secret')->nullable();
-        });
+        $this->artisan('migrate', ['--database' => 'testbench'])->run();
 
         TestTwoFactorAuthenticationSessionUser::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
             'two_factor_secret' => 'test-secret',
+            'two_factor_confirmed' => true,
         ]);
 
         $response = $this->withoutExceptionHandling()->post('/login', [

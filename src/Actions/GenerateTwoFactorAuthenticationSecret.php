@@ -2,10 +2,11 @@
 
 namespace Laravel\Fortify\Actions;
 
+use Illuminate\Support\Collection;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
-use Laravel\Fortify\Events\TwoFactorAuthenticationEnabled;
+use Laravel\Fortify\RecoveryCode;
 
-class EnableTwoFactorAuthentication
+class GenerateTwoFactorAuthenticationSecret
 {
     /**
      * The two factor authentication provider.
@@ -26,24 +27,19 @@ class EnableTwoFactorAuthentication
     }
 
     /**
-     * Enable two factor authentication for the user.
+     * Generate two factor authentication secret and recovery codes for the user.
      *
-     * @param  \Illuminate\Foundation\Auth\User  $user
-     * @param  string  $code
-     * @return bool
+     * @param  mixed  $user
+     * @return void
      */
-    public function __invoke($user, $code)
+    public function __invoke($user)
     {
-        if (empty($user->two_factor_secret) || ! $this->provider->verify(decrypt($user->two_factor_secret), $code)) {
-            return false;
-        }
-
         $user->forceFill([
-            'two_factor_confirmed' => true,
+            'two_factor_confirmed' => false,
+            'two_factor_secret' => encrypt($this->provider->generateSecretKey()),
+            'two_factor_recovery_codes' => encrypt(json_encode(Collection::times(8, function () {
+                return RecoveryCode::generate();
+            })->all())),
         ])->save();
-
-        TwoFactorAuthenticationEnabled::dispatch($user);
-
-        return true;
     }
 }

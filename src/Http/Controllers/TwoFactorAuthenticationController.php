@@ -7,23 +7,43 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Laravel\Fortify\Actions\DisableTwoFactorAuthentication;
 use Laravel\Fortify\Actions\EnableTwoFactorAuthentication;
+use Laravel\Fortify\Actions\GenerateTwoFactorAuthenticationSecret;
+use Laravel\Fortify\Contracts\FailedTwoFactorEnableResponse;
 
 class TwoFactorAuthenticationController extends Controller
 {
     /**
-     * Enable two factor authentication for the user.
+     * Generate two factor authentication secret and recovery codes for the user.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Laravel\Fortify\Actions\EnableTwoFactorAuthentication  $enable
+     * @param  \Laravel\Fortify\Actions\GenerateTwoFactorAuthenticationSecret  $enable
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function store(Request $request, EnableTwoFactorAuthentication $enable)
+    public function store(Request $request, GenerateTwoFactorAuthenticationSecret $generate)
     {
-        $enable($request->user());
+        $generate($request->user());
 
         return $request->wantsJson()
                     ? new JsonResponse('', 200)
-                    : back()->with('status', 'two-factor-authentication-enabled');
+                    : back()->with('status', 'two-factor-authentication-secret-generated');
+    }
+
+    /**
+     * Confirms activation of two-factor authentication by validating a TOTP code.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param \Laravel\Fortify\Actions\EnableTwoFactorAuthentication $confirm
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function confirm(Request $request, EnableTwoFactorAuthentication $enable)
+    {
+        if (! $enable($request->user(), $request->code)) {
+            return app(FailedTwoFactorEnableResponse::class);
+        }
+
+        return $request->wantsJson()
+            ? new JsonResponse('', 200)
+            : back()->with('status', 'two-factor-authentication-enabled');
     }
 
     /**
