@@ -91,7 +91,6 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
                 'code' => 'test',
             ]);
 
-
         $response->assertStatus(422);
         $response->assertJsonValidationErrors('code');
 
