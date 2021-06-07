@@ -1,6 +1,7 @@
 <?php
 
 namespace Laravel\Fortify\Contracts;
+use Illuminate\Http\Request;
 
 interface CreatesNewUsers
 {
@@ -10,5 +11,5 @@ interface CreatesNewUsers
      * @param  array  $input
      * @return mixed
      */
-    public function create(array $input);
+    public function create(Request $request);
 }
