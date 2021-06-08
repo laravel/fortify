@@ -51,7 +51,7 @@ class RegisteredUserController extends Controller
     public function store(Request $request,
                           CreatesNewUsers $creator): RegisterResponse
     {
-        event(new Registered($user = $creator->create($request->all())));
+        event(new Registered($user = $creator->create($request)));
 
         $this->guard->login($user);
 
