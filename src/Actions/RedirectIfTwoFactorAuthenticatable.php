@@ -129,7 +129,7 @@ class RedirectIfTwoFactorAuthenticatable
     {
         $request->session()->put([
             'login.id' => $user->getKey(),
-            'login.remember' => $request->filled('remember'),
+            'login.remember' => $request->boolean('remember'),
         ]);
 
         return $request->wantsJson()
