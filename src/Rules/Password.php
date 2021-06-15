@@ -17,23 +17,23 @@ class Password implements Rule
     /**
      * Indicates if the password must contain one uppercase character.
      *
-     * @var bool
+     * @var numeric
      */
-    protected $requireUppercase = false;
+    protected $uppercaseCount = 0;
 
     /**
      * Indicates if the password must contain one numeric digit.
      *
-     * @var bool
+     * @var numeric
      */
-    protected $requireNumeric = false;
+    protected $numericCount = 0;
 
     /**
      * Indicates if the password must contain one special character.
      *
-     * @var bool
+     * @var numeric
      */
-    protected $requireSpecialCharacter = false;
+    protected $specialCharacterCount = 0;
 
     /**
      * The message that should be used when validation fails.
@@ -53,15 +53,15 @@ class Password implements Rule
     {
         $value = is_scalar($value) ? (string) $value : '';
 
-        if ($this->requireUppercase && Str::lower($value) === $value) {
+        if ($this->uppercaseCount > (Str::length($value) - Str::length(preg_replace('/[A-Z]+/', '', $value)))) {
             return false;
         }
 
-        if ($this->requireNumeric && ! preg_match('/[0-9]/', $value)) {
+        if ($this->numericCount > (Str::length($value) - Str::length(preg_replace('/[0-9]+/', '', $value)))) {
             return false;
         }
 
-        if ($this->requireSpecialCharacter && ! preg_match('/[\W_]/', $value)) {
+        if ($this->specialCharacterCount > (Str::length($value) - Str::length(preg_replace('/[\W_]+/', '', $value))) ) {
             return false;
         }
 
@@ -80,53 +80,65 @@ class Password implements Rule
         }
 
         switch (true) {
-            case $this->requireUppercase
-                && ! $this->requireNumeric
-                && ! $this->requireSpecialCharacter:
-                return __('The :attribute must be at least :length characters and contain at least one uppercase character.', [
+            case $this->uppercaseCount
+                && ! $this->numericCount
+                && ! $this->specialCharacterCount:
+                return __('The :attribute must be at least :length characters and contain at least :ucCount uppercase character.', [
                     'length' => $this->length,
+                    'ucCount'=> $this->uppercaseCount,
                 ]);
 
-            case $this->requireNumeric
-                && ! $this->requireUppercase
-                && ! $this->requireSpecialCharacter:
-                return __('The :attribute must be at least :length characters and contain at least one number.', [
+            case $this->numericCount
+                && ! $this->uppercaseCount
+                && ! $this->specialCharacterCount:
+                return __('The :attribute must be at least :length characters and contain at least :numCount number.', [
                     'length' => $this->length,
+                    'numCount'=> $this->numericCount,
                 ]);
 
-            case $this->requireSpecialCharacter
-                && ! $this->requireUppercase
-                && ! $this->requireNumeric:
-                return __('The :attribute must be at least :length characters and contain at least one special character.', [
+            case $this->specialCharacterCount
+                && ! $this->uppercaseCount
+                && ! $this->numericCount:
+                return __('The :attribute must be at least :length characters and contain at least :specialCount special character.', [
                     'length' => $this->length,
+                    'specialCount'=> $this->specialCharacterCount,
                 ]);
 
-            case $this->requireUppercase
-                && $this->requireNumeric
-                && ! $this->requireSpecialCharacter:
-                return __('The :attribute must be at least :length characters and contain at least one uppercase character and one number.', [
+            case $this->uppercaseCount
+                && $this->numericCount
+                && ! $this->specialCharacterCount:
+                return __('The :attribute must be at least :length characters and contain at least :ucCount uppercase character and :numCount number.', [
                     'length' => $this->length,
+                    'ucCount'=> $this->uppercaseCount,
+                    'numCount'=> $this->numericCount,
                 ]);
 
-            case $this->requireUppercase
-                && $this->requireSpecialCharacter
-                && ! $this->requireNumeric:
-                return __('The :attribute must be at least :length characters and contain at least one uppercase character and one special character.', [
+            case $this->uppercaseCount
+                && $this->specialCharacterCount
+                && ! $this->numericCount:
+                return __('The :attribute must be at least :length characters and contain at least :ucCount uppercase character and :specialCount special character.', [
                     'length' => $this->length,
+                    'ucCount'=> $this->uppercaseCount,
+                    'specialCount'=> $this->specialCharacterCount,
                 ]);
 
-            case $this->requireUppercase
-                && $this->requireNumeric
-                && $this->requireSpecialCharacter:
-                return __('The :attribute must be at least :length characters and contain at least one uppercase character, one number, and one special character.', [
+            case $this->uppercaseCount
+                && $this->numericCount
+                && $this->specialCharacterCount:
+                return __('The :attribute must be at least :length characters and contain at least :ucCount uppercase character, :numCount number, and :specialCount special character.', [
                     'length' => $this->length,
+                    'ucCount'=> $this->uppercaseCount,
+                    'numCount'=> $this->numericCount,
+                    'specialCount'=> $this->specialCharacterCount,
                 ]);
 
-            case $this->requireNumeric
-                && $this->requireSpecialCharacter
-                && ! $this->requireUppercase:
-                return __('The :attribute must be at least :length characters and contain at least one special character and one number.', [
+            case $this->numericCount
+                && $this->specialCharacterCount
+                && ! $this->uppercaseCount:
+                return __('The :attribute must be at least :length characters and contain at least :specialCount special character and :numCount number.', [
                     'length' => $this->length,
+                    'specialCount'=> $this->specialCharacterCount,
+                    'numCount'=> $this->numericCount,
                 ]);
 
             default:
@@ -152,11 +164,12 @@ class Password implements Rule
     /**
      * Indicate that at least one uppercase character is required.
      *
+     * @param positive-int $length
      * @return $this
      */
-    public function requireUppercase()
+    public function requireUppercase(int $length = 1)
     {
-        $this->requireUppercase = true;
+        $this->uppercaseCount = abs($length);
 
         return $this;
     }
@@ -164,11 +177,12 @@ class Password implements Rule
     /**
      * Indicate that at least one numeric digit is required.
      *
+     * @param positive-int $length
      * @return $this
      */
-    public function requireNumeric()
+    public function requireNumeric(int $length = 1)
     {
-        $this->requireNumeric = true;
+        $this->numericCount = abs($length);
 
         return $this;
     }
@@ -176,11 +190,12 @@ class Password implements Rule
     /**
      * Indicate that at least one special character is required.
      *
+     * @param positive-int $length
      * @return $this
      */
-    public function requireSpecialCharacter()
+    public function requireSpecialCharacter(int $length = 1)
     {
-        $this->requireSpecialCharacter = true;
+        $this->specialCharacterCount = abs($length);
 
         return $this;
     }
