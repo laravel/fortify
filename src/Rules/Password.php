@@ -167,7 +167,7 @@ class Password implements Rule
      * @param positive-int $length
      * @return $this
      */
-    public function requireUppercase(int $length)
+    public function requireUppercase(int $length = 1)
     {
         $this->uppercaseCount = abs($length);
 
@@ -180,7 +180,7 @@ class Password implements Rule
      * @param positive-int $length
      * @return $this
      */
-    public function requireNumeric(int $length)
+    public function requireNumeric(int $length = 1)
     {
         $this->numericCount = abs($length);
 
@@ -193,7 +193,7 @@ class Password implements Rule
      * @param positive-int $length
      * @return $this
      */
-    public function requireSpecialCharacter(int $length)
+    public function requireSpecialCharacter(int $length = 1)
     {
         $this->specialCharacterCount = abs($length);
 
