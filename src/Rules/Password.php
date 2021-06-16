@@ -61,7 +61,7 @@ class Password implements Rule
             return false;
         }
 
-        if ($this->specialCharacterCount > (Str::length($value) - Str::length(preg_replace('/[\W_]+/', '', $value))) ) {
+        if ($this->specialCharacterCount > (Str::length($value) - Str::length(preg_replace('/[\W_]+/', '', $value)))) {
             return false;
         }
 
