@@ -15,21 +15,21 @@ class Password implements Rule
     protected $length = 8;
 
     /**
-     * Indicates if the password must contain one uppercase character.
+     * Indicates how much uppercase character the password must contain.
      *
      * @var numeric
      */
     protected $uppercaseCount = 0;
 
     /**
-     * Indicates if the password must contain one numeric digit.
+     * Indicates how much numeric digit the password must contain.
      *
      * @var numeric
      */
     protected $numericCount = 0;
 
     /**
-     * Indicates if the password must contain one special character.
+     * Indicates how much special character the password must contain.
      *
      * @var numeric
      */
@@ -162,7 +162,7 @@ class Password implements Rule
     }
 
     /**
-     * Indicate that at least one uppercase character is required.
+     * Indicate that at least $length uppercase character is required.
      *
      * @param positive-int $length
      * @return $this
@@ -175,7 +175,7 @@ class Password implements Rule
     }
 
     /**
-     * Indicate that at least one numeric digit is required.
+     * Indicate that at least $length numeric digit is required.
      *
      * @param positive-int $length
      * @return $this
@@ -188,7 +188,7 @@ class Password implements Rule
     }
 
     /**
-     * Indicate that at least one special character is required.
+     * Indicate that at least $length special character is required.
      *
      * @param positive-int $length
      * @return $this
