@@ -17,6 +17,6 @@ class PasswordUpdateResponse implements PasswordUpdateResponseContract
     {
         return $request->wantsJson()
             ? new JsonResponse('', 200)
-            : redirect()->intended(config('fortify.home'));
+            : back()->with('status', 'password-updated');
     }
 }
