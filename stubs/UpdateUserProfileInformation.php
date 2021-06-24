@@ -72,6 +72,8 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 
 
     /**
+     * Check if the avatar is submitted and should update
+     *
      * @param $user
      * @param array $input
      * @return false
@@ -83,6 +85,8 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 
 
     /**
+     * Update avatar in database
+     *
      * @param $user
      * @param array $input
      */
@@ -94,6 +98,8 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     }
 
     /**
+     * Upload avatar file in storage
+     *
      * @param $user
      * @param $image
      * @return null
