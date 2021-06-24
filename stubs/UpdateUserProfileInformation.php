@@ -73,7 +73,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 
     /**
      * @param $user
-     * @param $input
+     * @param array $input
      * @return false
      */
     protected function shouldUpdateAvatar($user, array $input)
@@ -84,7 +84,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 
     /**
      * @param $user
-     * @param $input
+     * @param array $input
      */
     protected function updateAvatar($user, array $input)
     {
