@@ -9,6 +9,7 @@ return [
     'username' => 'email',
     'email' => 'email',
     'views' => true,
+    'signed_relative' => false,
     'home' => '/home',
     'prefix' => '',
     'domain' => null,

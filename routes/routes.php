@@ -20,6 +20,7 @@ use Laravel\Fortify\Http\Controllers\VerifyEmailController;
 
 Route::group(['middleware' => config('fortify.middleware', ['web'])], function () {
     $enableViews = config('fortify.views', true);
+    $signedMiddleware = config('fortify.signed_relative', false) ? 'signed:relative' : 'signed';
 
     // Authentication...
     if ($enableViews) {
@@ -82,7 +83,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         }
 
         Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
-            ->middleware(['auth', 'signed', 'throttle:6,1'])
+            ->middleware(['auth', $signedMiddleware, 'throttle:6,1'])
             ->name('verification.verify');
 
         Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])

@@ -122,6 +122,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Use Relative Signed Url In Middleware
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify if the signed middleware applied to the email
+    | verification verify route should use a relative url.
+    |
+    */
+
+    'signed_relative' => false,
+
+    /*
+    |--------------------------------------------------------------------------
     | Features
     |--------------------------------------------------------------------------
     |
