@@ -16,6 +16,7 @@ use Laravel\Fortify\Contracts\LogoutResponse as LogoutResponseContract;
 use Laravel\Fortify\Contracts\PasswordConfirmedResponse as PasswordConfirmedResponseContract;
 use Laravel\Fortify\Contracts\PasswordResetResponse as PasswordResetResponseContract;
 use Laravel\Fortify\Contracts\PasswordUpdateResponse as PasswordUpdateResponseContract;
+use Laravel\Fortify\Contracts\ProfileInformationUpdateResponse as ProfileInformationUpdateResponseContract;
 use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
 use Laravel\Fortify\Contracts\SuccessfulPasswordResetLinkRequestResponse as SuccessfulPasswordResetLinkRequestResponseContract;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider as TwoFactorAuthenticationProviderContract;
@@ -30,6 +31,7 @@ use Laravel\Fortify\Http\Responses\LogoutResponse;
 use Laravel\Fortify\Http\Responses\PasswordConfirmedResponse;
 use Laravel\Fortify\Http\Responses\PasswordResetResponse;
 use Laravel\Fortify\Http\Responses\PasswordUpdateResponse;
+use Laravel\Fortify\Http\Responses\ProfileInformationUpdateResponse;
 use Laravel\Fortify\Http\Responses\RegisterResponse;
 use Laravel\Fortify\Http\Responses\SuccessfulPasswordResetLinkRequestResponse;
 use Laravel\Fortify\Http\Responses\TwoFactorLoginResponse;
@@ -75,6 +77,7 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->singleton(PasswordConfirmedResponseContract::class, PasswordConfirmedResponse::class);
         $this->app->singleton(PasswordResetResponseContract::class, PasswordResetResponse::class);
         $this->app->singleton(PasswordUpdateResponseContract::class, PasswordUpdateResponse ::class);
+        $this->app->singleton(ProfileInformationUpdateResponseContract::class, ProfileInformationUpdateResponse::class);
         $this->app->singleton(RegisterResponseContract::class, RegisterResponse::class);
         $this->app->singleton(SuccessfulPasswordResetLinkRequestResponseContract::class, SuccessfulPasswordResetLinkRequestResponse::class);
     }
