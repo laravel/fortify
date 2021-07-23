@@ -17,10 +17,8 @@ class ConfirmPassword
      */
     public function __invoke(StatefulGuard $guard, $user, ?string $password = null)
     {
-        $username = config('fortify.username');
-
         return is_null(Fortify::$confirmPasswordsUsingCallback) ? $guard->validate([
-            $username => $user->{$username},
+            Fortify::username() => $user->{Fortify::username()},
             'password' => $password,
         ]) : $this->confirmPasswordUsingCustomCallback($user, $password);
     }

@@ -12,7 +12,7 @@ class Features
      */
     public static function enabled(string $feature)
     {
-        return in_array($feature, config('fortify.features', []));
+        return in_array($feature, Fortify::features());
     }
 
     /**

@@ -107,7 +107,7 @@ class AttemptToAuthenticate
      */
     protected function fireFailedEvent($request)
     {
-        event(new Failed(config('fortify.guard'), null, [
+        event(new Failed(Fortify::guard(), null, [
             Fortify::username() => $request->{Fortify::username()},
             'password' => $request->password,
         ]));

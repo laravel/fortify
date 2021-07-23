@@ -53,7 +53,7 @@ class FortifyServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(StatefulGuard::class, function () {
-            return Auth::guard(config('fortify.guard', null));
+            return Auth::guard(Fortify::guard());
         });
     }
 
@@ -127,8 +127,8 @@ class FortifyServiceProvider extends ServiceProvider
         if (Fortify::$registersRoutes) {
             Route::group([
                 'namespace' => 'Laravel\Fortify\Http\Controllers',
-                'domain' => config('fortify.domain', null),
-                'prefix' => config('fortify.prefix'),
+                'domain' => Fortify::domain(),
+                'prefix' => Fortify::prefix(),
             ], function () {
                 $this->loadRoutesFrom(__DIR__.'/../routes/routes.php');
             });

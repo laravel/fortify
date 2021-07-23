@@ -75,14 +75,14 @@ class AuthenticatedSessionController extends Controller
             ));
         }
 
-        if (is_array(config('fortify.pipelines.login'))) {
+        if (is_array(Fortify::pipelines('login'))) {
             return (new Pipeline(app()))->send($request)->through(array_filter(
-                config('fortify.pipelines.login')
+                Fortify::pipelines('login')
             ));
         }
 
         return (new Pipeline(app()))->send($request)->through(array_filter([
-            config('fortify.limiters.login') ? null : EnsureLoginIsNotThrottled::class,
+            Fortify::limiters('login') ? null : EnsureLoginIsNotThrottled::class,
             Features::enabled(Features::twoFactorAuthentication()) ? RedirectIfTwoFactorAuthenticatable::class : null,
             AttemptToAuthenticate::class,
             PrepareAuthenticatedSession::class,

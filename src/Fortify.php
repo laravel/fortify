@@ -56,6 +56,106 @@ class Fortify
     }
 
     /**
+     * Get the pipeline used for authentication.
+     *
+     * @return array
+     */
+    public static function pipelines(string $pipeline)
+    {
+        return config('fortify.pipelines.'.$pipeline);
+    }
+
+    /**
+     * Indicates if Fortify views will be enabled.
+     *
+     * @return bool
+     */
+    public static function views()
+    {
+        return config('fortify.views', true);
+    }
+
+    /**
+     * Get the route middleware.
+     *
+     * @return array
+     */
+    public static function middleware()
+    {
+        return config('fortify.middleware', ['web']);
+    }
+
+    /**
+     * Get the limiter used for authentication.
+     *
+     * @return string|null
+     */
+    public static function limiters(string $limiter)
+    {
+        return config('fortify.limiters.'.$limiter);
+    }
+
+    /**
+     * Get the authentication guard name.
+     *
+     * @return string
+     */
+    public static function guard()
+    {
+        return config('fortify.guard', 'web');
+    }
+
+    /**
+     * Get the route domain.
+     *
+     * @return string|null
+     */
+    public static function domain()
+    {
+        return config('fortify.domain');
+    }
+
+     /**
+     * Get the route prefix.
+     *
+     * @return string|null
+     */
+    public static function prefix()
+    {
+        return config('fortify.prefix');
+    }
+
+    /**
+     * Get the features.
+     *
+     * @return array
+     */
+    public static function features()
+    {
+        return config('fortify.features', []);
+    }
+
+    /**
+     * Get the passwords broker name used for password reset.
+     *
+     * @return string|null
+     */
+    public static function passwords()
+    {
+        return config('fortify.passwords');
+    }
+
+    /**
+     * Get the home path used for redirects.
+     *
+     * @return string
+     */
+    public static function home()
+    {
+        return config('fortify.home', '/');
+    }
+
+    /**
      * Get the name of the email address request variable / field.
      *
      * @return string
