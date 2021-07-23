@@ -58,6 +58,7 @@ class Fortify
     /**
      * Get the pipeline used for authentication.
      *
+     * @param  string  $pipeline
      * @return array
      */
     public static function pipelines(string $pipeline)
@@ -88,6 +89,7 @@ class Fortify
     /**
      * Get the limiter used for authentication.
      *
+     * @param  string  $limiter
      * @return string|null
      */
     public static function limiters(string $limiter)
