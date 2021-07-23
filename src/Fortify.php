@@ -73,7 +73,7 @@ class Fortify
      */
     public static function redirects(string $redirect, $default = null)
     {
-        return config('fortify.redirects.'.$redirect, $default) ?? config('fortify.home');
+        return config('fortify.redirects.'.$redirect) ?? $default ?? config('fortify.home');
     }
 
     /**
