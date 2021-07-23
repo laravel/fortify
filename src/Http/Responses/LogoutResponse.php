@@ -4,6 +4,7 @@ namespace Laravel\Fortify\Http\Responses;
 
 use Illuminate\Http\JsonResponse;
 use Laravel\Fortify\Contracts\LogoutResponse as LogoutResponseContract;
+use Laravel\Fortify\Fortify;
 
 class LogoutResponse implements LogoutResponseContract
 {
@@ -17,6 +18,6 @@ class LogoutResponse implements LogoutResponseContract
     {
         return $request->wantsJson()
                     ? new JsonResponse('', 204)
-                    : redirect('/');
+                    : redirect(Fortify::redirects('logout', '/'));
     }
 }
