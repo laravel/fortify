@@ -115,7 +115,7 @@ class Fortify
         return config('fortify.domain');
     }
 
-     /**
+    /**
      * Get the route prefix.
      *
      * @return string|null
