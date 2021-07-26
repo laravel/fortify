@@ -4,6 +4,7 @@ namespace Laravel\Fortify\Http\Responses;
 
 use Illuminate\Http\JsonResponse;
 use Laravel\Fortify\Contracts\TwoFactorLoginResponse as TwoFactorLoginResponseContract;
+use Laravel\Fortify\Fortify;
 
 class TwoFactorLoginResponse implements TwoFactorLoginResponseContract
 {
@@ -17,6 +18,6 @@ class TwoFactorLoginResponse implements TwoFactorLoginResponseContract
     {
         return $request->wantsJson()
                     ? new JsonResponse('', 204)
-                    : redirect()->intended(config('fortify.home'));
+                    : redirect()->intended(Fortify::redirects('login'));
     }
 }

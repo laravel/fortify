@@ -5,6 +5,7 @@ namespace Laravel\Fortify\Http\Controllers;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
+use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Http\Requests\VerifyEmailRequest;
 
 class VerifyEmailController extends Controller
@@ -20,7 +21,7 @@ class VerifyEmailController extends Controller
         if ($request->user()->hasVerifiedEmail()) {
             return $request->wantsJson()
                 ? new JsonResponse('', 204)
-                : redirect()->intended(config('fortify.home').'?verified=1');
+                : redirect()->intended(Fortify::redirects('email-verification').'?verified=1');
         }
 
         if ($request->user()->markEmailAsVerified()) {
@@ -29,6 +30,6 @@ class VerifyEmailController extends Controller
 
         return $request->wantsJson()
             ? new JsonResponse('', 202)
-            : redirect()->intended(config('fortify.home').'?verified=1');
+            : redirect()->intended(Fortify::redirects('email-verification').'?verified=1');
     }
 }

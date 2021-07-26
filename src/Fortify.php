@@ -66,6 +66,17 @@ class Fortify
     }
 
     /**
+     * Get a completion redirect path for a specific feature.
+     *
+     * @param  string  $redirect
+     * @return string
+     */
+    public static function redirects(string $redirect, $default = null)
+    {
+        return config('fortify.redirects.'.$redirect) ?? $default ?? config('fortify.home');
+    }
+
+    /**
      * Register the views for Fortify using conventional names under the given namespace.
      *
      * @param  string  $namespace
