@@ -66,7 +66,7 @@ class Fortify
     }
 
     /**
-     * Get the redirect path.
+     * Get a completion redirect path for a specific feature.
      *
      * @param  string  $redirect
      * @return string

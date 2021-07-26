@@ -18,7 +18,7 @@ return [
     'redirects' => [
         'login' => null,
         'logout' => null,
-        'password-confirmed' => null,
+        'password-confirmation' => null,
         'register' => null,
         'email-verification' => null,
     ],
