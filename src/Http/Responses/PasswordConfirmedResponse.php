@@ -18,6 +18,6 @@ class PasswordConfirmedResponse implements PasswordConfirmedResponseContract
     {
         return $request->wantsJson()
                     ? new JsonResponse('', 201)
-                    : redirect()->intended(Fortify::redirects('password-confirmed'));
+                    : redirect()->intended(Fortify::redirects('password-confirmation'));
     }
 }
