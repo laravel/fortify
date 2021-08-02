@@ -79,7 +79,7 @@ class RedirectIfTwoFactorAuthenticatable
 
         $model = $this->guard->getProvider()->getModel();
 
-        return tap($model::where(Fortify::username(), $request->{Fortify::username()})->first(), function ($user) use($request) {
+        return tap($model::where(Fortify::username(), $request->{Fortify::username()})->first(), function ($user) use ($request) {
             if (! $user || ! $this->guard->getProvider()->validateCredentials($user, ['password' => $request->password])) {
                 $this->fireFailedEvent($request, $user);
 
