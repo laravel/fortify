@@ -11,6 +11,7 @@ use Laravel\Fortify\Contracts\FailedPasswordResetLinkRequestResponse;
 use Laravel\Fortify\Contracts\RequestPasswordResetLinkViewResponse;
 use Laravel\Fortify\Contracts\SuccessfulPasswordResetLinkRequestResponse;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Http\Requests\PasswordResetLinkRequest;
 
 class PasswordResetLinkController extends Controller
 {
@@ -28,13 +29,11 @@ class PasswordResetLinkController extends Controller
     /**
      * Send a reset link to the given user.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Laravel\Fortify\Http\Requests\PasswordResetLinkRequest  $request
      * @return \Illuminate\Contracts\Support\Responsable
      */
-    public function store(Request $request): Responsable
+    public function store(PasswordResetLinkRequest $request): Responsable
     {
-        $request->validate([Fortify::email() => 'required|email']);
-
         // We will send the password reset link to this user. Once we have attempted
         // to send the link, we will examine the response then see the message we
         // need to show to the user. Finally, we'll send out a proper response.

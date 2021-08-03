@@ -14,6 +14,7 @@ use Laravel\Fortify\Contracts\PasswordResetResponse;
 use Laravel\Fortify\Contracts\ResetPasswordViewResponse;
 use Laravel\Fortify\Contracts\ResetsUserPasswords;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Http\Requests\NewPasswordRequest;
 
 class NewPasswordController extends Controller
 {
@@ -49,17 +50,11 @@ class NewPasswordController extends Controller
     /**
      * Reset the user's password.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Laravel\Fortify\Http\Requests\NewPasswordRequest  $request
      * @return \Illuminate\Contracts\Support\Responsable
      */
-    public function store(Request $request): Responsable
+    public function store(NewPasswordRequest $request): Responsable
     {
-        $request->validate([
-            'token' => 'required',
-            Fortify::email() => 'required|email',
-            'password' => 'required',
-        ]);
-
         // Here we will attempt to reset the user's password. If it is successful we
         // will update the password on an actual user model and persist it to the
         // database. Otherwise we will parse the error and return the response.
