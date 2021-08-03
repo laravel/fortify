@@ -68,7 +68,7 @@ class RedirectIfTwoFactorAuthenticatable
         if (Fortify::$authenticateUsingCallback) {
             return tap(call_user_func(Fortify::$authenticateUsingCallback, $request), function ($user) use ($request) {
                 if (! $user) {
-                    $this->fireFailedEvent($request, $user);
+                    $this->fireFailedEvent($request);
 
                     return $this->throwFailedAuthenticationException($request);
                 }

@@ -72,7 +72,7 @@ class AttemptToAuthenticate
         $user = call_user_func(Fortify::$authenticateUsingCallback, $request);
 
         if (! $user) {
-            $this->fireFailedEvent($request, $user);
+            $this->fireFailedEvent($request);
 
             return $this->throwFailedAuthenticationException($request);
         }
@@ -103,12 +103,11 @@ class AttemptToAuthenticate
      * Fire the failed authentication attempt event with the given arguments.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Contracts\Auth\Authenticatable|null  $user
      * @return void
      */
-    protected function fireFailedEvent($request, $user = null)
+    protected function fireFailedEvent($request)
     {
-        event(new Failed(config('fortify.guard'), $user, [
+        event(new Failed(config('fortify.guard'), null, [
             Fortify::username() => $request->{Fortify::username()},
             'password' => $request->password,
         ]));
