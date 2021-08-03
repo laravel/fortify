@@ -50,7 +50,7 @@ class AttemptToAuthenticate
             return $this->handleUsingCustomCallback($request, $next);
         }
 
-        if ($this->guard->attempt(
+        if ($request->user() || $this->guard->attempt(
             $request->only(Fortify::username(), 'password'),
             $request->filled('remember'))
         ) {
