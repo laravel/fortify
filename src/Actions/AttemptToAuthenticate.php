@@ -42,15 +42,22 @@ class AttemptToAuthenticate
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  callable  $next
+     * @param  \Illuminate\Contracts\Auth\Authenticatable|null  $user
      * @return mixed
      */
-    public function handle($request, $next)
+    public function handle($request, $next, $user = null)
     {
         if (Fortify::$authenticateUsingCallback) {
             return $this->handleUsingCustomCallback($request, $next);
         }
 
-        if ($request->user() || $this->guard->attempt(
+        if ($user) {
+            $this->guard->login($user, $request->filled('remember'));
+
+            return $next($request);
+        }
+
+        if ($this->guard->attempt(
             $request->only(Fortify::username(), 'password'),
             $request->filled('remember'))
         ) {

@@ -54,11 +54,7 @@ class RedirectIfTwoFactorAuthenticatable
             return $this->twoFactorChallengeResponse($request, $user);
         }
 
-        if ($user) {
-            $this->guard->login($user, $request->filled('remember'));
-        }
-
-        return $next($request);
+        return $next($request, $user);
     }
 
     /**
