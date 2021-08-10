@@ -3,8 +3,8 @@
 namespace Laravel\Fortify\Http\Responses;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
+use Laravel\Fortify\Fortify;
 
 class RegisterResponse implements RegisterResponseContract
 {
@@ -18,6 +18,6 @@ class RegisterResponse implements RegisterResponseContract
     {
         return $request->wantsJson()
                     ? new JsonResponse('', 201)
-                    : redirect()->intended(config('fortify.home'));
+                    : redirect()->intended(Fortify::redirects('register'));
     }
 }

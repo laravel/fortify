@@ -15,6 +15,13 @@ return [
     'limiters' => [
         'login' => null,
     ],
+    'redirects' => [
+        'login' => null,
+        'logout' => null,
+        'password-confirmation' => null,
+        'register' => null,
+        'email-verification' => null,
+    ],
     'features' => [
         Features::registration(),
         Features::resetPasswords(),

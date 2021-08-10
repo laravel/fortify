@@ -2,7 +2,6 @@
 
 namespace Laravel\Fortify\Http\Responses;
 
-use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\FailedPasswordConfirmationResponse as FailedPasswordConfirmationResponseContract;
 
@@ -24,6 +23,6 @@ class FailedPasswordConfirmationResponse implements FailedPasswordConfirmationRe
             ]);
         }
 
-        return redirect()->back()->withErrors(['password' => $message]);
+        return back()->withErrors(['password' => $message]);
     }
 }
