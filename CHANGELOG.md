@@ -1,6 +1,16 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.7.14...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.8.0...1.x)
+
+
+## [v1.8.0 (2021-08-10)](https://github.com/laravel/fortify/compare/v1.7.14...v1.8.0)
+
+### Added
+- Redirection customization ([#298](https://github.com/laravel/fortify/pull/298))
+- Add ReplacedRecoveryCode event ([#301](https://github.com/laravel/fortify/pull/301))
+
+### Fixed
+- Fix auth guard ([#296](https://github.com/laravel/fortify/pull/296))
 
 
 ## [v1.7.14 (2021-06-29)](https://github.com/laravel/fortify/compare/v1.7.13...v1.7.14)
