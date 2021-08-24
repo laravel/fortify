@@ -55,7 +55,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
         ]);
 
         $response->assertStatus(302);
-        $response->assertRedirect(Fortify::redirects('password-reset'));
+        $response->assertRedirect(Fortify::redirects('password-reset', route('login')));
     }
 
     public function test_password_reset_can_fail()
@@ -126,7 +126,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
         ]);
 
         $response->assertStatus(302);
-        $response->assertRedirect(Fortify::redirects('password-reset'));
+        $response->assertRedirect(Fortify::redirects('password-reset', route('login')));
     }
 
     public function test_password_is_required()
