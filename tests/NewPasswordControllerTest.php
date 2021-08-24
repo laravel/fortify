@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Password;
 use Laravel\Fortify\Contracts\ResetPasswordViewResponse;
 use Laravel\Fortify\Contracts\ResetsUserPasswords;
+use Laravel\Fortify\Fortify;
 use Mockery;
 
 class NewPasswordControllerTest extends OrchestraTestCase
@@ -54,7 +55,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
         ]);
 
         $response->assertStatus(302);
-        $response->assertRedirect('/login');
+        $response->assertRedirect(Fortify::redirects('password-reset', route('login')));
     }
 
     public function test_password_reset_can_fail()
@@ -125,7 +126,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
         ]);
 
         $response->assertStatus(302);
-        $response->assertRedirect('/login');
+        $response->assertRedirect(Fortify::redirects('password-reset', route('login')));
     }
 
     public function test_password_is_required()

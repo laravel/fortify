@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.8.0...master)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.8.1...master)
+
+
+## [v1.8.1 (2021-08-24)](https://github.com/laravel/fortify/compare/v1.8.0...v1.8.1)
+
+### Changed
+- Allow reset password redirect ([#307](https://github.com/laravel/fortify/pull/307))
 
 
 ## [v1.8.0 (2021-08-10)](https://github.com/laravel/fortify/compare/v1.7.14...v1.8.0)
