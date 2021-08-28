@@ -40,7 +40,7 @@ return [
     |
     */
 
-	'email-verification-model' => Illuminate\Foundation\Auth\User::class,
+	'email-verification-model' => App\Models\User::class,
 
 	/*
     |--------------------------------------------------------------------------

@@ -6,7 +6,7 @@ return [
     'guard' => 'web',
     'middleware' => ['web'],
     'passwords' => 'users',
-    'email-verification-model' => Illuminate\Foundation\Auth\User::class,
+    'email-verification-model' => App\Models\User::class,
     'username' => 'email',
     'email' => 'email',
     'views' => true,
