@@ -17,16 +17,13 @@ class EmailVerificationNotificationController extends Controller
      */
     public function store(Request $request)
     {
-		$userModel = config('fortify.email-verification-model');
-		$user = $request->user() ?? $userModel::findOrFail($request->route('id'));
-
-        if ($user->hasVerifiedEmail()) {
+        if ($request->user()->hasVerifiedEmail()) {
             return $request->wantsJson()
                         ? new JsonResponse('', 204)
                         : redirect()->intended(Fortify::redirects('email-verification'));
         }
 
-        $user->sendEmailVerificationNotification();
+        $request->user()->sendEmailVerificationNotification();
 
         return $request->wantsJson()
                     ? new JsonResponse('', 202)
