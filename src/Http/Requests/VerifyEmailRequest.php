@@ -13,11 +13,9 @@ class VerifyEmailRequest extends FormRequest
      */
     public function authorize()
     {
-        if (! hash_equals((string) $this->route('id'), (string) $this->user()->getKey())) {
-            return false;
-        }
+		$user = $this->getCurrentUser();
 
-        if (! hash_equals((string) $this->route('hash'), sha1($this->user()->getEmailForVerification()))) {
+        if (! hash_equals((string) $this->route('hash'), sha1($user->getEmailForVerification()))) {
             return false;
         }
 
@@ -33,4 +31,11 @@ class VerifyEmailRequest extends FormRequest
     {
         return [];
     }
+
+	public function getCurrentUser()
+	{
+		$userModel = config('fortify.email-verification-model');
+
+		return $this->user() ?? $userModel::findOrFail($this->route('id'));
+	}
 }

@@ -5,7 +5,7 @@ use Laravel\Fortify\Features;
 
 return [
 
-    /*
+	/*
     |--------------------------------------------------------------------------
     | Fortify Guard
     |--------------------------------------------------------------------------
@@ -16,9 +16,9 @@ return [
     |
     */
 
-    'guard' => 'web',
+	'guard' => 'web',
 
-    /*
+	/*
     |--------------------------------------------------------------------------
     | Fortify Password Broker
     |--------------------------------------------------------------------------
@@ -29,9 +29,20 @@ return [
     |
     */
 
-    'passwords' => 'users',
+	'passwords' => 'users',
 
-    /*
+	/*
+    |--------------------------------------------------------------------------
+    | Email Verification Model
+    |--------------------------------------------------------------------------
+    |
+    | Specify which model should be used for email verification feature.
+    |
+    */
+
+	'email-verification-model' => App\Models\User::class,
+
+	/*
     |--------------------------------------------------------------------------
     | Username / Email
     |--------------------------------------------------------------------------
@@ -46,11 +57,11 @@ return [
     |
     */
 
-    'username' => 'email',
+	'username' => 'email',
 
-    'email' => 'email',
+	'email' => 'email',
 
-    /*
+	/*
     |--------------------------------------------------------------------------
     | Home Path
     |--------------------------------------------------------------------------
@@ -61,9 +72,9 @@ return [
     |
     */
 
-    'home' => RouteServiceProvider::HOME,
+	'home' => RouteServiceProvider::HOME,
 
-    /*
+	/*
     |--------------------------------------------------------------------------
     | Fortify Routes Prefix / Subdomain
     |--------------------------------------------------------------------------
@@ -74,11 +85,11 @@ return [
     |
     */
 
-    'prefix' => '',
+	'prefix' => '',
 
-    'domain' => null,
+	'domain' => null,
 
-    /*
+	/*
     |--------------------------------------------------------------------------
     | Fortify Routes Middleware
     |--------------------------------------------------------------------------
@@ -89,9 +100,9 @@ return [
     |
     */
 
-    'middleware' => ['web'],
+	'middleware' => ['web'],
 
-    /*
+	/*
     |--------------------------------------------------------------------------
     | Rate Limiting
     |--------------------------------------------------------------------------
@@ -102,12 +113,30 @@ return [
     |
     */
 
-    'limiters' => [
-        'login' => 'login',
-        'two-factor' => 'two-factor',
-    ],
+	'limiters' => [
+		'login' => 'login',
+		'two-factor' => 'two-factor',
+	],
 
-    /*
+	/*
+    |--------------------------------------------------------------------------
+    | Redirects
+    |--------------------------------------------------------------------------
+    |
+    | Customize redirect URLs after these actions.
+    |
+    */
+
+	'redirects' => [
+		'login' => null,
+		'logout' => null,
+		'password-confirmation' => null,
+		'register' => null,
+		'email-verification' => null,
+		'password-reset' => null,
+	],
+
+	/*
     |--------------------------------------------------------------------------
     | Register View Routes
     |--------------------------------------------------------------------------
@@ -118,9 +147,9 @@ return [
     |
     */
 
-    'views' => true,
+	'views' => true,
 
-    /*
+	/*
     |--------------------------------------------------------------------------
     | Features
     |--------------------------------------------------------------------------
@@ -131,15 +160,15 @@ return [
     |
     */
 
-    'features' => [
-        Features::registration(),
-        Features::resetPasswords(),
-        // Features::emailVerification(),
-        Features::updateProfileInformation(),
-        Features::updatePasswords(),
-        Features::twoFactorAuthentication([
-            'confirmPassword' => true,
-        ]),
-    ],
+	'features' => [
+		Features::registration(),
+		Features::resetPasswords(),
+		// Features::emailVerification(),
+		Features::updateProfileInformation(),
+		Features::updatePasswords(),
+		Features::twoFactorAuthentication([
+			'confirmPassword' => true,
+		]),
+	],
 
 ];

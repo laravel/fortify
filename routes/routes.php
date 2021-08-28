@@ -82,11 +82,11 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         }
 
         Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
-            ->middleware(['auth:'.config('fortify.guard'), 'signed', 'throttle:6,1'])
+            ->middleware(['signed', 'throttle:6,1'])
             ->name('verification.verify');
 
         Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-            ->middleware(['auth:'.config('fortify.guard'), 'throttle:6,1'])
+            ->middleware(['throttle:6,1'])
             ->name('verification.send');
     }
 

@@ -10,26 +10,28 @@ use Laravel\Fortify\Http\Requests\VerifyEmailRequest;
 
 class VerifyEmailController extends Controller
 {
-    /**
-     * Mark the authenticated user's email address as verified.
-     *
-     * @param  \Laravel\Fortify\Http\Requests\VerifyEmailRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function __invoke(VerifyEmailRequest $request)
-    {
-        if ($request->user()->hasVerifiedEmail()) {
-            return $request->wantsJson()
-                ? new JsonResponse('', 204)
-                : redirect()->intended(Fortify::redirects('email-verification').'?verified=1');
-        }
+	/**
+	 * Mark the authenticated user's email address as verified.
+	 *
+	 * @param  \Laravel\Fortify\Http\Requests\VerifyEmailRequest  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function __invoke(VerifyEmailRequest $request)
+	{
+		$user = $request->getCurrentUser();
 
-        if ($request->user()->markEmailAsVerified()) {
-            event(new Verified($request->user()));
-        }
+		if ($user->hasVerifiedEmail()) {
+			return $request->wantsJson()
+				? new JsonResponse('', 204)
+				: redirect()->intended(Fortify::redirects('email-verification') . '?verified=1');
+		}
 
-        return $request->wantsJson()
-            ? new JsonResponse('', 202)
-            : redirect()->intended(Fortify::redirects('email-verification').'?verified=1');
-    }
+		if ($user->markEmailAsVerified()) {
+			event(new Verified($user));
+		}
+
+		return $request->wantsJson()
+			? new JsonResponse('', 202)
+			: redirect()->intended(Fortify::redirects('email-verification') . '?verified=1');
+	}
 }
