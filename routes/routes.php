@@ -86,7 +86,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
             ->name('verification.verify');
 
         Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-            ->middleware(['throttle:6,1'])
+            ->middleware(['auth:'.config('fortify.guard'), 'throttle:6,1'])
             ->name('verification.send');
     }
 
