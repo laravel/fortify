@@ -15,7 +15,7 @@ return [
     'domain' => null,
     'limiters' => [
         'login' => null,
-        'two-factor' => 'two-factor',
+        'two-factor' => null,
     ],
     'redirects' => [
         'login' => null,
