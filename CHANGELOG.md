@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.8.1...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.8.2...1.x)
+
+
+## [v1.8.2 (2021-09-07)](https://github.com/laravel/fortify/compare/v1.8.1...v1.8.2)
+
+### Changed
+- Allow verification rate limiter to be configurable ([#313](https://github.com/laravel/fortify/pull/313))
 
 
 ## [v1.8.1 (2021-08-24)](https://github.com/laravel/fortify/compare/v1.8.0...v1.8.1)
