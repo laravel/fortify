@@ -21,7 +21,7 @@ trait TwoFactorAuthenticatable
     {
         return ! is_null($this->two_factor_secret);
     }
-    
+
     /**
      * Get the user's two factor authentication recovery codes.
      *
