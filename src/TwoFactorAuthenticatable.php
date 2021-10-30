@@ -14,11 +14,13 @@ trait TwoFactorAuthenticatable
 {
     
     /**
-     * Check if two-factor auth is enabled
+     * Determine if two-factor authentication has been enabled.
+     *
+     * @return bool
      */
-    public function twoFactorAuthEnabled()
+    public function hasEnabledTwoFactorAuthentication()
     {
-        return !is_null($this->two_factor_secret);
+        return ! is_null($this->two_factor_secret);
     }
     
     /**
