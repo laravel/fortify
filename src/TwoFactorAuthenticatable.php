@@ -12,7 +12,6 @@ use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
 
 trait TwoFactorAuthenticatable
 {
-    
     /**
      * Determine if two-factor authentication has been enabled.
      *
