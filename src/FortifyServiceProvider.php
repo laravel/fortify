@@ -74,7 +74,7 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->singleton(LogoutResponseContract::class, LogoutResponse::class);
         $this->app->singleton(PasswordConfirmedResponseContract::class, PasswordConfirmedResponse::class);
         $this->app->singleton(PasswordResetResponseContract::class, PasswordResetResponse::class);
-        $this->app->singleton(PasswordUpdateResponseContract::class, PasswordUpdateResponse ::class);
+        $this->app->singleton(PasswordUpdateResponseContract::class, PasswordUpdateResponse::class);
         $this->app->singleton(RegisterResponseContract::class, RegisterResponse::class);
         $this->app->singleton(SuccessfulPasswordResetLinkRequestResponseContract::class, SuccessfulPasswordResetLinkRequestResponse::class);
     }

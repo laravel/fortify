@@ -13,6 +13,16 @@ use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
 trait TwoFactorAuthenticatable
 {
     /**
+     * Determine if two-factor authentication has been enabled.
+     *
+     * @return bool
+     */
+    public function hasEnabledTwoFactorAuthentication()
+    {
+        return ! is_null($this->two_factor_secret);
+    }
+
+    /**
      * Get the user's two factor authentication recovery codes.
      *
      * @return array

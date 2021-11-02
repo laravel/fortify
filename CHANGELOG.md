@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.8.2...master)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.8.3...master)
+
+
+## [v1.8.3 (2021-11-02)](https://github.com/laravel/fortify/compare/v1.8.2...v1.8.3)
+
+### Changed
+- Add a check for two factor auth being enabled ([#323](https://github.com/laravel/fortify/pull/323))
 
 
 ## [v1.8.2 (2021-09-07)](https://github.com/laravel/fortify/compare/v1.8.1...v1.8.2)
