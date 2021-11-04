@@ -39,7 +39,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     }
 
     /**
-     * Handles saving the user's information in the database
+     * Handles saving the user's information in the database.
      *
      * If `$mustVerify` is `true`, then `email_verified_at` will be set to `null`.
      *
