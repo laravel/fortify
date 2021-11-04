@@ -16,7 +16,7 @@ class ProfileUpdated
     public $user;
 
     /**
-     * The old email address, if changed
+     * The old email address, if changed.
      *
      * @var string
      */

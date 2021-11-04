@@ -81,7 +81,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         }
 
         /**
-         * Here you can notify the old email address that a change was made
+         * Here you can notify the old email address that a change was made.
          *
          * @see https://laravel.com/docs/8.x/notifications
          */

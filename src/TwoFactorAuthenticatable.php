@@ -71,7 +71,7 @@ trait TwoFactorAuthenticatable
     }
 
     /**
-     * Determine if two factor authentication is enabled for the user
+     * Determine if two factor authentication is enabled for the user.
      *
      * @return bool
      */
@@ -88,7 +88,7 @@ trait TwoFactorAuthenticatable
     }
 
     /**
-     * Determine if two factor authentication is disabled for the user
+     * Determine if two factor authentication is disabled for the user.
      *
      * @return bool
      */
