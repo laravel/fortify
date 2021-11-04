@@ -86,6 +86,7 @@ class AuthenticatedSessionController extends Controller
             Features::enabled(Features::twoFactorAuthentication()) ? RedirectIfTwoFactorAuthenticatable::class : null,
             AttemptToAuthenticate::class,
             PrepareAuthenticatedSession::class,
+            config('fortify.login_confirms_password') ? $request->session()->put('auth.password_confirmed_at', time()) : null,
         ]));
     }
 

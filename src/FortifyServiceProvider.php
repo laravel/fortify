@@ -3,12 +3,17 @@
 namespace Laravel\Fortify;
 
 use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Contracts\FailedPasswordConfirmationResponse as FailedPasswordConfirmationResponseContract;
 use Laravel\Fortify\Contracts\FailedPasswordResetLinkRequestResponse as FailedPasswordResetLinkRequestResponseContract;
 use Laravel\Fortify\Contracts\FailedPasswordResetResponse as FailedPasswordResetResponseContract;
+use Laravel\Fortify\Contracts\FailedTwoFactorConfirmationRecoveryResponse as FailedTwoFactorConfirmationRecoveryResponseContract;
+use Laravel\Fortify\Contracts\FailedTwoFactorConfirmationResponse as FailedTwoFactorConfirmationResponseContract;
+use Laravel\Fortify\Contracts\FailedTwoFactorLoginRecoveryResponse as FailedTwoFactorLoginRecoveryResponseContract;
 use Laravel\Fortify\Contracts\FailedTwoFactorLoginResponse as FailedTwoFactorLoginResponseContract;
 use Laravel\Fortify\Contracts\LockoutResponse as LockoutResponseContract;
 use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
@@ -19,10 +24,15 @@ use Laravel\Fortify\Contracts\PasswordUpdateResponse as PasswordUpdateResponseCo
 use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
 use Laravel\Fortify\Contracts\SuccessfulPasswordResetLinkRequestResponse as SuccessfulPasswordResetLinkRequestResponseContract;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider as TwoFactorAuthenticationProviderContract;
+use Laravel\Fortify\Contracts\TwoFactorConfirmedResponse as TwoFactorConfirmedResponseContract;
 use Laravel\Fortify\Contracts\TwoFactorLoginResponse as TwoFactorLoginResponseContract;
+use Laravel\Fortify\Http\Middleware\RequireTwoFactor;
 use Laravel\Fortify\Http\Responses\FailedPasswordConfirmationResponse;
 use Laravel\Fortify\Http\Responses\FailedPasswordResetLinkRequestResponse;
 use Laravel\Fortify\Http\Responses\FailedPasswordResetResponse;
+use Laravel\Fortify\Http\Responses\FailedTwoFactorConfirmationRecoveryResponse;
+use Laravel\Fortify\Http\Responses\FailedTwoFactorConfirmationResponse;
+use Laravel\Fortify\Http\Responses\FailedTwoFactorLoginRecoveryResponse;
 use Laravel\Fortify\Http\Responses\FailedTwoFactorLoginResponse;
 use Laravel\Fortify\Http\Responses\LockoutResponse;
 use Laravel\Fortify\Http\Responses\LoginResponse;
@@ -32,6 +42,7 @@ use Laravel\Fortify\Http\Responses\PasswordResetResponse;
 use Laravel\Fortify\Http\Responses\PasswordUpdateResponse;
 use Laravel\Fortify\Http\Responses\RegisterResponse;
 use Laravel\Fortify\Http\Responses\SuccessfulPasswordResetLinkRequestResponse;
+use Laravel\Fortify\Http\Responses\TwoFactorConfirmedResponse;
 use Laravel\Fortify\Http\Responses\TwoFactorLoginResponse;
 
 class FortifyServiceProvider extends ServiceProvider
@@ -46,6 +57,8 @@ class FortifyServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/fortify.php', 'fortify');
 
         $this->registerResponseBindings();
+
+        $this->registerRequireTwoFactor();
 
         $this->app->singleton(
             TwoFactorAuthenticationProviderContract::class,
@@ -67,16 +80,20 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->singleton(FailedPasswordConfirmationResponseContract::class, FailedPasswordConfirmationResponse::class);
         $this->app->singleton(FailedPasswordResetLinkRequestResponseContract::class, FailedPasswordResetLinkRequestResponse::class);
         $this->app->singleton(FailedPasswordResetResponseContract::class, FailedPasswordResetResponse::class);
+        $this->app->singleton(FailedTwoFactorConfirmationRecoveryResponseContract::class, FailedTwoFactorConfirmationRecoveryResponse::class);
+        $this->app->singleton(FailedTwoFactorConfirmationResponseContract::class, FailedTwoFactorConfirmationResponse::class);
+        $this->app->singleton(FailedTwoFactorLoginRecoveryResponseContract::class, FailedTwoFactorLoginRecoveryResponse::class);
         $this->app->singleton(FailedTwoFactorLoginResponseContract::class, FailedTwoFactorLoginResponse::class);
         $this->app->singleton(LockoutResponseContract::class, LockoutResponse::class);
         $this->app->singleton(LoginResponseContract::class, LoginResponse::class);
-        $this->app->singleton(TwoFactorLoginResponseContract::class, TwoFactorLoginResponse::class);
         $this->app->singleton(LogoutResponseContract::class, LogoutResponse::class);
         $this->app->singleton(PasswordConfirmedResponseContract::class, PasswordConfirmedResponse::class);
         $this->app->singleton(PasswordResetResponseContract::class, PasswordResetResponse::class);
         $this->app->singleton(PasswordUpdateResponseContract::class, PasswordUpdateResponse::class);
         $this->app->singleton(RegisterResponseContract::class, RegisterResponse::class);
         $this->app->singleton(SuccessfulPasswordResetLinkRequestResponseContract::class, SuccessfulPasswordResetLinkRequestResponse::class);
+        $this->app->singleton(TwoFactorConfirmedResponseContract::class, TwoFactorConfirmedResponse::class);
+        $this->app->singleton(TwoFactorLoginResponseContract::class, TwoFactorLoginResponse::class);
     }
 
     /**
@@ -99,17 +116,20 @@ class FortifyServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../stubs/fortify.php' => config_path('fortify.php'),
+                __DIR__.'/../stubs/config/fortify.php' => config_path('fortify.php'),
             ], 'fortify-config');
 
             $this->publishes([
-                __DIR__.'/../stubs/CreateNewUser.php' => app_path('Actions/Fortify/CreateNewUser.php'),
-                __DIR__.'/../stubs/FortifyServiceProvider.php' => app_path('Providers/FortifyServiceProvider.php'),
-                __DIR__.'/../stubs/PasswordValidationRules.php' => app_path('Actions/Fortify/PasswordValidationRules.php'),
-                __DIR__.'/../stubs/ResetUserPassword.php' => app_path('Actions/Fortify/ResetUserPassword.php'),
-                __DIR__.'/../stubs/UpdateUserProfileInformation.php' => app_path('Actions/Fortify/UpdateUserProfileInformation.php'),
-                __DIR__.'/../stubs/UpdateUserPassword.php' => app_path('Actions/Fortify/UpdateUserPassword.php'),
-            ], 'fortify-support');
+                __DIR__.'/../stubs/Actions/CreateNewUser.php' => app_path('Actions/Fortify/CreateNewUser.php'),
+                __DIR__.'/../stubs/Actions/PasswordValidationRules.php' => app_path('Actions/Fortify/PasswordValidationRules.php'),
+                __DIR__.'/../stubs/Actions/ResetUserPassword.php' => app_path('Actions/Fortify/ResetUserPassword.php'),
+                __DIR__.'/../stubs/Actions/UpdateUserPassword.php' => app_path('Actions/Fortify/UpdateUserPassword.php'),
+                __DIR__.'/../stubs/Actions/UpdateUserProfileInformation.php' => app_path('Actions/Fortify/UpdateUserProfileInformation.php'),
+            ], 'fortify-actions');
+
+            $this->publishes([
+                __DIR__.'/../stubs/Providers/FortifyServiceProvider.php' => app_path('Providers/FortifyServiceProvider.php'),
+            ], 'fortify-provider');
 
             $this->publishes([
                 __DIR__.'/../database/migrations' => database_path('migrations'),
@@ -133,5 +153,21 @@ class FortifyServiceProvider extends ServiceProvider
                 $this->loadRoutesFrom(__DIR__.'/../routes/routes.php');
             });
         }
+    }
+
+    /**
+     * Register a resolver for the two factor confirmation.
+     *
+     * @return void
+     */
+    protected function registerRequireTwoFactor()
+    {
+        $this->app->bind(RequireTwoFactor::class, function ($app) {
+            return new RequireTwoFactor(
+                $app[ResponseFactory::class],
+                $app[UrlGenerator::class],
+                $app['config']->get('auth.two_factor_timeout')
+            );
+        });
     }
 }

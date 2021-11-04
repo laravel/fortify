@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Routing\Controller;
 use Laravel\Fortify\Contracts\FailedTwoFactorLoginResponse;
+use Laravel\Fortify\Contracts\FailedTwoFactorLoginRecoveryResponse;
 use Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse;
 use Laravel\Fortify\Contracts\TwoFactorLoginResponse;
 use Laravel\Fortify\Events\RecoveryCodeReplaced;
@@ -56,17 +57,40 @@ class TwoFactorAuthenticatedSessionController extends Controller
     {
         $user = $request->challengedUser();
 
-        if ($code = $request->validRecoveryCode()) {
-            $user->replaceRecoveryCode($code);
+        if ($request->filled('recovery_code')) {
+            $code = $request->validRecoveryCode();
 
+            if (! $code) {
+                $request->session()->put([
+                    'login.id' => $user->getKey(),
+                    'login.remember' => $request->filled('remember'),
+                ]);
+
+                return app(FailedTwoFactorLoginRecoveryResponse::class);
+            }
+
+            $user->replaceRecoveryCode($code);
             event(new RecoveryCodeReplaced($user, $code));
         } elseif (! $request->hasValidCode()) {
+            $request->session()->put([
+                'login.id' => $user->getKey(),
+                'login.remember' => $request->filled('remember'),
+            ]);
+
             return app(FailedTwoFactorLoginResponse::class);
         }
 
         $this->guard->login($user, $request->remember());
 
         $request->session()->regenerate();
+
+        if (config('fortify.login_confirms_password')) {
+            $request->session()->put('auth.password_confirmed_at', time());
+        }
+
+        if (config('fortify.login_confirms_two_factor')) {
+            $request->session()->put('auth.two_factor_confirmed_at', time());
+        }
 
         return app(TwoFactorLoginResponse::class);
     }

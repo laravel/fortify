@@ -12,6 +12,9 @@ return [
     'home' => '/home',
     'prefix' => '',
     'domain' => null,
+    'login_confirms_password' => false,
+    'login_confirms_two_factor' => false,
+    'number_of_recovery_codes' => 8,
     'limiters' => [
         'login' => null,
     ],
@@ -19,6 +22,7 @@ return [
         'login' => null,
         'logout' => null,
         'password-confirmation' => null,
+        'two-factor-confirmation' => null,
         'register' => null,
         'email-verification' => null,
         'password-reset' => null,

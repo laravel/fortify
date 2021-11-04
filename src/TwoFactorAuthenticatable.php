@@ -69,4 +69,38 @@ trait TwoFactorAuthenticatable
             decrypt($this->two_factor_secret)
         );
     }
+
+    /**
+     * Determine if two factor authentication is enabled for the user
+     *
+     * @return bool
+     */
+    public function isTwoFactorEnabled()
+    {
+        if (is_null(Fortify::$isTwoFactorEnabledCallback)) {
+            return $this->two_factor_secret ? true : false;
+        }
+
+        return call_user_func(
+            Fortify::$isTwoFactorEnabledCallback,
+            $this
+        );
+    }
+
+    /**
+     * Determine if two factor authentication is disabled for the user
+     *
+     * @return bool
+     */
+    public function isTwoFactorDisabled()
+    {
+        if (is_null(Fortify::$isTwoFactorDisabledCallback)) {
+            return $this->two_factor_secret ? false : true;
+        }
+
+        return call_user_func(
+            Fortify::$isTwoFactorDisabledCallback,
+            $this
+        );
+    }
 }

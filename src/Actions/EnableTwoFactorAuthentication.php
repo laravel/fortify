@@ -4,6 +4,7 @@ namespace Laravel\Fortify\Actions;
 
 use Illuminate\Support\Collection;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
+use Laravel\Fortify\Events\TwoFactorEnabled;
 use Laravel\Fortify\RecoveryCode;
 
 class EnableTwoFactorAuthentication
@@ -36,9 +37,11 @@ class EnableTwoFactorAuthentication
     {
         $user->forceFill([
             'two_factor_secret' => encrypt($this->provider->generateSecretKey()),
-            'two_factor_recovery_codes' => encrypt(json_encode(Collection::times(8, function () {
+            'two_factor_recovery_codes' => encrypt(json_encode(Collection::times(config('fortify.number_of_recovery_codes', 8), function () {
                 return RecoveryCode::generate();
             })->all())),
         ])->save();
+
+        event(new TwoFactorEnabled($user));
     }
 }

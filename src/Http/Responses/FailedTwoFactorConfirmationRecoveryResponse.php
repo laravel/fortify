@@ -3,9 +3,9 @@
 namespace Laravel\Fortify\Http\Responses;
 
 use Illuminate\Validation\ValidationException;
-use Laravel\Fortify\Contracts\FailedTwoFactorLoginResponse as FailedTwoFactorLoginResponseContract;
+use Laravel\Fortify\Contracts\FailedTwoFactorConfirmationRecoveryResponse as FailedTwoFactorConfirmationRecoveryResponseContract;
 
-class FailedTwoFactorLoginResponse implements FailedTwoFactorLoginResponseContract
+class FailedTwoFactorConfirmationRecoveryResponse implements FailedTwoFactorConfirmationRecoveryResponseContract
 {
     /**
      * Create an HTTP response that represents the object.
@@ -15,14 +15,14 @@ class FailedTwoFactorLoginResponse implements FailedTwoFactorLoginResponseContra
      */
     public function toResponse($request)
     {
-        $message = __('The provided two factor authentication code was invalid.');
+        $message = __('The provided two factor recovery code was invalid.');
 
         if ($request->wantsJson()) {
             throw ValidationException::withMessages([
-                'code' => [$message],
+                'recovery_code' => [$message],
             ]);
         }
 
-        return back()->withErrors(['code' => $message]);
+        return back()->withErrors(['recovery_code' => $message]);
     }
 }

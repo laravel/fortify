@@ -3,9 +3,9 @@
 namespace Laravel\Fortify\Http\Responses;
 
 use Illuminate\Validation\ValidationException;
-use Laravel\Fortify\Contracts\FailedTwoFactorLoginResponse as FailedTwoFactorLoginResponseContract;
+use Laravel\Fortify\Contracts\FailedTwoFactorConfirmationResponse as FailedTwoFactorConfirmationResponseContract;
 
-class FailedTwoFactorLoginResponse implements FailedTwoFactorLoginResponseContract
+class FailedTwoFactorConfirmationResponse implements FailedTwoFactorConfirmationResponseContract
 {
     /**
      * Create an HTTP response that represents the object.

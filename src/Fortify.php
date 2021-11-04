@@ -3,6 +3,7 @@
 namespace Laravel\Fortify;
 
 use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
+use Laravel\Fortify\Contracts\ConfirmTwoFactorViewResponse;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Fortify\Contracts\LoginViewResponse;
 use Laravel\Fortify\Contracts\RegisterViewResponse;
@@ -12,6 +13,7 @@ use Laravel\Fortify\Contracts\ResetsUserPasswords;
 use Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse;
 use Laravel\Fortify\Contracts\UpdatesUserPasswords;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
+use Laravel\Fortify\Contracts\UserTwoFactorNotEnabledViewResponse;
 use Laravel\Fortify\Contracts\VerifyEmailViewResponse;
 use Laravel\Fortify\Http\Responses\SimpleViewResponse;
 
@@ -37,6 +39,29 @@ class Fortify
      * @var callable|null
      */
     public static $confirmPasswordsUsingCallback;
+
+    /**
+     * The callback that is responsible for confirming two factor authentication.
+     *
+     * @var callable|null
+     */
+    public static $confirmTwoFactorsUsingCallback;
+
+    /**
+     * The callback that is responsible for determining if a user has two factor
+     * authentication enabled.
+     *
+     * @var callable|null
+     */
+    public static $isTwoFactorEnabledCallback;
+
+    /**
+     * The callback that is responsible for determining if a user has two factor
+     * authentication disabled.
+     *
+     * @var callable|null
+     */
+    public static $isTwoFactorDisabledCallback;
 
     /**
      * Indicates if Fortify routes will be registered.
@@ -102,6 +127,7 @@ class Fortify
         static::resetPasswordView($prefix.'reset-password');
         static::verifyEmailView($prefix.'verify-email');
         static::confirmPasswordView($prefix.'confirm-password');
+        static::confirmTwoFactorView($prefix.'confirm-two-factor');
     }
 
     /**
@@ -183,6 +209,32 @@ class Fortify
     }
 
     /**
+     * Specify which view should be used as the two-factor confirmation prompt.
+     *
+     * @param  callable|string  $view
+     * @return void
+     */
+    public static function confirmTwoFactorView($view)
+    {
+        app()->singleton(ConfirmTwoFactorViewResponse::class, function () use ($view) {
+            return new SimpleViewResponse($view);
+        });
+    }
+
+    /**
+     * Specify which view should be used as the two-factor not enabled user prompt.
+     *
+     * @param  callable|string  $view
+     * @return void
+     */
+    public static function userTwoFactorNotEnabledView($view)
+    {
+        app()->singleton(UserTwoFactorNotEnabledViewResponse::class, function () use ($view) {
+            return new SimpleViewResponse($view);
+        });
+    }
+
+    /**
      * Specify which view should be used as the request password reset link view.
      *
      * @param  callable|string  $view
@@ -237,6 +289,41 @@ class Fortify
     public static function confirmPasswordsUsing(callable $callback)
     {
         static::$confirmPasswordsUsingCallback = $callback;
+    }
+
+    /**
+     * Register a callback that is responsible for confirming existing user two factor as valid.
+     *
+     * @param  callable  $callback
+     * @return void
+     */
+    public static function confirmTwoFactorUsing(callable $callback)
+    {
+        static::$confirmTwoFactorsUsingCallback = $callback;
+    }
+
+    /**
+     * Register a callback that is responsible for determining if a user has two
+     * factor authentication enabled.
+     *
+     * @param  callable  $callback
+     * @return void
+     */
+    public static function isTwoFactorEnabledUsing(callable $callback)
+    {
+        static::$isTwoFactorEnabledCallback = $callback;
+    }
+
+    /**
+     * Register a callback that is responsible for determining if a user has two
+     * factor authentication disabled.
+     *
+     * @param  callable  $callback
+     * @return void
+     */
+    public static function isTwoFactorDisabledUsing(callable $callback)
+    {
+        static::$isTwoFactorDisabledCallback = $callback;
     }
 
     /**

@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use Laravel\Fortify\Http\Controllers\ConfirmablePasswordController;
+use Laravel\Fortify\Http\Controllers\ConfirmableTwoFactorController;
 use Laravel\Fortify\Http\Controllers\ConfirmedPasswordStatusController;
+use Laravel\Fortify\Http\Controllers\ConfirmedTwoFactorStatusController;
 use Laravel\Fortify\Http\Controllers\EmailVerificationNotificationController;
 use Laravel\Fortify\Http\Controllers\EmailVerificationPromptController;
 use Laravel\Fortify\Http\Controllers\NewPasswordController;
@@ -118,6 +120,21 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
 
     Route::post('/user/confirm-password', [ConfirmablePasswordController::class, 'store'])
         ->middleware(['auth:'.config('fortify.guard')]);
+
+    // Two Factor Confirmation
+    if ($enableViews) {
+        Route::get('/user/confirm-two-factor', [ConfirmableTwoFactorController::class, 'show'])
+            ->middleware(['auth:'.config('fortify.guard')])
+            ->name('two-factor.confirm');
+    }
+
+    Route::get('/user/confirmed-two-factor-status', [ConfirmedTwoFactorStatusController::class, 'show'])
+        ->middleware(['auth:'.config('fortify.guard')])
+        ->name('two-factor.confirmation');
+
+    Route::post('/user/confirm-two-factor', [ConfirmableTwoFactorController::class, 'store'])
+        ->middleware(['auth:'.config('fortify.guard')]);
+
 
     // Two Factor Authentication...
     if (Features::enabled(Features::twoFactorAuthentication())) {

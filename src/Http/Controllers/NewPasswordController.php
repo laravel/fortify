@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify\Http\Controllers;
 
+use App\Actions\Fortify\PasswordValidationRules;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Contracts\Support\Responsable;
@@ -17,6 +18,8 @@ use Laravel\Fortify\Fortify;
 
 class NewPasswordController extends Controller
 {
+    use PasswordValidationRules;
+
     /**
      * The guard implementation.
      *
@@ -43,6 +46,14 @@ class NewPasswordController extends Controller
      */
     public function create(Request $request): ResetPasswordViewResponse
     {
+        $user = $this->broker()->getUser(
+            $request->only(Fortify::email())
+        );
+
+        if (! $user || ! $exists = $this->broker()->tokenExists($user, $request->route('token'))) {
+            abort(401, 'Invalid Token!');
+        }
+
         return app(ResetPasswordViewResponse::class);
     }
 
@@ -57,7 +68,7 @@ class NewPasswordController extends Controller
         $request->validate([
             'token' => 'required',
             Fortify::email() => 'required|email',
-            'password' => 'required',
+            'password' => $this->passwordRules(),
         ]);
 
         // Here we will attempt to reset the user's password. If it is successful we
