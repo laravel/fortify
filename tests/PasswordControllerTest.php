@@ -35,8 +35,8 @@ class PasswordControllerTest extends OrchestraTestCase
         $user = Mockery::mock(Authenticatable::class);
         $user->password = '';
 
-        require_once __DIR__.'/../stubs/PasswordValidationRules.php';
-        require_once __DIR__.'/../stubs/UpdateUserPassword.php';
+        require_once __DIR__.'/../stubs/Actions/PasswordValidationRules.php';
+        require_once __DIR__.'/../stubs/Actions/UpdateUserPassword.php';
 
         try {
             (new UpdateUserPassword())->update($user, [
