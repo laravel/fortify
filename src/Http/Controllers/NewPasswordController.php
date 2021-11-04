@@ -2,7 +2,6 @@
 
 namespace Laravel\Fortify\Http\Controllers;
 
-use App\Actions\Fortify\PasswordValidationRules;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Contracts\Support\Responsable;
@@ -18,8 +17,6 @@ use Laravel\Fortify\Fortify;
 
 class NewPasswordController extends Controller
 {
-    use PasswordValidationRules;
-
     /**
      * The guard implementation.
      *
@@ -68,7 +65,7 @@ class NewPasswordController extends Controller
         $request->validate([
             'token' => 'required',
             Fortify::email() => 'required|email',
-            'password' => $this->passwordRules(),
+            'password' => 'required',
         ]);
 
         // Here we will attempt to reset the user's password. If it is successful we
