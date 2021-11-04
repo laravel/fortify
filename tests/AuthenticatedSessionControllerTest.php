@@ -232,11 +232,11 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $response = $this->withSession([
             'login.id' => $user->id,
             'login.remember' => false,
-        ])->withoutExceptionHandling()->post('/two-factor-challenge', [
+        ])->withoutExceptionHandling()->from('/two-factor-challenge')->post('/two-factor-challenge', [
             'recovery_code' => 'missing-code',
         ]);
 
-        $response->assertRedirect('/login');
+        $response->assertRedirect('/two-factor-challenge');
         $this->assertNull(Auth::getUser());
     }
 
@@ -276,6 +276,8 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
 class TestAuthenticationSessionUser extends User
 {
+    use TwoFactorAuthenticatable;
+
     protected $table = 'users';
 }
 
