@@ -20,7 +20,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
                 ->shouldReceive('toResponse')
                 ->andReturn(response('hello world'));
 
-        $response = $this->get('/reset-password/token');
+        $response = $this->get('/reset-password/token?email=taylor@laravel.com');
 
         $response->assertStatus(200);
         $response->assertSeeText('hello world');
