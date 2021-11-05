@@ -33,7 +33,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
             'password' => bcrypt('secret'),
         ]);
 
-        $this->broker()->sendResetLink(['email' => $this->user->email], function($user, $token) {
+        $this->broker()->sendResetLink(['email' => $this->user->email], function ($user, $token) {
             $this->token = $token;
         });
     }
@@ -44,7 +44,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
                 ->shouldReceive('toResponse')
                 ->andReturn(response('hello world'));
 
-        $response = $this->get('/reset-password/' . $this->token . '?email=' . $this->user->email);
+        $response = $this->get('/reset-password/'.$this->token.'?email='.$this->user->email);
 
         $response->assertStatus(200);
         $response->assertSeeText('hello world');

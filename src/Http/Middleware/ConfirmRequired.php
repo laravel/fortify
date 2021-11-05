@@ -7,7 +7,6 @@ use Illuminate\Auth\Middleware\RequirePassword;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Http\Request;
-use Laravel\Fortify\Http\Middleware\RequireTwoFactor;
 
 class ConfirmRequired
 {
