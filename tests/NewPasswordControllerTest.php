@@ -5,6 +5,7 @@ namespace Laravel\Fortify\Tests;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Password;
 use Laravel\Fortify\Contracts\ResetPasswordViewResponse;
@@ -14,13 +15,36 @@ use Mockery;
 
 class NewPasswordControllerTest extends OrchestraTestCase
 {
+    protected $user;
+
+    protected $token;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->loadLaravelMigrations(['--database' => 'testbench']);
+
+        $this->artisan('migrate', ['--database' => 'testbench'])->run();
+
+        $this->user = TestNewPasswordUser::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+        ]);
+
+        $this->broker()->sendResetLink(['email' => $this->user->email], function($user, $token) {
+            $this->token = $token;
+        });
+    }
+
     public function test_the_new_password_view_is_returned()
     {
         $this->mock(ResetPasswordViewResponse::class)
                 ->shouldReceive('toResponse')
                 ->andReturn(response('hello world'));
 
-        $response = $this->get('/reset-password/token?email=taylor@laravel.com');
+        $response = $this->get('/reset-password/' . $this->token . '?email=' . $this->user->email);
 
         $response->assertStatus(200);
         $response->assertSeeText('hello world');
@@ -139,4 +163,29 @@ class NewPasswordControllerTest extends OrchestraTestCase
         $response->assertStatus(302);
         $response->assertSessionHasErrors(['password']);
     }
+
+    protected function getEnvironmentSetUp($app)
+    {
+        $app['migrator']->path(__DIR__.'/../database/migrations');
+
+        $app['config']->set('auth.providers.users.model', TestNewPasswordUser::class);
+
+        $app['config']->set('database.default', 'testbench');
+
+        $app['config']->set('database.connections.testbench', [
+            'driver'   => 'sqlite',
+            'database' => ':memory:',
+            'prefix'   => '',
+        ]);
+    }
+
+    protected function broker(): PasswordBroker
+    {
+        return Password::broker(config('fortify.passwords'));
+    }
+}
+
+class TestNewPasswordUser extends User
+{
+    protected $table = 'users';
 }
