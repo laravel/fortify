@@ -52,7 +52,7 @@ class AttemptToAuthenticate
 
         if ($this->guard->attempt(
             $request->only(Fortify::username(), 'password'),
-            $request->filled('remember'))
+            $request->boolean('remember'))
         ) {
             return $next($request);
         }
@@ -77,7 +77,7 @@ class AttemptToAuthenticate
             return $this->throwFailedAuthenticationException($request);
         }
 
-        $this->guard->login($user, $request->filled('remember'));
+        $this->guard->login($user, $request->boolean('remember'));
 
         return $next($request);
     }
