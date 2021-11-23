@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.8.3...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.8.4...1.x)
+
+
+## [v1.8.4 (2021-11-23)](https://github.com/laravel/fortify/compare/v1.8.3...v1.8.4)
+
+### Changed
+- Use boolean rather than filled for remember ([#328](https://github.com/laravel/fortify/pull/328))
 
 
 ## [v1.8.3 (2021-11-02)](https://github.com/laravel/fortify/compare/v1.8.2...v1.8.3)
