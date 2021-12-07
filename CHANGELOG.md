@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.8.4...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.8.5...1.x)
+
+
+## [v1.8.5 (2021-12-07)](https://github.com/laravel/fortify/compare/v1.8.4...v1.8.5)
+
+### Fixed
+- Fix an issue with array to string conversion ([#333](https://github.com/laravel/fortify/pull/333))
 
 
 ## [v1.8.4 (2021-11-23)](https://github.com/laravel/fortify/compare/v1.8.3...v1.8.4)
