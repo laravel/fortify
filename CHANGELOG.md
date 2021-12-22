@@ -1,6 +1,15 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.8.5...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.8.6...1.x)
+
+
+## [v1.8.6 (2021-12-22)](https://github.com/laravel/fortify/compare/v1.8.5...v1.8.6)
+
+### Changed
+- Customise the auth middleware name ([#335](https://github.com/laravel/fortify/pull/335))
+
+### Fixed
+- Check if authenticated user has 2FA enabled ([#334](https://github.com/laravel/fortify/pull/334))
 
 
 ## [v1.8.5 (2021-12-07)](https://github.com/laravel/fortify/compare/v1.8.4...v1.8.5)
