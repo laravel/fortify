@@ -78,46 +78,46 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     if (Features::enabled(Features::emailVerification())) {
         if ($enableViews) {
             Route::get('/email/verify', [EmailVerificationPromptController::class, '__invoke'])
-                ->middleware(['auth:'.config('fortify.guard')])
+                ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
                 ->name('verification.notice');
         }
 
         Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
-            ->middleware(['auth:'.config('fortify.guard'), 'signed', 'throttle:'.$verificationLimiter])
+            ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard'), 'signed', 'throttle:'.$verificationLimiter])
             ->name('verification.verify');
 
         Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-            ->middleware(['auth:'.config('fortify.guard'), 'throttle:'.$verificationLimiter])
+            ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard'), 'throttle:'.$verificationLimiter])
             ->name('verification.send');
     }
 
     // Profile Information...
     if (Features::enabled(Features::updateProfileInformation())) {
         Route::put('/user/profile-information', [ProfileInformationController::class, 'update'])
-            ->middleware(['auth:'.config('fortify.guard')])
+            ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
             ->name('user-profile-information.update');
     }
 
     // Passwords...
     if (Features::enabled(Features::updatePasswords())) {
         Route::put('/user/password', [PasswordController::class, 'update'])
-            ->middleware(['auth:'.config('fortify.guard')])
+            ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
             ->name('user-password.update');
     }
 
     // Password Confirmation...
     if ($enableViews) {
         Route::get('/user/confirm-password', [ConfirmablePasswordController::class, 'show'])
-            ->middleware(['auth:'.config('fortify.guard')])
+            ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
             ->name('password.confirm');
     }
 
     Route::get('/user/confirmed-password-status', [ConfirmedPasswordStatusController::class, 'show'])
-        ->middleware(['auth:'.config('fortify.guard')])
+        ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
         ->name('password.confirmation');
 
     Route::post('/user/confirm-password', [ConfirmablePasswordController::class, 'store'])
-        ->middleware(['auth:'.config('fortify.guard')]);
+        ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')]);
 
     // Two Factor Authentication...
     if (Features::enabled(Features::twoFactorAuthentication())) {
@@ -134,8 +134,8 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
             ]));
 
         $twoFactorMiddleware = Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword')
-            ? ['auth:'.config('fortify.guard'), 'password.confirm']
-            : ['auth:'.config('fortify.guard')];
+            ? [config('fortify.auth_middleware', 'auth').':'.config('fortify.guard'), 'password.confirm']
+            : [config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')];
 
         Route::post('/user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'store'])
             ->middleware($twoFactorMiddleware)
