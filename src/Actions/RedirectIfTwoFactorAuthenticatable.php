@@ -5,6 +5,7 @@ namespace Laravel\Fortify\Actions;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Validation\ValidationException;
+use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\LoginRateLimiter;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -131,6 +132,8 @@ class RedirectIfTwoFactorAuthenticatable
             'login.id' => $user->getKey(),
             'login.remember' => $request->filled('remember'),
         ]);
+
+        TwoFactorAuthenticationChallenged::dispatch($user);
 
         return $request->wantsJson()
                     ? response()->json(['two_factor' => true])

@@ -5,8 +5,10 @@ namespace Laravel\Fortify\Tests;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Schema;
 use Laravel\Fortify\Contracts\LoginViewResponse;
+use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\FortifyServiceProvider;
 use Laravel\Fortify\LoginRateLimiter;
@@ -48,6 +50,8 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
     public function test_user_is_redirected_to_challenge_when_using_two_factor_authentication()
     {
+        Event::fake();
+
         app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
 
         $this->loadLaravelMigrations(['--database' => 'testbench']);
@@ -69,6 +73,8 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         ]);
 
         $response->assertRedirect('/two-factor-challenge');
+
+        Event::assertDispatched(TwoFactorAuthenticationChallenged::class);
     }
 
     public function test_user_can_authenticate_when_two_factor_challenge_is_disabled()
