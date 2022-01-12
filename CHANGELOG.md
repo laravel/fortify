@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.8.6...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.9.0...1.x)
+
+
+## [v1.9.0 (2022-01-12)](https://github.com/laravel/fortify/compare/v1.8.6...v1.9.0)
+
+### Changed
+* Add 2fa Events ([#338](https://github.com/laravel/fortify/pull/338))
+* Laravel 9 support ([#340](https://github.com/laravel/fortify/pull/340))
 
 
 ## [v1.8.6 (2021-12-22)](https://github.com/laravel/fortify/compare/v1.8.5...v1.8.6)
