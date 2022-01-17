@@ -242,7 +242,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
             'recovery_code' => 'missing-code',
         ]);
 
-        $response->assertRedirect('/login');
+        $response->assertRedirect('/two-factor-challenge');
         $this->assertNull(Auth::getUser());
     }
 
