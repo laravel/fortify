@@ -16,7 +16,7 @@ trait LoginValidationRules
     {
         return [
             Fortify::username() => ['required', 'string'],
-            'password' => ['required', 'string', new Password],
+            'password' => ['required', 'string'],
         ];
     }
 }

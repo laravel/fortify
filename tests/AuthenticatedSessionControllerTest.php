@@ -39,12 +39,12 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         TestAuthenticationSessionUser::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
-            'password' => bcrypt('password'),
+            'password' => bcrypt('secret'),
         ]);
 
         $response = $this->withoutExceptionHandling()->post('/login', [
             'email' => 'taylor@laravel.com',
-            'password' => 'password',
+            'password' => 'secret',
         ]);
 
         $response->assertRedirect('/home');
@@ -65,13 +65,13 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         TestTwoFactorAuthenticationSessionUser::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
-            'password' => bcrypt('password'),
+            'password' => bcrypt('secret'),
             'two_factor_secret' => 'test-secret',
         ]);
 
         $response = $this->withoutExceptionHandling()->post('/login', [
             'email' => 'taylor@laravel.com',
-            'password' => 'password',
+            'password' => 'secret',
         ]);
 
         $response->assertRedirect('/two-factor-challenge');
@@ -98,13 +98,13 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         TestTwoFactorAuthenticationSessionUser::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
-            'password' => bcrypt('password'),
+            'password' => bcrypt('secret'),
             'two_factor_secret' => 'test-secret',
         ]);
 
         $response = $this->withoutExceptionHandling()->post('/login', [
             'email' => 'taylor@laravel.com',
-            'password' => 'password',
+            'password' => 'secret',
         ]);
 
         $response->assertRedirect('/home');
@@ -138,7 +138,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
         $response = $this->postJson('/login', [
             'email' => 'taylor@laravel.com',
-            'password' => 'password',
+            'password' => 'secret',
         ]);
 
         $response->assertStatus(429);
@@ -183,7 +183,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $user = TestTwoFactorAuthenticationSessionUser::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
-            'password' => bcrypt('password'),
+            'password' => bcrypt('secret'),
             'two_factor_secret' => encrypt($userSecret),
         ]);
 
@@ -207,7 +207,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $user = TestTwoFactorAuthenticationSessionUser::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
-            'password' => bcrypt('password'),
+            'password' => bcrypt('secret'),
             'two_factor_recovery_codes' => encrypt(json_encode(['invalid-code', 'valid-code'])),
         ]);
 
@@ -233,7 +233,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $user = TestTwoFactorAuthenticationSessionUser::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
-            'password' => bcrypt('password'),
+            'password' => bcrypt('secret'),
             'two_factor_recovery_codes' => encrypt(json_encode(['invalid-code', 'valid-code'])),
         ]);
 
