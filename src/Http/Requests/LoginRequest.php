@@ -2,11 +2,13 @@
 
 namespace Laravel\Fortify\Http\Requests;
 
+use App\Actions\Fortify\LoginValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
-use Laravel\Fortify\Fortify;
 
 class LoginRequest extends FormRequest
 {
+    use LoginValidationRules;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -24,9 +26,6 @@ class LoginRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            Fortify::username() => 'required|string',
-            'password' => 'required|string',
-        ];
+        return $this->loginRules();
     }
 }
