@@ -3,9 +3,7 @@
 namespace Laravel\Fortify\Http\Controllers;
 
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
-use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Http\Requests\VerifyEmailRequest;
 use Laravel\Fortify\Http\Responses\VerifyEmailResponse;
 
