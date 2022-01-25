@@ -1,6 +1,15 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.9.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.10.0...1.x)
+
+
+## [v1.10.0 (2022-01-25)](https://github.com/laravel/fortify/compare/v1.9.0...v1.10.0)
+
+### Added
+- Add VerifyEmailResponse contract ([#347](https://github.com/laravel/fortify/pull/347))
+
+### Changed
+- Switch to anonymous migrations ([#348](https://github.com/laravel/fortify/pull/348))
 
 
 ## [v1.9.0 (2022-01-12)](https://github.com/laravel/fortify/compare/v1.8.6...v1.9.0)
