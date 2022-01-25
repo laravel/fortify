@@ -1,6 +1,22 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.8.6...master)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.10.0...master)
+
+
+## [v1.10.0 (2022-01-25)](https://github.com/laravel/fortify/compare/v1.9.0...v1.10.0)
+
+### Added
+- Add VerifyEmailResponse contract ([#347](https://github.com/laravel/fortify/pull/347))
+
+### Changed
+- Switch to anonymous migrations ([#348](https://github.com/laravel/fortify/pull/348))
+
+
+## [v1.9.0 (2022-01-12)](https://github.com/laravel/fortify/compare/v1.8.6...v1.9.0)
+
+### Changed
+* Add 2fa Events ([#338](https://github.com/laravel/fortify/pull/338))
+* Laravel 9 support ([#340](https://github.com/laravel/fortify/pull/340))
 
 
 ## [v1.8.6 (2021-12-22)](https://github.com/laravel/fortify/compare/v1.8.5...v1.8.6)
