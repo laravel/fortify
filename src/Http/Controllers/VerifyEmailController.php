@@ -4,8 +4,8 @@ namespace Laravel\Fortify\Http\Controllers;
 
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Routing\Controller;
+use Laravel\Fortify\Contracts\VerifyEmailResponse;
 use Laravel\Fortify\Http\Requests\VerifyEmailRequest;
-use Laravel\Fortify\Http\Responses\VerifyEmailResponse;
 
 class VerifyEmailController extends Controller
 {
