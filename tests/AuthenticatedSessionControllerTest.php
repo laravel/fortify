@@ -192,7 +192,8 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
             'code' => $validOtp,
         ]);
 
-        $response->assertRedirect('/home');
+        $response->assertRedirect('/home')
+            ->assertSessionMissing('login.id');
     }
 
     public function test_two_factor_challenge_can_be_passed_via_recovery_code()
@@ -216,7 +217,8 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
             'recovery_code' => 'valid-code',
         ]);
 
-        $response->assertRedirect('/home');
+        $response->assertRedirect('/home')
+            ->assertSessionMissing('login.id');
         $this->assertNotNull(Auth::getUser());
         $this->assertNotContains('valid-code', json_decode(decrypt($user->fresh()->two_factor_recovery_codes), true));
     }
@@ -242,7 +244,8 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
             'recovery_code' => 'missing-code',
         ]);
 
-        $response->assertRedirect('/login');
+        $response->assertRedirect('/two-factor-challenge')
+            ->assertSessionHas('login.id');
         $this->assertNull(Auth::getUser());
     }
 
