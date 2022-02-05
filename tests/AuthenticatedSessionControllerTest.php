@@ -2,8 +2,10 @@
 
 namespace Laravel\Fortify\Tests;
 
+use Illuminate\Cache\RateLimiter;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Schema;
@@ -141,6 +143,40 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
         $response->assertStatus(429);
         $response->assertJsonValidationErrors(['email']);
+    }
+
+    /**
+     * @dataProvider usernameProvider
+     */
+    public function test_cant_bypass_throttle_with_special_characters(string $username, string $expectedResult)
+    {
+        $loginRateLimiter = new LoginRateLimiter(
+            $this->mock(RateLimiter::class)
+        );
+
+        $reflection = new \ReflectionClass($loginRateLimiter);
+        $method = $reflection->getMethod('throttleKey');
+        $method->setAccessible(true);
+
+        $request = $this->mock(
+            Request::class,
+            static function ($mock) use ($username) {
+                $mock->shouldReceive('input')->andReturn($username);
+                $mock->shouldReceive('ip')->andReturn('192.168.0.1');
+            }
+        );
+
+        self::assertSame($expectedResult.'|192.168.0.1', $method->invoke($loginRateLimiter, $request));
+    }
+
+    public function usernameProvider(): array
+    {
+        return [
+            'lowercase special characters' => ['ⓣⓔⓢⓣ@ⓛⓐⓡⓐⓥⓔⓛ.ⓒⓞⓜ', 'test@laravel.com'],
+            'uppercase special characters' => ['ⓉⒺⓈⓉ@ⓁⒶⓇⒶⓋⒺⓁ.ⒸⓄⓂ', 'test@laravel.com'],
+            'special character numbers' =>['test⑩⓸③@laravel.com', 'test1043@laravel.com'],
+            'default email' => ['test@laravel.com', 'test@laravel.com'],
+        ];
     }
 
     public function test_the_user_can_logout_of_the_application()
