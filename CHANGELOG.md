@@ -1,6 +1,16 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.10.1...HEAD)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.10.2...1.x)
+
+## [v1.10.2](https://github.com/laravel/fortify/compare/v1.10.1...v1.10.2) - 2022-02-08
+
+### Changed
+
+- Prevent new login after 2FA challenge ([#353](https://github.com/laravel/fortify/pull/353))
+
+### Security
+
+- Fix throttle bypass exploit ([#354](https://github.com/laravel/fortify/pull/354))
 
 ## [v1.10.1](https://github.com/laravel/fortify/compare/v1.10.0...v1.10.1) - 2022-02-01
 
