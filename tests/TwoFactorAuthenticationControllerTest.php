@@ -4,7 +4,6 @@ namespace Laravel\Fortify\Tests;
 
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Schema;
 use Laravel\Fortify\Events\TwoFactorAuthenticationConfirmed;
 use Laravel\Fortify\Events\TwoFactorAuthenticationDisabled;
 use Laravel\Fortify\Events\TwoFactorAuthenticationEnabled;
