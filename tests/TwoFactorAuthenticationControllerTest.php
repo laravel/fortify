@@ -32,10 +32,11 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
 
         Event::assertDispatched(TwoFactorAuthenticationEnabled::class);
 
-        $user->fresh();
+        $user = $user->fresh();
 
         $this->assertNotNull($user->two_factor_secret);
         $this->assertNotNull($user->two_factor_recovery_codes);
+        $this->assertEquals(0, $user->two_factor_confirmed);
         $this->assertIsArray(json_decode(decrypt($user->two_factor_recovery_codes), true));
         $this->assertNotNull($user->twoFactorQrCodeSvg());
     }

@@ -51,9 +51,17 @@ class RedirectIfTwoFactorAuthenticatable
     {
         $user = $this->validateCredentials($request);
 
+        if (Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm')) {
+            if (optional($user)->two_factor_secret &&
+                optional($user)->two_factor_confirmed &&
+                in_array(TwoFactorAuthenticatable::class, class_uses_recursive($user))) {
+                return $this->twoFactorChallengeResponse($request, $user);
+            } else {
+                return $next($request);
+            }
+        }
+
         if (optional($user)->two_factor_secret &&
-            ( ! Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm') ||
-                optional($user)->two_factor_confirmed) &&
             in_array(TwoFactorAuthenticatable::class, class_uses_recursive($user))) {
             return $this->twoFactorChallengeResponse($request, $user);
         }
