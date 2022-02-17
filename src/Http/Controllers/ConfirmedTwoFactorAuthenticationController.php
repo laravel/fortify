@@ -18,7 +18,7 @@ class ConfirmedTwoFactorAuthenticationController extends Controller
      */
     public function store(Request $request, ConfirmTwoFactorAuthentication $confirm)
     {
-        $confirm($request->user());
+        $confirm($request->user(), $request->input('code'));
 
         return $request->wantsJson()
                     ? new JsonResponse('', 200)

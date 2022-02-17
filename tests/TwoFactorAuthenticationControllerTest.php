@@ -4,10 +4,13 @@ namespace Laravel\Fortify\Tests;
 
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Schema;
+use Laravel\Fortify\Events\TwoFactorAuthenticationConfirmed;
 use Laravel\Fortify\Events\TwoFactorAuthenticationDisabled;
 use Laravel\Fortify\Events\TwoFactorAuthenticationEnabled;
 use Laravel\Fortify\FortifyServiceProvider;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use PragmaRX\Google2FA\Google2FA;
 
 class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
 {
@@ -39,6 +42,69 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
         $this->assertEquals(0, $user->two_factor_confirmed);
         $this->assertIsArray(json_decode(decrypt($user->two_factor_recovery_codes), true));
         $this->assertNotNull($user->twoFactorQrCodeSvg());
+    }
+
+    public function test_two_factor_authentication_can_be_confirmed()
+    {
+        Event::fake();
+
+        $this->loadLaravelMigrations(['--database' => 'testbench']);
+        $this->artisan('migrate', ['--database' => 'testbench'])->run();
+
+        $tfaEngine = app(Google2FA::class);
+        $userSecret = $tfaEngine->generateSecretKey();
+        $validOtp = $tfaEngine->getCurrentOtp($userSecret);
+
+        $user = TestTwoFactorAuthenticationUser::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+            'two_factor_secret' => encrypt($userSecret),
+            'two_factor_confirmed' => false,
+        ]);
+
+        $response = $this->withoutExceptionHandling()->actingAs($user)->postJson(
+            '/user/confirmed-two-factor-authentication', ['code' => $validOtp],
+        );
+
+        $response->assertStatus(200);
+
+        Event::assertDispatched(TwoFactorAuthenticationConfirmed::class);
+
+        $user = $user->fresh();
+
+        $this->assertEquals(1, $user->two_factor_confirmed);
+    }
+
+    public function test_two_factor_authentication_can_not_be_confirmed_with_invalid_code()
+    {
+        Event::fake();
+
+        $this->loadLaravelMigrations(['--database' => 'testbench']);
+        $this->artisan('migrate', ['--database' => 'testbench'])->run();
+
+        $tfaEngine = app(Google2FA::class);
+        $userSecret = $tfaEngine->generateSecretKey();
+
+        $user = TestTwoFactorAuthenticationUser::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+            'two_factor_secret' => encrypt($userSecret),
+            'two_factor_confirmed' => false,
+        ]);
+
+        $response = $this->withExceptionHandling()->actingAs($user)->postJson(
+            '/user/confirmed-two-factor-authentication', ['code' => 'invalid-otp'],
+        );
+
+        $response->assertStatus(422);
+
+        Event::assertNotDispatched(TwoFactorAuthenticationConfirmed::class);
+
+        $user = $user->fresh();
+
+        $this->assertEquals(0, $user->two_factor_confirmed);
     }
 
     public function test_two_factor_authentication_can_be_disabled()
