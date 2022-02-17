@@ -6,6 +6,7 @@ use Illuminate\Auth\Events\Failed;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
+use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\LoginRateLimiter;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -51,6 +52,8 @@ class RedirectIfTwoFactorAuthenticatable
         $user = $this->validateCredentials($request);
 
         if (optional($user)->two_factor_secret &&
+            ( ! Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm') ||
+                optional($user)->two_factor_confirmed) &&
             in_array(TwoFactorAuthenticatable::class, class_uses_recursive($user))) {
             return $this->twoFactorChallengeResponse($request, $user);
         }

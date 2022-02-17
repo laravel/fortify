@@ -141,6 +141,10 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
             ->middleware($twoFactorMiddleware)
             ->name('two-factor.enable');
 
+        Route::post('/user/confirmed-two-factor-authentication', [ConfirmedTwoFactorAuthenticationController::class, 'store'])
+            ->middleware($twoFactorMiddleware)
+            ->name('two-factor.confirm');
+
         Route::delete('/user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'destroy'])
             ->middleware($twoFactorMiddleware)
             ->name('two-factor.disable');
