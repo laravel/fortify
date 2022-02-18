@@ -20,7 +20,7 @@ class TwoFactorQrCodeController extends Controller
         }
 
         return response()->json([
-            'svg' => $request->user()->twoFactorQrCodeSvg(), 
+            'svg' => $request->user()->twoFactorQrCodeSvg(),
             'url' => $request->user()->twoFactorQrCodeUrl(),
         ]);
     }
