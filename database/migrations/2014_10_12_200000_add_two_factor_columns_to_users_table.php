@@ -27,7 +27,7 @@ return new class extends Migration
                 $table->boolean('two_factor_confirmed')
                         ->after('two_factor_recovery_codes')
                         ->default(false);
-                    }
+            }
         });
     }
 
