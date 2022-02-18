@@ -13,6 +13,7 @@ use Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse;
 use Laravel\Fortify\Contracts\UpdatesUserPasswords;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use Laravel\Fortify\Contracts\VerifyEmailViewResponse;
+use Laravel\Fortify\Features;
 use Laravel\Fortify\Http\Responses\SimpleViewResponse;
 
 class Fortify
@@ -281,6 +282,17 @@ class Fortify
     public static function resetUserPasswordsUsing(string $callback)
     {
         app()->singleton(ResetsUserPasswords::class, $callback);
+    }
+
+    /**
+     * Determine if Fortify is confirming two factor authentication configurations.
+     *
+     * @return bool
+     */
+    public static function confirmsTwoFactorAuthentication()
+    {
+        return Features::enabled(Features::twoFactorAuthentication()) &&
+               Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm');
     }
 
     /**

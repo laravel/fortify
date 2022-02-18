@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Event;
 use Laravel\Fortify\Events\TwoFactorAuthenticationConfirmed;
 use Laravel\Fortify\Events\TwoFactorAuthenticationDisabled;
 use Laravel\Fortify\Events\TwoFactorAuthenticationEnabled;
+use Laravel\Fortify\Features;
 use Laravel\Fortify\FortifyServiceProvider;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use PragmaRX\Google2FA\Google2FA;
@@ -47,6 +48,10 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
     {
         Event::fake();
 
+        app('config')->set('fortify.features', [
+            Features::twoFactorAuthentication(['confirm' => true]),
+        ]);
+
         $this->loadLaravelMigrations(['--database' => 'testbench']);
         $this->artisan('migrate', ['--database' => 'testbench'])->run();
 
@@ -78,6 +83,10 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
     public function test_two_factor_authentication_can_not_be_confirmed_with_invalid_code()
     {
         Event::fake();
+
+        app('config')->set('fortify.features', [
+            Features::twoFactorAuthentication(['confirm' => true]),
+        ]);
 
         $this->loadLaravelMigrations(['--database' => 'testbench']);
         $this->artisan('migrate', ['--database' => 'testbench'])->run();
