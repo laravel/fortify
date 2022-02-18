@@ -13,7 +13,6 @@ use Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse;
 use Laravel\Fortify\Contracts\UpdatesUserPasswords;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use Laravel\Fortify\Contracts\VerifyEmailViewResponse;
-use Laravel\Fortify\Features;
 use Laravel\Fortify\Http\Responses\SimpleViewResponse;
 
 class Fortify
