@@ -3,7 +3,7 @@
 namespace Laravel\Fortify\Actions;
 
 use Laravel\Fortify\Events\TwoFactorAuthenticationDisabled;
-use Laravel\Fortify\Features;
+use Laravel\Fortify\Fortify;
 
 class DisableTwoFactorAuthentication
 {
@@ -18,7 +18,7 @@ class DisableTwoFactorAuthentication
         $user->forceFill([
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
-        ] + (Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm') ? [
+        ] + (Fortify::confirmsTwoFactorAuthentication() ? [
             'two_factor_confirmed' => false,
         ] : []))->save();
 
