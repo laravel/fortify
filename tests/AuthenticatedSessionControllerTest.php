@@ -124,7 +124,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
         Schema::table('users', function ($table) {
             $table->text('two_factor_secret')->nullable();
-            $table->boolean('two_factor_confirmed')->default(true);
+            $table->boolean('two_factor_confirmed_at')->default(null);
         });
 
         TestTwoFactorAuthenticationSessionUser::forceCreate([
@@ -132,7 +132,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
             'two_factor_secret' => 'test-secret',
-            'two_factor_confirmed' => true,
+            'two_factor_confirmed_at' => now(),
         ]);
 
         $response = $this->withoutExceptionHandling()->post('/login', [

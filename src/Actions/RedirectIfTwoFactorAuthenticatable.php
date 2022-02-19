@@ -52,7 +52,7 @@ class RedirectIfTwoFactorAuthenticatable
 
         if (Fortify::confirmsTwoFactorAuthentication()) {
             if (optional($user)->two_factor_secret &&
-                optional($user)->two_factor_confirmed &&
+                ! is_null(optional($user)->two_factor_confirmed_at) &&
                 in_array(TwoFactorAuthenticatable::class, class_uses_recursive($user))) {
                 return $this->twoFactorChallengeResponse($request, $user);
             } else {
