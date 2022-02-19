@@ -124,7 +124,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
         Schema::table('users', function ($table) {
             $table->text('two_factor_secret')->nullable();
-            $table->boolean('two_factor_confirmed_at')->default(null);
+            $table->timestamp('two_factor_confirmed_at')->nullable();
         });
 
         TestTwoFactorAuthenticationSessionUser::forceCreate([
