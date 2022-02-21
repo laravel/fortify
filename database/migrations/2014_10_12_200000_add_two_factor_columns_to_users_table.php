@@ -24,9 +24,9 @@ return new class extends Migration
                     ->nullable();
 
             if (Fortify::confirmsTwoFactorAuthentication()) {
-                $table->boolean('two_factor_confirmed')
+                $table->timestamp('two_factor_confirmed_at')
                         ->after('two_factor_recovery_codes')
-                        ->default(false);
+                        ->nullable();
             }
         });
     }
@@ -43,7 +43,7 @@ return new class extends Migration
                 'two_factor_secret',
                 'two_factor_recovery_codes',
             ] + Fortify::confirmsTwoFactorAuthentication() ? [
-                'two_factor_confirmed',
+                'two_factor_confirmed_at',
             ] : []);
         });
     }

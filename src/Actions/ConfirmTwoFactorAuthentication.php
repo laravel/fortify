@@ -43,7 +43,7 @@ class ConfirmTwoFactorAuthentication
         }
 
         $user->forceFill([
-            'two_factor_confirmed' => true,
+            'two_factor_confirmed_at' => now(),
         ])->save();
 
         TwoFactorAuthenticationConfirmed::dispatch($user);

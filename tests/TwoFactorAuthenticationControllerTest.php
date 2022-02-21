@@ -39,7 +39,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
 
         $this->assertNotNull($user->two_factor_secret);
         $this->assertNotNull($user->two_factor_recovery_codes);
-        $this->assertEquals(0, $user->two_factor_confirmed);
+        $this->assertNull($user->two_factor_confirmed_at);
         $this->assertIsArray(json_decode(decrypt($user->two_factor_recovery_codes), true));
         $this->assertNotNull($user->twoFactorQrCodeSvg());
     }
@@ -64,7 +64,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
             'two_factor_secret' => encrypt($userSecret),
-            'two_factor_confirmed' => false,
+            'two_factor_confirmed_at' => null,
         ]);
 
         $response = $this->withoutExceptionHandling()->actingAs($user)->postJson(
@@ -77,7 +77,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
 
         $user = $user->fresh();
 
-        $this->assertEquals(1, $user->two_factor_confirmed);
+        $this->assertNotNull($user->two_factor_confirmed_at);
     }
 
     public function test_two_factor_authentication_can_not_be_confirmed_with_invalid_code()
@@ -99,7 +99,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
             'two_factor_secret' => encrypt($userSecret),
-            'two_factor_confirmed' => false,
+            'two_factor_confirmed_at' => null,
         ]);
 
         $response = $this->withExceptionHandling()->actingAs($user)->postJson(
@@ -112,7 +112,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
 
         $user = $user->fresh();
 
-        $this->assertEquals(0, $user->two_factor_confirmed);
+        $this->assertNull($user->two_factor_confirmed_at);
     }
 
     public function test_two_factor_authentication_can_be_disabled()
