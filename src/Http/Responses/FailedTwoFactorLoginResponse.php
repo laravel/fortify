@@ -24,8 +24,8 @@ class FailedTwoFactorLoginResponse implements FailedTwoFactorLoginResponseContra
         }
 
         return redirect()->route('two-factor.login')->withErrors([
-            'code' => $message, 
-            'email' => $message
+            'code' => $message,
+            'email' => $message,
         ]);
     }
 }
