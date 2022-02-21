@@ -78,6 +78,12 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
         $user = $user->fresh();
 
         $this->assertNotNull($user->two_factor_confirmed_at);
+        $this->assertTrue($user->hasEnabledTwoFactorAuthentication());
+
+        // Ensure two factor authentication not considered enabled if not confirmed...
+        $user->forceFill(['two_factor_confirmed_at' => null])->save();
+
+        $this->assertFalse($user->hasEnabledTwoFactorAuthentication());
     }
 
     public function test_two_factor_authentication_can_not_be_confirmed_with_invalid_code()
