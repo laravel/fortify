@@ -284,6 +284,17 @@ class Fortify
     }
 
     /**
+     * Determine if Fortify is confirming two factor authentication configurations.
+     *
+     * @return bool
+     */
+    public static function confirmsTwoFactorAuthentication()
+    {
+        return Features::enabled(Features::twoFactorAuthentication()) &&
+               Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm');
+    }
+
+    /**
      * Configure Fortify to not register its routes.
      *
      * @return static

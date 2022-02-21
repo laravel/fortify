@@ -79,6 +79,70 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         Event::assertDispatched(TwoFactorAuthenticationChallenged::class);
     }
 
+    public function test_user_is_not_redirected_to_challenge_when_using_two_factor_authentication_that_has_not_been_confirmed_and_confirmation_is_enabled()
+    {
+        Event::fake();
+
+        app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
+        app('config')->set('fortify.features', [
+            Features::registration(),
+            Features::twoFactorAuthentication(['confirm' => true]),
+        ]);
+
+        $this->loadLaravelMigrations(['--database' => 'testbench']);
+
+        Schema::table('users', function ($table) {
+            $table->text('two_factor_secret')->nullable();
+        });
+
+        TestTwoFactorAuthenticationSessionUser::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+            'two_factor_secret' => 'test-secret',
+        ]);
+
+        $response = $this->withoutExceptionHandling()->post('/login', [
+            'email' => 'taylor@laravel.com',
+            'password' => 'secret',
+        ]);
+
+        $response->assertRedirect('/home');
+    }
+
+    public function test_user_is_redirected_to_challenge_when_using_two_factor_authentication_that_has_been_confirmed_and_confirmation_is_enabled()
+    {
+        Event::fake();
+
+        app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
+        app('config')->set('fortify.features', [
+            Features::registration(),
+            Features::twoFactorAuthentication(['confirm' => true]),
+        ]);
+
+        $this->loadLaravelMigrations(['--database' => 'testbench']);
+
+        Schema::table('users', function ($table) {
+            $table->text('two_factor_secret')->nullable();
+            $table->timestamp('two_factor_confirmed_at')->nullable();
+        });
+
+        TestTwoFactorAuthenticationSessionUser::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+            'two_factor_secret' => 'test-secret',
+            'two_factor_confirmed_at' => now(),
+        ]);
+
+        $response = $this->withoutExceptionHandling()->post('/login', [
+            'email' => 'taylor@laravel.com',
+            'password' => 'secret',
+        ]);
+
+        $response->assertRedirect('/two-factor-challenge');
+    }
+
     public function test_user_can_authenticate_when_two_factor_challenge_is_disabled()
     {
         app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
