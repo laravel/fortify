@@ -1,6 +1,17 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.10.2...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.11.0...1.x)
+
+## [v1.11.0](https://github.com/laravel/fortify/compare/v1.10.2...v1.11.0) - 2022-02-22
+
+### Changed
+
+- Include the otpauth url when retrieving the QR svg by @JanMisker in https://github.com/laravel/fortify/pull/356
+- Confirmable 2FA by @taylorotwell in https://github.com/laravel/fortify/pull/358
+
+## Fixed
+
+- Fix incorrect key for error bag by @vaibhavpandeyvpz in https://github.com/laravel/fortify/pull/360
 
 ## [v1.10.2](https://github.com/laravel/fortify/compare/v1.10.1...v1.10.2) - 2022-02-08
 
