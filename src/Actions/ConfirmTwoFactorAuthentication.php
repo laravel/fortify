@@ -35,7 +35,7 @@ class ConfirmTwoFactorAuthentication
      */
     public function __invoke($user, $code)
     {
-        if (empty($user->two_factor_secret) || 
+        if (empty($user->two_factor_secret) ||
             empty($code) ||
             ! $this->provider->verify(decrypt($user->two_factor_secret), $code)) {
             throw ValidationException::withMessages([
