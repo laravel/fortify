@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.11.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.11.1...1.x)
+
+## [v1.11.1](https://github.com/laravel/fortify/compare/v1.11.0...v1.11.1) - 2022-02-24
+
+### Fixed
+
+- Fix Exception when sending empty 2FA confirmation code by @srdante in https://github.com/laravel/fortify/pull/361
+- Unsupported operand types on rollback migration by @Jackpump in https://github.com/laravel/fortify/pull/362
 
 ## [v1.11.0](https://github.com/laravel/fortify/compare/v1.10.2...v1.11.0) - 2022-02-22
 
