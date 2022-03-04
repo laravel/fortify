@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify;
 
+use Illuminate\Contracts\Cache\Repository;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider as TwoFactorAuthenticationProviderContract;
 use PragmaRX\Google2FA\Google2FA;
 
@@ -15,14 +16,23 @@ class TwoFactorAuthenticationProvider implements TwoFactorAuthenticationProvider
     protected $engine;
 
     /**
+     * The cache repository implementation.
+     *
+     * @var \Illuminate\Contracts\Cache\Repository|null
+     */
+    protected $cache;
+
+    /**
      * Create a new two factor authentication provider instance.
      *
      * @param  \PragmaRX\Google2FA\Google2FA  $engine
+     * @param  \Illuminate\Contracts\Cache\Repository|null  $cache
      * @return void
      */
-    public function __construct(Google2FA $engine)
+    public function __construct(Google2FA $engine, Repository $cache = null)
     {
         $this->engine = $engine;
+        $this->cache = $cache;
     }
 
     /**
@@ -57,6 +67,16 @@ class TwoFactorAuthenticationProvider implements TwoFactorAuthenticationProvider
      */
     public function verify($secret, $code)
     {
-        return $this->engine->verifyKey($secret, $code);
+        $timestamp = $this->engine->verifyKeyNewer(
+            $secret, $code, optional($this->cache)->get($key = 'fortify.2fa_codes.'.md5($code))
+        );
+
+        if ($timestamp !== false) {
+            optional($this->cache)->put($key, $timestamp, ($this->engine->getWindow() ?: 1) * 60);
+
+            return true;
+        }
+
+        return false;
     }
 }
