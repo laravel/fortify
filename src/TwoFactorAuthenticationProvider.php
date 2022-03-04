@@ -16,7 +16,7 @@ class TwoFactorAuthenticationProvider implements TwoFactorAuthenticationProvider
     protected $engine;
 
     /**
-     * The Cache repository instance.
+     * The cache repository implementation.
      *
      * @var \Illuminate\Contracts\Cache\Repository|null
      */
@@ -68,7 +68,7 @@ class TwoFactorAuthenticationProvider implements TwoFactorAuthenticationProvider
     public function verify($secret, $code)
     {
         $timestamp = $this->engine->verifyKeyNewer(
-            $secret, $code, optional($this->cache)->get($key = "fortify.2fa_codes.{$code}")
+            $secret, $code, optional($this->cache)->get($key = 'fortify.2fa_codes.'.sha1($code))
         );
 
         if ($timestamp !== false) {
