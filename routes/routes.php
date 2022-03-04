@@ -111,14 +111,18 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         Route::get('/user/confirm-password', [ConfirmablePasswordController::class, 'show'])
             ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
             ->name('password.confirm');
+ 
+        Route::post('/user/confirm-password', [ConfirmablePasswordController::class, 'store'])
+            ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')]);
+    } else {
+        Route::post('/user/confirm-password', [ConfirmablePasswordController::class, 'store'])
+            ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
+            ->name('password.confirm');
     }
 
     Route::get('/user/confirmed-password-status', [ConfirmedPasswordStatusController::class, 'show'])
         ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
         ->name('password.confirmation');
-
-    Route::post('/user/confirm-password', [ConfirmablePasswordController::class, 'store'])
-        ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')]);
 
     // Two Factor Authentication...
     if (Features::enabled(Features::twoFactorAuthentication())) {
