@@ -111,7 +111,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         Route::get('/user/confirm-password', [ConfirmablePasswordController::class, 'show'])
             ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
             ->name('password.confirm');
- 
+
         Route::post('/user/confirm-password', [ConfirmablePasswordController::class, 'store'])
             ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')]);
     } else {
