@@ -1,6 +1,16 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.11.1...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.11.2...1.x)
+
+## [v1.11.2](https://github.com/laravel/fortify/compare/v1.11.1...v1.11.2) - 2022-03-08
+
+### Fixed
+
+- Ensures route `password.confirm` is defined when not using views by @Frozire in https://github.com/laravel/fortify/pull/368
+
+### Security
+
+- Cache 2FA token timestamp by @driesvints in https://github.com/laravel/fortify/pull/366
 
 ## [v1.11.1](https://github.com/laravel/fortify/compare/v1.11.0...v1.11.1) - 2022-02-24
 
