@@ -5,10 +5,10 @@ namespace Laravel\Fortify\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-class TwoFactorSetupKeyController extends Controller
+class TwoFactorSecretKeyController extends Controller
 {
     /**
-     * Get the current user's two factor authentication setup key.
+     * Get the current user's two factor authentication setup / secret key.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Symfony\Component\HttpFoundation\Response
@@ -20,7 +20,7 @@ class TwoFactorSetupKeyController extends Controller
         }
 
         return response()->json([
-            'setupKey' => decrypt($request->user()->two_factor_secret),
+            'secretKey' => decrypt($request->user()->two_factor_secret),
         ]);
     }
 }

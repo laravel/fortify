@@ -44,6 +44,29 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
         $this->assertNotNull($user->twoFactorQrCodeSvg());
     }
 
+    public function test_two_factor_authentication_secret_key_can_be_retrieved()
+    {
+        Event::fake();
+
+        $this->loadLaravelMigrations(['--database' => 'testbench']);
+        $this->artisan('migrate', ['--database' => 'testbench'])->run();
+
+        $user = TestTwoFactorAuthenticationUser::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+            'two_factor_secret' => encrypt('foo'),
+        ]);
+
+        $response = $this->withoutExceptionHandling()->actingAs($user)->getJson(
+            '/user/two-factor-secret-key'
+        );
+
+        $response->assertStatus(200);
+
+        $this->assertEquals('foo', $response->original['secretKey']);
+    }
+
     public function test_two_factor_authentication_can_be_confirmed()
     {
         Event::fake();
