@@ -20,7 +20,7 @@ class TwoFactorSetupKeyController extends Controller
         }
 
         return response()->json([
-            'key' => decrypt($request->user()->two_factor_secret),
+            'setupKey' => decrypt($request->user()->two_factor_secret),
         ]);
     }
 }
