@@ -8,7 +8,7 @@ use Illuminate\Routing\Controller;
 class TwoFactorSetupKeyController extends Controller
 {
     /**
-     * Get the setup key for the user's two factor authentication.
+     * Get the current user's two factor authentication setup key.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Symfony\Component\HttpFoundation\Response
@@ -20,7 +20,7 @@ class TwoFactorSetupKeyController extends Controller
         }
 
         return response()->json([
-            'setupKey' => decrypt($request->user()->two_factor_secret),
+            'key' => decrypt($request->user()->two_factor_secret),
         ]);
     }
 }
