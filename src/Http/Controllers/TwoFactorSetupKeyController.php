@@ -16,7 +16,7 @@ class TwoFactorSetupKeyController extends Controller
     public function show(Request $request)
     {
         if (is_null($request->user()->two_factor_secret)) {
-            return [];
+            abort(404, 'Two factor authentication has not been enabled.');
         }
 
         return response()->json([
