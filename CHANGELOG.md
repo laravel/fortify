@@ -1,6 +1,17 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.11.2...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.12.0...1.x)
+
+## [v1.12.0](https://github.com/laravel/fortify/compare/v1.11.2...v1.12.0) - 2022-03-29
+
+### Changed
+
+- 2FA setup key by @ps-sean in https://github.com/laravel/fortify/pull/371
+- Enable 2FA confirmation by default by @taylorotwell in https://github.com/laravel/fortify/commit/a6caadc80e348755de0e1da221a6253d9f2c48f9
+
+### Fixed
+
+- Fix double error message for failed 2FA response by @driesvints in https://github.com/laravel/fortify/pull/369
 
 ## [v1.11.2](https://github.com/laravel/fortify/compare/v1.11.1...v1.11.2) - 2022-03-08
 
