@@ -296,6 +296,41 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
             ->assertSessionMissing('login.id');
     }
 
+    public function test_two_factor_challenge_fails_for_old_otp_and_zero_window()
+    {
+        app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
+
+        //Setting window to 0 should mean any old OTP is instantly invalid
+        app('config')->set('fortify.features', [
+            Features::twoFactorAuthentication(['window' => 0]),
+        ]);
+
+        $this->loadLaravelMigrations(['--database' => 'testbench']);
+        $this->artisan('migrate', ['--database' => 'testbench'])->run();
+
+        $tfaEngine = app(Google2FA::class);
+        $userSecret = $tfaEngine->generateSecretKey();
+        $currentTs = $tfaEngine->getTimestamp();
+        $previousOtp = $tfaEngine->oathTotp($userSecret, $currentTs - 1);
+
+        $user = TestTwoFactorAuthenticationSessionUser::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+            'two_factor_secret' => encrypt($userSecret),
+        ]);
+
+        $response = $this->withSession([
+            'login.id' => $user->id,
+            'login.remember' => false,
+        ])->withoutExceptionHandling()->post('/two-factor-challenge', [
+            'code' => $previousOtp,
+        ]);
+
+        $response->assertRedirect('/two-factor-challenge')
+                 ->assertSessionHas('login.id');
+    }
+
     public function test_two_factor_challenge_can_be_passed_via_recovery_code()
     {
         app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
