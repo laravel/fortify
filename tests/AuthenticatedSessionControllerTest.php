@@ -314,16 +314,16 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $previousOtp = $tfaEngine->oathTotp($userSecret, $currentTs - 1);
 
         $user = TestTwoFactorAuthenticationSessionUser::forceCreate([
-                                                                        'name' => 'Taylor Otwell',
-                                                                        'email' => 'taylor@laravel.com',
-                                                                        'password' => bcrypt('secret'),
-                                                                        'two_factor_secret' => encrypt($userSecret),
-                                                                    ]);
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+            'two_factor_secret' => encrypt($userSecret),
+        ]);
 
         $response = $this->withSession([
-                                           'login.id' => $user->id,
-                                           'login.remember' => false,
-                                       ])->withoutExceptionHandling()->post('/two-factor-challenge', [
+            'login.id' => $user->id,
+            'login.remember' => false,
+        ])->withoutExceptionHandling()->post('/two-factor-challenge', [
             'code' => $previousOtp,
         ]);
 

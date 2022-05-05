@@ -67,7 +67,7 @@ class TwoFactorAuthenticationProvider implements TwoFactorAuthenticationProvider
      */
     public function verify($secret, $code)
     {
-        if(is_int($customWindow = config('fortify-options.two-factor-authentication.window'))) {
+        if (is_int($customWindow = config('fortify-options.two-factor-authentication.window'))) {
             $this->engine->setWindow($customWindow);
         }
 
