@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.12.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.13.0...1.x)
+
+## [v1.13.0](https://github.com/laravel/fortify/compare/v1.12.0...v1.13.0) - 2022-05-05
+
+### Added
+
+- Added config option for custom OTP window by @robtesch in https://github.com/laravel/fortify/pull/385
 
 ## [v1.12.0](https://github.com/laravel/fortify/compare/v1.11.2...v1.12.0) - 2022-03-29
 
