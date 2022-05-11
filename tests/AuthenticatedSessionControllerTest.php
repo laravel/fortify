@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Schema;
 use Laravel\Fortify\Contracts\LoginViewResponse;
 use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
+use Laravel\Fortify\Events\TwoFactorAuthenticationSuccessful;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\FortifyServiceProvider;
 use Laravel\Fortify\LoginRateLimiter;
@@ -269,6 +270,8 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
     public function test_two_factor_challenge_can_be_passed_via_code()
     {
+        Event::fake();
+
         app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
 
         $this->loadLaravelMigrations(['--database' => 'testbench']);
@@ -292,12 +295,16 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
             'code' => $validOtp,
         ]);
 
+        Event::assertDispatched(TwoFactorAuthenticationSuccessful::class);
+
         $response->assertRedirect('/home')
             ->assertSessionMissing('login.id');
     }
 
     public function test_two_factor_challenge_fails_for_old_otp_and_zero_window()
     {
+        Event::fake();
+
         app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
 
         //Setting window to 0 should mean any old OTP is instantly invalid
@@ -329,10 +336,14 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
         $response->assertRedirect('/two-factor-challenge')
                  ->assertSessionHas('login.id');
+
+        Event::assertNotDispatched(TwoFactorAuthenticationSuccessful::class);
     }
 
     public function test_two_factor_challenge_can_be_passed_via_recovery_code()
     {
+        Event::fake();
+
         app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
 
         $this->loadLaravelMigrations(['--database' => 'testbench']);
@@ -356,10 +367,14 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
             ->assertSessionMissing('login.id');
         $this->assertNotNull(Auth::getUser());
         $this->assertNotContains('valid-code', json_decode(decrypt($user->fresh()->two_factor_recovery_codes), true));
+
+        Event::assertDispatched(TwoFactorAuthenticationSuccessful::class);
     }
 
     public function test_two_factor_challenge_can_fail_via_recovery_code()
     {
+        Event::fake();
+
         app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
 
         $this->loadLaravelMigrations(['--database' => 'testbench']);
@@ -382,6 +397,8 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $response->assertRedirect('/two-factor-challenge')
             ->assertSessionHas('login.id');
         $this->assertNull(Auth::getUser());
+
+        Event::assertNotDispatched(TwoFactorAuthenticationSuccessful::class);
     }
 
     public function test_two_factor_challenge_requires_a_challenged_user()
