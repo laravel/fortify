@@ -9,6 +9,7 @@ use Laravel\Fortify\Contracts\FailedTwoFactorLoginResponse;
 use Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse;
 use Laravel\Fortify\Contracts\TwoFactorLoginResponse;
 use Laravel\Fortify\Events\RecoveryCodeReplaced;
+use Laravel\Fortify\Events\TwoFactorAuthenticationSuccessful;
 use Laravel\Fortify\Http\Requests\TwoFactorLoginRequest;
 
 class TwoFactorAuthenticatedSessionController extends Controller
@@ -63,6 +64,8 @@ class TwoFactorAuthenticatedSessionController extends Controller
         } elseif (! $request->hasValidCode()) {
             return app(FailedTwoFactorLoginResponse::class);
         }
+
+        TwoFactorAuthenticationSuccessful::dispatch($user);
 
         $this->guard->login($user, $request->remember());
 
