@@ -4,7 +4,6 @@ namespace Laravel\Fortify\Http\Responses;
 
 use Illuminate\Http\JsonResponse;
 use Laravel\Fortify\Contracts\UpdateProfileResponse as UpdateProfileResponseContract;
-use Laravel\Fortify\Fortify;
 
 class UpdateProfileResponse implements UpdateProfileResponseContract
 {
