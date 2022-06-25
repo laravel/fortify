@@ -94,10 +94,8 @@ class TwoFactorLoginRequest extends FormRequest
             return true;
         }
 
-        $model = app(StatefulGuard::class)->getProvider()->getModel();
-
-        return $this->session()->has('login.id') &&
-            $model::find($this->session()->get('login.id'));
+        return $this->session()->has('login.id')
+            && app(StatefulGuard::class)->getProvider()->retrieveById($this->session()->get('login.id'));
     }
 
     /**
@@ -111,10 +109,8 @@ class TwoFactorLoginRequest extends FormRequest
             return $this->challengedUser;
         }
 
-        $model = app(StatefulGuard::class)->getProvider()->getModel();
-
         if (! $this->session()->has('login.id') ||
-            ! $user = $model::find($this->session()->get('login.id'))) {
+            ! $user = app(StatefulGuard::class)->getProvider()->retrieveById($this->session()->get('login.id'))) {
             throw new HttpResponseException(
                 app(FailedTwoFactorLoginResponse::class)->toResponse($this)
             );
