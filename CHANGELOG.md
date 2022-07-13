@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.13.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.13.1...1.x)
+
+## [v1.13.1](https://github.com/laravel/fortify/compare/v1.13.0...v1.13.1) - 2022-07-05
+
+### Fixed
+
+- Call FailedTwoFactorLoginResponse::toResponse with TwoFactorLoginRequest by @ricklambrechts in https://github.com/laravel/fortify/pull/395
 
 ## [v1.13.0](https://github.com/laravel/fortify/compare/v1.12.0...v1.13.0) - 2022-05-05
 
