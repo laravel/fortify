@@ -11,7 +11,7 @@ class ConfirmedPasswordStatusController extends Controller
      * Get the password confirmation status.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Request $request)
     {
