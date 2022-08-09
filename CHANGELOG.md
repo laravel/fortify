@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.13.1...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.13.2...1.x)
+
+## [v1.13.2](https://github.com/laravel/fortify/compare/v1.13.1...v1.13.2) - 2022-08-09
+
+### Fixed
+
+- Fix second usage of 2FA code by @xwillq in https://github.com/laravel/fortify/pull/399
 
 ## [v1.13.1](https://github.com/laravel/fortify/compare/v1.13.0...v1.13.1) - 2022-07-05
 
