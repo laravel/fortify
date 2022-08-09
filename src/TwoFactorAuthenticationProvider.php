@@ -76,6 +76,10 @@ class TwoFactorAuthenticationProvider implements TwoFactorAuthenticationProvider
         );
 
         if ($timestamp !== false) {
+            if ($timestamp === true) {
+                $timestamp = $this->engine->getTimestamp();
+            }
+
             optional($this->cache)->put($key, $timestamp, ($this->engine->getWindow() ?: 1) * 60);
 
             return true;
