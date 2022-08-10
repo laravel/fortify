@@ -243,7 +243,7 @@ class Fortify
     /**
      * Register a class / callback that should be used for user registration requests..
      *
-     * @param callable $callback
+     * @param  callable  $callback
      * @return void
      */
     public static function registerUsersVia(callable $callback)
