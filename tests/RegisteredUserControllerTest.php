@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Fortify\Contracts\RegisterViewResponse;
+use Laravel\Fortify\Contracts\UserRegistrationRequest;
 use Mockery;
 
 class RegisteredUserControllerTest extends OrchestraTestCase
@@ -24,6 +25,9 @@ class RegisteredUserControllerTest extends OrchestraTestCase
 
     public function test_users_can_be_created()
     {
+        $formRequest = $this->mock(UserRegistrationRequest::class);
+        $this->app->singleton(UserRegistrationRequest::class, fn () => $formRequest);
+
         $this->mock(CreatesNewUsers::class)
                     ->shouldReceive('create')
                     ->andReturn(Mockery::mock(Authenticatable::class));
@@ -32,13 +36,20 @@ class RegisteredUserControllerTest extends OrchestraTestCase
                     ->shouldReceive('login')
                     ->once();
 
-        $response = $this->post('/register', []);
+        $response = $this->post('/register', [
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => 'secret',
+        ]);
 
         $response->assertRedirect('/home');
     }
 
     public function test_users_can_be_created_and_redirected_to_intended_url()
     {
+        $formRequest = $this->mock(UserRegistrationRequest::class);
+        $this->app->singleton(UserRegistrationRequest::class, fn () => $formRequest);
+
         $this->mock(CreatesNewUsers::class)
                     ->shouldReceive('create')
                     ->andReturn(Mockery::mock(Authenticatable::class));
@@ -48,7 +59,11 @@ class RegisteredUserControllerTest extends OrchestraTestCase
                     ->once();
 
         $response = $this->withSession(['url.intended' => 'http://foo.com/bar'])
-                        ->post('/register', []);
+                        ->post('/register', [
+                            'name' => 'Taylor Otwell',
+                            'email' => 'taylor@laravel.com',
+                            'password' => 'secret',
+                        ]);
 
         $response->assertRedirect('http://foo.com/bar');
     }
