@@ -25,8 +25,10 @@ class RegisteredUserControllerTest extends OrchestraTestCase
 
     public function test_users_can_be_created()
     {
-        $formRequest = $this->mock(UserRegistrationRequest::class);
-        $this->app->singleton(UserRegistrationRequest::class, fn () => $formRequest);
+        $request = $this->mock(UserRegistrationRequest::class);
+        $request->shouldReceive('validated')->andReturn([]);
+
+        $this->app->singleton(UserRegistrationRequest::class, fn () => $request);
 
         $this->mock(CreatesNewUsers::class)
                     ->shouldReceive('create')
@@ -47,8 +49,10 @@ class RegisteredUserControllerTest extends OrchestraTestCase
 
     public function test_users_can_be_created_and_redirected_to_intended_url()
     {
-        $formRequest = $this->mock(UserRegistrationRequest::class);
-        $this->app->singleton(UserRegistrationRequest::class, fn () => $formRequest);
+        $request = $this->mock(UserRegistrationRequest::class);
+        $request->shouldReceive('validated')->andReturn([]);
+
+        $this->app->singleton(UserRegistrationRequest::class, fn () => $request);
 
         $this->mock(CreatesNewUsers::class)
                     ->shouldReceive('create')

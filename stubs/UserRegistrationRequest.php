@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\Fortify\Http\Requests;
+namespace App\Http\Requests;
 
 use App\Actions\Fortify\PasswordValidationRules;
 use App\Actions\Fortify\UsernameValidationRules;

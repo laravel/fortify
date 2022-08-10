@@ -20,8 +20,6 @@ use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
 use Laravel\Fortify\Contracts\SuccessfulPasswordResetLinkRequestResponse as SuccessfulPasswordResetLinkRequestResponseContract;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider as TwoFactorAuthenticationProviderContract;
 use Laravel\Fortify\Contracts\TwoFactorLoginResponse as TwoFactorLoginResponseContract;
-use Laravel\Fortify\Contracts\UserRegistrationRequest as UserRegistrationRequestContract;
-use Laravel\Fortify\Http\Requests\UserRegistrationRequest;
 use Laravel\Fortify\Http\Responses\FailedPasswordConfirmationResponse;
 use Laravel\Fortify\Http\Responses\FailedPasswordResetLinkRequestResponse;
 use Laravel\Fortify\Http\Responses\FailedPasswordResetResponse;
@@ -48,11 +46,6 @@ class FortifyServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/fortify.php', 'fortify');
 
         $this->registerResponseBindings();
-
-        $this->app->singleton(
-            UserRegistrationRequestContract::class,
-            UserRegistrationRequest::class
-        );
 
         $this->app->singleton(
             TwoFactorAuthenticationProviderContract::class,
@@ -117,6 +110,7 @@ class FortifyServiceProvider extends ServiceProvider
                 __DIR__.'/../stubs/UpdateUserProfileInformation.php' => app_path('Actions/Fortify/UpdateUserProfileInformation.php'),
                 __DIR__.'/../stubs/UpdateUserPassword.php' => app_path('Actions/Fortify/UpdateUserPassword.php'),
                 __DIR__.'/../stubs/UsernameValidationRules.php' => app_path('Actions/Fortify/UsernameValidationRules.php'),
+                __DIR__.'/../stubs/UserRegistrationRequest.php' => app_path('Http/Requests/UserRegistrationRequest.php'),
             ], 'fortify-support');
 
             $this->publishes([

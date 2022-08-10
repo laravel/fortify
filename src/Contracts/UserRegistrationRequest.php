@@ -19,6 +19,13 @@ interface UserRegistrationRequest
     public function rules();
 
     /**
+     * Get the validated data from the request.
+     *
+     * @return array
+     */
+    public function validated();
+
+    /**
      * Gets the "name" the user registered with.
      *
      * @return string|null

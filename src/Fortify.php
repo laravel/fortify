@@ -12,6 +12,7 @@ use Laravel\Fortify\Contracts\ResetsUserPasswords;
 use Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse;
 use Laravel\Fortify\Contracts\UpdatesUserPasswords;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
+use Laravel\Fortify\Contracts\UserRegistrationRequest;
 use Laravel\Fortify\Contracts\VerifyEmailViewResponse;
 use Laravel\Fortify\Http\Responses\SimpleViewResponse;
 
@@ -237,6 +238,17 @@ class Fortify
     public static function confirmPasswordsUsing(callable $callback)
     {
         static::$confirmPasswordsUsingCallback = $callback;
+    }
+
+    /**
+     * Register a class / callback that should be used for user registration requests..
+     *
+     * @param callable $callback
+     * @return void
+     */
+    public static function registerUsersVia(callable $callback)
+    {
+        app()->singleton(UserRegistrationRequest::class, $callback);
     }
 
     /**
