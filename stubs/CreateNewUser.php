@@ -2,10 +2,11 @@
 
 namespace App\Actions\Fortify;
 
-use App\Http\Requests\UserRegistrationRequest;
+use App\Http\Requests\RegisterUserRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Laravel\Fortify\Contracts\UserRegistrationRequest;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -14,7 +15,7 @@ class CreateNewUser implements CreatesNewUsers
     /**
      * Validate and create a newly registered user.
      *
-     * @param  \App\Http\Requests\UserRegistrationRequest  $request
+     * @param  \Laravel\Fortify\Contracts\UserRegistrationRequest  $request
      * @return mixed
      */
     public function create(UserRegistrationRequest $request)
