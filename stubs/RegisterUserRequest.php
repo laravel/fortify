@@ -43,7 +43,7 @@ class RegisterUserRequest extends FormRequest implements UserRegistrationRequest
     }
 
     /**
-     * Get the name the user registered with.
+     * Gets the name the user registered with.
      *
      * @return string
      */
@@ -53,7 +53,7 @@ class RegisterUserRequest extends FormRequest implements UserRegistrationRequest
     }
 
     /**
-     * Get the email address the user registered with.
+     * Gets the email address the user registered with.
      *
      * @return string
      */
@@ -63,7 +63,7 @@ class RegisterUserRequest extends FormRequest implements UserRegistrationRequest
     }
 
     /**
-     * Get the password the user registered with.
+     * Gets the password the user registered with.
      *
      * @return string
      */
