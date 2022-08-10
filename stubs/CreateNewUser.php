@@ -20,8 +20,6 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(UserRegistrationRequest $request)
     {
-        $request->validated();
-
         return User::create([
             'name' => $request->name(),
             Fortify::username() => $request->username(),
