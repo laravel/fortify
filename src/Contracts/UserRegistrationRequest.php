@@ -19,21 +19,21 @@ interface UserRegistrationRequest
     public function rules();
 
     /**
-     * Gets the name the user registered with.
+     * Gets the "name" the user registered with.
      *
      * @return string|null
      */
     public function name();
 
     /**
-     * Gets the email address the user registered with.
+     * Gets the "username" the user registered with.
      *
      * @return string
      */
-    public function email();
+    public function username();
 
     /**
-     * Gets the password the user registered with.
+     * Gets the "password" the user registered with.
      *
      * @return string
      */

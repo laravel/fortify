@@ -39,7 +39,7 @@ class UserRegistrationRequest extends FormRequest implements UserRegistrationReq
     }
 
     /**
-     * Gets the name the user registered with.
+     * Gets the "name" the user registered with.
      *
      * @return string
      */
@@ -49,17 +49,17 @@ class UserRegistrationRequest extends FormRequest implements UserRegistrationReq
     }
 
     /**
-     * Gets the email address the user registered with.
+     * Gets the "username" the user registered with.
      *
      * @return string
      */
-    public function email()
+    public function username()
     {
-        return $this->get('email');
+        return $this->get(Fortify::username());
     }
 
     /**
-     * Gets the password the user registered with.
+     * Gets the "password" the user registered with.
      *
      * @return string
      */
