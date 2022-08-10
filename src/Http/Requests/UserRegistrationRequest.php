@@ -3,14 +3,16 @@
 namespace Laravel\Fortify\Http\Requests;
 
 use App\Actions\Fortify\PasswordValidationRules;
+use App\Actions\Fortify\UsernameValidationRules;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\UserRegistrationRequest as UserRegistrationRequestContract;
+use Laravel\Fortify\Fortify;
 
 class UserRegistrationRequest extends FormRequest implements UserRegistrationRequestContract
 {
     use PasswordValidationRules;
+    use UsernameValidationRules;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -31,13 +33,7 @@ class UserRegistrationRequest extends FormRequest implements UserRegistrationReq
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => [
-                'required',
-                'string',
-                'email',
-                'max:255',
-                Rule::unique(User::class),
-            ],
+            Fortify::username() => $this->usernameRules(),
             'password' => $this->passwordRules(),
         ];
     }
