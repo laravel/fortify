@@ -20,6 +20,8 @@ use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
 use Laravel\Fortify\Contracts\SuccessfulPasswordResetLinkRequestResponse as SuccessfulPasswordResetLinkRequestResponseContract;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider as TwoFactorAuthenticationProviderContract;
 use Laravel\Fortify\Contracts\TwoFactorLoginResponse as TwoFactorLoginResponseContract;
+use Laravel\Fortify\Contracts\UserRegistrationRequest as UserRegistrationRequestContract;
+use Laravel\Fortify\Http\Requests\UserRegistrationRequest;
 use Laravel\Fortify\Http\Responses\FailedPasswordConfirmationResponse;
 use Laravel\Fortify\Http\Responses\FailedPasswordResetLinkRequestResponse;
 use Laravel\Fortify\Http\Responses\FailedPasswordResetResponse;
@@ -46,6 +48,11 @@ class FortifyServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/fortify.php', 'fortify');
 
         $this->registerResponseBindings();
+
+        $this->app->singleton(
+            UserRegistrationRequestContract::class,
+            UserRegistrationRequest::class
+        );
 
         $this->app->singleton(
             TwoFactorAuthenticationProviderContract::class,
