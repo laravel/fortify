@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Requests;
+namespace Laravel\Fortify\Http\Requests;
 
 use App\Actions\Fortify\PasswordValidationRules;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Laravel\Fortify\Contracts\UserRegistrationRequest;
+use Laravel\Fortify\Contracts\UserRegistrationRequest as UserRegistrationRequestContract;
 
-class RegisterUserRequest extends FormRequest implements UserRegistrationRequest
+class UserRegistrationRequest extends FormRequest implements UserRegistrationRequestContract
 {
     use PasswordValidationRules;
 
