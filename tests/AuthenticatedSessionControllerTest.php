@@ -328,7 +328,8 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         ]);
 
         $response->assertRedirect('/two-factor-challenge')
-                 ->assertSessionHas('login.id');
+                 ->assertSessionHas('login.id')
+                 ->assertSessionHasErrors(['code']);
     }
 
     public function test_two_factor_challenge_can_be_passed_via_recovery_code()
@@ -380,7 +381,8 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         ]);
 
         $response->assertRedirect('/two-factor-challenge')
-            ->assertSessionHas('login.id');
+            ->assertSessionHas('login.id')
+            ->assertSessionHasErrors(['recovery_code']);
         $this->assertNull(Auth::getUser());
     }
 

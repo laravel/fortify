@@ -15,14 +15,16 @@ class FailedTwoFactorLoginResponse implements FailedTwoFactorLoginResponseContra
      */
     public function toResponse($request)
     {
-        $message = __('The provided two factor authentication code was invalid.');
+        [$key, $message] = $request->has('recovery_code')
+            ? ['recovery_code', __('The provided two factor recovery code was invalid.')]
+            : ['code', __('The provided two factor authentication code was invalid.')];
 
         if ($request->wantsJson()) {
             throw ValidationException::withMessages([
-                'code' => [$message],
+                $key => [$message],
             ]);
         }
 
-        return redirect()->route('two-factor.login')->withErrors(['code' => $message]);
+        return redirect()->route('two-factor.login')->withErrors([$key => $message]);
     }
 }
