@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.13.2...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.13.3...1.x)
+
+## [v1.13.3](https://github.com/laravel/fortify/compare/v1.13.2...v1.13.3) - 2022-08-16
+
+### Changed
+
+- Return recovery errors under the `recovery_code` key by @jessarcher in https://github.com/laravel/fortify/pull/401
 
 ## [v1.13.2](https://github.com/laravel/fortify/compare/v1.13.1...v1.13.2) - 2022-08-09
 
