@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.13.3...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.13.4...1.x)
+
+## [v1.13.4](https://github.com/laravel/fortify/compare/v1.13.3...v1.13.4) - 2022-09-30
+
+### Fixed
+
+- Only save user if need to by @taylorotwell in https://github.com/laravel/fortify/commit/9a68cf2deb37d1796b6e2fd97d3c61f086868914
 
 ## [v1.13.3](https://github.com/laravel/fortify/compare/v1.13.2...v1.13.3) - 2022-08-16
 
