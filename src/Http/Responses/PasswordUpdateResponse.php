@@ -4,6 +4,7 @@ namespace Laravel\Fortify\Http\Responses;
 
 use Illuminate\Http\JsonResponse;
 use Laravel\Fortify\Contracts\PasswordUpdateResponse as PasswordUpdateResponseContract;
+use Laravel\Fortify\Fortify;
 
 class PasswordUpdateResponse implements PasswordUpdateResponseContract
 {
@@ -17,6 +18,6 @@ class PasswordUpdateResponse implements PasswordUpdateResponseContract
     {
         return $request->wantsJson()
             ? new JsonResponse('', 200)
-            : back()->with('status', 'password-updated');
+            : back()->with('status', Fortify::PASSWORD_UPDATED);
     }
 }

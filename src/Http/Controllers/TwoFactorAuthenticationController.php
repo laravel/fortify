@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Laravel\Fortify\Actions\DisableTwoFactorAuthentication;
 use Laravel\Fortify\Actions\EnableTwoFactorAuthentication;
+use Laravel\Fortify\Fortify;
 
 class TwoFactorAuthenticationController extends Controller
 {
@@ -23,7 +24,7 @@ class TwoFactorAuthenticationController extends Controller
 
         return $request->wantsJson()
                     ? new JsonResponse('', 200)
-                    : back()->with('status', 'two-factor-authentication-enabled');
+                    : back()->with('status', Fortify::TWO_FACTOR_AUTHENTICATION_ENABLED);
     }
 
     /**
@@ -39,6 +40,6 @@ class TwoFactorAuthenticationController extends Controller
 
         return $request->wantsJson()
                     ? new JsonResponse('', 200)
-                    : back()->with('status', 'two-factor-authentication-disabled');
+                    : back()->with('status', Fortify::TWO_FACTOR_AUTHENTICATION_DISABLED);
     }
 }

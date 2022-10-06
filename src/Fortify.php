@@ -45,6 +45,14 @@ class Fortify
      */
     public static $registersRoutes = true;
 
+    const PASSWORD_UPDATED = 'password-updated';
+    const PROFILE_INFORMATION_UPDATED = 'profile-information-updated';
+    const RECOVERY_CODES_GENERATED = 'recovery-codes-generated';
+    const TWO_FACTOR_AUTHENTICATION_CONFIRMED = 'two-factor-authentication-confirmed';
+    const TWO_FACTOR_AUTHENTICATION_DISABLED = 'two-factor-authentication-disabled';
+    const TWO_FACTOR_AUTHENTICATION_ENABLED = 'two-factor-authentication-enabled';
+    const VERIFICATION_LINK_SENT = 'verification-link-sent';
+
     /**
      * Get the username used for authentication.
      *

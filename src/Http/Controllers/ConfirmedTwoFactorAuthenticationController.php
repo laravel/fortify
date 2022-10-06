@@ -6,6 +6,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Laravel\Fortify\Actions\ConfirmTwoFactorAuthentication;
+use Laravel\Fortify\Fortify;
 
 class ConfirmedTwoFactorAuthenticationController extends Controller
 {
@@ -22,6 +23,6 @@ class ConfirmedTwoFactorAuthenticationController extends Controller
 
         return $request->wantsJson()
                     ? new JsonResponse('', 200)
-                    : back()->with('status', 'two-factor-authentication-confirmed');
+                    : back()->with('status', Fortify::TWO_FACTOR_AUTHENTICATION_CONFIRMED);
     }
 }
