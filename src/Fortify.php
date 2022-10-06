@@ -45,54 +45,13 @@ class Fortify
      */
     public static $registersRoutes = true;
 
-    /**
-     * Constant representing a successfully updated password.
-     *
-     * @var string
-     */
     const PASSWORD_UPDATED = 'password-updated';
-
-    /**
-     * Constant representing a successfully sent verification reminder.
-     *
-     * @var string
-     */
-    const VERIFICATION_LINK_SENT = 'verification-link-sent';
-
-    /**
-     * Constant representing a successfully updated user.
-     *
-     * @var string
-     */
     const PROFILE_INFORMATION_UPDATED = 'profile-information-updated';
-
-    /**
-     * Constant representing the recovery codes generated response.
-     *
-     * @var string
-     */
     const RECOVERY_CODES_GENERATED = 'recovery-codes-generated';
-
-    /**
-     * Constant representing two factor authentication being enabled.
-     *
-     * @var string
-     */
-    const TWO_FACTOR_AUTHENTICATION_ENABLED = 'two-factor-authentication-enabled';
-
-    /**
-     * Constant representing two factor authentication being disabled.
-     *
-     * @var string
-     */
-    const TWO_FACTOR_AUTHENTICATION_DISABLED = 'two-factor-authentication-disabled';
-
-    /**
-     * Constant representing two factor authentication being confirmed.
-     *
-     * @var string
-     */
     const TWO_FACTOR_AUTHENTICATION_CONFIRMED = 'two-factor-authentication-confirmed';
+    const TWO_FACTOR_AUTHENTICATION_DISABLED = 'two-factor-authentication-disabled';
+    const TWO_FACTOR_AUTHENTICATION_ENABLED = 'two-factor-authentication-enabled';
+    const VERIFICATION_LINK_SENT = 'verification-link-sent';
 
     /**
      * Get the username used for authentication.
