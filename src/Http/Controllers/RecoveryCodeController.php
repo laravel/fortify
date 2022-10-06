@@ -5,8 +5,8 @@ namespace Laravel\Fortify\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Actions\GenerateNewRecoveryCodes;
+use Laravel\Fortify\Fortify;
 
 class RecoveryCodeController extends Controller
 {

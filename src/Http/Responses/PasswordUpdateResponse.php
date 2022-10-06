@@ -3,8 +3,8 @@
 namespace Laravel\Fortify\Http\Responses;
 
 use Illuminate\Http\JsonResponse;
-use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Contracts\PasswordUpdateResponse as PasswordUpdateResponseContract;
+use Laravel\Fortify\Fortify;
 
 class PasswordUpdateResponse implements PasswordUpdateResponseContract
 {
