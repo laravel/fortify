@@ -30,7 +30,7 @@ class PasswordControllerTest extends OrchestraTestCase
         $response->assertStatus(200);
     }
 
-    public function test_passwords_cannot_be_updated_without_password_confirmation()
+    public function test_passwords_cannot_be_updated_without_current_password()
     {
         $user = Mockery::mock(Authenticatable::class);
         $user->password = '';
@@ -40,6 +40,28 @@ class PasswordControllerTest extends OrchestraTestCase
 
         try {
             (new UpdateUserPassword())->update($user, [
+                'password' => 'new-password',
+                'password_confirmation' => 'new-password',
+            ]);
+        } catch (ValidationException $e) {
+            $this->assertTrue(in_array(
+                'The current password field is required.',
+                $e->errors()['current_password']
+            ));
+        }
+    }
+
+    public function test_passwords_cannot_be_updated_without_current_password_confirmation()
+    {
+        $user = Mockery::mock(Authenticatable::class);
+        $user->password = '';
+
+        require_once __DIR__.'/../stubs/PasswordValidationRules.php';
+        require_once __DIR__.'/../stubs/UpdateUserPassword.php';
+
+        try {
+            (new UpdateUserPassword())->update($user, [
+                'current_password' => 'invalid-password',
                 'password' => 'new-password',
                 'password_confirmation' => 'new-password',
             ]);
