@@ -1,6 +1,14 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.13.4...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.13.5...1.x)
+
+## [v1.13.5](https://github.com/laravel/fortify/compare/v1.13.4...v1.13.5) - 2022-10-21
+
+### Changed
+
+- Add and use constants for session flashes by @dwightwatson in https://github.com/laravel/fortify/pull/409
+- Use current_password rule when changing password by @dwightwatson in https://github.com/laravel/fortify/pull/410
+- Parameters order with hash_equals by @chivincent in https://github.com/laravel/fortify/pull/411
 
 ## [v1.13.4](https://github.com/laravel/fortify/compare/v1.13.3...v1.13.4) - 2022-09-30
 
