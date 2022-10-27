@@ -33,7 +33,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
                         ->post('/forgot-password', ['email' => 'taylor@laravel.com']);
 
         $response->assertStatus(302);
-        $response->assertRedirect(Fortify::redirects('password-reset-link', '/forgot-password'));
+        $response->assertRedirect(Fortify::redirects('password-reset-link', url('/forgot-password')));
         $response->assertSessionHasNoErrors();
         $response->assertSessionHas('status', trans(Password::RESET_LINK_SENT));
     }
@@ -48,7 +48,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
                         ->post('/forgot-password', ['email' => 'taylor@laravel.com']);
 
         $response->assertStatus(302);
-        $response->assertRedirect(Fortify::redirects('password-reset-link', '/forgot-password'));
+        $response->assertRedirect(Fortify::redirects('password-reset-link', url('/forgot-password')));
         $response->assertSessionHasErrors('email');
     }
 
@@ -76,7 +76,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
             ->post('/forgot-password', ['emailAddress' => 'taylor@laravel.com']);
 
         $response->assertStatus(302);
-        $response->assertRedirect(Fortify::redirects('password-reset-link', '/forgot-password'));
+        $response->assertRedirect(Fortify::redirects('password-reset-link', url('/forgot-password')));
         $response->assertSessionHasNoErrors();
         $response->assertSessionHas('status', trans(Password::RESET_LINK_SENT));
     }
