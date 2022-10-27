@@ -22,6 +22,7 @@ return [
         'password-confirmation' => null,
         'register' => null,
         'email-verification' => null,
+        'password-reset-link' => null,
         'password-reset' => null,
     ],
     'features' => [
