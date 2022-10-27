@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Password;
 use Laravel\Fortify\Contracts\RequestPasswordResetLinkViewResponse;
+use Laravel\Fortify\Fortify;
 use Mockery;
 
 class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
