@@ -36,6 +36,6 @@ class SuccessfulPasswordResetLinkRequestResponse implements SuccessfulPasswordRe
     {
         return $request->wantsJson()
                     ? new JsonResponse(['message' => trans($this->status)], 200)
-                    : redirect(Fortify::redirects('password-reset-link', back()))->with('status', trans($this->status));
+                    : redirect(Fortify::redirects('password-reset-link', route('password.request')))->with('status', trans($this->status));
     }
 }
