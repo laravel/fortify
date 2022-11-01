@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.13.5...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.13.6...1.x)
+
+## [v1.13.6](https://github.com/laravel/fortify/compare/v1.13.5...v1.13.6) - 2022-11-01
+
+### Fixed
+
+- Fix error message when entering invalid 2fa code by @emargareten in https://github.com/laravel/fortify/pull/415
+- Use Fortify username method on ConfirmPassword action by @jayan-blutui in https://github.com/laravel/fortify/pull/420
 
 ## [v1.13.5](https://github.com/laravel/fortify/compare/v1.13.4...v1.13.5) - 2022-10-21
 
