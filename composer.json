@@ -32,6 +32,7 @@
     },
     "autoload-dev": {
         "psr-4": {
+            "App\\Models\\": "tests/Fixtures/Models",
             "Laravel\\Fortify\\Tests\\": "tests/"
         }
     },

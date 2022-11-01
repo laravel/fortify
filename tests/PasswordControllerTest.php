@@ -3,6 +3,7 @@
 namespace Laravel\Fortify\Tests;
 
 use App\Actions\Fortify\UpdateUserPassword;
+use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -13,9 +14,7 @@ class PasswordControllerTest extends OrchestraTestCase
 {
     public function test_passwords_can_be_updated()
     {
-        $user = Mockery::mock(Authenticatable::class);
-
-        $user->password = Hash::make('password');
+        $user = Mockery::mock(User::class);
 
         $this->mock(UpdatesUserPasswords::class)
                     ->shouldReceive('update')
@@ -32,8 +31,7 @@ class PasswordControllerTest extends OrchestraTestCase
 
     public function test_passwords_cannot_be_updated_without_current_password()
     {
-        $user = Mockery::mock(Authenticatable::class);
-        $user->password = '';
+        $user = Mockery::mock(User::class);
 
         require_once __DIR__.'/../stubs/PasswordValidationRules.php';
         require_once __DIR__.'/../stubs/UpdateUserPassword.php';
@@ -53,8 +51,7 @@ class PasswordControllerTest extends OrchestraTestCase
 
     public function test_passwords_cannot_be_updated_without_current_password_confirmation()
     {
-        $user = Mockery::mock(Authenticatable::class);
-        $user->password = '';
+        $user = Mockery::mock(User::class);
 
         require_once __DIR__.'/../stubs/PasswordValidationRules.php';
         require_once __DIR__.'/../stubs/UpdateUserPassword.php';
