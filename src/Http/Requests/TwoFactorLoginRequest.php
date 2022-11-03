@@ -75,7 +75,7 @@ class TwoFactorLoginRequest extends FormRequest
         }
 
         return tap(collect($this->challengedUser()->recoveryCodes())->first(function ($code) {
-            return hash_equals($this->recovery_code, $code) ? $code : null;
+            return hash_equals($code, $this->recovery_code) ? $code : null;
         }), function ($code) {
             if ($code) {
                 $this->session()->forget('login.id');
