@@ -296,6 +296,35 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
             ->assertSessionMissing('login.id');
     }
 
+    public function test_two_factor_authentication_preserves_remember_me_selection(): void
+    {
+        Event::fake();
+
+        app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
+
+        $this->loadLaravelMigrations(['--database' => 'testbench']);
+
+        Schema::table('users', function ($table) {
+            $table->text('two_factor_secret')->nullable();
+        });
+
+        TestTwoFactorAuthenticationSessionUser::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+            'two_factor_secret' => 'test-secret',
+        ]);
+
+        $response = $this->withoutExceptionHandling()->post('/login', [
+            'email' => 'taylor@laravel.com',
+            'password' => 'secret',
+            'remember' => false,
+        ]);
+
+        $response->assertRedirect('/two-factor-challenge')
+            ->assertSessionHas('login.remember', false);
+    }
+
     public function test_two_factor_challenge_fails_for_old_otp_and_zero_window()
     {
         app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
