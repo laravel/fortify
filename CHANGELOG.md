@@ -1,6 +1,16 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.13.6...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.13.7...1.x)
+
+## [v1.13.7](https://github.com/laravel/fortify/compare/v1.13.6...v1.13.7) - 2022-11-04
+
+### Changed
+
+- Update parameter order for hash_equals function in TwoFactorLoginRequest by @jayan-blutui in https://github.com/laravel/fortify/pull/422
+
+### Fixed
+
+- Use `boolean` rather than `filled` for remember by @Codeatron5000 in https://github.com/laravel/fortify/pull/423
 
 ## [v1.13.6](https://github.com/laravel/fortify/compare/v1.13.5...v1.13.6) - 2022-11-01
 
