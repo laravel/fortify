@@ -2,12 +2,12 @@
 
 namespace Laravel\Fortify\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Laravel\Fortify\Actions\DisableTwoFactorAuthentication;
 use Laravel\Fortify\Actions\EnableTwoFactorAuthentication;
-use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Contracts\TwoFactorDisabledResponse;
+use Laravel\Fortify\Contracts\TwoFactorEnabledResponse;
 
 class TwoFactorAuthenticationController extends Controller
 {
@@ -16,15 +16,13 @@ class TwoFactorAuthenticationController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Laravel\Fortify\Actions\EnableTwoFactorAuthentication  $enable
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Laravel\Fortify\Contracts\TwoFactorEnabledResponse
      */
     public function store(Request $request, EnableTwoFactorAuthentication $enable)
     {
         $enable($request->user());
 
-        return $request->wantsJson()
-                    ? new JsonResponse('', 200)
-                    : back()->with('status', Fortify::TWO_FACTOR_AUTHENTICATION_ENABLED);
+        return app(TwoFactorEnabledResponse::class);
     }
 
     /**
@@ -32,14 +30,12 @@ class TwoFactorAuthenticationController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Laravel\Fortify\Actions\DisableTwoFactorAuthentication  $disable
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Laravel\Fortify\Contracts\TwoFactorDisabledResponse
      */
     public function destroy(Request $request, DisableTwoFactorAuthentication $disable)
     {
         $disable($request->user());
 
-        return $request->wantsJson()
-                    ? new JsonResponse('', 200)
-                    : back()->with('status', Fortify::TWO_FACTOR_AUTHENTICATION_DISABLED);
+        return app(TwoFactorDisabledResponse::class);
     }
 }
