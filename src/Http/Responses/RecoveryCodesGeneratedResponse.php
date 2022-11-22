@@ -6,7 +6,7 @@ use Illuminate\Http\JsonResponse;
 use Laravel\Fortify\Contracts\PasswordUpdateResponse as PasswordUpdateResponseContract;
 use Laravel\Fortify\Fortify;
 
-class RecoveryCodeResponse implements PasswordUpdateResponseContract
+class RecoveryCodesGeneratedResponse implements PasswordUpdateResponseContract
 {
     /**
      * Create an HTTP response that represents the object.
