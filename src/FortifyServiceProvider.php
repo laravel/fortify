@@ -86,10 +86,6 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->singleton(FailedTwoFactorLoginResponseContract::class, FailedTwoFactorLoginResponse::class);
         $this->app->singleton(LockoutResponseContract::class, LockoutResponse::class);
         $this->app->singleton(LoginResponseContract::class, LoginResponse::class);
-        $this->app->singleton(TwoFactorConfirmedResponseContract::class, TwoFactorConfirmedResponse::class);
-        $this->app->singleton(TwoFactorDisabledResponseContract::class, TwoFactorDisabledResponse::class);
-        $this->app->singleton(TwoFactorEnabledResponseContract::class, TwoFactorEnabledResponse::class);
-        $this->app->singleton(TwoFactorLoginResponseContract::class, TwoFactorLoginResponse::class);
         $this->app->singleton(LogoutResponseContract::class, LogoutResponse::class);
         $this->app->singleton(PasswordConfirmedResponseContract::class, PasswordConfirmedResponse::class);
         $this->app->singleton(PasswordResetResponseContract::class, PasswordResetResponse::class);
@@ -98,6 +94,10 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->singleton(RecoveryCodesGeneratedResponseContract::class, RecoveryCodesGeneratedResponse::class);
         $this->app->singleton(RegisterResponseContract::class, RegisterResponse::class);
         $this->app->singleton(SuccessfulPasswordResetLinkRequestResponseContract::class, SuccessfulPasswordResetLinkRequestResponse::class);
+        $this->app->singleton(TwoFactorConfirmedResponseContract::class, TwoFactorConfirmedResponse::class);
+        $this->app->singleton(TwoFactorDisabledResponseContract::class, TwoFactorDisabledResponse::class);
+        $this->app->singleton(TwoFactorEnabledResponseContract::class, TwoFactorEnabledResponse::class);
+        $this->app->singleton(TwoFactorLoginResponseContract::class, TwoFactorLoginResponse::class);
         $this->app->singleton(VerifyEmailResponseContract::class, VerifyEmailResponse::class);
     }
 
