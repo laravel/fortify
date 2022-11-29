@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.13.7...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.14.0...1.x)
+
+## [v1.14.0](https://github.com/laravel/fortify/compare/v1.13.7...v1.14.0) - 2022-11-23
+
+### Added
+
+- Add more Response contract bindings by @bdsumon4u in https://github.com/laravel/fortify/pull/425
 
 ## [v1.13.7](https://github.com/laravel/fortify/compare/v1.13.6...v1.13.7) - 2022-11-04
 
