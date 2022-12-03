@@ -51,7 +51,6 @@ class Fortify
     const TWO_FACTOR_AUTHENTICATION_CONFIRMED = 'two-factor-authentication-confirmed';
     const TWO_FACTOR_AUTHENTICATION_DISABLED = 'two-factor-authentication-disabled';
     const TWO_FACTOR_AUTHENTICATION_ENABLED = 'two-factor-authentication-enabled';
-    const VERIFICATION_LINK_SENT = 'verification-link-sent';
 
     /**
      * Get the username used for authentication.
