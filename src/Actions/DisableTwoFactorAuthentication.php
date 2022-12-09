@@ -24,8 +24,8 @@ class DisableTwoFactorAuthentication
             ] + (Fortify::confirmsTwoFactorAuthentication() ? [
                 'two_factor_confirmed_at' => null,
             ] : []))->save();
-        }
 
-        TwoFactorAuthenticationDisabled::dispatch($user);
+            TwoFactorAuthenticationDisabled::dispatch($user);
+        }
     }
 }
