@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.14.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.14.1...1.x)
+
+## [v1.14.1](https://github.com/laravel/fortify/compare/v1.14.0...v1.14.1) - 2022-12-09
+
+### Changed
+
+- Only fire event when actually updating the database to disable two factor authentication by @taylorotwell in https://github.com/laravel/fortify/commit/04b4b9c20e421c415d0427904a72e08a21bdec27
 
 ## [v1.14.0](https://github.com/laravel/fortify/compare/v1.13.7...v1.14.0) - 2022-11-23
 
