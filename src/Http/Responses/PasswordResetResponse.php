@@ -36,6 +36,6 @@ class PasswordResetResponse implements PasswordResetResponseContract
     {
         return $request->wantsJson()
                     ? new JsonResponse(['message' => trans($this->status)], 200)
-                    : redirect(Fortify::redirects('password-reset', route('login')))->with('status', trans($this->status));
+                    : redirect(Fortify::redirects('password-reset', config('fortify.views', true) ? route('login') : null))->with('status', trans($this->status));
     }
 }
