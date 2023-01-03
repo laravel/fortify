@@ -1,6 +1,17 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.14.1...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.15.0...1.x)
+
+## [v1.15.0](https://github.com/laravel/fortify/compare/v1.14.1...v1.15.0) - 2023-01-03
+
+### Changed
+
+- Update PrepareAuthenticatedSession.php by @francoism90 in https://github.com/laravel/fortify/pull/434
+- Uses PHP Native Type Declarations 🐘 by @nunomaduro in https://github.com/laravel/fortify/pull/421
+
+### Fixed
+
+- Fix error while preparing PasswordResetResponse with views turned off by @leonkllr0 in https://github.com/laravel/fortify/pull/433
 
 ## [v1.14.1](https://github.com/laravel/fortify/compare/v1.14.0...v1.14.1) - 2022-12-09
 
