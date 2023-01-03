@@ -2,14 +2,10 @@
 
 namespace Laravel\Fortify\Contracts;
 
+/**
+ * @method void reset(\Illuminate\Foundation\Auth\User $user, array $input)
+ */
 interface ResetsUserPasswords
 {
-    /**
-     * Validate and reset the user's forgotten password.
-     *
-     * @param  mixed  $user
-     * @param  array  $input
-     * @return void
-     */
-    public function reset($user, array $input);
+    //
 }

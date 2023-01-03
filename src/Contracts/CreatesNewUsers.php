@@ -8,7 +8,7 @@ interface CreatesNewUsers
      * Validate and create a newly registered user.
      *
      * @param  array  $input
-     * @return mixed
+     * @return \Illuminate\Foundation\Auth\User
      */
     public function create(array $input);
 }
