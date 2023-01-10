@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.15.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.16.0...1.x)
+
+## [v1.16.0](https://github.com/laravel/fortify/compare/v1.15.0...v1.16.0) - 2023-01-06
+
+### Added
+
+- Laravel v10 Support by @driesvints in https://github.com/laravel/fortify/pull/435
 
 ## [v1.15.0](https://github.com/laravel/fortify/compare/v1.14.1...v1.15.0) - 2023-01-03
 
