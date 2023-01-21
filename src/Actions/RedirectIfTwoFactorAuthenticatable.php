@@ -3,7 +3,10 @@
 namespace Laravel\Fortify\Actions;
 
 use Illuminate\Auth\Events\Failed;
+use Illuminate\Auth\GenericUser;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
 use Laravel\Fortify\Fortify;
@@ -86,15 +89,42 @@ class RedirectIfTwoFactorAuthenticatable
             });
         }
 
-        $model = $this->guard->getProvider()->getModel();
-
-        return tap($model::where(Fortify::username(), $request->{Fortify::username()})->first(), function ($user) use ($request) {
+        return tap($this->getUserProvider($request), function ($user) use ($request) {
             if (! $user || ! $this->guard->getProvider()->validateCredentials($user, ['password' => $request->password])) {
                 $this->fireFailedEvent($request, $user);
 
                 $this->throwFailedAuthenticationException($request);
             }
         });
+    }
+
+    /**
+     * Get Authenticatable user using driver "eloquent" or "database".
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return Authenticatable|null
+     */
+    protected function getUserProvider($request): ?Authenticatable
+    {
+        if ($this->guard->getProvider()->isUsingEloquentModel()) {
+            $model = $this->guard->getProvider()->getModel();
+
+            return $model::where(Fortify::username(), $request->{Fortify::username()})
+                ->select(['password'])
+                ->first();
+        }
+
+        $query = DB::table($this->guard->getProvider()->getTable())
+            ->select(['password']);
+
+        $user = $query->where(Fortify::username(), $request->{Fortify::username()})
+            ->first();
+
+        if ($user) {
+            return new GenericUser((array) $user);
+        }
+
+        return null;
     }
 
     /**
