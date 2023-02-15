@@ -2,10 +2,10 @@
 
 namespace Laravel\Fortify\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Str;
 
-class Password implements Rule
+class Password implements ValidationRule
 {
     /**
      * The minimum length of the password.
@@ -47,25 +47,28 @@ class Password implements Rule
      *
      * @param  string  $attribute
      * @param  mixed  $value
-     * @return bool
+     * @param  \Closure  $fail
+     * @return void
      */
-    public function passes($attribute, $value)
+    public function validate($attribute, $value, $fail): void
     {
         $value = is_scalar($value) ? (string) $value : '';
 
         if ($this->requireUppercase && Str::lower($value) === $value) {
-            return false;
+            $fail($this->message());
         }
 
         if ($this->requireNumeric && ! preg_match('/[0-9]/', $value)) {
-            return false;
+            $fail($this->message());
         }
 
         if ($this->requireSpecialCharacter && ! preg_match('/[\W_]/', $value)) {
-            return false;
+            $fail($this->message());
         }
 
-        return Str::length($value) >= $this->length;
+        if (Str::length($value) < $this->length) {
+            $fail($this->message());
+        }
     }
 
     /**
@@ -181,19 +184,6 @@ class Password implements Rule
     public function requireSpecialCharacter()
     {
         $this->requireSpecialCharacter = true;
-
-        return $this;
-    }
-
-    /**
-     * Set the message that should be used when the rule fails.
-     *
-     * @param  string  $message
-     * @return $this
-     */
-    public function withMessage(string $message)
-    {
-        $this->message = $message;
 
         return $this;
     }
