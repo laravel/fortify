@@ -32,6 +32,13 @@ class Fortify
     public static $authenticateUsingCallback;
 
     /**
+     * The callback that is responsible for building the registration pipeline array, if applicable.
+     *
+     * @var callable|null
+     */
+    public static $registerThroughCallback;
+
+    /**
      * The callback that is responsible for confirming user passwords.
      *
      * @var callable|null
@@ -234,6 +241,17 @@ class Fortify
     public static function authenticateUsing(callable $callback)
     {
         static::$authenticateUsingCallback = $callback;
+    }
+
+    /**
+     * Register a callback that is responsible for building the registration pipeline array.
+     *
+     * @param  callable  $callback
+     * @return void
+     */
+    public static function registerThrough(callable $callback)
+    {
+        static::$registerThroughCallback = $callback;
     }
 
     /**
