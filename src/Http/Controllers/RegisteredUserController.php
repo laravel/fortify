@@ -48,10 +48,10 @@ class RegisteredUserController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Laravel\Fortify\Contracts\CreatesNewUsers  $creator
-     * @return \Laravel\Fortify\Contracts\RegisterResponse
+     * @return mixed
      */
     public function store(Request $request,
-                          CreatesNewUsers $creator): RegisterResponse
+                          CreatesNewUsers $creator)
     {
         return $this->registerPipeline($request)->then(function ($request) use ($creator) {
             event(new Registered($user = $creator->create($request->all())));
