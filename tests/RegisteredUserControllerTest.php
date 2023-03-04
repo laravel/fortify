@@ -59,7 +59,7 @@ class RegisteredUserControllerTest extends OrchestraTestCase
     {
         Fortify::registerThrough(function (Request $request) {
             return [
-                new class ()
+                new class()
                 {
                     public function handle($request, $next)
                     {
