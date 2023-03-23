@@ -15,6 +15,13 @@ class Password implements Rule
     protected $length = 8;
 
     /**
+     * The maximum length of the password.
+     *
+     * @var int
+     */
+    protected $maxLength = 256;
+
+    /**
      * Indicates if the password must contain one uppercase character.
      *
      * @var bool
@@ -65,7 +72,7 @@ class Password implements Rule
             return false;
         }
 
-        return Str::length($value) >= $this->length;
+        return Str::length($value) >= $this->length && Str::length($value) <= $this->maxLength;
     }
 
     /**
@@ -83,55 +90,63 @@ class Password implements Rule
             case $this->requireUppercase
                 && ! $this->requireNumeric
                 && ! $this->requireSpecialCharacter:
-                return __('The :attribute must be at least :length characters and contain at least one uppercase character.', [
+                return __('The :attribute must be between :length and :maxLength characters and contain at least one uppercase character.', [
                     'length' => $this->length,
+                    'maxLength' => $this->maxLength,
                 ]);
 
             case $this->requireNumeric
                 && ! $this->requireUppercase
                 && ! $this->requireSpecialCharacter:
-                return __('The :attribute must be at least :length characters and contain at least one number.', [
+                return __('The :attribute must be between :length and :maxLength characters and contain at least one number.', [
                     'length' => $this->length,
+                    'maxLength' => $this->maxLength,
                 ]);
 
             case $this->requireSpecialCharacter
                 && ! $this->requireUppercase
                 && ! $this->requireNumeric:
-                return __('The :attribute must be at least :length characters and contain at least one special character.', [
+                return __('The :attribute must be between :length and :maxLength characters and contain at least one special character.', [
                     'length' => $this->length,
+                    'maxLength' => $this->maxLength,
                 ]);
 
             case $this->requireUppercase
                 && $this->requireNumeric
                 && ! $this->requireSpecialCharacter:
-                return __('The :attribute must be at least :length characters and contain at least one uppercase character and one number.', [
+                return __('The :attribute must be between :length and :maxLength characters and contain at least one uppercase character and one number.', [
                     'length' => $this->length,
+                    'maxLength' => $this->maxLength,
                 ]);
 
             case $this->requireUppercase
                 && $this->requireSpecialCharacter
                 && ! $this->requireNumeric:
-                return __('The :attribute must be at least :length characters and contain at least one uppercase character and one special character.', [
+                return __('The :attribute must be between :length and :maxLength characters and contain at least one uppercase character and one special character.', [
                     'length' => $this->length,
+                    'maxLength' => $this->maxLength,
                 ]);
 
             case $this->requireUppercase
                 && $this->requireNumeric
                 && $this->requireSpecialCharacter:
-                return __('The :attribute must be at least :length characters and contain at least one uppercase character, one number, and one special character.', [
+                return __('The :attribute must be between :length and :maxLength characters and contain at least one uppercase character, one number, and one special character.', [
                     'length' => $this->length,
+                    'maxLength' => $this->maxLength,
                 ]);
 
             case $this->requireNumeric
                 && $this->requireSpecialCharacter
                 && ! $this->requireUppercase:
-                return __('The :attribute must be at least :length characters and contain at least one special character and one number.', [
+                return __('The :attribute must be between :length and :maxLength characters and contain at least one special character and one number.', [
                     'length' => $this->length,
+                    'maxLength' => $this->maxLength,
                 ]);
 
             default:
-                return __('The :attribute must be at least :length characters.', [
+                return __('The :attribute must be between :length and :maxLength characters.', [
                     'length' => $this->length,
+                    'maxLength' => $this->maxLength,
                 ]);
         }
     }
@@ -145,6 +160,18 @@ class Password implements Rule
     public function length(int $length)
     {
         $this->length = $length;
+
+        return $this;
+    }
+
+    /**
+     * Set the maximum length of the password.
+     *
+     * @param  int  $maxLength
+     * @return $this
+     */
+    public function maxLength(int $maxLength) {
+        $this->maxLength = $maxLength;
 
         return $this;
     }
