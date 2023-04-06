@@ -81,7 +81,17 @@ trait TwoFactorAuthenticatable
         return app(TwoFactorAuthenticationProvider::class)->qrCodeUrl(
             config('app.name'),
             $this->{Fortify::username()},
-            decrypt($this->two_factor_secret)
+            $this->twoFactorSetupKey()
         );
+    }
+
+    /**
+     * Get the two factor authentication setup key.
+     *
+     * @return string
+     */
+    public function twoFactorSetupKey()
+    {
+        return decrypt($this->two_factor_secret);
     }
 }
