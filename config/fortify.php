@@ -16,15 +16,7 @@ return [
     'limiters' => [
         'login' => null,
     ],
-    'redirects' => [
-        'login' => null,
-        'logout' => null,
-        'password-confirmation' => null,
-        'register' => null,
-        'email-verification' => null,
-        'password-reset' => null,
-    ],
-    'route_paths' => [
+    'paths' => [
         'login' => null,
         'logout' => null,
         'password.request' => null,
@@ -46,6 +38,14 @@ return [
         'two-factor.qr-code' => null,
         'two-factor.secret-key' => null,
         'two-factor.recovery-codes' => null,
+    ],
+    'redirects' => [
+        'login' => null,
+        'logout' => null,
+        'password-confirmation' => null,
+        'register' => null,
+        'email-verification' => null,
+        'password-reset' => null,
     ],
     'features' => [
         Features::registration(),
