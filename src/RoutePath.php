@@ -5,7 +5,7 @@ namespace Laravel\Fortify;
 class RoutePath
 {
     /**
-     * Get custom route path from config for routes.
+     * Get the route path for the given route name.
      *
      * @param  string  $routeName
      * @param  string  $default
