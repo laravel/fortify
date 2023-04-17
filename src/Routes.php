@@ -13,6 +13,6 @@ class Routes
      */
     public static function name(string $route, string $default)
     {
-        return config('fortify.route_names.' . $route) ?? $default;
+        return config('fortify.route_names.'.$route) ?? $default;
     }
 }
