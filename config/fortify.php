@@ -24,7 +24,7 @@ return [
         'email-verification' => null,
         'password-reset' => null,
     ],
-    'route_names' => [
+    'route_paths' => [
         'login' => null,
         'logout' => null,
         'password.request' => null,
