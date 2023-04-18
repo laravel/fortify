@@ -296,6 +296,38 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
             ->assertSessionMissing('login.id');
     }
 
+    public function test_two_factor_challenge_can_fail_via_code_with_empty_value()
+    {
+        app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
+
+        $this->loadLaravelMigrations(['--database' => 'testbench']);
+        $this->artisan('migrate', ['--database' => 'testbench'])->run();
+
+        $tfaEngine = app(Google2FA::class);
+        $userSecret = $tfaEngine->generateSecretKey();
+
+        $user = TestTwoFactorAuthenticationSessionUser::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+            'two_factor_secret' => encrypt($userSecret),
+        ]);
+
+        $response = $this->withSession([
+            'login.id' => $user->id,
+            'login.remember' => false,
+        ])->withoutExceptionHandling()->post('/two-factor-challenge', [
+            'code' => '',
+        ]);
+
+        $response->assertRedirect('/two-factor-challenge')
+            ->assertSessionHas('login.id')
+            ->assertSessionHasErrors([
+                'code' =>  __('The provided two factor authentication code was invalid.')
+            ])
+            ->assertSessionDoesntHaveErrors(['recovery_code']);
+    }
+
     public function test_two_factor_authentication_preserves_remember_me_selection(): void
     {
         Event::fake();
@@ -412,6 +444,37 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $response->assertRedirect('/two-factor-challenge')
             ->assertSessionHas('login.id')
             ->assertSessionHasErrors(['recovery_code']);
+        $this->assertNull(Auth::getUser());
+    }
+
+    public function test_two_factor_challenge_can_fail_via_recovery_code_with_empty_value()
+    {
+        app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
+
+        $this->loadLaravelMigrations(['--database' => 'testbench']);
+        $this->artisan('migrate', ['--database' => 'testbench'])->run();
+
+        $user = TestTwoFactorAuthenticationSessionUser::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+            'two_factor_recovery_codes' => encrypt(json_encode(['invalid-code', 'valid-code'])),
+        ]);
+
+        $response = $this->withSession([
+            'login.id' => $user->id,
+            'login.remember' => false,
+        ])->withoutExceptionHandling()->post('/two-factor-challenge', [
+            'recovery_code' => '',
+        ]);
+
+        $response->assertRedirect('/two-factor-challenge')
+            ->assertSessionHas('login.id')
+            ->assertSessionHasErrors([
+                'recovery_code' =>  __('The provided two factor recovery code was invalid.')
+            ])
+            ->assertSessionDoesntHaveErrors(['code']);
+
         $this->assertNull(Auth::getUser());
     }
 

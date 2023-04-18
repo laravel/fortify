@@ -12,10 +12,11 @@ class FailedTwoFactorLoginResponse implements FailedTwoFactorLoginResponseContra
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function toResponse($request)
     {
-        [$key, $message] = $request->filled('recovery_code')
+        [$key, $message] = $request->has('recovery_code')
             ? ['recovery_code', __('The provided two factor recovery code was invalid.')]
             : ['code', __('The provided two factor authentication code was invalid.')];
 
