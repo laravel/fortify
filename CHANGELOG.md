@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.16.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.17.0...1.x)
+
+## [v1.17.0](https://github.com/laravel/fortify/compare/v1.16.0...v1.17.0) - 2023-04-17
+
+- Add ability to override routes with custom paths by @stephenglass in https://github.com/laravel/fortify/pull/458
 
 ## [v1.16.0](https://github.com/laravel/fortify/compare/v1.15.0...v1.16.0) - 2023-01-06
 
