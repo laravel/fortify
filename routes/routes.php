@@ -33,6 +33,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
 
     $limiter = config('fortify.limiters.login');
     $twoFactorLimiter = config('fortify.limiters.two-factor');
+    $registrationLimiter = config('fortify.limiters.registration');
     $verificationLimiter = config('fortify.limiters.verification', '6,1');
 
     Route::post(RoutePath::for('login', '/login'), [AuthenticatedSessionController::class, 'store'])
@@ -69,12 +70,18 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     if (Features::enabled(Features::registration())) {
         if ($enableViews) {
             Route::get(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'create'])
-                ->middleware(['guest:'.config('fortify.guard')])
+                ->middleware(array_filter([
+                    'guest:'.config('fortify.guard'),
+                    $registrationLimiter ? 'throttle:'.$registrationLimiter : null,
+                ]))
                 ->name('register');
         }
 
         Route::post(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'store'])
-            ->middleware(['guest:'.config('fortify.guard')]);
+            ->middleware(array_filter([
+                'guest:'.config('fortify.guard'),
+                $registrationLimiter ? 'throttle:'.$registrationLimiter : null,
+            ]));
     }
 
     // Email Verification...
