@@ -70,10 +70,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     if (Features::enabled(Features::registration())) {
         if ($enableViews) {
             Route::get(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'create'])
-                ->middleware(array_filter([
-                    'guest:'.config('fortify.guard'),
-                    $registrationLimiter ? 'throttle:'.$registrationLimiter : null,
-                ]))
+                ->middleware(['guest:'.config('fortify.guard')])
                 ->name('register');
         }
 
