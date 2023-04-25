@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.17.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.17.1...1.x)
+
+## [v1.17.1](https://github.com/laravel/fortify/compare/v1.17.0...v1.17.1) - 2023-04-19
+
+- Add rate limiter for a registration by @trbsi in https://github.com/laravel/fortify/pull/460
 
 ## [v1.17.0](https://github.com/laravel/fortify/compare/v1.16.0...v1.17.0) - 2023-04-17
 
