@@ -70,10 +70,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     if (Features::enabled(Features::registration())) {
         if ($enableViews) {
             Route::get(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'create'])
-                ->middleware(array_filter([
-                    'guest:'.config('fortify.guard'),
-                    $registrationLimiter ? 'throttle:'.$registrationLimiter : null,
-                ]))
+                ->middleware(['guest:'.config('fortify.guard')])
                 ->name('register');
         }
 
@@ -93,11 +90,18 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         }
 
         Route::get(RoutePath::for('verification.verify', '/email/verify/{id}/{hash}'), [VerifyEmailController::class, '__invoke'])
-            ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard'), 'signed', 'throttle:'.$verificationLimiter])
+            ->middleware(array_filter([
+                config('fortify.auth_middleware', 'auth').':'.config('fortify.guard'),
+                'signed',
+                $verificationLimiter ? 'throttle:'.$verificationLimiter : null,
+            ]))
             ->name('verification.verify');
 
         Route::post(RoutePath::for('verification.send', '/email/verification-notification'), [EmailVerificationNotificationController::class, 'store'])
-            ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard'), 'throttle:'.$verificationLimiter])
+            ->middleware(array_filter([
+                config('fortify.auth_middleware', 'auth').':'.config('fortify.guard'),
+                $verificationLimiter ? 'throttle:'.$verificationLimiter : null,
+            ]))
             ->name('verification.send');
     }
 

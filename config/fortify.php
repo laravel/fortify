@@ -15,6 +15,9 @@ return [
     'domain' => null,
     'limiters' => [
         'login' => null,
+        'two-factor' => null,
+        'registration' => null,
+        'verification' => null,
     ],
     'paths' => [
         'login' => null,
