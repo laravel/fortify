@@ -7,6 +7,8 @@ use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Fortify\Contracts\EmailVerificationLinkSentResponse as EmailVerificationLinkSentResponseContract;
+use Laravel\Fortify\Contracts\EmailVerifiedResponse as EmailVerifiedResponseContract;
 use Laravel\Fortify\Contracts\FailedPasswordConfirmationResponse as FailedPasswordConfirmationResponseContract;
 use Laravel\Fortify\Contracts\FailedPasswordResetLinkRequestResponse as FailedPasswordResetLinkRequestResponseContract;
 use Laravel\Fortify\Contracts\FailedPasswordResetResponse as FailedPasswordResetResponseContract;
@@ -27,6 +29,8 @@ use Laravel\Fortify\Contracts\TwoFactorDisabledResponse as TwoFactorDisabledResp
 use Laravel\Fortify\Contracts\TwoFactorEnabledResponse as TwoFactorEnabledResponseContract;
 use Laravel\Fortify\Contracts\TwoFactorLoginResponse as TwoFactorLoginResponseContract;
 use Laravel\Fortify\Contracts\VerifyEmailResponse as VerifyEmailResponseContract;
+use Laravel\Fortify\Http\Responses\EmailVerificationLinkSentResponse;
+use Laravel\Fortify\Http\Responses\EmailVerifiedResponse;
 use Laravel\Fortify\Http\Responses\FailedPasswordConfirmationResponse;
 use Laravel\Fortify\Http\Responses\FailedPasswordResetLinkRequestResponse;
 use Laravel\Fortify\Http\Responses\FailedPasswordResetResponse;
@@ -80,6 +84,8 @@ class FortifyServiceProvider extends ServiceProvider
      */
     protected function registerResponseBindings()
     {
+        $this->app->singleton(EmailVerifiedResponseContract::class, EmailVerifiedResponse::class);
+        $this->app->singleton(EmailVerificationLinkSentResponseContract::class, EmailVerificationLinkSentResponse::class);
         $this->app->singleton(FailedPasswordConfirmationResponseContract::class, FailedPasswordConfirmationResponse::class);
         $this->app->singleton(FailedPasswordResetLinkRequestResponseContract::class, FailedPasswordResetLinkRequestResponse::class);
         $this->app->singleton(FailedPasswordResetResponseContract::class, FailedPasswordResetResponse::class);
