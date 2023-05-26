@@ -116,7 +116,7 @@ class TwoFactorLoginRequest extends FormRequest
         if (! $this->session()->has('login.id') ||
             ! $user = $model::find($this->session()->get('login.id'))) {
             throw new HttpResponseException(
-                app(FailedTwoFactorLoginResponse::class)->toResponse($this)
+                app(FailedTwoFactorLoginResponse::class)
             );
         }
 
