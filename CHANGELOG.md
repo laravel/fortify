@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.17.2...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.17.3...1.x)
+
+## [v1.17.3](https://github.com/laravel/fortify/compare/v1.17.2...v1.17.3) - 2023-06-02
+
+- Fix contract implementation by @jessarcher in https://github.com/laravel/fortify/pull/472
 
 ## [v1.17.2](https://github.com/laravel/fortify/compare/v1.17.1...v1.17.2) - 2023-04-26
 
