@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.17.3...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.17.4...1.x)
+
+## [v1.17.4](https://github.com/laravel/fortify/compare/v1.17.3...v1.17.4) - 2023-06-18
+
+- Port security fixes to default login rate limiter by @staudenmeir in https://github.com/laravel/fortify/pull/473
 
 ## [v1.17.3](https://github.com/laravel/fortify/compare/v1.17.2...v1.17.3) - 2023-06-02
 
