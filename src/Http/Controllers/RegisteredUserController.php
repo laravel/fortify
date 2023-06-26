@@ -9,6 +9,8 @@ use Illuminate\Routing\Controller;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Fortify\Contracts\RegisterResponse;
 use Laravel\Fortify\Contracts\RegisterViewResponse;
+use Illuminate\Pipeline\Pipeline;
+use Laravel\Fortify\Actions\AttemptToLogin;
 
 class RegisteredUserController extends Controller
 {
@@ -46,15 +48,33 @@ class RegisteredUserController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Laravel\Fortify\Contracts\CreatesNewUsers  $creator
-     * @return \Laravel\Fortify\Contracts\RegisterResponse
+     * @return mixed
      */
-    public function store(Request $request,
-                          CreatesNewUsers $creator): RegisterResponse
+    public function store(Request $request, CreatesNewUsers $creator)
     {
         event(new Registered($user = $creator->create($request->all())));
 
-        $this->guard->login($user);
+        return $this->registerPipeline($request)->then(function ($request) {
+            return app(RegisterResponse::class);
+        });
+    }
 
-        return app(RegisterResponse::class);
+    /**
+     * Get the authentication pipeline instance.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Pipeline\Pipeline
+     */
+    protected function registerPipeline(Request $request)
+    {
+        if (is_array(config('fortify.pipelines.register'))) {
+            return (new Pipeline(app()))->send($request)->through(array_filter(
+                config('fortify.pipelines.register')
+            ));
+        }
+
+        return (new Pipeline(app()))->send($request)->through([
+            AttemptToLogin::class,
+        ]);
     }
 }

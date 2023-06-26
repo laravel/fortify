@@ -3,9 +3,10 @@
 namespace Laravel\Fortify\Tests;
 
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Foundation\Auth\User;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Fortify\Contracts\RegisterViewResponse;
+use Laravel\Fortify\FortifyServiceProvider;
 use Mockery;
 
 class RegisteredUserControllerTest extends OrchestraTestCase
@@ -28,11 +29,20 @@ class RegisteredUserControllerTest extends OrchestraTestCase
                     ->shouldReceive('create')
                     ->andReturn(Mockery::mock(Authenticatable::class));
 
-        $this->mock(StatefulGuard::class)
-                    ->shouldReceive('login')
-                    ->once();
+        $this->loadLaravelMigrations(['--database' => 'testbench']);
 
-        $response = $this->post('/register', []);
+        TestRegisterUser::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+        ]);
+
+
+        $response = $this->post('/register', [
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => 'secret',
+        ]);
 
         $response->assertRedirect('/home');
     }
@@ -43,13 +53,46 @@ class RegisteredUserControllerTest extends OrchestraTestCase
                     ->shouldReceive('create')
                     ->andReturn(Mockery::mock(Authenticatable::class));
 
-        $this->mock(StatefulGuard::class)
-                    ->shouldReceive('login')
-                    ->once();
+        $this->loadLaravelMigrations(['--database' => 'testbench']);
 
-        $response = $this->withSession(['url.intended' => 'http://foo.com/bar'])
-                        ->post('/register', []);
+        TestRegisterUser::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+        ]);
+
+        $response = $this->withSession(['url.intended' => 'http://foo.com/bar'])->post('/register', [
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => 'secret',
+        ]);
 
         $response->assertRedirect('http://foo.com/bar');
     }
+
+    protected function getPackageProviders($app)
+    {
+        return [FortifyServiceProvider::class];
+    }
+
+    protected function getEnvironmentSetUp($app)
+    {
+        $app['migrator']->path(__DIR__.'/../database/migrations');
+
+        $app['config']->set('auth.providers.users.model', TestRegisterUser::class);
+
+        $app['config']->set('database.default', 'testbench');
+
+        $app['config']->set('database.connections.testbench', [
+            'driver'   => 'sqlite',
+            'database' => ':memory:',
+            'prefix'   => '',
+        ]);
+    }
 }
+
+class TestRegisterUser extends User
+{
+    protected $table = 'users';
+}
+
