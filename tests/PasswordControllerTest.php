@@ -10,7 +10,7 @@ use Mockery;
 
 class PasswordControllerTest extends OrchestraTestCase
 {
-    public function test_passwords_can_be_updated()
+    public function testPasswordsCanBeUpdated()
     {
         $user = Mockery::mock(User::class);
 
@@ -27,7 +27,7 @@ class PasswordControllerTest extends OrchestraTestCase
         $response->assertStatus(200);
     }
 
-    public function test_passwords_cannot_be_updated_without_current_password()
+    public function testPasswordsCannotBeUpdatedWithoutCurrentPassword()
     {
         $user = Mockery::mock(User::class);
 
@@ -47,7 +47,7 @@ class PasswordControllerTest extends OrchestraTestCase
         }
     }
 
-    public function test_passwords_cannot_be_updated_without_current_password_confirmation()
+    public function testPasswordsCannotBeUpdatedWithoutCurrentPasswordConfirmation()
     {
         $user = Mockery::mock(User::class);
 

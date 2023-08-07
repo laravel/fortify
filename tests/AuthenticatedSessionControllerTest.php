@@ -20,7 +20,7 @@ use PragmaRX\Google2FA\Google2FA;
 
 class AuthenticatedSessionControllerTest extends OrchestraTestCase
 {
-    public function test_the_login_view_is_returned()
+    public function testTheLoginViewIsReturned()
     {
         $this->mock(LoginViewResponse::class)
                 ->shouldReceive('toResponse')
@@ -32,7 +32,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $response->assertSeeText('hello world');
     }
 
-    public function test_user_can_authenticate()
+    public function testUserCanAuthenticate()
     {
         $this->loadLaravelMigrations(['--database' => 'testbench']);
 
@@ -50,7 +50,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $response->assertRedirect('/home');
     }
 
-    public function test_user_is_redirected_to_challenge_when_using_two_factor_authentication()
+    public function testUserIsRedirectedToChallengeWhenUsingTwoFactorAuthentication()
     {
         Event::fake();
 
@@ -79,7 +79,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         Event::assertDispatched(TwoFactorAuthenticationChallenged::class);
     }
 
-    public function test_user_is_not_redirected_to_challenge_when_using_two_factor_authentication_that_has_not_been_confirmed_and_confirmation_is_enabled()
+    public function testUserIsNotRedirectedToChallengeWhenUsingTwoFactorAuthenticationThatHasNotBeenConfirmedAndConfirmationIsEnabled()
     {
         Event::fake();
 
@@ -110,7 +110,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $response->assertRedirect('/home');
     }
 
-    public function test_user_is_redirected_to_challenge_when_using_two_factor_authentication_that_has_been_confirmed_and_confirmation_is_enabled()
+    public function testUserIsRedirectedToChallengeWhenUsingTwoFactorAuthenticationThatHasBeenConfirmedAndConfirmationIsEnabled()
     {
         Event::fake();
 
@@ -143,7 +143,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $response->assertRedirect('/two-factor-challenge');
     }
 
-    public function test_user_can_authenticate_when_two_factor_challenge_is_disabled()
+    public function testUserCanAuthenticateWhenTwoFactorChallengeIsDisabled()
     {
         app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
 
@@ -174,7 +174,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $response->assertRedirect('/home');
     }
 
-    public function test_validation_exception_returned_on_failure()
+    public function testValidationExceptionReturnedOnFailure()
     {
         $this->loadLaravelMigrations(['--database' => 'testbench']);
 
@@ -193,7 +193,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $response->assertSessionHasErrors(['email']);
     }
 
-    public function test_login_attempts_are_throttled()
+    public function testLoginAttemptsAreThrottled()
     {
         $this->mock(LoginRateLimiter::class, function ($mock) {
             $mock->shouldReceive('tooManyAttempts')->andReturn(true);
@@ -212,7 +212,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
     /**
      * @dataProvider usernameProvider
      */
-    public function test_cant_bypass_throttle_with_special_characters(string $username, string $expectedResult)
+    public function testCantBypassThrottleWithSpecialCharacters(string $username, string $expectedResult)
     {
         $loginRateLimiter = new LoginRateLimiter(
             $this->mock(RateLimiter::class)
@@ -243,7 +243,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         ];
     }
 
-    public function test_the_user_can_logout_of_the_application()
+    public function testTheUserCanLogoutOfTheApplication()
     {
         Auth::guard()->setUser(
             Mockery::mock(Authenticatable::class)->shouldIgnoreMissing()
@@ -255,7 +255,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $this->assertNull(Auth::guard()->getUser());
     }
 
-    public function test_the_user_can_logout_of_the_application_using_json_request()
+    public function testTheUserCanLogoutOfTheApplicationUsingJsonRequest()
     {
         Auth::guard()->setUser(
             Mockery::mock(Authenticatable::class)->shouldIgnoreMissing()
@@ -267,7 +267,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $this->assertNull(Auth::guard()->getUser());
     }
 
-    public function test_two_factor_challenge_can_be_passed_via_code()
+    public function testTwoFactorChallengeCanBePassedViaCode()
     {
         app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
 
@@ -296,7 +296,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
             ->assertSessionMissing('login.id');
     }
 
-    public function test_two_factor_authentication_preserves_remember_me_selection(): void
+    public function testTwoFactorAuthenticationPreservesRememberMeSelection(): void
     {
         Event::fake();
 
@@ -325,7 +325,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
             ->assertSessionHas('login.remember', false);
     }
 
-    public function test_two_factor_challenge_fails_for_old_otp_and_zero_window()
+    public function testTwoFactorChallengeFailsForOldOtpAndZeroWindow()
     {
         app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
 
@@ -361,7 +361,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
                  ->assertSessionHasErrors(['code']);
     }
 
-    public function test_two_factor_challenge_can_be_passed_via_recovery_code()
+    public function testTwoFactorChallengeCanBePassedViaRecoveryCode()
     {
         app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
 
@@ -388,7 +388,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $this->assertNotContains('valid-code', json_decode(decrypt($user->fresh()->two_factor_recovery_codes), true));
     }
 
-    public function test_two_factor_challenge_can_fail_via_recovery_code()
+    public function testTwoFactorChallengeCanFailViaRecoveryCode()
     {
         app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
 
@@ -415,7 +415,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $this->assertNull(Auth::getUser());
     }
 
-    public function test_two_factor_challenge_requires_a_challenged_user()
+    public function testTwoFactorChallengeRequiresAChallengedUser()
     {
         app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
 

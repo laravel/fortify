@@ -8,7 +8,7 @@ use Laravel\Fortify\Fortify;
 
 class FortifyServiceProviderTest extends OrchestraTestCase
 {
-    public function test_views_can_be_customized()
+    public function testViewsCanBeCustomized()
     {
         Fortify::loginView(function () {
             return 'foo';
@@ -20,7 +20,7 @@ class FortifyServiceProviderTest extends OrchestraTestCase
         $this->assertSame('foo', $response->content());
     }
 
-    public function test_customized_views_can_return_their_own_responsable()
+    public function testCustomizedViewsCanReturnTheirOwnResponsible()
     {
         Fortify::loginView(function () {
             return new class implements Responsable

@@ -8,7 +8,7 @@ use Mockery;
 
 class VerifyEmailControllerTest extends OrchestraTestCase
 {
-    public function test_the_email_can_be_verified()
+    public function testTheEmailCanBeVerified()
     {
         $url = URL::temporarySignedRoute(
             'verification.verify',
@@ -33,7 +33,7 @@ class VerifyEmailControllerTest extends OrchestraTestCase
         $response->assertRedirect('http://foo.com/bar');
     }
 
-    public function test_redirected_if_email_is_already_verified()
+    public function testRedirectedIfEmailIsAlreadyVerified()
     {
         $url = URL::temporarySignedRoute(
             'verification.verify',
@@ -56,7 +56,7 @@ class VerifyEmailControllerTest extends OrchestraTestCase
         $response->assertStatus(302);
     }
 
-    public function test_email_is_not_verified_if_id_does_not_match()
+    public function testEmailIsNotVerifiedIfIdDoesNotMatch()
     {
         $url = URL::temporarySignedRoute(
             'verification.verify',
@@ -77,7 +77,7 @@ class VerifyEmailControllerTest extends OrchestraTestCase
         $response->assertStatus(403);
     }
 
-    public function test_email_is_not_verified_if_email_does_not_match()
+    public function testEmailIsNotVerifiedIfEmailDoesNotMatch()
     {
         $url = URL::temporarySignedRoute(
             'verification.verify',

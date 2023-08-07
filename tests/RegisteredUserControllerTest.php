@@ -10,7 +10,7 @@ use Mockery;
 
 class RegisteredUserControllerTest extends OrchestraTestCase
 {
-    public function test_the_register_view_is_returned()
+    public function testTheRegisterViewIsReturned()
     {
         $this->mock(RegisterViewResponse::class)
                 ->shouldReceive('toResponse')
@@ -22,7 +22,7 @@ class RegisteredUserControllerTest extends OrchestraTestCase
         $response->assertSeeText('hello world');
     }
 
-    public function test_users_can_be_created()
+    public function testUsersCanBeCreated()
     {
         $this->mock(CreatesNewUsers::class)
                     ->shouldReceive('create')
@@ -37,7 +37,7 @@ class RegisteredUserControllerTest extends OrchestraTestCase
         $response->assertRedirect('/home');
     }
 
-    public function test_users_can_be_created_and_redirected_to_intended_url()
+    public function testUsersCanBeCreatedAndRedirectedToIntendedUrl()
     {
         $this->mock(CreatesNewUsers::class)
                     ->shouldReceive('create')

@@ -8,7 +8,7 @@ use Mockery;
 
 class EmailVerificationPromptControllerTest extends OrchestraTestCase
 {
-    public function test_the_email_verification_prompt_view_is_returned()
+    public function testTheEmailVerificationPromptViewIsReturned()
     {
         $this->mock(VerifyEmailViewResponse::class)
                 ->shouldReceive('toResponse')
@@ -23,7 +23,7 @@ class EmailVerificationPromptControllerTest extends OrchestraTestCase
         $response->assertSeeText('hello world');
     }
 
-    public function test_user_is_redirect_home_if_already_verified()
+    public function testUserIsRedirectHomeIfAlreadyVerified()
     {
         $this->mock(VerifyEmailViewResponse::class)
                 ->shouldReceive('toResponse')
@@ -37,7 +37,7 @@ class EmailVerificationPromptControllerTest extends OrchestraTestCase
         $response->assertRedirect('/home');
     }
 
-    public function test_user_is_redirect_to_intended_url_if_already_verified()
+    public function testUserIsRedirectToIntendedUrlIfAlreadyVerified()
     {
         $this->mock(VerifyEmailViewResponse::class)
                 ->shouldReceive('toResponse')

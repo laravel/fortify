@@ -7,7 +7,7 @@ use Mockery;
 
 class EmailVerificationNotificationControllerTest extends OrchestraTestCase
 {
-    public function test_email_verification_notification_can_be_sent()
+    public function testEmailVerificationNotificationCanBeSent()
     {
         $user = Mockery::mock(Authenticatable::class);
 
@@ -22,7 +22,7 @@ class EmailVerificationNotificationControllerTest extends OrchestraTestCase
         $response->assertRedirect('/email/verify');
     }
 
-    public function test_user_is_redirect_if_already_verified()
+    public function testUserIsRedirectIfAlreadyVerified()
     {
         $user = Mockery::mock(Authenticatable::class);
 
@@ -37,7 +37,7 @@ class EmailVerificationNotificationControllerTest extends OrchestraTestCase
         $response->assertRedirect('/home');
     }
 
-    public function test_user_is_redirect_to_intended_url_if_already_verified()
+    public function testUserIsRedirectToIntendedUrlIfAlreadyVerified()
     {
         $user = Mockery::mock(Authenticatable::class);
 

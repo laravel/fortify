@@ -7,7 +7,7 @@ use Laravel\Fortify\Rules\Password;
 
 class PasswordRuleTest extends OrchestraTestCase
 {
-    public function test_password_rule()
+    public function testPasswordRule()
     {
         $rule = new Password;
 
@@ -41,7 +41,7 @@ class PasswordRuleTest extends OrchestraTestCase
         $this->assertTrue(Str::contains($rule->message(), 'characters and contain at least one uppercase character and one number'));
     }
 
-    public function test_password_rule_can_require_special_characters()
+    public function testPasswordRuleCanRequireSpecialCharacters()
     {
         $rule = new Password;
 
@@ -54,7 +54,7 @@ class PasswordRuleTest extends OrchestraTestCase
         $this->assertTrue(Str::contains($rule->message(), 'special character'));
     }
 
-    public function test_password_rule_can_require_numeric_and_special_characters()
+    public function testPasswordRuleCanRequireNumericAndSpecialCharacters()
     {
         $rule = new Password;
 

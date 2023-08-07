@@ -14,7 +14,7 @@ use Mockery;
 
 class NewPasswordControllerTest extends OrchestraTestCase
 {
-    public function test_the_new_password_view_is_returned()
+    public function testTheNewPasswordViewIsReturned()
     {
         $this->mock(ResetPasswordViewResponse::class)
                 ->shouldReceive('toResponse')
@@ -26,7 +26,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
         $response->assertSeeText('hello world');
     }
 
-    public function test_password_can_be_reset()
+    public function testPasswordCanBeReset()
     {
         Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
 
@@ -58,7 +58,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
         $response->assertRedirect(Fortify::redirects('password-reset', route('login')));
     }
 
-    public function test_password_reset_can_fail()
+    public function testPasswordResetCanFail()
     {
         Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
 
@@ -77,7 +77,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
         $response->assertSessionHasErrors('email');
     }
 
-    public function test_password_reset_can_fail_with_json()
+    public function testPasswordResetCanFailWithJson()
     {
         Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
 
@@ -96,7 +96,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
         $response->assertJsonValidationErrors('email');
     }
 
-    public function test_password_can_be_reset_with_customized_email_address_field()
+    public function testPasswordCanBeResetWithCustomizedEmailAddressField()
     {
         Config::set('fortify.email', 'emailAddress');
         Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
@@ -129,7 +129,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
         $response->assertRedirect(Fortify::redirects('password-reset', route('login')));
     }
 
-    public function test_password_is_required()
+    public function testPasswordIsRequired()
     {
         $response = $this->post('/reset-password', [
             'token' => 'token',

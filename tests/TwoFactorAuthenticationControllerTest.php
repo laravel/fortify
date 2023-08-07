@@ -14,7 +14,7 @@ use PragmaRX\Google2FA\Google2FA;
 
 class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
 {
-    public function test_two_factor_authentication_can_be_enabled()
+    public function testTwoFactorAuthenticationCanBeEnabled()
     {
         Event::fake();
 
@@ -44,7 +44,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
         $this->assertNotNull($user->twoFactorQrCodeSvg());
     }
 
-    public function test_two_factor_authentication_secret_key_can_be_retrieved()
+    public function testTwoFactorAuthenticationSecretKeyCanBeRetrieved()
     {
         Event::fake();
 
@@ -67,7 +67,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
         $this->assertEquals('foo', $response->original['secretKey']);
     }
 
-    public function test_two_factor_authentication_can_be_confirmed()
+    public function testTwoFactorAuthenticationCanBeConfirmed()
     {
         Event::fake();
 
@@ -109,7 +109,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
         $this->assertFalse($user->hasEnabledTwoFactorAuthentication());
     }
 
-    public function test_two_factor_authentication_can_not_be_confirmed_with_invalid_code()
+    public function testTwoFactorAuthenticationCanNotBeConfirmedWithInvalidCode()
     {
         Event::fake();
 
@@ -144,7 +144,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
         $this->assertNull($user->two_factor_confirmed_at);
     }
 
-    public function test_two_factor_authentication_can_be_disabled()
+    public function testTwoFactorAuthenticationCanBeDisabled()
     {
         Event::fake();
 

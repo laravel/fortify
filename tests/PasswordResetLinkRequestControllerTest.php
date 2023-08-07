@@ -10,7 +10,7 @@ use Mockery;
 
 class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
 {
-    public function test_the_reset_link_request_view_is_returned()
+    public function testTheResetLinkRequestViewIsReturned()
     {
         $this->mock(RequestPasswordResetLinkViewResponse::class)
                 ->shouldReceive('toResponse')
@@ -22,7 +22,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
         $response->assertSeeText('hello world');
     }
 
-    public function test_reset_link_can_be_successfully_requested()
+    public function testResetLinkCanBeSuccessfullyRequested()
     {
         Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
 
@@ -37,7 +37,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
         $response->assertSessionHas('status', trans(Password::RESET_LINK_SENT));
     }
 
-    public function test_reset_link_request_can_fail()
+    public function testResetLinkRequestCanFail()
     {
         Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
 
@@ -51,7 +51,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
         $response->assertSessionHasErrors('email');
     }
 
-    public function test_reset_link_request_can_fail_with_json()
+    public function testResetLinkRequestCanFailWithJson()
     {
         Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
 
@@ -64,7 +64,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
         $response->assertJsonValidationErrors('email');
     }
 
-    public function test_reset_link_can_be_successfully_requested_with_customized_email_field()
+    public function testResetLinkCanBeSuccessfullyRequestedWithCustomizedEmailField()
     {
         Config::set('fortify.email', 'emailAddress');
         Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));

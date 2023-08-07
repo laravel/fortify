@@ -9,7 +9,7 @@ use Laravel\Fortify\FortifyServiceProvider;
 
 class RecoveryCodeControllerTest extends OrchestraTestCase
 {
-    public function test_new_recovery_codes_can_be_generated()
+    public function testNewRecoveryCodesCanBeGenerated()
     {
         Event::fake();
 

@@ -8,7 +8,7 @@ use Mockery;
 
 class ProfileInformationControllerTest extends OrchestraTestCase
 {
-    public function test_contact_information_can_be_updated()
+    public function testContactInformationCanBeUpdated()
     {
         $user = Mockery::mock(Authenticatable::class);
 

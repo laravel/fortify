@@ -25,7 +25,7 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
         ]);
     }
 
-    public function test_the_confirm_password_view_is_returned()
+    public function testTheConfirmPasswordViewIsReturned()
     {
         $this->mock(ConfirmPasswordViewResponse::class)
             ->shouldReceive('toResponse')
@@ -39,7 +39,7 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
         $response->assertSeeText('hello world');
     }
 
-    public function test_password_can_be_confirmed()
+    public function testPasswordCanBeConfirmed()
     {
         $response = $this->withoutExceptionHandling()
             ->actingAs($this->user)
@@ -53,7 +53,7 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
         $response->assertRedirect('http://foo.com/bar');
     }
 
-    public function test_password_confirmation_can_fail_with_an_invalid_password()
+    public function testPasswordConfirmationCanFailWithAnInvalidPassword()
     {
         $response = $this->withoutExceptionHandling()
             ->actingAs($this->user)
@@ -69,7 +69,7 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
         $this->assertNotEquals($response->getTargetUrl(), 'http://foo.com/bar');
     }
 
-    public function test_password_confirmation_can_fail_without_a_password()
+    public function testPasswordConfirmationCanFailWithoutAPassword()
     {
         $response = $this->withoutExceptionHandling()
             ->actingAs($this->user)
@@ -85,7 +85,7 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
         $this->assertNotEquals($response->getTargetUrl(), 'http://foo.com/bar');
     }
 
-    public function test_password_confirmation_can_be_customized()
+    public function testPasswordConfirmationCanBeCustomized()
     {
         Fortify::$confirmPasswordsUsingCallback = function () {
             return true;
@@ -105,7 +105,7 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
         Fortify::$confirmPasswordsUsingCallback = null;
     }
 
-    public function test_password_confirmation_can_be_customized_and_fail_without_password()
+    public function testPasswordConfirmationCanBeCustomizedAndFailWithoutPassword()
     {
         Fortify::$confirmPasswordsUsingCallback = function () {
             return true;
@@ -125,7 +125,7 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
         Fortify::$confirmPasswordsUsingCallback = null;
     }
 
-    public function test_password_can_be_confirmed_with_json()
+    public function testPasswordCanBeConfirmedWithJson()
     {
         $response = $this->actingAs($this->user)
             ->postJson(
@@ -136,7 +136,7 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
         $response->assertStatus(201);
     }
 
-    public function test_password_confirmation_can_fail_with_json()
+    public function testPasswordConfirmationCanFailWithJson()
     {
         $response = $this->actingAs($this->user)
             ->postJson(
