@@ -51,6 +51,22 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
         $response->assertSessionHasErrors('email');
     }
 
+    public function test_reset_link_request_return_success_on_invalid_user_if_configured()
+    {
+        Config::set('fortify.success_on_invalid_user', true);
+        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
+
+        $broker->shouldReceive('sendResetLink')->andReturn(Password::INVALID_USER);
+
+        $response = $this->from(url('/forgot-password'))
+            ->post('/forgot-password', ['email' => 'taylor@laravel.com']);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('/forgot-password');
+        $response->assertSessionHasNoErrors();
+        $response->assertSessionHas('status', trans(Password::RESET_LINK_SENT));
+    }
+
     public function test_reset_link_request_can_fail_with_json()
     {
         Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));

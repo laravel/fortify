@@ -38,8 +38,10 @@ class PasswordResetLinkController extends Controller
         // We will send the password reset link to this user. Once we have attempted
         // to send the link, we will examine the response then see the message we
         // need to show to the user. Finally, we'll send out a proper response.
-        $status = $this->broker()->sendResetLink(
-            $request->only(Fortify::email())
+        $status = $this->showSuccessOnInvalidUser(
+            $this->broker()->sendResetLink(
+                $request->only(Fortify::email())
+            )
         );
 
         return $status == Password::RESET_LINK_SENT
@@ -55,5 +57,15 @@ class PasswordResetLinkController extends Controller
     protected function broker(): PasswordBroker
     {
         return Password::broker(config('fortify.passwords'));
+    }
+
+    /**
+     * Update status to success if success on invalid user is allowed.
+     */
+    protected function showSuccessOnInvalidUser(string $status): string
+    {
+        return config('fortify.success_on_invalid_user') && $status === Password::INVALID_USER
+            ? Password::RESET_LINK_SENT
+            : $status;
     }
 }

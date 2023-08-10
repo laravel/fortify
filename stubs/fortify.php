@@ -144,4 +144,15 @@ return [
         ]),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Show Success on Invalid User
+    |--------------------------------------------------------------------------
+    |
+    | When an invalid email is entered on a forgot-password reset route,
+    | setting this to true will return a success response allowing you to hide
+    | the fact that the email doesn't exist preventing email enumeration.
+    |
+    */
+    'success_on_invalid_user' => true,
 ];
