@@ -74,10 +74,14 @@ class Features
     /**
      * Enable the registration feature.
      *
+     * @param  array  $options
      * @return string
      */
-    public static function registration()
+    public static function registration(array $options = [])
     {
+        if (! empty($options)) {
+            config(['fortify-options.registration' => $options]);
+        }
         return 'registration';
     }
 
