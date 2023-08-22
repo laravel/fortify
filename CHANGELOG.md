@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.17.4...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.17.5...1.x)
+
+## [v1.17.5](https://github.com/laravel/fortify/compare/v1.17.4...v1.17.5) - 2023-08-02
+
+- [1.x] Laravel Pint fixes by [@iruoy](https://github.com/iruoy) in https://github.com/laravel/fortify/pull/480
 
 ## [v1.17.4](https://github.com/laravel/fortify/compare/v1.17.3...v1.17.4) - 2023-06-18
 
