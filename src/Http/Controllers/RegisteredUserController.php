@@ -12,8 +12,6 @@ use Laravel\Fortify\Contracts\RegisterResponse;
 use Laravel\Fortify\Contracts\RegisterViewResponse;
 use Laravel\Fortify\Fortify;
 
-use function config;
-
 class RegisteredUserController extends Controller
 {
     /**

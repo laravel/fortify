@@ -8,8 +8,6 @@ use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Fortify\Contracts\RegisterViewResponse;
 use Mockery;
 
-use function app;
-
 class RegisteredUserControllerTest extends OrchestraTestCase
 {
     public function test_the_register_view_is_returned()

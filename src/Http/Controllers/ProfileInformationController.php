@@ -9,8 +9,6 @@ use Laravel\Fortify\Contracts\ProfileInformationUpdatedResponse;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use Laravel\Fortify\Fortify;
 
-use function config;
-
 class ProfileInformationController extends Controller
 {
     /**

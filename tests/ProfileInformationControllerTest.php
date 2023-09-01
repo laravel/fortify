@@ -6,8 +6,6 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use Mockery;
 
-use function app;
-
 class ProfileInformationControllerTest extends OrchestraTestCase
 {
     public function test_contact_information_can_be_updated()
