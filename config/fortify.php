@@ -13,6 +13,7 @@ return [
     'home' => '/home',
     'prefix' => '',
     'domain' => null,
+    'case_sensitive_usernames' => true,
     'limiters' => [
         'login' => null,
     ],

@@ -52,6 +52,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Case Sensitive Usernames
+    |--------------------------------------------------------------------------
+    |
+    | This value defines whether usernames should be considered as
+    | case-sensitive. If true, usernames will be written to and checked against
+    | the database as is. Otherwise, all usernames will be lower-cased.
+    |
+    | You should set this to true if you use the email field for usernames.
+    |
+    */
+
+    'case_sensitive_usernames' => true,
+
+    /*
+    |--------------------------------------------------------------------------
     | Home Path
     |--------------------------------------------------------------------------
     |
