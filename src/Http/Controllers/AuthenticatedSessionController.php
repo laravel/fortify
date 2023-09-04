@@ -99,9 +99,10 @@ class AuthenticatedSessionController extends Controller
     {
         $this->guard->logout();
 
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
+        if ($request->hasSession()) {
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
 
         return app(LogoutResponse::class);
     }
