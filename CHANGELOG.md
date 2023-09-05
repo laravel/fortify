@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.17.5...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.17.6...1.x)
+
+## [v1.17.6](https://github.com/laravel/fortify/compare/v1.17.5...v1.17.6) - 2023-09-04
+
+- Update logout to invalidate and regenerate session only if session is present (Issue #486) by [@karmendra](https://github.com/karmendra) in https://github.com/laravel/fortify/pull/487
 
 ## [v1.17.5](https://github.com/laravel/fortify/compare/v1.17.4...v1.17.5) - 2023-08-02
 
