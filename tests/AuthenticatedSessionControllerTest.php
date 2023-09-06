@@ -428,6 +428,26 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $this->assertNull(Auth::getUser());
     }
 
+    public function test_case_insensitive_usernames_can_be_used()
+    {
+        app('config')->set('fortify.lowercase_usernames', true);
+
+        $this->loadLaravelMigrations(['--database' => 'testbench']);
+
+        TestAuthenticationSessionUser::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+        ]);
+
+        $response = $this->withoutExceptionHandling()->post('/login', [
+            'email' => 'TAYLOR@LARAVEL.COM',
+            'password' => 'secret',
+        ]);
+
+        $response->assertRedirect('/home');
+    }
+
     protected function getPackageProviders($app)
     {
         return [FortifyServiceProvider::class];
