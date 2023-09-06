@@ -430,7 +430,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
     public function test_case_insensitive_usernames_can_be_used()
     {
-        app('config')->set('fortify.case_sensitive_usernames', false);
+        app('config')->set('fortify.lowercase_usernames', true);
 
         $this->loadLaravelMigrations(['--database' => 'testbench']);
 

@@ -55,7 +55,7 @@ class RegisteredUserControllerTest extends OrchestraTestCase
 
     public function test_usernames_will_be_stored_case_insensitive()
     {
-        app('config')->set('fortify.case_sensitive_usernames', false);
+        app('config')->set('fortify.lowercase_usernames', true);
 
         $this->mock(CreatesNewUsers::class)
                     ->shouldReceive('create')

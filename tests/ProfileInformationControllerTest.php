@@ -26,7 +26,7 @@ class ProfileInformationControllerTest extends OrchestraTestCase
 
     public function test_email_address_will_be_updated_case_insensitive()
     {
-        app('config')->set('fortify.case_sensitive_usernames', false);
+        app('config')->set('fortify.lowercase_usernames', true);
 
         $user = Mockery::mock(Authenticatable::class);
 
