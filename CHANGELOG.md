@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.17.6...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.18.0...1.x)
+
+## [v1.18.0](https://github.com/laravel/fortify/compare/v1.17.6...v1.18.0) - 2023-09-12
+
+- Added case-sensitivity option for usernames by [@Radiergummi](https://github.com/Radiergummi) in https://github.com/laravel/fortify/pull/485
+- Added response contract for email verification notification by [@m-thalmann](https://github.com/m-thalmann) in https://github.com/laravel/fortify/pull/489
 
 ## [v1.17.6](https://github.com/laravel/fortify/compare/v1.17.5...v1.17.6) - 2023-09-04
 
