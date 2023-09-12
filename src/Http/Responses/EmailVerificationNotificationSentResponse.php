@@ -3,10 +3,10 @@
 namespace Laravel\Fortify\Http\Responses;
 
 use Illuminate\Http\JsonResponse;
-use Laravel\Fortify\Contracts\SuccessfulEmailVerificationNotificationResponse as SuccessfulEmailVerificationNotificationResponseContract;
+use Laravel\Fortify\Contracts\EmailVerificationNotificationSentResponse as EmailVerificationNotificationSentResponseContract;
 use Laravel\Fortify\Fortify;
 
-class SuccessfulEmailVerificationNotificationResponse implements SuccessfulEmailVerificationNotificationResponseContract
+class EmailVerificationNotificationSentResponse implements EmailVerificationNotificationSentResponseContract
 {
     /**
      * Create an HTTP response that represents the object.

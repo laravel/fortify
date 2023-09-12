@@ -5,7 +5,7 @@ namespace Laravel\Fortify\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Laravel\Fortify\Contracts\SuccessfulEmailVerificationNotificationResponse;
+use Laravel\Fortify\Contracts\EmailVerificationNotificationSentResponse;
 use Laravel\Fortify\Fortify;
 
 class EmailVerificationNotificationController extends Controller
@@ -26,6 +26,6 @@ class EmailVerificationNotificationController extends Controller
 
         $request->user()->sendEmailVerificationNotification();
 
-        return app(SuccessfulEmailVerificationNotificationResponse::class);
+        return app(EmailVerificationNotificationSentResponse::class);
     }
 }
