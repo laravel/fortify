@@ -20,6 +20,7 @@ use Laravel\Fortify\Contracts\PasswordUpdateResponse as PasswordUpdateResponseCo
 use Laravel\Fortify\Contracts\ProfileInformationUpdatedResponse as ProfileInformationUpdatedResponseContract;
 use Laravel\Fortify\Contracts\RecoveryCodesGeneratedResponse as RecoveryCodesGeneratedResponseContract;
 use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
+use Laravel\Fortify\Contracts\SuccessfulEmailVerificationNotificationResponse as SuccessfulEmailVerificationNotificationResponseContract;
 use Laravel\Fortify\Contracts\SuccessfulPasswordResetLinkRequestResponse as SuccessfulPasswordResetLinkRequestResponseContract;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider as TwoFactorAuthenticationProviderContract;
 use Laravel\Fortify\Contracts\TwoFactorConfirmedResponse as TwoFactorConfirmedResponseContract;
@@ -40,6 +41,7 @@ use Laravel\Fortify\Http\Responses\PasswordUpdateResponse;
 use Laravel\Fortify\Http\Responses\ProfileInformationUpdatedResponse;
 use Laravel\Fortify\Http\Responses\RecoveryCodesGeneratedResponse;
 use Laravel\Fortify\Http\Responses\RegisterResponse;
+use Laravel\Fortify\Http\Responses\SuccessfulEmailVerificationNotificationResponse;
 use Laravel\Fortify\Http\Responses\SuccessfulPasswordResetLinkRequestResponse;
 use Laravel\Fortify\Http\Responses\TwoFactorConfirmedResponse;
 use Laravel\Fortify\Http\Responses\TwoFactorDisabledResponse;
@@ -93,6 +95,7 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->singleton(ProfileInformationUpdatedResponseContract::class, ProfileInformationUpdatedResponse::class);
         $this->app->singleton(RecoveryCodesGeneratedResponseContract::class, RecoveryCodesGeneratedResponse::class);
         $this->app->singleton(RegisterResponseContract::class, RegisterResponse::class);
+        $this->app->singleton(SuccessfulEmailVerificationNotificationResponseContract::class, SuccessfulEmailVerificationNotificationResponse::class);
         $this->app->singleton(SuccessfulPasswordResetLinkRequestResponseContract::class, SuccessfulPasswordResetLinkRequestResponse::class);
         $this->app->singleton(TwoFactorConfirmedResponseContract::class, TwoFactorConfirmedResponse::class);
         $this->app->singleton(TwoFactorDisabledResponseContract::class, TwoFactorDisabledResponse::class);
