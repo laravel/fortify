@@ -1,10 +1,7 @@
 {
     "name": "laravel/fortify",
     "description": "Backend controllers and scaffolding for Laravel authentication.",
-    "keywords": [
-        "laravel",
-        "auth"
-    ],
+    "keywords": ["laravel", "auth"],
     "license": "MIT",
     "support": {
         "issues": "https://github.com/laravel/fortify/issues",
