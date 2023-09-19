@@ -36,10 +36,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Laravel\\Fortify\\Tests\\": "tests/",
-            "Workbench\\App\\": "workbench/app/"
+            "Laravel\\Fortify\\Tests\\": "tests/"
         },
-        "classmap": ["stubs/"]
+        "classmap": ["stubs/", "tests/Fixture/"]
     },
     "extra": {
         "branch-alias": {

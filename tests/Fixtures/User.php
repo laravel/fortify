@@ -1,6 +1,6 @@
 <?php
 
-namespace Workbench\App\Models;
+namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
