@@ -6,7 +6,6 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Laravel\Fortify\Events\RecoveryCodesGenerated;
-use Laravel\Fortify\FortifyServiceProvider;
 
 class RecoveryCodeControllerTest extends OrchestraTestCase
 {
