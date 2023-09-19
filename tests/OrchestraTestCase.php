@@ -2,7 +2,6 @@
 
 namespace Laravel\Fortify\Tests;
 
-use Mockery;
 use Orchestra\Testbench\Concerns\WithLaravelMigrations;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase;
