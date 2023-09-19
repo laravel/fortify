@@ -3,23 +3,21 @@
 namespace Laravel\Fortify\Tests;
 
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Laravel\Fortify\Events\TwoFactorAuthenticationConfirmed;
 use Laravel\Fortify\Events\TwoFactorAuthenticationDisabled;
 use Laravel\Fortify\Events\TwoFactorAuthenticationEnabled;
-use Laravel\Fortify\Features;
-use Laravel\Fortify\FortifyServiceProvider;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use PragmaRX\Google2FA\Google2FA;
 
 class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
 {
+    use RefreshDatabase;
+
     public function test_two_factor_authentication_can_be_enabled()
     {
         Event::fake();
-
-        $this->loadLaravelMigrations(['--database' => 'testbench']);
-        $this->artisan('migrate', ['--database' => 'testbench'])->run();
 
         $user = TestTwoFactorAuthenticationUser::forceCreate([
             'name' => 'Taylor Otwell',
@@ -48,9 +46,6 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
     {
         Event::fake();
 
-        $this->loadLaravelMigrations(['--database' => 'testbench']);
-        $this->artisan('migrate', ['--database' => 'testbench'])->run();
-
         $user = TestTwoFactorAuthenticationUser::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
@@ -67,16 +62,12 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
         $this->assertEquals('foo', $response->original['secretKey']);
     }
 
+    /**
+     * @define-env withConfirmedTwoFactorAuthentication
+     */
     public function test_two_factor_authentication_can_be_confirmed()
     {
         Event::fake();
-
-        app('config')->set('fortify.features', [
-            Features::twoFactorAuthentication(['confirm' => true]),
-        ]);
-
-        $this->loadLaravelMigrations(['--database' => 'testbench']);
-        $this->artisan('migrate', ['--database' => 'testbench'])->run();
 
         $tfaEngine = app(Google2FA::class);
         $userSecret = $tfaEngine->generateSecretKey();
@@ -109,16 +100,12 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
         $this->assertFalse($user->hasEnabledTwoFactorAuthentication());
     }
 
+    /**
+     * @define-env withConfirmedTwoFactorAuthentication
+     */
     public function test_two_factor_authentication_can_not_be_confirmed_with_invalid_code()
     {
         Event::fake();
-
-        app('config')->set('fortify.features', [
-            Features::twoFactorAuthentication(['confirm' => true]),
-        ]);
-
-        $this->loadLaravelMigrations(['--database' => 'testbench']);
-        $this->artisan('migrate', ['--database' => 'testbench'])->run();
 
         $tfaEngine = app(Google2FA::class);
         $userSecret = $tfaEngine->generateSecretKey();
@@ -148,9 +135,6 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
     {
         Event::fake();
 
-        $this->loadLaravelMigrations(['--database' => 'testbench']);
-        $this->artisan('migrate', ['--database' => 'testbench'])->run();
-
         $user = TestTwoFactorAuthenticationUser::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
@@ -171,24 +155,6 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
 
         $this->assertNull($user->two_factor_secret);
         $this->assertNull($user->two_factor_recovery_codes);
-    }
-
-    protected function getPackageProviders($app)
-    {
-        return [FortifyServiceProvider::class];
-    }
-
-    protected function getEnvironmentSetUp($app)
-    {
-        $app['migrator']->path(__DIR__.'/../database/migrations');
-
-        $app['config']->set('database.default', 'testbench');
-
-        $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
-            'database' => ':memory:',
-            'prefix'   => '',
-        ]);
     }
 }
 

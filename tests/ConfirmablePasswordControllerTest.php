@@ -3,26 +3,27 @@
 namespace Laravel\Fortify\Tests;
 
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
 use Laravel\Fortify\Fortify;
 
 class ConfirmablePasswordControllerTest extends OrchestraTestCase
 {
+    use RefreshDatabase;
+
     protected $user;
 
     protected function setUp(): void
     {
+        $this->afterApplicationCreated(function () {
+            $this->user = TestConfirmPasswordUser::forceCreate([
+                'name' => 'Taylor Otwell',
+                'email' => 'taylor@laravel.com',
+                'password' => bcrypt('secret'),
+            ]);
+        });
+
         parent::setUp();
-
-        $this->loadLaravelMigrations(['--database' => 'testbench']);
-
-        $this->artisan('migrate', ['--database' => 'testbench'])->run();
-
-        $this->user = TestConfirmPasswordUser::forceCreate([
-            'name' => 'Taylor Otwell',
-            'email' => 'taylor@laravel.com',
-            'password' => bcrypt('secret'),
-        ]);
     }
 
     public function test_the_confirm_password_view_is_returned()
@@ -147,18 +148,12 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
         $response->assertJsonValidationErrors('password');
     }
 
-    protected function getEnvironmentSetUp($app)
+    protected function defineEnvironment($app)
     {
-        $app['migrator']->path(__DIR__.'/../database/migrations');
+        parent::defineEnvironment($app);
 
-        $app['config']->set('auth.providers.users.model', TestConfirmPasswordUser::class);
-
-        $app['config']->set('database.default', 'testbench');
-
-        $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
-            'database' => ':memory:',
-            'prefix'   => '',
+        $app['config']->set([
+            'auth.providers.users.model' => TestConfirmPasswordUser::class,
         ]);
     }
 }

@@ -2,19 +2,24 @@
 
 namespace Laravel\Fortify\Tests;
 
-use Laravel\Fortify\FortifyServiceProvider;
-use Mockery;
+use Laravel\Fortify\Features;
+use Orchestra\Testbench\Concerns\WithLaravelMigrations;
+use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase;
 
 abstract class OrchestraTestCase extends TestCase
 {
-    public function tearDown(): void
+    use WithLaravelMigrations, WithWorkbench;
+
+    protected function defineEnvironment($app)
     {
-        Mockery::close();
+        $app['config']->set(['database.default' => 'testing']);
     }
 
-    protected function getPackageProviders($app)
+    protected function withConfirmedTwoFactorAuthentication($app)
     {
-        return [FortifyServiceProvider::class];
+        $app['config']->set('fortify.features', [
+            Features::twoFactorAuthentication(['confirm' => true]),
+        ]);
     }
 }

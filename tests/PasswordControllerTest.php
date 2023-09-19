@@ -3,16 +3,18 @@
 namespace Laravel\Fortify\Tests;
 
 use App\Actions\Fortify\UpdateUserPassword;
-use App\Models\User;
+use Database\Factories\UserFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\UpdatesUserPasswords;
-use Mockery;
 
 class PasswordControllerTest extends OrchestraTestCase
 {
+    use RefreshDatabase;
+
     public function test_passwords_can_be_updated()
     {
-        $user = Mockery::mock(User::class);
+        $user = UserFactory::new()->create();
 
         $this->mock(UpdatesUserPasswords::class)
                     ->shouldReceive('update')
@@ -29,10 +31,7 @@ class PasswordControllerTest extends OrchestraTestCase
 
     public function test_passwords_cannot_be_updated_without_current_password()
     {
-        $user = Mockery::mock(User::class);
-
-        require_once __DIR__.'/../stubs/PasswordValidationRules.php';
-        require_once __DIR__.'/../stubs/UpdateUserPassword.php';
+        $user = UserFactory::new()->create();
 
         try {
             (new UpdateUserPassword())->update($user, [
@@ -49,10 +48,7 @@ class PasswordControllerTest extends OrchestraTestCase
 
     public function test_passwords_cannot_be_updated_without_current_password_confirmation()
     {
-        $user = Mockery::mock(User::class);
-
-        require_once __DIR__.'/../stubs/PasswordValidationRules.php';
-        require_once __DIR__.'/../stubs/UpdateUserPassword.php';
+        $user = UserFactory::new()->create();
 
         try {
             (new UpdateUserPassword())->update($user, [

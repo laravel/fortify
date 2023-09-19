@@ -22,7 +22,7 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.0",
-        "orchestra/testbench": "^6.0|^7.0|^8.0",
+        "orchestra/testbench": "^6.34|^7.31|^8.11",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^9.3"
     },
@@ -33,9 +33,11 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "App\\Models\\": "tests/Fixtures/Models",
-            "Laravel\\Fortify\\Tests\\": "tests/"
-        }
+            "Laravel\\Fortify\\Tests\\": "tests/",
+            "App\\": "workbench/app/",
+            "Database\\Factories\\": "workbench/database/factories/"
+        },
+        "classmap": ["stubs/"]
     },
     "extra": {
         "branch-alias": {
@@ -51,5 +53,11 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "scripts": {
+        "post-autoload-dump": "@prepare",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "lint": "@php vendor/bin/phpstan analyse",
+        "test": "@php vendor/bin/phpunit"
+    }
 }
