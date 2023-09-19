@@ -35,8 +35,7 @@
         "psr-4": {
             "Laravel\\Fortify\\Tests\\": "tests/",
             "App\\": "workbench/app/",
-            "Database\\Factories\\": "workbench/database/factories/",
-            "Database\\Seeders\\": "workbench/database/seeders/"
+            "Database\\Factories\\": "workbench/database/factories/"
         },
         "classmap": ["stubs/"]
     },
