@@ -157,18 +157,6 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
         $this->assertNull($user->two_factor_secret);
         $this->assertNull($user->two_factor_recovery_codes);
     }
-
-    protected function defineEnvironment($app)
-    {
-        $app['config']->set(['database.default' => 'testing']);
-    }
-
-    protected function withConfirmedTwoFactorAuthentication($app)
-    {
-        $app['config']->set('fortify.features', [
-            Features::twoFactorAuthentication(['confirm' => true]),
-        ]);
-    }
 }
 
 class TestTwoFactorAuthenticationUser extends User

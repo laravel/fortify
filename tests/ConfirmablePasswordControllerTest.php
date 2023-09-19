@@ -150,9 +150,10 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
 
     protected function defineEnvironment($app)
     {
+        parent::defineEnvironment($app);
+
         $app['config']->set([
             'auth.providers.users.model' => TestConfirmPasswordUser::class,
-            'database.default' => 'testing',
         ]);
     }
 }

@@ -404,9 +404,10 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
     protected function defineEnvironment($app)
     {
+        parent::defineEnvironment($app);
+
         $app['config']->set([
             'auth.providers.users.model' => TestAuthenticationSessionUser::class,
-            'database.default' => 'testing',
         ]);
     }
 }
