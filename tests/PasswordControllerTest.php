@@ -3,11 +3,11 @@
 namespace Laravel\Fortify\Tests;
 
 use App\Actions\Fortify\UpdateUserPassword;
+use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\UpdatesUserPasswords;
 use Mockery;
-use Orchestra\Testbench\Factories\UserFactory;
 
 class PasswordControllerTest extends OrchestraTestCase
 {

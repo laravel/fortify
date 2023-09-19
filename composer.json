@@ -36,9 +36,12 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Laravel\\Fortify\\Tests\\": "tests/"
+            "Laravel\\Fortify\\Tests\\": "tests/",
+            "App\\": "workbench/app/",
+            "Database\\Factories\\": "workbench/database/factories/",
+            "Database\\Seeders\\": "workbench/database/seeders/"
         },
-        "classmap": ["stubs/", "tests/Fixture/"]
+        "classmap": ["stubs/"]
     },
     "extra": {
         "branch-alias": {
