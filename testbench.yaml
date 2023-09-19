@@ -1,0 +1,5 @@
+providers:
+  - Laravel\Fortify\FortifyServiceProvider
+
+migrations:
+  - workbench/database/migrations
