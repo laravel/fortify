@@ -7,7 +7,6 @@ use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\UpdatesUserPasswords;
-use Mockery;
 
 class PasswordControllerTest extends OrchestraTestCase
 {
