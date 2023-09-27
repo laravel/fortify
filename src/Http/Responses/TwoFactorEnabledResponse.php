@@ -3,10 +3,10 @@
 namespace Laravel\Fortify\Http\Responses;
 
 use Illuminate\Http\JsonResponse;
-use Laravel\Fortify\Contracts\TwoFactorLoginResponse as TwoFactorLoginResponseContract;
+use Laravel\Fortify\Contracts\TwoFactorEnabledResponse as TwoFactorEnabledResponseContract;
 use Laravel\Fortify\Fortify;
 
-class TwoFactorEnabledResponse implements TwoFactorLoginResponseContract
+class TwoFactorEnabledResponse implements TwoFactorEnabledResponseContract
 {
     /**
      * Create an HTTP response that represents the object.
