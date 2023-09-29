@@ -34,6 +34,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     $limiter = config('fortify.limiters.login');
     $twoFactorLimiter = config('fortify.limiters.two-factor');
     $verificationLimiter = config('fortify.limiters.verification', '6,1');
+    $resetPasswordLimiter = config('fortify.limiters.reset-password', '6,1');
 
     Route::post(RoutePath::for('login', '/login'), [AuthenticatedSessionController::class, 'store'])
         ->middleware(array_filter([
@@ -57,11 +58,11 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         }
 
         Route::post(RoutePath::for('password.email', '/forgot-password'), [PasswordResetLinkController::class, 'store'])
-            ->middleware(['guest:'.config('fortify.guard')])
+            ->middleware(['guest:'.config('fortify.guard'), 'throttle:'.$resetPasswordLimiter])
             ->name('password.email');
 
         Route::post(RoutePath::for('password.update', '/reset-password'), [NewPasswordController::class, 'store'])
-            ->middleware(['guest:'.config('fortify.guard')])
+            ->middleware(['guest:'.config('fortify.guard'), 'throttle:'.$resetPasswordLimiter])
             ->name('password.update');
     }
 
