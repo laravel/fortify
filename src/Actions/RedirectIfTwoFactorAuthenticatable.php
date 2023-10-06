@@ -8,6 +8,7 @@ use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\LoginRateLimiter;
+use Laravel\Fortify\RouteName;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
 class RedirectIfTwoFactorAuthenticatable
@@ -147,6 +148,6 @@ class RedirectIfTwoFactorAuthenticatable
 
         return $request->wantsJson()
                     ? response()->json(['two_factor' => true])
-                    : redirect()->route('two-factor.login');
+                    : redirect()->route(RouteName::for('two-factor.login'));
     }
 }

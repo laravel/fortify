@@ -10,6 +10,7 @@ use Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse;
 use Laravel\Fortify\Contracts\TwoFactorLoginResponse;
 use Laravel\Fortify\Events\RecoveryCodeReplaced;
 use Laravel\Fortify\Http\Requests\TwoFactorLoginRequest;
+use Laravel\Fortify\RouteName;
 
 class TwoFactorAuthenticatedSessionController extends Controller
 {
@@ -40,7 +41,7 @@ class TwoFactorAuthenticatedSessionController extends Controller
     public function create(TwoFactorLoginRequest $request): TwoFactorChallengeViewResponse
     {
         if (! $request->hasChallengedUser()) {
-            throw new HttpResponseException(redirect()->route('login'));
+            throw new HttpResponseException(redirect()->route(RouteName::for('login')));
         }
 
         return app(TwoFactorChallengeViewResponse::class);

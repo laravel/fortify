@@ -4,6 +4,7 @@ namespace Laravel\Fortify\Http\Responses;
 
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\FailedTwoFactorLoginResponse as FailedTwoFactorLoginResponseContract;
+use Laravel\Fortify\RouteName;
 
 class FailedTwoFactorLoginResponse implements FailedTwoFactorLoginResponseContract
 {
@@ -25,6 +26,6 @@ class FailedTwoFactorLoginResponse implements FailedTwoFactorLoginResponseContra
             ]);
         }
 
-        return redirect()->route('two-factor.login')->withErrors([$key => $message]);
+        return redirect()->route(RouteName::for('two-factor.login'))->withErrors([$key => $message]);
     }
 }
