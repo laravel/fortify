@@ -154,6 +154,7 @@ class FortifyServiceProvider extends ServiceProvider
                 'namespace' => 'Laravel\Fortify\Http\Controllers',
                 'domain' => config('fortify.domain', null),
                 'prefix' => config('fortify.prefix'),
+                'middleware' => config('fortify.middleware', ['web']),
             ], function () {
                 $this->loadRoutesFrom(__DIR__.'/../routes/routes.php');
             });
