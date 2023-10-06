@@ -12,9 +12,10 @@ class RouteName
      */
     public static function for(string $routeName)
     {
-        if (!config('fortify.name_prefix')) {
+        if (! config('fortify.name_prefix')) {
             return $routeName;
         }
+
         return config('fortify.name_prefix').'.'.$routeName;
     }
 }
