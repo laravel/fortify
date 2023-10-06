@@ -91,6 +91,8 @@ return [
 
     'domain' => null,
 
+    'name_prefix' => null,
+
     /*
     |--------------------------------------------------------------------------
     | Fortify Routes Middleware
