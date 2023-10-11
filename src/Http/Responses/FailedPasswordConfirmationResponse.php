@@ -15,7 +15,7 @@ class FailedPasswordConfirmationResponse implements FailedPasswordConfirmationRe
      */
     public function toResponse($request)
     {
-        $message = __('The provided password was incorrect.');
+        $message = __('auth.password');
 
         if ($request->wantsJson()) {
             throw ValidationException::withMessages([
