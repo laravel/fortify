@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.18.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.18.1...1.x)
+
+## [v1.18.1](https://github.com/laravel/fortify/compare/v1.18.0...v1.18.1) - 2023-10-18
+
+- Fix paths in default config using nested arrays by [@sebj54](https://github.com/sebj54) in https://github.com/laravel/fortify/pull/501
 
 ## [v1.18.0](https://github.com/laravel/fortify/compare/v1.17.6...v1.18.0) - 2023-09-12
 
