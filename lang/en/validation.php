@@ -17,6 +17,6 @@ return [
         'numeric' => 'The :attribute must contain at least one number.',
         'special_character' => 'The :attribute must contain at least one special character.',
         'uppercase' => 'The :attribute must contain at least one uppercase character.'
-    ]
+    ],
 
 ];

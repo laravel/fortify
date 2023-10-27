@@ -88,7 +88,9 @@ class Password implements ValidationRule
      */
     private function upsertRule(ValidationRule $rule): self
     {
-        $this->rules[$rule::class] = $rule;
+        $key = get_class($rule);
+
+        $this->rules[$key] = $rule;
 
         return $this;
     }
