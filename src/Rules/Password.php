@@ -3,137 +3,31 @@
 namespace Laravel\Fortify\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Support\Str;
 
 class Password implements Rule
 {
     /**
-     * The minimum length of the password.
-     *
-     * @var int
-     */
-    protected $length = 8;
-
-    /**
-     * Indicates if the password must contain one uppercase character.
-     *
-     * @var bool
-     */
-    protected $requireUppercase = false;
-
-    /**
-     * Indicates if the password must contain one numeric digit.
-     *
-     * @var bool
-     */
-    protected $requireNumeric = false;
-
-    /**
-     * Indicates if the password must contain one special character.
-     *
-     * @var bool
-     */
-    protected $requireSpecialCharacter = false;
-
-    /**
-     * The message that should be used when validation fails.
+     * The validation rule error message.
      *
      * @var string
      */
-    protected $message;
+    protected $error;
 
     /**
-     * Determine if the validation rule passes.
+     * The validation rules to apply.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @return bool
+     * @var \Illuminate\Contracts\Validation\Rule[]
      */
-    public function passes($attribute, $value)
-    {
-        $value = is_scalar($value) ? (string) $value : '';
-
-        if ($this->requireUppercase && Str::lower($value) === $value) {
-            return false;
-        }
-
-        if ($this->requireNumeric && ! preg_match('/[0-9]/', $value)) {
-            return false;
-        }
-
-        if ($this->requireSpecialCharacter && ! preg_match('/[\W_]/', $value)) {
-            return false;
-        }
-
-        return Str::length($value) >= $this->length;
-    }
+    protected $rules = [];
 
     /**
-     * Get the validation error message.
+     * Initialize the validation rule and set the default password length.
      *
-     * @return string
+     * @param  int  $length
      */
-    public function message()
+    public function __construct(int $length = 8)
     {
-        if ($this->message) {
-            return $this->message;
-        }
-
-        switch (true) {
-            case $this->requireUppercase
-            && ! $this->requireNumeric
-            && ! $this->requireSpecialCharacter:
-                return __('The :attribute must be at least :length characters and contain at least one uppercase character.', [
-                    'length' => $this->length,
-                ]);
-
-            case $this->requireNumeric
-            && ! $this->requireUppercase
-            && ! $this->requireSpecialCharacter:
-                return __('The :attribute must be at least :length characters and contain at least one number.', [
-                    'length' => $this->length,
-                ]);
-
-            case $this->requireSpecialCharacter
-            && ! $this->requireUppercase
-            && ! $this->requireNumeric:
-                return __('The :attribute must be at least :length characters and contain at least one special character.', [
-                    'length' => $this->length,
-                ]);
-
-            case $this->requireUppercase
-            && $this->requireNumeric
-            && ! $this->requireSpecialCharacter:
-                return __('The :attribute must be at least :length characters and contain at least one uppercase character and one number.', [
-                    'length' => $this->length,
-                ]);
-
-            case $this->requireUppercase
-            && $this->requireSpecialCharacter
-            && ! $this->requireNumeric:
-                return __('The :attribute must be at least :length characters and contain at least one uppercase character and one special character.', [
-                    'length' => $this->length,
-                ]);
-
-            case $this->requireUppercase
-            && $this->requireNumeric
-            && $this->requireSpecialCharacter:
-                return __('The :attribute must be at least :length characters and contain at least one uppercase character, one number, and one special character.', [
-                    'length' => $this->length,
-                ]);
-
-            case $this->requireNumeric
-            && $this->requireSpecialCharacter
-            && ! $this->requireUppercase:
-                return __('The :attribute must be at least :length characters and contain at least one special character and one number.', [
-                    'length' => $this->length,
-                ]);
-
-            default:
-                return __('The :attribute must be at least :length characters.', [
-                    'length' => $this->length,
-                ]);
-        }
+        $this->length($length);
     }
 
     /**
@@ -142,35 +36,19 @@ class Password implements Rule
      * @param  int  $length
      * @return $this
      */
-    public function length(int $length)
+    public function length(int $length): self
     {
-        $this->length = $length;
-
-        return $this;
+        return $this->upsertRule(new Length($length));
     }
 
     /**
-     * Indicate that at least one uppercase character is required.
-     *
-     * @return $this
-     */
-    public function requireUppercase()
-    {
-        $this->requireUppercase = true;
-
-        return $this;
-    }
-
-    /**
-     * Indicate that at least one numeric digit is required.
+     * Indicate that at least one numeric character is required.
      *
      * @return $this
      */
     public function requireNumeric()
     {
-        $this->requireNumeric = true;
-
-        return $this;
+        return $this->upsertRule(new HasNumeric());
     }
 
     /**
@@ -180,20 +58,62 @@ class Password implements Rule
      */
     public function requireSpecialCharacter()
     {
-        $this->requireSpecialCharacter = true;
-
-        return $this;
+        return $this->upsertRule(new HasSpecialCharacter());
     }
 
     /**
-     * Set the message that should be used when the rule fails.
+     * Indicate that at least one uppercase character is required.
      *
-     * @param  string  $message
      * @return $this
      */
-    public function withMessage(string $message)
+    public function requireUppercase()
     {
-        $this->message = $message;
+        return $this->upsertRule(new HasUppercase());
+    }
+
+    /**
+     * Determine if the validation rule passes.
+     *
+     * @param $attribute
+     * @param $value
+     * @return bool
+     */
+    public function passes($attribute, $value)
+    {
+        foreach ($this->rules as $rule) {
+            if (! $rule->passes($attribute, $value)) {
+                // If the current validation rule fails, capture the error message
+                // and return false to break the loop.
+                $this->error = $rule->message();
+                
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Get the validation error message.
+     *
+     * @return string
+     */
+    public function message()
+    {
+        return $this->error;
+    }
+
+    /**
+     * Update or insert a rule in the validation rules to apply.
+     *
+     * @param  \Illuminate\Contracts\Validation\Rule  $rule
+     * @return $this
+     */
+    private function upsertRule(Rule $rule)
+    {
+        $key = get_class($rule);
+
+        $this->rules[$key] = $rule;
 
         return $this;
     }
