@@ -2,7 +2,6 @@
 
 namespace Laravel\Fortify\Tests;
 
-use Illuminate\Foundation\Testing\RefreshDatabaseState;
 use Laravel\Fortify\Features;
 use Orchestra\Testbench\Concerns\WithLaravelMigrations;
 use Orchestra\Testbench\Concerns\WithWorkbench;
@@ -22,7 +21,5 @@ abstract class OrchestraTestCase extends TestCase
         $app['config']->set('fortify.features', [
             Features::twoFactorAuthentication(['confirm' => true]),
         ]);
-
-        RefreshDatabaseState::$migrated = false;
     }
 }
