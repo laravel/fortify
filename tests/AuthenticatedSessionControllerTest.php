@@ -210,7 +210,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         self::assertSame($expectedResult.'|192.168.0.1', $method->invoke($loginRateLimiter, $request));
     }
 
-    public function usernameProvider(): array
+    public static function usernameProvider(): array
     {
         return [
             'lowercase special characters' => ['ⓣⓔⓢⓣ@ⓛⓐⓡⓐⓥⓔⓛ.ⓒⓞⓜ', 'test@laravel.com'],
