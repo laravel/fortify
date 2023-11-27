@@ -3,13 +3,12 @@
 namespace Laravel\Fortify\Tests;
 
 use Laravel\Fortify\Features;
-use Orchestra\Testbench\Concerns\WithLaravelMigrations;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase;
 
 abstract class OrchestraTestCase extends TestCase
 {
-    use WithLaravelMigrations, WithWorkbench;
+    use WithWorkbench;
 
     protected function defineEnvironment($app)
     {

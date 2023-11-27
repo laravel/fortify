@@ -16,8 +16,10 @@ use Laravel\Fortify\Features;
 use Laravel\Fortify\LoginRateLimiter;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Mockery;
+use Orchestra\Testbench\Attributes\WithMigration;
 use PragmaRX\Google2FA\Google2FA;
 
+#[WithMigration]
 class AuthenticatedSessionControllerTest extends OrchestraTestCase
 {
     use RefreshDatabase;

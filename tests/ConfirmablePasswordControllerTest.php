@@ -6,24 +6,22 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
 use Laravel\Fortify\Fortify;
+use Orchestra\Testbench\Attributes\WithMigration;
 
+#[WithMigration]
 class ConfirmablePasswordControllerTest extends OrchestraTestCase
 {
     use RefreshDatabase;
 
     protected $user;
 
-    protected function setUp(): void
+    protected function afterRefreshingDatabase()
     {
-        $this->afterApplicationCreated(function () {
-            $this->user = TestConfirmPasswordUser::forceCreate([
-                'name' => 'Taylor Otwell',
-                'email' => 'taylor@laravel.com',
-                'password' => bcrypt('secret'),
-            ]);
-        });
-
-        parent::setUp();
+        $this->user = TestConfirmPasswordUser::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+        ]);
     }
 
     public function test_the_confirm_password_view_is_returned()

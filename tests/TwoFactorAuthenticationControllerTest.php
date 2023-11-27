@@ -10,8 +10,10 @@ use Laravel\Fortify\Events\TwoFactorAuthenticationDisabled;
 use Laravel\Fortify\Events\TwoFactorAuthenticationEnabled;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Orchestra\Testbench\Attributes\DefineDatabase;
+use Orchestra\Testbench\Attributes\WithMigration;
 use PragmaRX\Google2FA\Google2FA;
 
+#[WithMigration]
 class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
 {
     use RefreshDatabase;
@@ -63,7 +65,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
         $this->assertEquals('foo', $response->original['secretKey']);
     }
 
-    #[DefineDatabase('withConfirmedTwoFactorAuthentication')]
+    #[DefineDatabase('withConfirmedTwoFactorAuthentication', defer: false)]
     public function test_two_factor_authentication_can_be_confirmed()
     {
         Event::fake();
@@ -99,7 +101,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
         $this->assertFalse($user->hasEnabledTwoFactorAuthentication());
     }
 
-    #[DefineDatabase('withConfirmedTwoFactorAuthentication')]
+    #[DefineDatabase('withConfirmedTwoFactorAuthentication', defer: false)]
     public function test_two_factor_authentication_can_not_be_confirmed_with_invalid_code()
     {
         Event::fake();
