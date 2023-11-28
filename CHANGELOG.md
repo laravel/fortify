@@ -4,6 +4,8 @@
 
 ## [v1.19.0](https://github.com/laravel/fortify/compare/v1.18.1...v1.19.0) - 2023-11-27
 
+- Add new event by @taylorotwell in https://github.com/laravel/fortify/commit/2da721fead1f3bc18af983e4903c4e1df67177e7
+
 ## [v1.18.1](https://github.com/laravel/fortify/compare/v1.18.0...v1.18.1) - 2023-10-18
 
 - Fix paths in default config using nested arrays by [@sebj54](https://github.com/sebj54) in https://github.com/laravel/fortify/pull/501
