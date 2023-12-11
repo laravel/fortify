@@ -5,6 +5,9 @@ namespace Laravel\Fortify\Rules;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Str;
 
+/**
+ * @deprecated Use \Illuminate\Validation\Rules\Password instead.
+ */
 class Password implements Rule
 {
     /**
