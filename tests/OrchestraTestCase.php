@@ -3,12 +3,22 @@
 namespace Laravel\Fortify\Tests;
 
 use Laravel\Fortify\Features;
+use Illuminate\Foundation\Testing\RefreshDatabaseState;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase;
 
 abstract class OrchestraTestCase extends TestCase
 {
     use WithWorkbench;
+
+    public function setUp(): void
+    {
+        if (class_exists(RefreshDatabaseState::class)) {
+            RefreshDatabaseState::$migrated = false;
+        }
+
+        parent::setUp();
+    }
 
     protected function defineEnvironment($app)
     {
