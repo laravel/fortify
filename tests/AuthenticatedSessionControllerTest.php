@@ -16,8 +16,10 @@ use Laravel\Fortify\Features;
 use Laravel\Fortify\LoginRateLimiter;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Mockery;
+use Orchestra\Testbench\Attributes\WithMigration;
 use PragmaRX\Google2FA\Google2FA;
 
+#[WithMigration]
 class AuthenticatedSessionControllerTest extends OrchestraTestCase
 {
     use RefreshDatabase;
@@ -210,12 +212,12 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         self::assertSame($expectedResult.'|192.168.0.1', $method->invoke($loginRateLimiter, $request));
     }
 
-    public function usernameProvider(): array
+    public static function usernameProvider(): array
     {
         return [
             'lowercase special characters' => ['ⓣⓔⓢⓣ@ⓛⓐⓡⓐⓥⓔⓛ.ⓒⓞⓜ', 'test@laravel.com'],
             'uppercase special characters' => ['ⓉⒺⓈⓉ@ⓁⒶⓇⒶⓋⒺⓁ.ⒸⓄⓂ', 'test@laravel.com'],
-            'special character numbers' =>['test⑩⓸③@laravel.com', 'test1043@laravel.com'],
+            'special character numbers' => ['test⑩⓸③@laravel.com', 'test1043@laravel.com'],
             'default email' => ['test@laravel.com', 'test@laravel.com'],
         ];
     }
