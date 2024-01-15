@@ -2,8 +2,8 @@
 
 namespace Laravel\Fortify\Tests;
 
-use Laravel\Fortify\Features;
 use Illuminate\Foundation\Testing\RefreshDatabaseState;
+use Laravel\Fortify\Features;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase;
 

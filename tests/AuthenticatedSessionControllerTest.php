@@ -217,7 +217,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         return [
             'lowercase special characters' => ['ⓣⓔⓢⓣ@ⓛⓐⓡⓐⓥⓔⓛ.ⓒⓞⓜ', 'test@laravel.com'],
             'uppercase special characters' => ['ⓉⒺⓈⓉ@ⓁⒶⓇⒶⓋⒺⓁ.ⒸⓄⓂ', 'test@laravel.com'],
-            'special character numbers' =>['test⑩⓸③@laravel.com', 'test1043@laravel.com'],
+            'special character numbers' => ['test⑩⓸③@laravel.com', 'test1043@laravel.com'],
             'default email' => ['test@laravel.com', 'test@laravel.com'],
         ];
     }
