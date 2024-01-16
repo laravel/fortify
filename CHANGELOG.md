@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.19.1...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.20.0...1.x)
+
+## [v1.20.0](https://github.com/laravel/fortify/compare/v1.19.1...v1.20.0) - 2024-01-15
+
+* [1.x] Merges develop by [@nunomaduro](https://github.com/nunomaduro) in https://github.com/laravel/fortify/pull/515
 
 ## [v1.19.1](https://github.com/laravel/fortify/compare/v1.19.0...v1.19.1) - 2023-12-11
 
