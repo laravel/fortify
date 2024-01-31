@@ -46,7 +46,6 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
         $this->assertNotNull($user->twoFactorQrCodeSvg());
     }
 
-
     #[ResetRefreshDatabaseState]
     public function test_calling_two_factor_authentication_endpoint_will_not_overwrite_without_force_parameter()
     {
@@ -110,7 +109,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
 
         $old_value = $user->two_factor_secret;
 
-          $response = $this->withoutExceptionHandling()->actingAs($user)->postJson(
+        $response = $this->withoutExceptionHandling()->actingAs($user)->postJson(
             '/user/two-factor-authentication',
             [
                 'force' => true,
@@ -120,7 +119,6 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
         $response->assertStatus(200);
 
         $user = $user->fresh();
-
 
         $this->assertNotNull($user->two_factor_secret);
         $this->assertNotNull($user->two_factor_recovery_codes);

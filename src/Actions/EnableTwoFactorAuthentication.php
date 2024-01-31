@@ -36,9 +36,7 @@ class EnableTwoFactorAuthentication
      */
     public function __invoke($user, $force = false)
     {
-
         if (empty($user->two_factor_secret) || $force === true) {
-        
             $user->forceFill([
                 'two_factor_secret' => encrypt($this->provider->generateSecretKey()),
                 'two_factor_recovery_codes' => encrypt(json_encode(Collection::times(8, function () {
