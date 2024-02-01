@@ -31,7 +31,7 @@ class EnableTwoFactorAuthentication
      * Enable two factor authentication for the user.
      *
      * @param  mixed  $user
-     * @param  bool $force
+     * @param  bool  $force
      * @return void
      */
     public function __invoke($user, $force = false)
