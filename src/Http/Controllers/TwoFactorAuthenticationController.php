@@ -20,7 +20,7 @@ class TwoFactorAuthenticationController extends Controller
      */
     public function store(Request $request, EnableTwoFactorAuthentication $enable)
     {
-        $enable($request->user());
+        $enable($request->user(), $request->boolean('force', false));
 
         return app(TwoFactorEnabledResponse::class);
     }

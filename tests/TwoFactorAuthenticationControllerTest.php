@@ -46,6 +46,88 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
         $this->assertNotNull($user->twoFactorQrCodeSvg());
     }
 
+    #[ResetRefreshDatabaseState]
+    public function test_calling_two_factor_authentication_endpoint_will_not_overwrite_without_force_parameter()
+    {
+        Event::fake();
+
+        $user = TestTwoFactorAuthenticationUser::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+        ]);
+
+        $response = $this->withoutExceptionHandling()->actingAs($user)->postJson(
+            '/user/two-factor-authentication'
+        );
+
+        $response->assertStatus(200);
+
+        Event::assertDispatched(TwoFactorAuthenticationEnabled::class);
+
+        $user = $user->fresh();
+
+        $old_value = $user->two_factor_secret;
+
+        $response = $this->withoutExceptionHandling()->actingAs($user)->postJson(
+            '/user/two-factor-authentication'
+        );
+
+        $response->assertStatus(200);
+
+        $this->assertNotNull($user->two_factor_secret);
+        $this->assertNotNull($user->two_factor_recovery_codes);
+        $this->assertEquals($old_value, $user->fresh()->two_factor_secret);
+        $this->assertNull($user->two_factor_confirmed_at);
+        $this->assertIsArray(json_decode(decrypt($user->two_factor_recovery_codes), true));
+        $this->assertNotNull($user->twoFactorQrCodeSvg());
+    }
+
+    #[ResetRefreshDatabaseState]
+    public function test_calling_two_factor_authentication_endpoint_will_overwrite_with_force_parameter()
+    {
+        Event::fake();
+
+        $user = TestTwoFactorAuthenticationUser::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+        ]);
+
+        $response = $this->withoutExceptionHandling()->actingAs($user)->postJson(
+            '/user/two-factor-authentication',
+            [
+                'force' => true,
+            ]
+        );
+
+        $response->assertStatus(200);
+
+        Event::assertDispatched(TwoFactorAuthenticationEnabled::class);
+
+        $user = $user->fresh();
+
+        $old_value = $user->two_factor_secret;
+
+        $response = $this->withoutExceptionHandling()->actingAs($user)->postJson(
+            '/user/two-factor-authentication',
+            [
+                'force' => true,
+            ]
+        );
+
+        $response->assertStatus(200);
+
+        $user = $user->fresh();
+
+        $this->assertNotNull($user->two_factor_secret);
+        $this->assertNotNull($user->two_factor_recovery_codes);
+        $this->assertNotEquals($old_value, $user->fresh()->two_factor_secret);
+        $this->assertNull($user->two_factor_confirmed_at);
+        $this->assertIsArray(json_decode(decrypt($user->two_factor_recovery_codes), true));
+        $this->assertNotNull($user->twoFactorQrCodeSvg());
+    }
+
     public function test_two_factor_authentication_secret_key_can_be_retrieved()
     {
         Event::fake();
