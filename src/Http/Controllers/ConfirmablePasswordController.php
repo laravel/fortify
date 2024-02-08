@@ -5,6 +5,7 @@ namespace Laravel\Fortify\Http\Controllers;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Date;
 use Laravel\Fortify\Actions\ConfirmPassword;
 use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
 use Laravel\Fortify\Contracts\FailedPasswordConfirmationResponse;
@@ -54,7 +55,7 @@ class ConfirmablePasswordController extends Controller
         );
 
         if ($confirmed) {
-            $request->session()->put('auth.password_confirmed_at', time());
+            $request->session()->put('auth.password_confirmed_at', Date::now()->unix());
         }
 
         return $confirmed
