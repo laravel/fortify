@@ -4,6 +4,7 @@ namespace Laravel\Fortify\Tests;
 
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Date;
 use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
 use Laravel\Fortify\Fortify;
 use Orchestra\Testbench\Attributes\WithMigration;
@@ -40,6 +41,8 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
 
     public function test_password_can_be_confirmed()
     {
+        $this->freezeSecond();
+
         $response = $this->withoutExceptionHandling()
             ->actingAs($this->user)
             ->withSession(['url.intended' => 'http://foo.com/bar'])
@@ -48,7 +51,7 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
                 ['password' => 'secret']
             );
 
-        $response->assertSessionHas('auth.password_confirmed_at');
+        $response->assertSessionHas('auth.password_confirmed_at', Date::now()->unix());
         $response->assertRedirect('http://foo.com/bar');
     }
 
@@ -86,6 +89,8 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
 
     public function test_password_confirmation_can_be_customized()
     {
+        $this->freezeSecond();
+
         Fortify::$confirmPasswordsUsingCallback = function () {
             return true;
         };
@@ -98,7 +103,7 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
                 ['password' => 'invalid']
             );
 
-        $response->assertSessionHas('auth.password_confirmed_at');
+        $response->assertSessionHas('auth.password_confirmed_at', Date::now()->unix());
         $response->assertRedirect('http://foo.com/bar');
 
         Fortify::$confirmPasswordsUsingCallback = null;
@@ -106,6 +111,8 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
 
     public function test_password_confirmation_can_be_customized_and_fail_without_password()
     {
+        $this->freezeSecond();
+
         Fortify::$confirmPasswordsUsingCallback = function () {
             return true;
         };
@@ -118,7 +125,7 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
                 ['password' => null]
             );
 
-        $response->assertSessionHas('auth.password_confirmed_at');
+        $response->assertSessionHas('auth.password_confirmed_at', Date::now()->unix());
         $response->assertRedirect('http://foo.com/bar');
 
         Fortify::$confirmPasswordsUsingCallback = null;
