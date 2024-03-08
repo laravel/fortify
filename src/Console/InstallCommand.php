@@ -3,7 +3,6 @@
 namespace Laravel\Fortify\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\FortifyServiceProvider;
 
