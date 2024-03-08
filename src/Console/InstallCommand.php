@@ -47,6 +47,6 @@ class InstallCommand extends Command
             return;
         }
 
-        ServiceProvider::addProviderToBootstrapFile(\App\Providers\FortifyServiceProvider::class); // @phpstan-ignore-line
+        ServiceProvider::addProviderToBootstrapFile(\App\Providers\FortifyServiceProvider::class);
     }
 }
