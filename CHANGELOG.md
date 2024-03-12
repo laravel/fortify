@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.20.1...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.21.0...1.x)
+
+## [v1.21.0](https://github.com/laravel/fortify/compare/v1.20.1...v1.21.0) - 2024-03-08
+
+* [1.x] Adds `fortify:install` Artisan command by [@nunomaduro](https://github.com/nunomaduro) in https://github.com/laravel/fortify/pull/524
 
 ## [v1.20.1](https://github.com/laravel/fortify/compare/v1.20.0...v1.20.1) - 2024-02-08
 
