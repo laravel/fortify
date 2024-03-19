@@ -5,7 +5,9 @@ namespace Laravel\Fortify\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\FortifyServiceProvider;
+use Symfony\Component\Console\Attribute\AsCommand;
 
+#[AsCommand(name: 'fortify:install')]
 class InstallCommand extends Command
 {
     /**
