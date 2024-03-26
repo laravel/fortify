@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.21.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.21.1...1.x)
+
+## [v1.21.1](https://github.com/laravel/fortify/compare/v1.21.0...v1.21.1) - 2024-03-19
+
+* Specify return type array type by [@santigarcor](https://github.com/santigarcor) in https://github.com/laravel/fortify/pull/525
+* [1.x] Make commands lazy by [@timacdonald](https://github.com/timacdonald) in https://github.com/laravel/fortify/pull/527
 
 ## [v1.21.0](https://github.com/laravel/fortify/compare/v1.20.1...v1.21.0) - 2024-03-08
 
