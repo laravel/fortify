@@ -82,15 +82,6 @@ class AuthenticatedSessionController extends Controller
             ));
         }
 
-        $request['authUser'] = tap(call_user_func(Fortify::$authenticateUsingCallback, $request), function ($user) use ($request)
-		{
-			if (!$user) {
-				$this->fireFailedEvent($request);
-
-				$this->throwFailedAuthenticationException($request);
-			}
-		});
-
         return (new Pipeline(app()))->send($request)->through(array_filter([
             config('fortify.limiters.login') ? null : EnsureLoginIsNotThrottled::class,
             config('fortify.lowercase_usernames') ? CanonicalizeUsername::class : null,

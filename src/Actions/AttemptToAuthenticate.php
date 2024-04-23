@@ -69,7 +69,7 @@ class AttemptToAuthenticate
      */
     protected function handleUsingCustomCallback($request, $next)
     {
-        $user = $request['authUser'] ?? call_user_func(Fortify::$authenticateUsingCallback, $request);
+        $user = $request->get('user') ?? call_user_func(Fortify::$authenticateUsingCallback, $request);
 
         if (! $user) {
             $this->fireFailedEvent($request);
