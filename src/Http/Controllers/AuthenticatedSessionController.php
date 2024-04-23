@@ -84,6 +84,10 @@ class AuthenticatedSessionController extends Controller
 
         $request['authUser'] = call_user_func(Fortify::$authenticateUsingCallback, $request);
 
+        $request->set(["key"=>"value"]);
+
+        $request->request->add(['variable' => 'value']); //add request
+
         return (new Pipeline(app()))->send($request)->through(array_filter([
             config('fortify.limiters.login') ? null : EnsureLoginIsNotThrottled::class,
             config('fortify.lowercase_usernames') ? CanonicalizeUsername::class : null,
