@@ -39,9 +39,6 @@ class RedirectIfTwoFactorAuthenticatable
         $this->limiter = $limiter;
     }
 
-
-    public $authUser;
-
     /**
      * Handle the incoming request.
      *
