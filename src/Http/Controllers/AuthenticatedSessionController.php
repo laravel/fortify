@@ -82,11 +82,14 @@ class AuthenticatedSessionController extends Controller
             ));
         }
 
-        $request['authUser'] = call_user_func(Fortify::$authenticateUsingCallback, $request);
+        $request['authUser'] = tap(call_user_func(Fortify::$authenticateUsingCallback, $request), function ($user) use ($request)
+		{
+			if (!$user) {
+				$this->fireFailedEvent($request);
 
-        $request->set(["key"=>"value"]);
-
-        $request->request->add(['variable' => 'value']); //add request
+				$this->throwFailedAuthenticationException($request);
+			}
+		});
 
         return (new Pipeline(app()))->send($request)->through(array_filter([
             config('fortify.limiters.login') ? null : EnsureLoginIsNotThrottled::class,
