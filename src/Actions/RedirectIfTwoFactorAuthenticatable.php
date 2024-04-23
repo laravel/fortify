@@ -48,7 +48,7 @@ class RedirectIfTwoFactorAuthenticatable
      */
     public function handle($request, $next)
     {
-        $user = $this->validateCredentials($request);
+        $user = $request['authUser'] ?? $this->validateCredentials($request);
 
         if (Fortify::confirmsTwoFactorAuthentication()) {
             if (optional($user)->two_factor_secret &&
