@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.21.1...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.21.2...1.x)
+
+## [v1.21.2](https://github.com/laravel/fortify/compare/v1.21.1...v1.21.2) - 2024-04-25
+
+* [1.x] Bacon QR 3.0 support by [@eshimischi](https://github.com/eshimischi) in https://github.com/laravel/fortify/pull/534
 
 ## [v1.21.1](https://github.com/laravel/fortify/compare/v1.21.0...v1.21.1) - 2024-03-19
 
