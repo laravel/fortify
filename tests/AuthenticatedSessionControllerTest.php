@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify\Tests;
 
+use Illuminate\Auth\Events\Logout;
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Auth\User;
@@ -402,6 +403,33 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         ]);
 
         $response->assertRedirect('/home');
+    }
+
+    public function test_users_can_logout(): void
+    {
+        $user = TestAuthenticationSessionUser::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+        ]);
+        Event::fake([Logout::class]);
+
+        $response = $this->actingAs($user)->post('/logout');
+
+        $response->assertRedirect();
+        $this->assertGuest();
+        Event::assertDispatched(fn (Logout $logout) => $logout->user->is($user));
+    }
+
+    public function test_must_be_authenticated_to_logout(): void
+    {
+        Event::fake([Logout::class]);
+
+        $response = $this->post('/logout');
+
+        $response->assertRedirect();
+        $this->assertGuest();
+        Event::assertNotDispatched(Logout::class);
     }
 
     protected function defineEnvironment($app)
