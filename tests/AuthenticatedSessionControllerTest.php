@@ -423,11 +423,6 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
     public function test_must_be_authenticated_to_logout(): void
     {
-        $user = TestAuthenticationSessionUser::forceCreate([
-            'name' => 'Taylor Otwell',
-            'email' => 'taylor@laravel.com',
-            'password' => bcrypt('secret'),
-        ]);
         Event::fake([Logout::class]);
 
         $response = $this->post('/logout');
