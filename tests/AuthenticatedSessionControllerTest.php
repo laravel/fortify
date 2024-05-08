@@ -412,18 +412,13 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
         ]);
-
-        $loggedOutUser = null;
-        Event::listen(function (Logout $event) use (&$loggedOutUser) {
-            $loggedOutUser = $event->user;
-        });
+        Event::fake([Logout::class]);
 
         $response = $this->actingAs($user)->post('/logout');
 
-        $this->assertNotNull($loggedOutUser);
-        $this->assertTrue($loggedOutUser->is($user));
         $response->assertRedirect();
         $this->assertGuest();
+        Event::assertDispatched(fn (Logout $logout) => $logout->user->is($user));
     }
 
     public function test_must_be_authenticated_to_logout(): void
@@ -433,16 +428,13 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
         ]);
-        $loggedOut = false;
-        Event::listen(function (Logout $event) use (&$loggedOut) {
-            $loggedOut = true;
-        });
+        Event::fake([Logout::class]);
 
         $response = $this->post('/logout');
 
-        $this->assertFalse($loggedOut);
         $response->assertRedirect();
         $this->assertGuest();
+        Event::assertNotDispatched(Logout::class);
     }
 
     protected function defineEnvironment($app)
