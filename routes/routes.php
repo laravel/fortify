@@ -34,6 +34,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     $limiter = config('fortify.limiters.login');
     $twoFactorLimiter = config('fortify.limiters.two-factor');
     $verificationLimiter = config('fortify.limiters.verification', '6,1');
+    $passwordUpdateLimiter = config('fortify.limiters.password-update');
 
     Route::post(RoutePath::for('login', '/login'), [AuthenticatedSessionController::class, 'store'])
         ->middleware(array_filter([
@@ -105,7 +106,10 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     // Passwords...
     if (Features::enabled(Features::updatePasswords())) {
         Route::put(RoutePath::for('user-password.update', '/user/password'), [PasswordController::class, 'update'])
-            ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
+            ->middleware(array_filter([
+                config('fortify.auth_middleware', 'auth').':'.config('fortify.guard'),
+                $passwordUpdateLimiter ? 'throttle:'.$passwordUpdateLimiter : null,
+            ]))
             ->name('user-password.update');
     }
 
