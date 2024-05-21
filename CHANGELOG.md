@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.21.2...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.21.3...1.x)
+
+## [v1.21.3](https://github.com/laravel/fortify/compare/v1.21.2...v1.21.3) - 2024-05-08
+
+* [1.x] Ensure logout route is authenticated by [@timacdonald](https://github.com/timacdonald) in https://github.com/laravel/fortify/pull/536
 
 ## [v1.21.2](https://github.com/laravel/fortify/compare/v1.21.1...v1.21.2) - 2024-04-25
 
