@@ -298,8 +298,7 @@ class Fortify
      */
     public static function confirmsTwoFactorAuthentication()
     {
-        return Features::enabled(Features::twoFactorAuthentication()) &&
-               Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm');
+        return Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm');
     }
 
     /**
