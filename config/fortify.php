@@ -15,7 +15,11 @@ return [
     'domain' => null,
     'lowercase_usernames' => false,
     'limiters' => [
-        'login' => null,
+        'login' => 5,
+        'login-middleware' => 10, 
+        'two-factor' => 5,
+        'two-factor-middleware' => 10,
+        'decay-seconds' => 60,
     ],
     'paths' => [
         'login' => null,
