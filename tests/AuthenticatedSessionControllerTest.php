@@ -17,6 +17,7 @@ use Laravel\Fortify\Features;
 use Laravel\Fortify\LoginRateLimiter;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Mockery;
+use Orchestra\Testbench\Attributes\WithConfig;
 use Orchestra\Testbench\Attributes\WithMigration;
 use PragmaRX\Google2FA\Google2FA;
 
@@ -173,6 +174,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $response->assertSessionHasErrors(['email']);
     }
 
+    #[WithConfig('fortify.limiters.login', true)]
     public function test_login_attempts_are_throttled()
     {
         $this->mock(LoginRateLimiter::class, function ($mock) {
@@ -187,6 +189,29 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
         $response->assertStatus(429);
         $response->assertJsonValidationErrors(['email']);
+    }
+
+    #[WithConfig('fortify.limiters.login', false)]
+    public function test_login_attempts_are_not_throttled()
+    {
+        $this->mock(LoginRateLimiter::class, function ($mock) {
+            $mock->shouldNotReceive('tooManyAttempts')->andReturn(true);
+            $mock->shouldNotReceive('availableIn')->andReturn(10);
+            $mock->shouldReceive('clear');
+        });
+
+        TestAuthenticationSessionUser::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+        ]);
+
+        $response = $this->withoutExceptionHandling()->post('/login', [
+            'email' => 'taylor@laravel.com',
+            'password' => 'secret',
+        ]);
+
+        $response->assertRedirect('/home');
     }
 
     /**
