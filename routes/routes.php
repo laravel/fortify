@@ -31,14 +31,14 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
             ->name('login');
     }
 
-    $limiter = config('fortify.limiters.login');
-    $twoFactorLimiter = config('fortify.limiters.two-factor');
+    $limiterMiddleware = config('fortify.limiters.login-middleware');
+    $twoFactorLimiterMiddleware = config('fortify.limiters.two-factor-middleware');
     $verificationLimiter = config('fortify.limiters.verification', '6,1');
 
     Route::post(RoutePath::for('login', '/login'), [AuthenticatedSessionController::class, 'store'])
         ->middleware(array_filter([
             'guest:'.config('fortify.guard'),
-            $limiter ? 'throttle:'.$limiter : null,
+            $limiterMiddleware ? 'throttle:'.$limiterMiddleware : null,
         ]));
 
     Route::post(RoutePath::for('logout', '/logout'), [AuthenticatedSessionController::class, 'destroy'])
@@ -134,7 +134,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         Route::post(RoutePath::for('two-factor.login', '/two-factor-challenge'), [TwoFactorAuthenticatedSessionController::class, 'store'])
             ->middleware(array_filter([
                 'guest:'.config('fortify.guard'),
-                $twoFactorLimiter ? 'throttle:'.$twoFactorLimiter : null,
+                $twoFactorLimiterMiddleware ? 'throttle:'.$twoFactorLimiterMiddleware : null,
             ]));
 
         $twoFactorMiddleware = Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword')
