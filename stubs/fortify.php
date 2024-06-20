@@ -119,6 +119,7 @@ return [
         'login-middleware' => 10, 
         'two-factor' => 5,
         'two-factor-middleware' => 10,
+        'decay-seconds' => 60,
     ],
 
     /*

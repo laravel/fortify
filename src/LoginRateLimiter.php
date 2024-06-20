@@ -56,7 +56,7 @@ class LoginRateLimiter
      */
     public function increment(Request $request)
     {
-        $this->limiter->hit($this->throttleKey($request), 60);
+        $this->limiter->hit($this->throttleKey($request), config('fortify.limiters.decay-seconds', 60));
     }
 
     /**
