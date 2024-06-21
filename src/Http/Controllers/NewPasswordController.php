@@ -110,7 +110,7 @@ class NewPasswordController extends Controller
      * @param  string  $status
      * @return mixed
      */
-    protected function sendResetResponse(Request $request, $status)
+    protected function sendResetResponse(Request $request, string $status)
     {
         return app(PasswordResetResponse::class, ['status' => $status])
     }
@@ -122,7 +122,7 @@ class NewPasswordController extends Controller
      * @param  string  $status
      * @return mixed
      */
-    protected function sendResetFailedResponse(Request $request, $status)
+    protected function sendResetFailedResponse(Request $request, string $status)
     {
         return app(FailedPasswordResetResponse::class, ['status' => $status]);
     }
