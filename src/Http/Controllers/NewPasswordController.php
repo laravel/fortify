@@ -2,8 +2,6 @@
 
 namespace Laravel\Fortify\Http\Controllers;
 
-use Closure;
-use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Contracts\Support\Responsable;
