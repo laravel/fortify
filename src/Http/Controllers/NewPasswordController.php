@@ -66,18 +66,13 @@ class NewPasswordController extends Controller
         $status = $this->broker()->reset(
             $request->only(Fortify::email(), 'password', 'password_confirmation', 'token'),
             function ($user) use ($request) {
-                app(ResetsUserPasswords::class)->reset($user, $request->all());
+                $this->handleUserPasswordReset($request, $user);
 
                 app(CompletePasswordReset::class)($this->guard, $user);
             }
         );
 
-        // If the password was successfully reset, we will redirect the user back to
-        // the application's home authenticated view. If there is an error we can
-        // redirect them back to where they came from with their error message.
-        return $status == Password::PASSWORD_RESET
-                    ? app(PasswordResetResponse::class, ['status' => $status])
-                    : app(FailedPasswordResetResponse::class, ['status' => $status]);
+        return $this->handlePasswordResetResponse($request, $status);
     }
 
     /**
@@ -88,5 +83,34 @@ class NewPasswordController extends Controller
     protected function broker(): PasswordBroker
     {
         return Password::broker(config('fortify.passwords'));
+    }
+
+    /**
+     * Handle resetting the user's password.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
+     * @return void
+     */
+    protected function handleUserPasswordReset(Request $request, $user): void
+    {
+        app(ResetsUserPasswords::class)->reset($user, $request->all());
+    }
+
+    /**
+     * Handle resetting the user's password response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $status
+     * @return mixed
+     */
+    protected function handlePasswordResetResponse(Request $request, string $status)
+    {
+        // If the password was successfully reset, we will redirect the user back to
+        // the application's home authenticated view. If there is an error we can
+        // redirect them back to where they came from with their error message.
+        return $status == Password::PASSWORD_RESET
+                    ? app(PasswordResetResponse::class, ['status' => $status])
+                    : app(FailedPasswordResetResponse::class, ['status' => $status]);
     }
 }
