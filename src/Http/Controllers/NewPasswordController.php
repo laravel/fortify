@@ -111,7 +111,7 @@ class NewPasswordController extends Controller
      */
     protected function sendResetResponse(Request $request, string $status)
     {
-        return app(PasswordResetResponse::class, ['status' => $status])
+        return app(PasswordResetResponse::class, ['status' => $status]);
     }
 
     /**
