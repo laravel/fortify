@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify\Http\Controllers;
 
+use Closure;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Contracts\Support\Responsable;
@@ -65,11 +66,7 @@ class NewPasswordController extends Controller
         // database. Otherwise we will parse the error and return the response.
         $status = $this->broker()->reset(
             $request->only(Fortify::email(), 'password', 'password_confirmation', 'token'),
-            function ($user) use ($request) {
-                $this->handleUserPasswordReset($request, $user);
-
-                app(CompletePasswordReset::class)($this->guard, $user);
-            }
+            $this->handleUserPasswordResetResolver($request)
         );
 
         return $this->handlePasswordResetResponse($request, $status);
@@ -89,12 +86,15 @@ class NewPasswordController extends Controller
      * Handle resetting the user's password.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
-     * @return void
+     * @return \Closure
      */
-    protected function handleUserPasswordReset(Request $request, $user): void
+    protected function handleUserPasswordResetResolver(Request $request): Closure
     {
-        app(ResetsUserPasswords::class)->reset($user, $request->all());
+        return function ($user) use ($request) {
+            app(ResetsUserPasswords::class)->reset($user, $request->all());
+
+            app(CompletePasswordReset::class)($this->guard, $user);
+        };
     }
 
     /**
