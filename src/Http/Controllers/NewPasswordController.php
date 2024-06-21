@@ -2,8 +2,6 @@
 
 namespace Laravel\Fortify\Http\Controllers;
 
-use Closure;
-use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Contracts\Support\Responsable;
@@ -91,7 +89,7 @@ class NewPasswordController extends Controller
      * Handle resetting the user's password.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Auth\Passwords\CanResetPassword  $user
+     * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
      * @return void
      */
     protected function handleUserPasswordReset(Request $request, $user): void
