@@ -102,7 +102,6 @@ class NewPasswordController extends Controller
         app(ResetsUserPasswords::class)->reset($user, $request->all());
     }
 
-
     /**
      * Get the response for a successful password reset.
      *
