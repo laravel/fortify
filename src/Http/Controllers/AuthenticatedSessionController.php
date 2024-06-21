@@ -58,7 +58,7 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request)
     {
         return $this->loginPipeline($request)->then(function ($request) {
-            return $this->handleLoginResponse($request);
+            return $this->sendLoginResponse($request);
         });
     }
 
@@ -110,12 +110,12 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle login response.
+     * Send the response after the user was authenticated.
      *
      * @param  \Laravel\Fortify\Http\Requests\LoginRequest  $request
      * @return mixed
      */
-    protected function handleLoginResponse(LoginRequest $request)
+    protected function sendLoginResponse(LoginRequest $request)
     {
         return app(LoginResponse::class);
     }
