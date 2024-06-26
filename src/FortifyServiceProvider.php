@@ -137,6 +137,11 @@ class FortifyServiceProvider extends ServiceProvider
                 __DIR__.'/../stubs/UpdateUserPassword.php' => app_path('Actions/Fortify/UpdateUserPassword.php'),
             ], 'fortify-support');
 
+            $this->publishes([
+                __DIR__.'/../routes/routes.php' => base_path('routes/fortify.php'),
+            ], 'fortify-routes');
+
+
             $method = method_exists($this, 'publishesMigrations') ? 'publishesMigrations' : 'publishes';
 
             $this->{$method}([
