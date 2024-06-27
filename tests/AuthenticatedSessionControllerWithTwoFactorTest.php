@@ -2,10 +2,11 @@
 
 namespace Laravel\Fortify\Tests;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
+use Laravel\Fortify\Features;
 use Laravel\Fortify\Tests\Models\UserWithTwoFactor;
 use Orchestra\Testbench\Attributes\DefineEnvironment;
 use Orchestra\Testbench\Attributes\WithConfig;
@@ -17,7 +18,7 @@ use PragmaRX\Google2FA\Google2FA;
 #[WithConfig('auth.providers.users.model', UserWithTwoFactor::class)]
 class AuthenticatedSessionControllerWithTwoFactorTest extends OrchestraTestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     public function test_user_is_redirected_to_challenge_when_using_two_factor_authentication()
     {
@@ -144,10 +145,10 @@ class AuthenticatedSessionControllerWithTwoFactorTest extends OrchestraTestCase
             ->assertSessionHas('login.remember', false);
     }
 
-    #[WithConfig('fortify-options.two-factor-authentication.window', 0)]
     public function test_two_factor_challenge_fails_for_old_otp_and_zero_window()
     {
         // Setting window to 0 should mean any old OTP is instantly invalid
+        Features::twoFactorAuthentication(['window' => 0]);
 
         $tfaEngine = app(Google2FA::class);
         $userSecret = $tfaEngine->generateSecretKey();
