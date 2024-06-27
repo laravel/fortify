@@ -87,6 +87,6 @@ class NewPasswordController extends Controller
      */
     protected function broker(): PasswordBroker
     {
-        return Password::broker(config('fortify.passwords'));
+        return app(PasswordBroker::class);
     }
 }

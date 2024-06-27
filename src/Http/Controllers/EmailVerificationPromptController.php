@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Laravel\Fortify\Contracts\VerifyEmailViewResponse;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Http\Responses\RedirectAsIntended;
 
 class EmailVerificationPromptController extends Controller
 {
@@ -18,7 +19,7 @@ class EmailVerificationPromptController extends Controller
     public function __invoke(Request $request)
     {
         return $request->user()->hasVerifiedEmail()
-                    ? redirect()->intended(Fortify::redirects('email-verification'))
+                    ? app(RedirectAsIntended::class, ['name' => 'email-verification'])
                     : app(VerifyEmailViewResponse::class);
     }
 }
