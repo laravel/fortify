@@ -2,13 +2,12 @@
 
 namespace Laravel\Fortify\Tests;
 
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Laravel\Fortify\Events\TwoFactorAuthenticationConfirmed;
 use Laravel\Fortify\Events\TwoFactorAuthenticationDisabled;
 use Laravel\Fortify\Events\TwoFactorAuthenticationEnabled;
-use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Fortify\Tests\Models\UserWithTwoFactor;
 use Orchestra\Testbench\Attributes\DefineEnvironment;
 use Orchestra\Testbench\Attributes\ResetRefreshDatabaseState;
 use Orchestra\Testbench\Attributes\WithMigration;
@@ -23,7 +22,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
     {
         Event::fake();
 
-        $user = TestTwoFactorAuthenticationUser::forceCreate([
+        $user = UserWithTwoFactor::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
@@ -51,7 +50,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
     {
         Event::fake();
 
-        $user = TestTwoFactorAuthenticationUser::forceCreate([
+        $user = UserWithTwoFactor::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
@@ -88,7 +87,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
     {
         Event::fake();
 
-        $user = TestTwoFactorAuthenticationUser::forceCreate([
+        $user = UserWithTwoFactor::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
@@ -132,7 +131,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
     {
         Event::fake();
 
-        $user = TestTwoFactorAuthenticationUser::forceCreate([
+        $user = UserWithTwoFactor::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
@@ -158,7 +157,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
         $userSecret = $tfaEngine->generateSecretKey();
         $validOtp = $tfaEngine->getCurrentOtp($userSecret);
 
-        $user = TestTwoFactorAuthenticationUser::forceCreate([
+        $user = UserWithTwoFactor::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
@@ -194,7 +193,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
         $tfaEngine = app(Google2FA::class);
         $userSecret = $tfaEngine->generateSecretKey();
 
-        $user = TestTwoFactorAuthenticationUser::forceCreate([
+        $user = UserWithTwoFactor::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
@@ -219,7 +218,7 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
     {
         Event::fake();
 
-        $user = TestTwoFactorAuthenticationUser::forceCreate([
+        $user = UserWithTwoFactor::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
@@ -240,11 +239,4 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
         $this->assertNull($user->two_factor_secret);
         $this->assertNull($user->two_factor_recovery_codes);
     }
-}
-
-class TestTwoFactorAuthenticationUser extends User
-{
-    use TwoFactorAuthenticatable;
-
-    protected $table = 'users';
 }

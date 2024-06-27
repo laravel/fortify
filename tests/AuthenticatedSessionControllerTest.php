@@ -10,15 +10,10 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Schema;
 use Laravel\Fortify\Contracts\LoginViewResponse;
-use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
-use Laravel\Fortify\Features;
 use Laravel\Fortify\LoginRateLimiter;
-use Laravel\Fortify\TwoFactorAuthenticatable;
 use Mockery;
 use Orchestra\Testbench\Attributes\WithMigration;
-use PragmaRX\Google2FA\Google2FA;
 
 #[WithMigration]
 class AuthenticatedSessionControllerTest extends OrchestraTestCase
@@ -39,113 +34,10 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
     public function test_user_can_authenticate()
     {
-        TestAuthenticationSessionUser::forceCreate([
+        User::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
-        ]);
-
-        $response = $this->withoutExceptionHandling()->post('/login', [
-            'email' => 'taylor@laravel.com',
-            'password' => 'secret',
-        ]);
-
-        $response->assertRedirect('/home');
-    }
-
-    public function test_user_is_redirected_to_challenge_when_using_two_factor_authentication()
-    {
-        Event::fake();
-
-        app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
-
-        TestTwoFactorAuthenticationSessionUser::forceCreate([
-            'name' => 'Taylor Otwell',
-            'email' => 'taylor@laravel.com',
-            'password' => bcrypt('secret'),
-            'two_factor_secret' => 'test-secret',
-        ]);
-
-        $response = $this->withoutExceptionHandling()->post('/login', [
-            'email' => 'taylor@laravel.com',
-            'password' => 'secret',
-        ]);
-
-        $response->assertRedirect('/two-factor-challenge');
-
-        Event::assertDispatched(TwoFactorAuthenticationChallenged::class);
-    }
-
-    public function test_user_is_not_redirected_to_challenge_when_using_two_factor_authentication_that_has_not_been_confirmed_and_confirmation_is_enabled()
-    {
-        Event::fake();
-
-        app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
-        app('config')->set('fortify.features', [
-            Features::registration(),
-            Features::twoFactorAuthentication(['confirm' => true]),
-        ]);
-
-        TestTwoFactorAuthenticationSessionUser::forceCreate([
-            'name' => 'Taylor Otwell',
-            'email' => 'taylor@laravel.com',
-            'password' => bcrypt('secret'),
-            'two_factor_secret' => 'test-secret',
-        ]);
-
-        $response = $this->withoutExceptionHandling()->post('/login', [
-            'email' => 'taylor@laravel.com',
-            'password' => 'secret',
-        ]);
-
-        $response->assertRedirect('/home');
-    }
-
-    public function test_user_is_redirected_to_challenge_when_using_two_factor_authentication_that_has_been_confirmed_and_confirmation_is_enabled()
-    {
-        Event::fake();
-
-        app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
-        app('config')->set('fortify.features', [
-            Features::registration(),
-            Features::twoFactorAuthentication(['confirm' => true]),
-        ]);
-
-        Schema::table('users', function ($table) {
-            $table->timestamp('two_factor_confirmed_at')->nullable();
-        });
-
-        TestTwoFactorAuthenticationSessionUser::forceCreate([
-            'name' => 'Taylor Otwell',
-            'email' => 'taylor@laravel.com',
-            'password' => bcrypt('secret'),
-            'two_factor_secret' => 'test-secret',
-            'two_factor_confirmed_at' => now(),
-        ]);
-
-        $response = $this->withoutExceptionHandling()->post('/login', [
-            'email' => 'taylor@laravel.com',
-            'password' => 'secret',
-        ]);
-
-        $response->assertRedirect('/two-factor-challenge');
-    }
-
-    public function test_user_can_authenticate_when_two_factor_challenge_is_disabled()
-    {
-        app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
-
-        $features = app('config')->get('fortify.features');
-
-        unset($features[array_search(Features::twoFactorAuthentication(), $features)]);
-
-        app('config')->set('fortify.features', $features);
-
-        TestTwoFactorAuthenticationSessionUser::forceCreate([
-            'name' => 'Taylor Otwell',
-            'email' => 'taylor@laravel.com',
-            'password' => bcrypt('secret'),
-            'two_factor_secret' => 'test-secret',
         ]);
 
         $response = $this->withoutExceptionHandling()->post('/login', [
@@ -158,7 +50,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
     public function test_validation_exception_returned_on_failure()
     {
-        TestAuthenticationSessionUser::forceCreate([
+        User::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
@@ -247,151 +139,11 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $this->assertNull(Auth::guard()->getUser());
     }
 
-    public function test_two_factor_challenge_can_be_passed_via_code()
-    {
-        app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
-
-        $tfaEngine = app(Google2FA::class);
-        $userSecret = $tfaEngine->generateSecretKey();
-        $validOtp = $tfaEngine->getCurrentOtp($userSecret);
-
-        $user = TestTwoFactorAuthenticationSessionUser::forceCreate([
-            'name' => 'Taylor Otwell',
-            'email' => 'taylor@laravel.com',
-            'password' => bcrypt('secret'),
-            'two_factor_secret' => encrypt($userSecret),
-        ]);
-
-        $response = $this->withSession([
-            'login.id' => $user->id,
-            'login.remember' => false,
-        ])->withoutExceptionHandling()->post('/two-factor-challenge', [
-            'code' => $validOtp,
-        ]);
-
-        $response->assertRedirect('/home')
-            ->assertSessionMissing('login.id');
-    }
-
-    public function test_two_factor_authentication_preserves_remember_me_selection(): void
-    {
-        Event::fake();
-
-        app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
-
-        TestTwoFactorAuthenticationSessionUser::forceCreate([
-            'name' => 'Taylor Otwell',
-            'email' => 'taylor@laravel.com',
-            'password' => bcrypt('secret'),
-            'two_factor_secret' => 'test-secret',
-        ]);
-
-        $response = $this->withoutExceptionHandling()->post('/login', [
-            'email' => 'taylor@laravel.com',
-            'password' => 'secret',
-            'remember' => false,
-        ]);
-
-        $response->assertRedirect('/two-factor-challenge')
-            ->assertSessionHas('login.remember', false);
-    }
-
-    public function test_two_factor_challenge_fails_for_old_otp_and_zero_window()
-    {
-        app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
-
-        //Setting window to 0 should mean any old OTP is instantly invalid
-        app('config')->set('fortify.features', [
-            Features::twoFactorAuthentication(['window' => 0]),
-        ]);
-
-        $tfaEngine = app(Google2FA::class);
-        $userSecret = $tfaEngine->generateSecretKey();
-        $currentTs = $tfaEngine->getTimestamp();
-        $previousOtp = $tfaEngine->oathTotp($userSecret, $currentTs - 1);
-
-        $user = TestTwoFactorAuthenticationSessionUser::forceCreate([
-            'name' => 'Taylor Otwell',
-            'email' => 'taylor@laravel.com',
-            'password' => bcrypt('secret'),
-            'two_factor_secret' => encrypt($userSecret),
-        ]);
-
-        $response = $this->withSession([
-            'login.id' => $user->id,
-            'login.remember' => false,
-        ])->withoutExceptionHandling()->post('/two-factor-challenge', [
-            'code' => $previousOtp,
-        ]);
-
-        $response->assertRedirect('/two-factor-challenge')
-                 ->assertSessionHas('login.id')
-                 ->assertSessionHasErrors(['code']);
-    }
-
-    public function test_two_factor_challenge_can_be_passed_via_recovery_code()
-    {
-        app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
-
-        $user = TestTwoFactorAuthenticationSessionUser::forceCreate([
-            'name' => 'Taylor Otwell',
-            'email' => 'taylor@laravel.com',
-            'password' => bcrypt('secret'),
-            'two_factor_recovery_codes' => encrypt(json_encode(['invalid-code', 'valid-code'])),
-        ]);
-
-        $response = $this->withSession([
-            'login.id' => $user->id,
-            'login.remember' => false,
-        ])->withoutExceptionHandling()->post('/two-factor-challenge', [
-            'recovery_code' => 'valid-code',
-        ]);
-
-        $response->assertRedirect('/home')
-            ->assertSessionMissing('login.id');
-        $this->assertNotNull(Auth::getUser());
-        $this->assertNotContains('valid-code', json_decode(decrypt($user->fresh()->two_factor_recovery_codes), true));
-    }
-
-    public function test_two_factor_challenge_can_fail_via_recovery_code()
-    {
-        app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
-
-        $user = TestTwoFactorAuthenticationSessionUser::forceCreate([
-            'name' => 'Taylor Otwell',
-            'email' => 'taylor@laravel.com',
-            'password' => bcrypt('secret'),
-            'two_factor_recovery_codes' => encrypt(json_encode(['invalid-code', 'valid-code'])),
-        ]);
-
-        $response = $this->withSession([
-            'login.id' => $user->id,
-            'login.remember' => false,
-        ])->withoutExceptionHandling()->post('/two-factor-challenge', [
-            'recovery_code' => 'missing-code',
-        ]);
-
-        $response->assertRedirect('/two-factor-challenge')
-            ->assertSessionHas('login.id')
-            ->assertSessionHasErrors(['recovery_code']);
-        $this->assertNull(Auth::getUser());
-    }
-
-    public function test_two_factor_challenge_requires_a_challenged_user()
-    {
-        app('config')->set('auth.providers.users.model', TestTwoFactorAuthenticationSessionUser::class);
-
-        $response = $this->withSession([])->withoutExceptionHandling()->get('/two-factor-challenge');
-
-        $response->assertRedirect('/login');
-        $this->assertNull(Auth::getUser());
-    }
-
     public function test_case_insensitive_usernames_can_be_used()
     {
         app('config')->set('fortify.lowercase_usernames', true);
 
-        TestAuthenticationSessionUser::forceCreate([
+        User::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
@@ -407,7 +159,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
     public function test_users_can_logout(): void
     {
-        $user = TestAuthenticationSessionUser::forceCreate([
+        $user = User::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
@@ -431,25 +183,4 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $this->assertGuest();
         Event::assertNotDispatched(Logout::class);
     }
-
-    protected function defineEnvironment($app)
-    {
-        parent::defineEnvironment($app);
-
-        $app['config']->set([
-            'auth.providers.users.model' => TestAuthenticationSessionUser::class,
-        ]);
-    }
-}
-
-class TestAuthenticationSessionUser extends User
-{
-    protected $table = 'users';
-}
-
-class TestTwoFactorAuthenticationSessionUser extends User
-{
-    use TwoFactorAuthenticatable;
-
-    protected $table = 'users';
 }
