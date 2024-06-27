@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Event;
 use Laravel\Fortify\Contracts\LoginViewResponse;
 use Laravel\Fortify\LoginRateLimiter;
 use Mockery;
-use Orchestra\Testbench\Attributes\WithConfig;
 use Orchestra\Testbench\Attributes\WithMigration;
 
 #[WithMigration]
