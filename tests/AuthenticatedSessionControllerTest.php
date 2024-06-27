@@ -5,19 +5,18 @@ namespace Laravel\Fortify\Tests;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Laravel\Fortify\Contracts\LoginViewResponse;
 use Laravel\Fortify\LoginRateLimiter;
-use Laravel\Fortify\Tests\Models\User;
 use Mockery;
 use Orchestra\Testbench\Attributes\WithConfig;
 use Orchestra\Testbench\Attributes\WithMigration;
 
 #[WithMigration]
-#[WithConfig('auth.providers.users.model', User::class)]
 class AuthenticatedSessionControllerTest extends OrchestraTestCase
 {
     use DatabaseMigrations;
