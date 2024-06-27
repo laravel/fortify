@@ -7,10 +7,14 @@ use Orchestra\Testbench\Attributes\WithConfig;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase;
 
-#[WithConfig('database.default', 'testing')]
 abstract class OrchestraTestCase extends TestCase
 {
     use WithWorkbench;
+
+    protected function defineEnvironment($app)
+    {
+        $app['config']->set('database.default', 'testing');
+    }
 
     protected function withTwoFactorAuthentication($app)
     {
