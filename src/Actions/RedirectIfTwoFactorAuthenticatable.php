@@ -123,7 +123,7 @@ class RedirectIfTwoFactorAuthenticatable
      */
     protected function fireFailedEvent($request, $user = null)
     {
-        event(new Failed(config('fortify.guard'), $user, [
+        event(new Failed($this->guard?->name ?? config('fortify.guard'), $user, [
             Fortify::username() => $request->{Fortify::username()},
             'password' => $request->password,
         ]));
