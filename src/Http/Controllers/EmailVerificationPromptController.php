@@ -5,7 +5,6 @@ namespace Laravel\Fortify\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Laravel\Fortify\Contracts\VerifyEmailViewResponse;
-use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Http\Responses\RedirectAsIntended;
 
 class EmailVerificationPromptController extends Controller

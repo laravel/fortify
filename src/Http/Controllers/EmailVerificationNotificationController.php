@@ -6,7 +6,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Laravel\Fortify\Contracts\EmailVerificationNotificationSentResponse;
-use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Http\Responses\RedirectAsIntended;
 
 class EmailVerificationNotificationController extends Controller
