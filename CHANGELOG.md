@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.21.3...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.21.4...1.x)
+
+## [v1.21.4](https://github.com/laravel/fortify/compare/v1.21.3...v1.21.4) - 2024-06-27
+
+* [1.x] Use available `$name` property from `SessionGuard` if the value exists by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/fortify/pull/553
 
 ## [v1.21.3](https://github.com/laravel/fortify/compare/v1.21.2...v1.21.3) - 2024-05-08
 
