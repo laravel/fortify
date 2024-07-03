@@ -2,11 +2,9 @@
 
 namespace Laravel\Fortify;
 
-use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Contracts\EmailVerificationNotificationSentResponse as EmailVerificationNotificationSentResponseContract;
@@ -74,10 +72,6 @@ class FortifyServiceProvider extends ServiceProvider
 
         $this->app->bind(StatefulGuard::class, function () {
             return Auth::guard(config('fortify.guard', null));
-        });
-
-        $this->app->bind(PasswordBroker::class, function () {
-            return Password::broker(config('fortify.passwords'));
         });
     }
 

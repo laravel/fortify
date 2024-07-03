@@ -54,6 +54,6 @@ class PasswordResetLinkController extends Controller
      */
     protected function broker(): PasswordBroker
     {
-        return app(PasswordBroker::class);
+        return Password::broker(config('fortify.passwords'));
     }
 }
