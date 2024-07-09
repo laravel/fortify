@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.21.4...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.21.5...1.x)
+
+## [v1.21.5](https://github.com/laravel/fortify/compare/v1.21.4...v1.21.5) - 2024-07-04
+
+* [1.x] Allow `redirect()->intended()` responses to be resolved via the Container by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/fortify/pull/551
 
 ## [v1.21.4](https://github.com/laravel/fortify/compare/v1.21.3...v1.21.4) - 2024-06-27
 
