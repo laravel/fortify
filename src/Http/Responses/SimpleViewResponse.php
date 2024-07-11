@@ -9,6 +9,7 @@ use Laravel\Fortify\Contracts\RegisterViewResponse;
 use Laravel\Fortify\Contracts\RequestPasswordResetLinkViewResponse;
 use Laravel\Fortify\Contracts\ResetPasswordViewResponse;
 use Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse;
+use Laravel\Fortify\Contracts\TwoFactorSetupEnforcedViewResponse;
 use Laravel\Fortify\Contracts\VerifyEmailViewResponse;
 
 class SimpleViewResponse implements
@@ -17,6 +18,7 @@ class SimpleViewResponse implements
     RegisterViewResponse,
     RequestPasswordResetLinkViewResponse,
     TwoFactorChallengeViewResponse,
+    TwoFactorSetupEnforcedViewResponse,
     VerifyEmailViewResponse,
     ConfirmPasswordViewResponse
 {

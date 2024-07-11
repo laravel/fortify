@@ -10,6 +10,7 @@ use Laravel\Fortify\Contracts\RequestPasswordResetLinkViewResponse;
 use Laravel\Fortify\Contracts\ResetPasswordViewResponse;
 use Laravel\Fortify\Contracts\ResetsUserPasswords;
 use Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse;
+use Laravel\Fortify\Contracts\TwoFactorSetupEnforcedViewResponse;
 use Laravel\Fortify\Contracts\UpdatesUserPasswords;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use Laravel\Fortify\Contracts\VerifyEmailViewResponse;
@@ -105,6 +106,7 @@ class Fortify
     {
         static::loginView($prefix.'login');
         static::twoFactorChallengeView($prefix.'two-factor-challenge');
+        static::twoFactorSetupEnforcedView($prefix.'two-factor-setup');
         static::registerView($prefix.'register');
         static::requestPasswordResetLinkView($prefix.'forgot-password');
         static::resetPasswordView($prefix.'reset-password');
@@ -134,6 +136,20 @@ class Fortify
     public static function twoFactorChallengeView($view)
     {
         app()->singleton(TwoFactorChallengeViewResponse::class, function () use ($view) {
+            return new SimpleViewResponse($view);
+        });
+    }
+
+    /**
+     * Specify which view should be used as the two factor authentication setup page when
+     * a user logs in with two factor authentication enforced.
+     *
+     * @param  callable|string  $view
+     * @return void
+     */
+    public static function twoFactorSetupEnforcedView($view)
+    {
+        app()->singleton(TwoFactorSetupEnforcedViewResponse::class, function () use ($view) {
             return new SimpleViewResponse($view);
         });
     }
