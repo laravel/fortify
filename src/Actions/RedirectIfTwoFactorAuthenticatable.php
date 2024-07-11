@@ -6,6 +6,8 @@ use Illuminate\Auth\Events\Failed;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
+use Laravel\Fortify\Events\TwoFactorAuthenticationRequired;
+use Laravel\Fortify\Events\TwoFactorAuthenticationSetupRequired;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\LoginRateLimiter;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -49,6 +51,13 @@ class RedirectIfTwoFactorAuthenticatable
     public function handle($request, $next)
     {
         $user = $this->validateCredentials($request);
+
+        if (in_array(TwoFactorAuthenticatable::class, class_uses_recursive($user)) &&
+            ! $user->hasEnabledTwoFactorAuthentication() &&
+            $user->twoFactorAuthenticationEnforced()
+        ) {
+            return $this->twoFactorSetupResponse($request, $user);
+        }
 
         if (Fortify::confirmsTwoFactorAuthentication()) {
             if (optional($user)->two_factor_secret &&
@@ -148,5 +157,36 @@ class RedirectIfTwoFactorAuthenticatable
         return $request->wantsJson()
                     ? response()->json(['two_factor' => true])
                     : redirect()->route('two-factor.login');
+    }
+
+    /**
+     * Get the two factor setup response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function twoFactorSetupResponse($request, $user)
+    {
+        $request->session()->put([
+            'login.id' => $user->getKey(),
+            'login.remember' => $request->boolean('remember'),
+        ]);
+
+        app(EnableTwoFactorAuthentication::class)($user, force: true);
+
+        TwoFactorAuthenticationSetupRequired::dispatch($user);
+
+        return $request->wantsJson()
+                    ? response()->json([
+                        'two_factor_setup_required' => true,
+                        'setup_info' => [
+                            'code' => decrypt($user->two_factor_secret),
+                            'url' => $user->twoFactorQrCodeUrl(),
+                            'qr_svg' => $user->twoFactorQrCodeSvg(),
+                            'recovery_codes' => $user->recoveryCodes(),
+                        ],
+                    ])
+                    : redirect()->route('two-factor.setup');
     }
 }
