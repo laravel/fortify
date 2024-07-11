@@ -13,6 +13,16 @@ use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
 trait TwoFactorAuthenticatable
 {
     /**
+     * Determine if two-factor authentication should be enforced for the user.
+     *
+     * @return bool
+     */
+    public function twoFactorAuthenticationEnforced()
+    {
+        return config('fortify.enforce_two_factor_auth');
+    }
+
+    /**
      * Determine if two-factor authentication has been enabled.
      *
      * @return bool
