@@ -4,7 +4,6 @@ namespace Laravel\Fortify\Http\Controllers;
 
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Actions\ConfirmTwoFactorAuthentication;

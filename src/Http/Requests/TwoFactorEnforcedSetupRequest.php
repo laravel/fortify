@@ -6,7 +6,6 @@ use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Laravel\Fortify\Contracts\FailedTwoFactorLoginResponse;
-use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
 
 class TwoFactorEnforcedSetupRequest extends FormRequest
 {

@@ -17,7 +17,7 @@ class FailedTwoFactorConfirmResponse implements FailedTwoFactorLoginResponseCont
     {
         [$key, $message] = [
             'code',
-            __('The provided two factor authentication code was invalid.')
+            __('The provided two factor authentication code was invalid.'),
         ];
 
         if ($request->wantsJson()) {
