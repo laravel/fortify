@@ -53,7 +53,7 @@ class TwoFactorEnforcedSetupRequest extends FormRequest
      */
     public function hasSetupUser()
     {
-        if ($this->user) {
+        if ($this->setupUser) {
             return true;
         }
 
