@@ -4,11 +4,18 @@ namespace Laravel\Fortify\Http\Controllers;
 
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Validation\ValidationException;
+use Laravel\Fortify\Actions\ConfirmTwoFactorAuthentication;
+use Laravel\Fortify\Contracts\FailedTwoFactorConfirmResponse;
 use Laravel\Fortify\Contracts\FailedTwoFactorLoginResponse;
 use Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse;
 use Laravel\Fortify\Contracts\TwoFactorLoginResponse;
+use Laravel\Fortify\Contracts\TwoFactorSetupEnforcedViewResponse;
 use Laravel\Fortify\Events\RecoveryCodeReplaced;
+use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Http\Requests\TwoFactorEnforcedSetupRequest;
 use Laravel\Fortify\Http\Requests\TwoFactorLoginRequest;
 
 class TwoFactorAuthenticatedSessionController extends Controller
@@ -44,6 +51,45 @@ class TwoFactorAuthenticatedSessionController extends Controller
         }
 
         return app(TwoFactorChallengeViewResponse::class);
+    }
+
+    /**
+     * Show the two factor authentication setup view.
+     *
+     * @param  \Laravel\Fortify\Http\Requests\TwoFactorEnforcedSetupRequest  $request
+     * @return \Laravel\Fortify\Contracts\TwoFactorSetupEnforcedViewResponse
+     */
+    public function setup(TwoFactorEnforcedSetupRequest $request)
+    {
+        return app(TwoFactorSetupEnforcedViewResponse::class)->toResponse($request);
+    }
+
+    /**
+     * Complete the two factor authentication setup process.
+     *
+     * @param  \Laravel\Fortify\Http\Requests\TwoFactorEnforcedSetupRequest  $request
+     * @return \Laravel\Fortify\Contracts\TwoFactorLoginResponse
+     */
+    public function completeSetup(TwoFactorEnforcedSetupRequest $request)
+    {
+        $user = $request->setupUser();
+
+        if (Fortify::confirmsTwoFactorAuthentication()) {
+            try {
+                app(ConfirmTwoFactorAuthentication::class)($user, $request->code);
+            } catch (ValidationException $e) {
+                return app(FailedTwoFactorConfirmResponse::class)->toResponse($request, [
+                    'errors' => $e->errorBag('confirmTwoFactorAuthentication'),
+                ]);
+            }
+        }
+
+        $this->guard->login($user, $request->remember());
+
+        $request->session()->forget('login.id');
+        $request->session()->regenerate();
+
+        return app(TwoFactorLoginResponse::class);
     }
 
     /**
