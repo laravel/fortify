@@ -39,4 +39,14 @@ abstract class OrchestraTestCase extends TestCase
             $config->set('fortify.features', $features);
         });
     }
+
+    protected function withConfirmedEnforcedTwoFactorAuthentication($app)
+    {
+        $app['config']->set('fortify.features', [
+            Features::twoFactorAuthentication([
+                'confirm' => true,
+                'enforced' => true,
+            ]),
+        ]);
+    }
 }

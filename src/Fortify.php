@@ -308,6 +308,17 @@ class Fortify
     }
 
     /**
+     * Determine if Fortify is enforcing two factor authentication.
+     *
+     * @return bool
+     */
+    public static function enforcesTwoFactorAuthentication()
+    {
+        return Features::enabled(Features::twoFactorAuthentication()) &&
+               Features::optionEnabled(Features::twoFactorAuthentication(), 'enforced');
+    }
+
+    /**
      * Determine if Fortify is confirming two factor authentication configurations.
      *
      * @return bool

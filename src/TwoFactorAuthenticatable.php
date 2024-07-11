@@ -19,7 +19,7 @@ trait TwoFactorAuthenticatable
      */
     public function twoFactorAuthenticationEnforced()
     {
-        return config('fortify.enforce_two_factor_auth');
+        return Fortify::enforcesTwoFactorAuthentication();
     }
 
     /**

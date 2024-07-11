@@ -17,7 +17,6 @@ return [
     'limiters' => [
         'login' => null,
     ],
-    'enforce_two_factor_auth' => false,
     'paths' => [
         'login' => null,
         'logout' => null,

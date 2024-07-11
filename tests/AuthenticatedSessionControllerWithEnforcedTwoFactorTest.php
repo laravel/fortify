@@ -13,13 +13,12 @@ use Orchestra\Testbench\Attributes\WithMigration;
 use PragmaRX\Google2FA\Google2FA;
 
 #[WithMigration]
-#[DefineEnvironment('withTwoFactorAuthentication')]
 #[WithConfig('auth.providers.users.model', UserWithTwoFactor::class)]
-#[WithConfig('fortify.enforce_two_factor_auth', true)]
 class AuthenticatedSessionControllerWithEnforcedTwoFactorTest extends OrchestraTestCase
 {
     use RefreshDatabase;
 
+    #[DefineEnvironment('withConfirmedEnforcedTwoFactorAuthentication')]
     public function test_user_is_redirected_to_setup_page_when_two_factor_is_enforced()
     {
         Event::fake();
@@ -40,6 +39,7 @@ class AuthenticatedSessionControllerWithEnforcedTwoFactorTest extends OrchestraT
         Event::assertDispatched(TwoFactorAuthenticationSetupRequired::class);
     }
 
+    #[DefineEnvironment('withConfirmedEnforcedTwoFactorAuthentication')]
     public function test_json_response_contains_data_required_for_setting_up_two_factor_when_enforced()
     {
         Event::fake();
@@ -68,6 +68,7 @@ class AuthenticatedSessionControllerWithEnforcedTwoFactorTest extends OrchestraT
         ]);
     }
 
+    #[DefineEnvironment('withConfirmedEnforcedTwoFactorAuthentication')]
     public function test_user_is_redirected_to_challenge_when_two_factor_is_already_setup()
     {
         Event::fake();
@@ -77,6 +78,7 @@ class AuthenticatedSessionControllerWithEnforcedTwoFactorTest extends OrchestraT
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
             'two_factor_secret' => 'test-secret',
+            'two_factor_confirmed_at' => now(),
         ]);
 
         $response = $this->withoutExceptionHandling()->post('/login', [
@@ -89,7 +91,7 @@ class AuthenticatedSessionControllerWithEnforcedTwoFactorTest extends OrchestraT
         $response->assertRedirect('/two-factor-challenge');
     }
 
-    #[DefineEnvironment('withConfirmedTwoFactorAuthentication')]
+    #[DefineEnvironment('withConfirmedEnforcedTwoFactorAuthentication')]
     public function test_two_factor_is_confirmed_when_feature_enabled_after_successful_setup()
     {
         Event::fake();
@@ -120,7 +122,7 @@ class AuthenticatedSessionControllerWithEnforcedTwoFactorTest extends OrchestraT
         $this->assertNotNull($user->two_factor_confirmed_at);
     }
 
-    #[DefineEnvironment('withConfirmedTwoFactorAuthentication')]
+    #[DefineEnvironment('withConfirmedEnforcedTwoFactorAuthentication')]
     public function test_user_is_redirected_to_home_when_two_factor_is_successfully_set_up()
     {
         Event::fake();
@@ -150,7 +152,7 @@ class AuthenticatedSessionControllerWithEnforcedTwoFactorTest extends OrchestraT
             ->assertSessionMissing('login.id');
     }
 
-    #[DefineEnvironment('withConfirmedTwoFactorAuthentication')]
+    #[DefineEnvironment('withConfirmedEnforcedTwoFactorAuthentication')]
     public function test_setup_fails_if_confirm_two_factor_is_enabled_and_code_is_incorrect()
     {
         Event::fake();
