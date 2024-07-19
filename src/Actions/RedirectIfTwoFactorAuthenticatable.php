@@ -94,6 +94,10 @@ class RedirectIfTwoFactorAuthenticatable
 
                 $this->throwFailedAuthenticationException($request);
             }
+
+            if (config('hashing.rehash_on_login', true) && method_exists($this->guard->getProvider(), 'rehashPasswordIfRequired')) {
+                $this->guard->getProvider()->rehashPasswordIfRequired($user, ['password' => $request->password]);
+            }
         });
     }
 
