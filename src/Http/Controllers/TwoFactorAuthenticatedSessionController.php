@@ -63,7 +63,7 @@ class TwoFactorAuthenticatedSessionController extends Controller
             event(new RecoveryCodeReplaced($user, $code));
         } elseif (! $request->hasValidCode()) {
             event(new TwoFactorAuthenticationFailed($user));
-            
+
             return app(FailedTwoFactorLoginResponse::class)->toResponse($request);
         }
 
