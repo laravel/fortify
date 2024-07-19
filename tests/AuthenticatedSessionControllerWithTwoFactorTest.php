@@ -202,6 +202,7 @@ class AuthenticatedSessionControllerWithTwoFactorTest extends OrchestraTestCase
     public function test_two_factor_challenge_fails_for_old_otp_and_zero_window()
     {
         Event::fake();
+        
         // Setting window to 0 should mean any old OTP is instantly invalid
         Features::twoFactorAuthentication(['window' => 0]);
 
