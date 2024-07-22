@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
+use Laravel\Fortify\Events\TwoFactorAuthenticationFailed;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Tests\Models\UserWithTwoFactor;
 use Orchestra\Testbench\Attributes\DefineEnvironment;
@@ -200,6 +201,8 @@ class AuthenticatedSessionControllerWithTwoFactorTest extends OrchestraTestCase
 
     public function test_two_factor_challenge_fails_for_old_otp_and_zero_window()
     {
+        Event::fake();
+
         // Setting window to 0 should mean any old OTP is instantly invalid
         Features::twoFactorAuthentication(['window' => 0]);
 
@@ -221,6 +224,8 @@ class AuthenticatedSessionControllerWithTwoFactorTest extends OrchestraTestCase
         ])->withoutExceptionHandling()->post('/two-factor-challenge', [
             'code' => $previousOtp,
         ]);
+
+        Event::assertDispatched(TwoFactorAuthenticationFailed::class);
 
         $response->assertRedirect('/two-factor-challenge')
                  ->assertSessionHas('login.id')
