@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.21.5...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.22.0...1.x)
+
+## [v1.22.0](https://github.com/laravel/fortify/compare/v1.21.5...v1.22.0) - 2024-07-22
+
+* [1.x] Rehash password if required when user uses two factor by [@gdebrauwer](https://github.com/gdebrauwer) in https://github.com/laravel/fortify/pull/557
+* [1.x] Add TwoFactorAuthenticationFailed event by [@antergos98](https://github.com/antergos98) in https://github.com/laravel/fortify/pull/558
 
 ## [v1.21.5](https://github.com/laravel/fortify/compare/v1.21.4...v1.21.5) - 2024-07-04
 
