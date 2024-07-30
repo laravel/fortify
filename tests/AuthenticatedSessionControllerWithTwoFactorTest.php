@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
 use Laravel\Fortify\Events\TwoFactorAuthenticationFailed;
-use Laravel\Fortify\Events\TwoFactorAuthenticationVerified;
+use Laravel\Fortify\Events\ValidTwoFactorAuthenticationCodeProvided;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Tests\Models\UserWithTwoFactor;
 use Orchestra\Testbench\Attributes\DefineEnvironment;
@@ -177,7 +177,7 @@ class AuthenticatedSessionControllerWithTwoFactorTest extends OrchestraTestCase
             'code' => $validOtp,
         ]);
 
-        Event::assertDispatched(TwoFactorAuthenticationVerified::class);
+        Event::assertDispatched(ValidTwoFactorAuthenticationCodeProvided::class);
 
         $response->assertRedirect('/home')
             ->assertSessionMissing('login.id');
@@ -255,7 +255,7 @@ class AuthenticatedSessionControllerWithTwoFactorTest extends OrchestraTestCase
             'recovery_code' => 'valid-code',
         ]);
 
-        Event::assertDispatched(TwoFactorAuthenticationVerified::class);
+        Event::assertDispatched(ValidTwoFactorAuthenticationCodeProvided::class);
 
         $response->assertRedirect('/home')
             ->assertSessionMissing('login.id');
