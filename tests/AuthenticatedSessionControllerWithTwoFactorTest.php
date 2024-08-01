@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
 use Laravel\Fortify\Events\TwoFactorAuthenticationFailed;
+use Laravel\Fortify\Events\ValidTwoFactorAuthenticationCodeProvided;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Tests\Models\UserWithTwoFactor;
 use Orchestra\Testbench\Attributes\DefineEnvironment;
@@ -156,6 +157,8 @@ class AuthenticatedSessionControllerWithTwoFactorTest extends OrchestraTestCase
 
     public function test_two_factor_challenge_can_be_passed_via_code()
     {
+        Event::fake();
+
         $tfaEngine = app(Google2FA::class);
         $userSecret = $tfaEngine->generateSecretKey();
         $validOtp = $tfaEngine->getCurrentOtp($userSecret);
@@ -173,6 +176,8 @@ class AuthenticatedSessionControllerWithTwoFactorTest extends OrchestraTestCase
         ])->withoutExceptionHandling()->post('/two-factor-challenge', [
             'code' => $validOtp,
         ]);
+
+        Event::assertDispatched(ValidTwoFactorAuthenticationCodeProvided::class);
 
         $response->assertRedirect('/home')
             ->assertSessionMissing('login.id');
@@ -234,6 +239,8 @@ class AuthenticatedSessionControllerWithTwoFactorTest extends OrchestraTestCase
 
     public function test_two_factor_challenge_can_be_passed_via_recovery_code()
     {
+        Event::fake();
+
         $user = UserWithTwoFactor::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
@@ -247,6 +254,8 @@ class AuthenticatedSessionControllerWithTwoFactorTest extends OrchestraTestCase
         ])->withoutExceptionHandling()->post('/two-factor-challenge', [
             'recovery_code' => 'valid-code',
         ]);
+
+        Event::assertDispatched(ValidTwoFactorAuthenticationCodeProvided::class);
 
         $response->assertRedirect('/home')
             ->assertSessionMissing('login.id');
