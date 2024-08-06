@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.22.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.23.0...1.x)
+
+## [v1.23.0](https://github.com/laravel/fortify/compare/v1.22.0...v1.23.0) - 2024-08-02
+
+* Fire ValidTwoFactorAuthenticationCodeProvided Event when 2FA session is authenticated by [@stefanzweifel](https://github.com/stefanzweifel) in https://github.com/laravel/fortify/pull/559
 
 ## [v1.22.0](https://github.com/laravel/fortify/compare/v1.21.5...v1.22.0) - 2024-07-22
 
