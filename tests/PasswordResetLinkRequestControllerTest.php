@@ -79,4 +79,20 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
         $response->assertSessionHasNoErrors();
         $response->assertSessionHas('status', trans(Password::RESET_LINK_SENT));
     }
+
+    public function test_case_insensitive_usernames_can_be_used()
+    {
+        Config::set('fortify.lowercase_usernames', true);
+        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
+
+        $broker->shouldReceive('sendResetLink')->andReturn(Password::RESET_LINK_SENT);
+
+        $response = $this->from(url('/forgot-password'))
+            ->post('/forgot-password', ['email' => 'TAYLOR@laravel.com']);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('/forgot-password');
+        $response->assertSessionHasNoErrors();
+        $response->assertSessionHas('status', trans(Password::RESET_LINK_SENT));
+    }
 }
