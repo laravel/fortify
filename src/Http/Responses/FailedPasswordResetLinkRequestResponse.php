@@ -4,6 +4,7 @@ namespace Laravel\Fortify\Http\Responses;
 
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\FailedPasswordResetLinkRequestResponse as FailedPasswordResetLinkRequestResponseContract;
+use Laravel\Fortify\Fortify;
 
 class FailedPasswordResetLinkRequestResponse implements FailedPasswordResetLinkRequestResponseContract
 {
@@ -35,12 +36,12 @@ class FailedPasswordResetLinkRequestResponse implements FailedPasswordResetLinkR
     {
         if ($request->wantsJson()) {
             throw ValidationException::withMessages([
-                'email' => [trans($this->status)],
+                Fortify::email() => [trans($this->status)],
             ]);
         }
 
         return back()
-                ->withInput($request->only('email'))
-                ->withErrors(['email' => trans($this->status)]);
+                ->withInput($request->only(Fortify::email()))
+                ->withErrors([Fortify::email() => trans($this->status)]);
     }
 }
