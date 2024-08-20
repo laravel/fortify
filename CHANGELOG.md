@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.23.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.24.0...1.x)
+
+## [v1.24.0](https://github.com/laravel/fortify/compare/v1.23.0...v1.24.0) - 2024-08-20
+
+* [1.x] Support case insensitive password resets by [@mattmcdonald-uk](https://github.com/mattmcdonald-uk) in https://github.com/laravel/fortify/pull/562
+* Dispatch RecoveryCodeReplaced Event by [@stephenjude](https://github.com/stephenjude) in https://github.com/laravel/fortify/pull/564
 
 ## [v1.23.0](https://github.com/laravel/fortify/compare/v1.22.0...v1.23.0) - 2024-08-02
 
