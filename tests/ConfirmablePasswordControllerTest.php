@@ -4,9 +4,11 @@ namespace Laravel\Fortify\Tests;
 
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Date;
 use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
 use Laravel\Fortify\Fortify;
+use Orchestra\Testbench\Attributes\WithConfig;
 use Orchestra\Testbench\Attributes\WithMigration;
 
 #[WithMigration]
@@ -151,6 +153,56 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
             );
 
         $response->assertJsonValidationErrors('password');
+    }
+
+    #[WithConfig('auth.password_timeout', 120)]
+    public function test_password_confirmation_status_has_been_confirmed()
+    {
+        Carbon::setTestNow();
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($this->user)
+            ->withSession(['auth.password_confirmed_at' => now()->subMinute(1)->unix()])
+            ->get(
+                '/user/confirmed-password-status',
+            );
+
+        $response->assertOk()
+            ->assertJson(['confirmed' => true])
+            ->assertHeader('X-Retry-After', 60);
+    }
+
+    #[WithConfig('auth.password_timeout', 120)]
+    public function test_password_confirmation_status_has_expired()
+    {
+        Carbon::setTestNow();
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($this->user)
+            ->withSession(['auth.password_confirmed_at' => now()->subMinutes(10)->unix()])
+            ->get(
+                '/user/confirmed-password-status',
+            );
+
+        $response->assertOk()
+            ->assertJson(['confirmed' => false])
+            ->assertHeaderMissing('X-Retry-After');
+    }
+
+    #[WithConfig('auth.password_timeout', 120)]
+    public function test_password_confirmation_status_has_not_confirmed()
+    {
+        Carbon::setTestNow();
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($this->user)
+            ->get(
+                '/user/confirmed-password-status',
+            );
+
+        $response->assertOk()
+            ->assertJson(['confirmed' => false])
+            ->assertHeaderMissing('X-Retry-After');
     }
 
     protected function defineEnvironment($app)
