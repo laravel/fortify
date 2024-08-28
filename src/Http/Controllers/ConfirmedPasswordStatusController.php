@@ -16,9 +16,15 @@ class ConfirmedPasswordStatusController extends Controller
      */
     public function show(Request $request)
     {
-        $lastConfirmation = $request->session()->get('auth.password_confirmed_at', 0);
+        $lastConfirmation = $request->session()->get(
+            'auth.password_confirmed_at', 0
+        );
+
         $lastConfirmed = (Date::now()->unix() - $lastConfirmation);
-        $confirmed = $lastConfirmed < $request->input('seconds', config('auth.password_timeout', 900));
+
+        $confirmed = $lastConfirmed < $request->input(
+            'seconds', config('auth.password_timeout', 900)
+        );
 
         return response()->json([
             'confirmed' => $confirmed,
