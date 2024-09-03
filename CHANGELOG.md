@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.24.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.24.1...1.x)
+
+## [v1.24.1](https://github.com/laravel/fortify/compare/v1.24.0...v1.24.1) - 2024-09-03
+
+* [1.x] Add `X-Retry-After` to `/user/confirm-password/status` response by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/fortify/pull/565
 
 ## [v1.24.0](https://github.com/laravel/fortify/compare/v1.23.0...v1.24.0) - 2024-08-20
 
