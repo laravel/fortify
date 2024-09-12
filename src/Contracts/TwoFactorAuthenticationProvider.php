@@ -9,7 +9,7 @@ interface TwoFactorAuthenticationProvider
      *
      * @return string
      */
-    public function generateSecretKey);
+    public function generateSecretKey();
 
     /**
      * Get the two factor authentication QR code URL.
