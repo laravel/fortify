@@ -7,10 +7,9 @@ interface TwoFactorAuthenticationProvider
     /**
      * Generate a new secret key.
      *
-     * @param  int  $secret_length
      * @return string
      */
-    public function generateSecretKey($secret_length);
+    public function generateSecretKey);
 
     /**
      * Get the two factor authentication QR code URL.
