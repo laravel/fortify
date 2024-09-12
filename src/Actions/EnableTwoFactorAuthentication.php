@@ -37,9 +37,11 @@ class EnableTwoFactorAuthentication
     public function __invoke($user, $force = false)
     {
         if (empty($user->two_factor_secret) || $force === true) {
-            $secret_length = (int) config('fortify-options.two-factor-authentication.secret-length', 16);
+
+            $secretLength = (int) config('fortify-options.two-factor-authentication.secret-length', 16);
+
             $user->forceFill([
-                'two_factor_secret' => encrypt($this->provider->generateSecretKey($secret_length)),
+                'two_factor_secret' => encrypt($this->provider->generateSecretKey($secretLength)),
                 'two_factor_recovery_codes' => encrypt(json_encode(Collection::times(8, function () {
                     return RecoveryCode::generate();
                 })->all())),
