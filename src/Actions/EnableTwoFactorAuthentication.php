@@ -37,7 +37,6 @@ class EnableTwoFactorAuthentication
     public function __invoke($user, $force = false)
     {
         if (empty($user->two_factor_secret) || $force === true) {
-
             $secretLength = (int) config('fortify-options.two-factor-authentication.secret-length', 16);
 
             $user->forceFill([
