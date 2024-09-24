@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.24.1...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.24.2...1.x)
+
+## [v1.24.2](https://github.com/laravel/fortify/compare/v1.24.1...v1.24.2) - 2024-09-16
+
+* Adding context length configuration for 2FA to ensure better security standards by [@MattLoyeD](https://github.com/MattLoyeD) in https://github.com/laravel/fortify/pull/568
 
 ## [v1.24.1](https://github.com/laravel/fortify/compare/v1.24.0...v1.24.1) - 2024-09-03
 
