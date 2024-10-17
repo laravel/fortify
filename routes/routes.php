@@ -35,10 +35,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     $twoFactorLimiter = config('fortify.limiters.two-factor');
     $verificationLimiter = config('fortify.limiters.verification', '6,1');
 
-    $login = Route::post(
-        RoutePath::for('login', '/login'),
-        [AuthenticatedSessionController::class, 'store']
-    )
+    $login = Route::post(RoutePath::for('login', '/login'), [AuthenticatedSessionController::class, 'store'])
         ->middleware(array_filter([
             'guest:'.config('fortify.guard'),
             $limiter ? 'throttle:'.$limiter : null,
@@ -81,10 +78,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
                 ->name('register');
         }
 
-        $register = Route::post(
-            RoutePath::for('register', '/register'),
-            [RegisteredUserController::class, 'store']
-        )
+        $register = Route::post(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'store'])
             ->middleware(['guest:'.config('fortify.guard')]);
 
         if (! $enableViews) {
@@ -134,10 +128,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
         ->name('password.confirmation');
 
-    $passwordConfirm = Route::post(
-        RoutePath::for('password.confirm', '/user/confirm-password'),
-        [ConfirmablePasswordController::class, 'store']
-    )
+    $passwordConfirm = Route::post(RoutePath::for('password.confirm', '/user/confirm-password'), [ConfirmablePasswordController::class, 'store'])
         ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')]);
 
     if (! $enableViews) {
@@ -152,9 +143,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
                 ->name('two-factor.login');
         }
 
-        $twoFactorLogin = Route::post(
-            RoutePath::for('two-factor.login', '/two-factor-challenge'), [TwoFactorAuthenticatedSessionController::class, 'store']
-        )
+        $twoFactorLogin = Route::post(RoutePath::for('two-factor.login', '/two-factor-challenge'), [TwoFactorAuthenticatedSessionController::class, 'store'])
             ->middleware(array_filter([
                 'guest:'.config('fortify.guard'),
                 $twoFactorLimiter ? 'throttle:'.$twoFactorLimiter : null,
