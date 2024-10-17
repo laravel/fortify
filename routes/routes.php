@@ -138,7 +138,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         RoutePath::for('password.confirm', '/user/confirm-password'),
         [ConfirmablePasswordController::class, 'store']
     )
-    ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')]);
+        ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')]);
 
     if (! $enableViews) {
         $passwordConfirm->name('password.confirm');
