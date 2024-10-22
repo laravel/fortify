@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.24.2...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.24.3...1.x)
+
+## [v1.24.3](https://github.com/laravel/fortify/compare/v1.24.2...v1.24.3) - 2024-10-18
+
+* Update logo to support dark/light theme by [@milewski](https://github.com/milewski) in https://github.com/laravel/fortify/pull/569
+* Fix unnamed routes when views are disabled (with original code formatting) by [@cima-alfa](https://github.com/cima-alfa) in https://github.com/laravel/fortify/pull/571
 
 ## [v1.24.2](https://github.com/laravel/fortify/compare/v1.24.1...v1.24.2) - 2024-09-16
 
