@@ -39,8 +39,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         ->middleware(array_filter([
             'guest:'.config('fortify.guard'),
             $limiter ? 'throttle:'.$limiter : null,
-        ]))
-        ->name('login.store');
+        ]))->name('login.store');
 
     Route::post(RoutePath::for('logout', '/logout'), [AuthenticatedSessionController::class, 'destroy'])
         ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
@@ -138,8 +137,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
             ->middleware(array_filter([
                 'guest:'.config('fortify.guard'),
                 $twoFactorLimiter ? 'throttle:'.$twoFactorLimiter : null,
-            ]))
-            ->name('two-factor.login.store');
+            ]))->name('two-factor.login.store');
 
         $twoFactorMiddleware = Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword')
             ? [config('fortify.auth_middleware', 'auth').':'.config('fortify.guard'), 'password.confirm']
