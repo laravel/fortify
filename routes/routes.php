@@ -35,15 +35,11 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     $twoFactorLimiter = config('fortify.limiters.two-factor');
     $verificationLimiter = config('fortify.limiters.verification', '6,1');
 
-    $login = Route::post(RoutePath::for('login', '/login'), [AuthenticatedSessionController::class, 'store'])
+    Route::post(RoutePath::for('login', '/login'), [AuthenticatedSessionController::class, 'store'])
         ->middleware(array_filter([
             'guest:'.config('fortify.guard'),
             $limiter ? 'throttle:'.$limiter : null,
-        ]));
-
-    if (! $enableViews) {
-        $login->name('login');
-    }
+        ]))->name('login.store');
 
     Route::post(RoutePath::for('logout', '/logout'), [AuthenticatedSessionController::class, 'destroy'])
         ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
@@ -78,12 +74,9 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
                 ->name('register');
         }
 
-        $register = Route::post(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'store'])
-            ->middleware(['guest:'.config('fortify.guard')]);
-
-        if (! $enableViews) {
-            $register->name('register');
-        }
+        Route::post(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'store'])
+            ->middleware(['guest:'.config('fortify.guard')])
+            ->name('register.store');
     }
 
     // Email Verification...
@@ -128,12 +121,9 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
         ->name('password.confirmation');
 
-    $passwordConfirm = Route::post(RoutePath::for('password.confirm', '/user/confirm-password'), [ConfirmablePasswordController::class, 'store'])
-        ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')]);
-
-    if (! $enableViews) {
-        $passwordConfirm->name('password.confirm');
-    }
+    Route::post(RoutePath::for('password.confirm', '/user/confirm-password'), [ConfirmablePasswordController::class, 'store'])
+        ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
+        ->name('password.confirm.store');
 
     // Two Factor Authentication...
     if (Features::enabled(Features::twoFactorAuthentication())) {
@@ -143,15 +133,11 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
                 ->name('two-factor.login');
         }
 
-        $twoFactorLogin = Route::post(RoutePath::for('two-factor.login', '/two-factor-challenge'), [TwoFactorAuthenticatedSessionController::class, 'store'])
+        Route::post(RoutePath::for('two-factor.login', '/two-factor-challenge'), [TwoFactorAuthenticatedSessionController::class, 'store'])
             ->middleware(array_filter([
                 'guest:'.config('fortify.guard'),
                 $twoFactorLimiter ? 'throttle:'.$twoFactorLimiter : null,
-            ]));
-
-        if (! $enableViews) {
-            $twoFactorLogin->name('two-factor.login');
-        }
+            ]))->name('two-factor.login.store');
 
         $twoFactorMiddleware = Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword')
             ? [config('fortify.auth_middleware', 'auth').':'.config('fortify.guard'), 'password.confirm']
