@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.24.3...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.24.4...1.x)
+
+## [v1.24.4](https://github.com/laravel/fortify/compare/v1.24.3...v1.24.4) - 2024-10-29
+
+* Rename `POST` routes to avoid regression bugs by [@cima-alfa](https://github.com/cima-alfa) in https://github.com/laravel/fortify/pull/574
 
 ## [v1.24.3](https://github.com/laravel/fortify/compare/v1.24.2...v1.24.3) - 2024-10-18
 
