@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.24.4...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.24.5...1.x)
+
+## [v1.24.5](https://github.com/laravel/fortify/compare/v1.24.4...v1.24.5) - 2024-11-12
+
+* [1.x] Supports PHP 8.4 by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/fortify/pull/576
 
 ## [v1.24.4](https://github.com/laravel/fortify/compare/v1.24.3...v1.24.4) - 2024-10-29
 
