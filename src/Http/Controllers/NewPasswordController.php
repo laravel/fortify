@@ -50,10 +50,15 @@ class NewPasswordController extends Controller
      * Reset the user's password.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Contracts\Auth\StatefulGuard|null  $guard
      * @return \Illuminate\Contracts\Support\Responsable
      */
-    public function store(Request $request): Responsable
+    public function store(Request $request, StatefulGuard|null $guard = null): Responsable
     {
+        if ($guard) {
+            $this->guard = $guard;
+        }
+
         $request->validate([
             'token' => 'required',
             Fortify::email() => 'required|email',

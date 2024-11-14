@@ -48,11 +48,16 @@ class RegisteredUserController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Laravel\Fortify\Contracts\CreatesNewUsers  $creator
+     * @param  \Illuminate\Contracts\Auth\StatefulGuard|null  $guard
      * @return \Laravel\Fortify\Contracts\RegisterResponse
      */
     public function store(Request $request,
-                          CreatesNewUsers $creator): RegisterResponse
+                          CreatesNewUsers $creator, StatefulGuard|null $guard = null): RegisterResponse
     {
+        if ($guard) {
+            $this->guard = $guard;
+        }
+
         if (config('fortify.lowercase_usernames')) {
             $request->merge([
                 Fortify::username() => Str::lower($request->{Fortify::username()}),

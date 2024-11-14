@@ -52,10 +52,15 @@ class TwoFactorAuthenticatedSessionController extends Controller
      * Attempt to authenticate a new session using the two factor authentication code.
      *
      * @param  \Laravel\Fortify\Http\Requests\TwoFactorLoginRequest  $request
+     * @param  \Illuminate\Contracts\Auth\StatefulGuard|null  $guard
      * @return mixed
      */
-    public function store(TwoFactorLoginRequest $request)
+    public function store(TwoFactorLoginRequest $request, StatefulGuard|null $guard = null)
     {
+        if ($guard) {
+            $this->guard = $guard;
+        }
+
         $user = $request->challengedUser();
 
         if ($code = $request->validRecoveryCode()) {

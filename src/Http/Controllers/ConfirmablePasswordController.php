@@ -46,10 +46,15 @@ class ConfirmablePasswordController extends Controller
      * Confirm the user's password.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Contracts\Auth\StatefulGuard|null  $guard
      * @return \Illuminate\Contracts\Support\Responsable
      */
-    public function store(Request $request)
+    public function store(Request $request, StatefulGuard|null $guard = null)
     {
+        if ($guard) {
+            $this->guard = $guard;
+        }
+
         $confirmed = app(ConfirmPassword::class)(
             $this->guard, $request->user(), $request->input('password')
         );

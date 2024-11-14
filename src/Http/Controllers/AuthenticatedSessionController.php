@@ -95,10 +95,15 @@ class AuthenticatedSessionController extends Controller
      * Destroy an authenticated session.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Contracts\Auth\StatefulGuard|null  $guard
      * @return \Laravel\Fortify\Contracts\LogoutResponse
      */
-    public function destroy(Request $request): LogoutResponse
+    public function destroy(Request $request, StatefulGuard|null $guard = null): LogoutResponse
     {
+        if ($guard) {
+            $this->guard = $guard;
+        }
+
         $this->guard->logout();
 
         if ($request->hasSession()) {
