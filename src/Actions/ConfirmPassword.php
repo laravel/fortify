@@ -15,7 +15,7 @@ class ConfirmPassword
      * @param  string|null  $password
      * @return bool
      */
-    public function __invoke(StatefulGuard $guard, $user, ?string $password = null)
+    public function __invoke(StatefulGuard $guard, $user, #[\SensitiveParameter] ?string $password = null)
     {
         $username = Fortify::username();
 
@@ -32,7 +32,7 @@ class ConfirmPassword
      * @param  string|null  $password
      * @return bool
      */
-    protected function confirmPasswordUsingCustomCallback($user, ?string $password = null)
+    protected function confirmPasswordUsingCustomCallback($user, #[\SensitiveParameter] ?string $password = null)
     {
         return call_user_func(
             Fortify::$confirmPasswordsUsingCallback,
