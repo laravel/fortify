@@ -77,4 +77,25 @@ class RegisteredUserControllerTest extends OrchestraTestCase
 
         $response->assertRedirect('/home');
     }
+
+    public function test_users_can_be_created_with_remember_option()
+    {
+        $this->mock(CreatesNewUsers::class)
+                    ->shouldReceive('create')
+                    ->once()
+                    ->andReturn(Mockery::mock(Authenticatable::class));
+
+        $this->mock(StatefulGuard::class)
+                    ->shouldReceive('login')
+                    ->with(Mockery::type(Authenticatable::class), true)
+                    ->once();
+
+        $response = $this->post('/register', [
+            'email' => 'taylor@laravel.com',
+            'password' => 'password',
+            'remember' => '1',
+        ]);
+
+        $response->assertRedirect('/home');
+    }
 }
