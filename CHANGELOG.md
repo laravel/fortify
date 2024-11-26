@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.24.5...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.25.0...1.x)
+
+## [v1.25.0](https://github.com/laravel/fortify/compare/v1.24.5...v1.25.0) - 2024-11-21
+
+* Add Remember Me Functionality to Registered User Login by [@cvairlis](https://github.com/cvairlis) in https://github.com/laravel/fortify/pull/579
 
 ## [v1.24.5](https://github.com/laravel/fortify/compare/v1.24.4...v1.24.5) - 2024-11-12
 
