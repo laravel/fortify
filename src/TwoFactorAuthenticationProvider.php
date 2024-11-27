@@ -29,7 +29,7 @@ class TwoFactorAuthenticationProvider implements TwoFactorAuthenticationProvider
      * @param  \Illuminate\Contracts\Cache\Repository|null  $cache
      * @return void
      */
-    public function __construct(Google2FA $engine, Repository $cache = null)
+    public function __construct(Google2FA $engine, ?Repository $cache = null)
     {
         $this->engine = $engine;
         $this->cache = $cache;
