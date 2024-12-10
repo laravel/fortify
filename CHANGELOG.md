@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.25.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.25.1...1.x)
+
+## [v1.25.1](https://github.com/laravel/fortify/compare/v1.25.0...v1.25.1) - 2024-11-27
+
+* Replace implicitly nullable parameters for PHP 8.4 by [@JeppeKnockaert](https://github.com/JeppeKnockaert) in https://github.com/laravel/fortify/pull/580
 
 ## [v1.25.0](https://github.com/laravel/fortify/compare/v1.24.5...v1.25.0) - 2024-11-21
 
