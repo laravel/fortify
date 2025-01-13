@@ -32,11 +32,11 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn([
+            $table->dropColumn(array_filter([
                 'two_factor_secret',
                 'two_factor_recovery_codes',
-                'two_factor_confirmed_at',
-            ]);
+                Schema::hasColumn('users', 'two_factor_confirmed_at') ? 'two_factor_confirmed_at' : null,
+            ]));
         });
     }
 };
