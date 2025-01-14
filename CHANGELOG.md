@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.25.1...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.25.2...1.x)
+
+## [v1.25.2](https://github.com/laravel/fortify/compare/v1.25.1...v1.25.2) - 2025-01-10
+
+* [1.x] Use `retrieveByCredentials()` on the User Provider instead of a hardcoded Eloquent query by [@pascalbaljet](https://github.com/pascalbaljet) in https://github.com/laravel/fortify/pull/582
+* Changed migration of users table by [@aronbeurskens](https://github.com/aronbeurskens) in https://github.com/laravel/fortify/pull/586
 
 ## [v1.25.1](https://github.com/laravel/fortify/compare/v1.25.0...v1.25.1) - 2024-11-27
 
