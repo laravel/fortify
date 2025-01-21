@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.25.2...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.25.3...1.x)
+
+## [v1.25.3](https://github.com/laravel/fortify/compare/v1.25.2...v1.25.3) - 2025-01-17
+
+* `DisableTwoFactorAuthentication` should always set `two_factor_confirmed_at` to `null` when it has a value by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/fortify/pull/589
 
 ## [v1.25.2](https://github.com/laravel/fortify/compare/v1.25.1...v1.25.2) - 2025-01-10
 
