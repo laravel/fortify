@@ -36,7 +36,7 @@ class PasswordResetLinkController extends Controller
     {
         $request->validate([Fortify::email() => 'required|email']);
 
-        if (config('fortify.lowercase_usernames')) {
+        if (config('fortify.lowercase_usernames') && $request->has(Fortify::email())) {
             $request->merge([
                 Fortify::email() => Str::lower($request->{Fortify::email()}),
             ]);
