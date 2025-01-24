@@ -16,9 +16,11 @@ class CanonicalizeUsername
      */
     public function handle($request, $next)
     {
-        $request->merge([
-            Fortify::username() => Str::lower($request->{Fortify::username()}),
-        ]);
+        if ($request->has(Fortify::username())) {
+            $request->merge([
+                Fortify::username() => Str::lower($request->{Fortify::username()}),
+            ]);
+        }
 
         return $next($request);
     }

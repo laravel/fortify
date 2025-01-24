@@ -53,7 +53,7 @@ class RegisteredUserController extends Controller
     public function store(Request $request,
                           CreatesNewUsers $creator): RegisterResponse
     {
-        if (config('fortify.lowercase_usernames')) {
+        if (config('fortify.lowercase_usernames') && $request->has(Fortify::username())) {
             $request->merge([
                 Fortify::username() => Str::lower($request->{Fortify::username()}),
             ]);
