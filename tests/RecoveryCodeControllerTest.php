@@ -3,18 +3,17 @@
 namespace Laravel\Fortify\Tests;
 
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Laravel\Fortify\Events\RecoveryCodesGenerated;
-use Laravel\Fortify\FortifyServiceProvider;
 
 class RecoveryCodeControllerTest extends OrchestraTestCase
 {
+    use RefreshDatabase;
+
     public function test_new_recovery_codes_can_be_generated()
     {
         Event::fake();
-
-        $this->loadLaravelMigrations(['--database' => 'testbench']);
-        $this->artisan('migrate', ['--database' => 'testbench'])->run();
 
         $user = TestTwoFactorRecoveryCodeUser::forceCreate([
             'name' => 'Taylor Otwell',
@@ -34,24 +33,6 @@ class RecoveryCodeControllerTest extends OrchestraTestCase
 
         $this->assertNotNull($user->two_factor_recovery_codes);
         $this->assertIsArray(json_decode(decrypt($user->two_factor_recovery_codes), true));
-    }
-
-    protected function getPackageProviders($app)
-    {
-        return [FortifyServiceProvider::class];
-    }
-
-    protected function getEnvironmentSetUp($app)
-    {
-        $app['migrator']->path(__DIR__.'/../database/migrations');
-
-        $app['config']->set('database.default', 'testbench');
-
-        $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
-            'database' => ':memory:',
-            'prefix'   => '',
-        ]);
     }
 }
 

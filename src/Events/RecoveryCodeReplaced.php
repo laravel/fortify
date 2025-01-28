@@ -2,11 +2,12 @@
 
 namespace Laravel\Fortify\Events;
 
+use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
 class RecoveryCodeReplaced
 {
-    use SerializesModels;
+    use Dispatchable, SerializesModels;
 
     /**
      * The authenticated user.

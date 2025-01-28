@@ -3,19 +3,18 @@
 namespace Laravel\Fortify\Tests;
 
 use App\Actions\Fortify\UpdateUserPassword;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Support\Facades\Hash;
+use Database\Factories\UserFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\UpdatesUserPasswords;
-use Mockery;
 
 class PasswordControllerTest extends OrchestraTestCase
 {
+    use RefreshDatabase;
+
     public function test_passwords_can_be_updated()
     {
-        $user = Mockery::mock(Authenticatable::class);
-
-        $user->password = Hash::make('password');
+        $user = UserFactory::new()->create();
 
         $this->mock(UpdatesUserPasswords::class)
                     ->shouldReceive('update')
@@ -30,16 +29,30 @@ class PasswordControllerTest extends OrchestraTestCase
         $response->assertStatus(200);
     }
 
-    public function test_passwords_cannot_be_updated_without_password_confirmation()
+    public function test_passwords_cannot_be_updated_without_current_password()
     {
-        $user = Mockery::mock(Authenticatable::class);
-        $user->password = '';
-
-        require_once __DIR__.'/../stubs/PasswordValidationRules.php';
-        require_once __DIR__.'/../stubs/UpdateUserPassword.php';
+        $user = UserFactory::new()->create();
 
         try {
             (new UpdateUserPassword())->update($user, [
+                'password' => 'new-password',
+                'password_confirmation' => 'new-password',
+            ]);
+        } catch (ValidationException $e) {
+            $this->assertTrue(in_array(
+                'The current password field is required.',
+                $e->errors()['current_password']
+            ));
+        }
+    }
+
+    public function test_passwords_cannot_be_updated_without_current_password_confirmation()
+    {
+        $user = UserFactory::new()->create();
+
+        try {
+            (new UpdateUserPassword())->update($user, [
+                'current_password' => 'invalid-password',
                 'password' => 'new-password',
                 'password_confirmation' => 'new-password',
             ]);

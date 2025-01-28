@@ -5,7 +5,8 @@ namespace Laravel\Fortify\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Contracts\EmailVerificationNotificationSentResponse;
+use Laravel\Fortify\Http\Responses\RedirectAsIntended;
 
 class EmailVerificationNotificationController extends Controller
 {
@@ -20,13 +21,11 @@ class EmailVerificationNotificationController extends Controller
         if ($request->user()->hasVerifiedEmail()) {
             return $request->wantsJson()
                         ? new JsonResponse('', 204)
-                        : redirect()->intended(Fortify::redirects('email-verification'));
+                        : app(RedirectAsIntended::class, ['name' => 'email-verification']);
         }
 
         $request->user()->sendEmailVerificationNotification();
 
-        return $request->wantsJson()
-                    ? new JsonResponse('', 202)
-                    : back()->with('status', 'verification-link-sent');
+        return app(EmailVerificationNotificationSentResponse::class);
     }
 }

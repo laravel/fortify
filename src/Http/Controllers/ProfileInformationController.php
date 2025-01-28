@@ -2,10 +2,12 @@
 
 namespace Laravel\Fortify\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Str;
+use Laravel\Fortify\Contracts\ProfileInformationUpdatedResponse;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
+use Laravel\Fortify\Fortify;
 
 class ProfileInformationController extends Controller
 {
@@ -14,15 +16,19 @@ class ProfileInformationController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Laravel\Fortify\Contracts\UpdatesUserProfileInformation  $updater
-     * @return \Illuminate\Http\Response
+     * @return \Laravel\Fortify\Contracts\ProfileInformationUpdatedResponse
      */
     public function update(Request $request,
                            UpdatesUserProfileInformation $updater)
     {
+        if (config('fortify.lowercase_usernames') && $request->has(Fortify::username())) {
+            $request->merge([
+                Fortify::username() => Str::lower($request->{Fortify::username()}),
+            ]);
+        }
+
         $updater->update($request->user(), $request->all());
 
-        return $request->wantsJson()
-                    ? new JsonResponse('', 200)
-                    : back()->with('status', 'profile-information-updated');
+        return app(ProfileInformationUpdatedResponse::class);
     }
 }

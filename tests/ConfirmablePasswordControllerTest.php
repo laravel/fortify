@@ -3,21 +3,23 @@
 namespace Laravel\Fortify\Tests;
 
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
 use Laravel\Fortify\Fortify;
+use Orchestra\Testbench\Attributes\WithConfig;
+use Orchestra\Testbench\Attributes\WithMigration;
 
+#[WithMigration]
 class ConfirmablePasswordControllerTest extends OrchestraTestCase
 {
+    use RefreshDatabase;
+
     protected $user;
 
-    protected function setUp(): void
+    protected function afterRefreshingDatabase()
     {
-        parent::setUp();
-
-        $this->loadLaravelMigrations(['--database' => 'testbench']);
-
-        $this->artisan('migrate', ['--database' => 'testbench'])->run();
-
         $this->user = TestConfirmPasswordUser::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
@@ -41,6 +43,8 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
 
     public function test_password_can_be_confirmed()
     {
+        $this->freezeSecond();
+
         $response = $this->withoutExceptionHandling()
             ->actingAs($this->user)
             ->withSession(['url.intended' => 'http://foo.com/bar'])
@@ -49,7 +53,7 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
                 ['password' => 'secret']
             );
 
-        $response->assertSessionHas('auth.password_confirmed_at');
+        $response->assertSessionHas('auth.password_confirmed_at', Date::now()->unix());
         $response->assertRedirect('http://foo.com/bar');
     }
 
@@ -87,6 +91,8 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
 
     public function test_password_confirmation_can_be_customized()
     {
+        $this->freezeSecond();
+
         Fortify::$confirmPasswordsUsingCallback = function () {
             return true;
         };
@@ -99,7 +105,7 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
                 ['password' => 'invalid']
             );
 
-        $response->assertSessionHas('auth.password_confirmed_at');
+        $response->assertSessionHas('auth.password_confirmed_at', Date::now()->unix());
         $response->assertRedirect('http://foo.com/bar');
 
         Fortify::$confirmPasswordsUsingCallback = null;
@@ -107,6 +113,8 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
 
     public function test_password_confirmation_can_be_customized_and_fail_without_password()
     {
+        $this->freezeSecond();
+
         Fortify::$confirmPasswordsUsingCallback = function () {
             return true;
         };
@@ -119,7 +127,7 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
                 ['password' => null]
             );
 
-        $response->assertSessionHas('auth.password_confirmed_at');
+        $response->assertSessionHas('auth.password_confirmed_at', Date::now()->unix());
         $response->assertRedirect('http://foo.com/bar');
 
         Fortify::$confirmPasswordsUsingCallback = null;
@@ -147,18 +155,62 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
         $response->assertJsonValidationErrors('password');
     }
 
-    protected function getEnvironmentSetUp($app)
+    #[WithConfig('auth.password_timeout', 120)]
+    public function test_password_confirmation_status_has_been_confirmed()
     {
-        $app['migrator']->path(__DIR__.'/../database/migrations');
+        Carbon::setTestNow();
 
-        $app['config']->set('auth.providers.users.model', TestConfirmPasswordUser::class);
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($this->user)
+            ->withSession(['auth.password_confirmed_at' => now()->subMinute(1)->unix()])
+            ->get(
+                '/user/confirmed-password-status',
+            );
 
-        $app['config']->set('database.default', 'testbench');
+        $response->assertOk()
+            ->assertJson(['confirmed' => true])
+            ->assertHeader('X-Retry-After', 60);
+    }
 
-        $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
-            'database' => ':memory:',
-            'prefix'   => '',
+    #[WithConfig('auth.password_timeout', 120)]
+    public function test_password_confirmation_status_has_expired()
+    {
+        Carbon::setTestNow();
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($this->user)
+            ->withSession(['auth.password_confirmed_at' => now()->subMinutes(10)->unix()])
+            ->get(
+                '/user/confirmed-password-status',
+            );
+
+        $response->assertOk()
+            ->assertJson(['confirmed' => false])
+            ->assertHeaderMissing('X-Retry-After');
+    }
+
+    #[WithConfig('auth.password_timeout', 120)]
+    public function test_password_confirmation_status_has_not_confirmed()
+    {
+        Carbon::setTestNow();
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($this->user)
+            ->get(
+                '/user/confirmed-password-status',
+            );
+
+        $response->assertOk()
+            ->assertJson(['confirmed' => false])
+            ->assertHeaderMissing('X-Retry-After');
+    }
+
+    protected function defineEnvironment($app)
+    {
+        parent::defineEnvironment($app);
+
+        $app['config']->set([
+            'auth.providers.users.model' => TestConfirmPasswordUser::class,
         ]);
     }
 }

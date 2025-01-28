@@ -2,14 +2,10 @@
 
 namespace Laravel\Fortify\Contracts;
 
+/**
+ * @method void update(\Illuminate\Foundation\Auth\User $user, array $input)
+ */
 interface UpdatesUserPasswords
 {
-    /**
-     * Validate and update the user's password.
-     *
-     * @param  mixed  $user
-     * @param  array  $input
-     * @return void
-     */
-    public function update($user, array $input);
+    //
 }

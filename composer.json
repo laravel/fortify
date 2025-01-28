@@ -14,16 +14,18 @@
         }
     ],
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^8.1",
         "ext-json": "*",
-        "bacon/bacon-qr-code": "^2.0",
-        "illuminate/support": "^8.82|^9.0",
-        "pragmarx/google2fa": "^7.0|^8.0"
+        "bacon/bacon-qr-code": "^3.0",
+        "illuminate/support": "^10.0|^11.0|^12.0",
+        "symfony/console": "^6.0|^7.0",
+        "pragmarx/google2fa": "^8.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.0",
-        "orchestra/testbench": "^6.0|^7.0",
-        "phpunit/phpunit": "^9.3"
+        "orchestra/testbench": "^8.16|^9.0|^10.0",
+        "phpstan/phpstan": "^1.10",
+        "phpunit/phpunit": "^10.4|^11.3"
     },
     "autoload": {
         "psr-4": {
@@ -32,8 +34,11 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Laravel\\Fortify\\Tests\\": "tests/"
-        }
+            "Laravel\\Fortify\\Tests\\": "tests/",
+            "App\\": "workbench/app/",
+            "Database\\Factories\\": "workbench/database/factories/"
+        },
+        "classmap": ["stubs/"]
     },
     "extra": {
         "branch-alias": {
@@ -49,5 +54,11 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "scripts": {
+        "post-autoload-dump": "@prepare",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "lint": "@php vendor/bin/phpstan analyse",
+        "test": "@php vendor/bin/phpunit"
+    }
 }

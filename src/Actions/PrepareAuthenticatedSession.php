@@ -33,7 +33,9 @@ class PrepareAuthenticatedSession
      */
     public function handle($request, $next)
     {
-        $request->session()->regenerate();
+        if ($request->hasSession()) {
+            $request->session()->regenerate();
+        }
 
         $this->limiter->clear($request);
 
