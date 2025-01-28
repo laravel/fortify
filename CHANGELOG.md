@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.25.3...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.25.4...1.x)
+
+## [v1.25.4](https://github.com/laravel/fortify/compare/v1.25.3...v1.25.4) - 2025-01-26
+
+* Prevent empty username fields from being added to requests by [@edvardsr](https://github.com/edvardsr) in https://github.com/laravel/fortify/pull/590
+* Supports Laravel 12 by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/fortify/pull/591
 
 ## [v1.25.3](https://github.com/laravel/fortify/compare/v1.25.2...v1.25.3) - 2025-01-17
 
