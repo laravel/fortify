@@ -34,6 +34,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     $limiter = config('fortify.limiters.login');
     $twoFactorLimiter = config('fortify.limiters.two-factor');
     $verificationLimiter = config('fortify.limiters.verification');
+    $registrationLimiter = config('fortify.limiters.registration');
 
     Route::post(RoutePath::for('login', '/login'), [AuthenticatedSessionController::class, 'store'])
         ->middleware(array_filter([
@@ -75,7 +76,10 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         }
 
         Route::post(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'store'])
-            ->middleware(['guest:'.config('fortify.guard')])
+            ->middleware(array_filter([
+                'guest:'.config('fortify.guard'),
+                $registrationLimiter ? 'throttle:'.$registrationLimiter : null,
+            ]))
             ->name('register.store');
     }
 

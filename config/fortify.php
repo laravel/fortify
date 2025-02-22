@@ -18,6 +18,7 @@ return [
         'login' => null,
         'two-factor' => null,
         'verification' => '6,1',
+        'registration' => null,
     ],
     'paths' => [
         'login' => null,
