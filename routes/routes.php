@@ -33,7 +33,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
 
     $limiter = config('fortify.limiters.login');
     $twoFactorLimiter = config('fortify.limiters.two-factor');
-    $verificationLimiter = config('fortify.limiters.verification', '6,1');
+    $verificationLimiter = config('fortify.limiters.verification');
 
     Route::post(RoutePath::for('login', '/login'), [AuthenticatedSessionController::class, 'store'])
         ->middleware(array_filter([

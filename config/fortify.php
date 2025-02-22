@@ -16,6 +16,8 @@ return [
     'lowercase_usernames' => false,
     'limiters' => [
         'login' => null,
+        'two-factor' => null,
+        'verification' => '6,1',
     ],
     'paths' => [
         'login' => null,
