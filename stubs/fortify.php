@@ -149,9 +149,10 @@ return [
         // Features::emailVerification(),
         Features::updateProfileInformation(),
         Features::updatePasswords(),
+        Features::passwordConfirmation(),
         Features::twoFactorAuthentication([
             'confirm' => true,
-            'confirmPassword' => true, // Enables Features::passwordConfirmation()
+            'confirmPassword' => true,
             // 'window' => 0,
         ]),
     ],

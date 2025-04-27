@@ -111,7 +111,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     }
 
     // Password Confirmation...
-    if (Features::enabled(Features::passwordConfirmation())) {
+    if (Features::enabled(Features::passwordConfirmation()) || Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword')) {
         if ($enableViews) {
             Route::get(RoutePath::for('password.confirm', '/user/confirm-password'), [ConfirmablePasswordController::class, 'show'])
                 ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
