@@ -111,19 +111,21 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     }
 
     // Password Confirmation...
-    if ($enableViews) {
-        Route::get(RoutePath::for('password.confirm', '/user/confirm-password'), [ConfirmablePasswordController::class, 'show'])
+    if (Features::enabled(Features::passwordConfirmation())) {
+        if ($enableViews) {
+            Route::get(RoutePath::for('password.confirm', '/user/confirm-password'), [ConfirmablePasswordController::class, 'show'])
+                ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
+                ->name('password.confirm');
+        }
+
+        Route::get(RoutePath::for('password.confirmation', '/user/confirmed-password-status'), [ConfirmedPasswordStatusController::class, 'show'])
             ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
-            ->name('password.confirm');
+            ->name('password.confirmation');
+
+        Route::post(RoutePath::for('password.confirm', '/user/confirm-password'), [ConfirmablePasswordController::class, 'store'])
+            ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
+            ->name('password.confirm.store');
     }
-
-    Route::get(RoutePath::for('password.confirmation', '/user/confirmed-password-status'), [ConfirmedPasswordStatusController::class, 'show'])
-        ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
-        ->name('password.confirmation');
-
-    Route::post(RoutePath::for('password.confirm', '/user/confirm-password'), [ConfirmablePasswordController::class, 'store'])
-        ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
-        ->name('password.confirm.store');
 
     // Two Factor Authentication...
     if (Features::enabled(Features::twoFactorAuthentication())) {

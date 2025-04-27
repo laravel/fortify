@@ -2,6 +2,36 @@
 
 Future upgrade notes will be placed here.
 
+---
+
+## Upgrading to 2.x from 1.x
+
+### Confirm Password Feature Disabled by Default
+
+> **If you're using two-factor authentication with `confirmPassword`, no changes are needed; otherwise, enable password confirmation manually.**
+
+If your application is already using two-factor authentication with `confirmPassword` enabled, no changes are required — everything should continue to work as before:
+
+```php
+'features' => [
+    // ...
+    Features::twoFactorAuthentication([
+        'confirmPassword' => true,
+    ]),
+    // ...
+],
+```
+
+If your application is **not** using two-factor authentication but **is** using `password.confirm` routes, you will need to enable the password confirmation feature in your `fortify.php` configuration file by adding the following line to the `features` array:
+
+```php
+'features' => [
+    // ...
+    Features::passwordConfirmation(),
+    // ...
+],
+```
+
 ## Upgrading To 1.7.3 From 1.x
 
 ### Two Factor Brute Force Attack Security Fix

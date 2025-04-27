@@ -92,6 +92,16 @@ class Features
     }
 
     /**
+     * Enable the password confirmation feature.
+     *
+     * @return string
+     */
+    public static function passwordConfirmation()
+    {
+        return 'password-confirmation';
+    }
+
+    /**
      * Enable the email verification feature.
      *
      * @return string
@@ -131,6 +141,9 @@ class Features
     {
         if (! empty($options)) {
             config(['fortify-options.two-factor-authentication' => $options]);
+            if (isset($options['confirmPassword']) && $options['confirmPassword'] === true) {
+                config(['fortify.features' => array_merge(config('fortify.features', []), [static::passwordConfirmation()])]);
+            }
         }
 
         return 'two-factor-authentication';

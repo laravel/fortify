@@ -64,6 +64,7 @@ return [
         Features::emailVerification(),
         Features::updateProfileInformation(),
         Features::updatePasswords(),
+        Features::passwordConfirmation(),
         Features::twoFactorAuthentication(),
     ],
 ];
