@@ -4,9 +4,12 @@ namespace Laravel\Fortify\Tests;
 
 use App\Actions\Fortify\UpdateUserPassword;
 use Database\Factories\UserFactory;
+use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\UpdatesUserPasswords;
+use Mockery;
 
 class PasswordControllerTest extends OrchestraTestCase
 {
@@ -16,9 +19,20 @@ class PasswordControllerTest extends OrchestraTestCase
     {
         $user = UserFactory::new()->create();
 
+        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
+
+        $broker->shouldReceive('deleteToken')
+            ->once()
+            ->with($user);
+
         $this->mock(UpdatesUserPasswords::class)
-                    ->shouldReceive('update')
-                    ->once();
+            ->shouldReceive('update')
+            ->once()
+            ->with($user, [
+                'current_password' => 'password',
+                'password' => 'new-password',
+                'password_confirmation' => 'new-password',
+            ]);
 
         $response = $this->withoutExceptionHandling()->actingAs($user)->putJson('/user/password', [
             'current_password' => 'password',
