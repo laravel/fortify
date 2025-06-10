@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.25.4...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.26.0...1.x)
+
+## [v1.26.0](https://github.com/laravel/fortify/compare/v1.25.4...v1.26.0) - 2025-06-05
+
+* Delete existing tokens when user updates password by [@patrickomeara](https://github.com/patrickomeara) in https://github.com/laravel/fortify/pull/598
 
 ## [v1.25.4](https://github.com/laravel/fortify/compare/v1.25.3...v1.25.4) - 2025-01-26
 
