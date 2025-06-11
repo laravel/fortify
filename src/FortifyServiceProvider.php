@@ -28,6 +28,7 @@ use Laravel\Fortify\Contracts\TwoFactorDisabledResponse as TwoFactorDisabledResp
 use Laravel\Fortify\Contracts\TwoFactorEnabledResponse as TwoFactorEnabledResponseContract;
 use Laravel\Fortify\Contracts\TwoFactorLoginResponse as TwoFactorLoginResponseContract;
 use Laravel\Fortify\Contracts\VerifyEmailResponse as VerifyEmailResponseContract;
+use Laravel\Fortify\Contracts\RedirectsIfTwoFactorAuthenticatable as RedirectsIfTwoFactorAuthenticatableContract;
 use Laravel\Fortify\Http\Responses\EmailVerificationNotificationSentResponse;
 use Laravel\Fortify\Http\Responses\FailedPasswordConfirmationResponse;
 use Laravel\Fortify\Http\Responses\FailedPasswordResetLinkRequestResponse;
@@ -48,6 +49,7 @@ use Laravel\Fortify\Http\Responses\TwoFactorDisabledResponse;
 use Laravel\Fortify\Http\Responses\TwoFactorEnabledResponse;
 use Laravel\Fortify\Http\Responses\TwoFactorLoginResponse;
 use Laravel\Fortify\Http\Responses\VerifyEmailResponse;
+use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use PragmaRX\Google2FA\Google2FA;
 
 class FortifyServiceProvider extends ServiceProvider
@@ -69,6 +71,8 @@ class FortifyServiceProvider extends ServiceProvider
                 $app->make(Repository::class)
             );
         });
+
+        $this->app->singleton(RedirectsIfTwoFactorAuthenticatableContract::class, RedirectIfTwoFactorAuthenticatable::class);
 
         $this->app->bind(StatefulGuard::class, function () {
             return Auth::guard(config('fortify.guard', null));
