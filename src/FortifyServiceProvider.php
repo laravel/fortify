@@ -72,7 +72,9 @@ class FortifyServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->singleton(RedirectsIfTwoFactorAuthenticatableContract::class, RedirectIfTwoFactorAuthenticatable::class);
+        $this->app->singleton(RedirectsIfTwoFactorAuthenticatableContract::class, function ($app) {
+            return $app->make(RedirectIfTwoFactorAuthenticatable::class);
+        });
 
         $this->app->bind(StatefulGuard::class, function () {
             return Auth::guard(config('fortify.guard', null));
