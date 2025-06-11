@@ -238,6 +238,17 @@ class Fortify
     }
 
     /**
+     * Register a class / callback that should be used to redirect users for two factor authentication.
+     *
+     * @param  string  $callback
+     * @return void
+     */
+    public static function redirectUserForTwoFactorAuthenticationUsing(string $callback)
+    {
+        app()->singleton(RedirectsIfTwoFactorAuthenticatable::class, $callback);
+    }
+
+    /**
      * Register a callback that is responsible for confirming existing user passwords as valid.
      *
      * @param  callable  $callback
@@ -290,17 +301,6 @@ class Fortify
     public static function resetUserPasswordsUsing(string $callback)
     {
         app()->singleton(ResetsUserPasswords::class, $callback);
-    }
-
-    /**
-     * Register a class / callback that should be used to redirect users for two factor authentication.
-     *
-     * @param  string  $callback
-     * @return void
-     */
-    public static function redirectUserForTwoFactorAuthenticationUsing(string $callback)
-    {
-        app()->singleton(RedirectsIfTwoFactorAuthenticatable::class, $callback);
     }
 
     /**

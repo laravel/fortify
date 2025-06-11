@@ -2,10 +2,14 @@
 
 namespace Laravel\Fortify\Contracts;
 
-/**
- * @method void handle(\Illuminate\Http\Request $request, callable $next)
- */
 interface RedirectsIfTwoFactorAuthenticatable
 {
-    //
+    /**
+     * Handle the incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  callable  $next
+     * @return mixed
+     */
+    public function handle($request, $next);
 }
