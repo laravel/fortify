@@ -5,6 +5,7 @@ namespace Laravel\Fortify;
 use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Fortify\Contracts\LoginViewResponse;
+use Laravel\Fortify\Contracts\RedirectsIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Contracts\RegisterViewResponse;
 use Laravel\Fortify\Contracts\RequestPasswordResetLinkViewResponse;
 use Laravel\Fortify\Contracts\ResetPasswordViewResponse;
@@ -289,6 +290,17 @@ class Fortify
     public static function resetUserPasswordsUsing(string $callback)
     {
         app()->singleton(ResetsUserPasswords::class, $callback);
+    }
+
+    /**
+     * Register a class / callback that should be used to redirect users for two factor authentication.
+     *
+     * @param  string  $callback
+     * @return void
+     */
+    public static function redirectUserForTwoFactorAuthenticationUsing(string $callback)
+    {
+        app()->singleton(RedirectsIfTwoFactorAuthenticatable::class, $callback);
     }
 
     /**
