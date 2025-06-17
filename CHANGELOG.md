@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.26.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.27.0...1.x)
+
+## [v1.27.0](https://github.com/laravel/fortify/compare/v1.26.0...v1.27.0) - 2025-06-11
+
+* Allow `RedirectIfTwoFactorAuthenticatable` to be resolved via the Container by [@Junveloper](https://github.com/Junveloper) in https://github.com/laravel/fortify/pull/599
 
 ## [v1.26.0](https://github.com/laravel/fortify/compare/v1.25.4...v1.26.0) - 2025-06-05
 
