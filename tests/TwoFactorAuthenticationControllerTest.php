@@ -2,8 +2,11 @@
 
 namespace Laravel\Fortify\Tests;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Encryption\Encrypter;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Str;
 use Laravel\Fortify\Events\TwoFactorAuthenticationConfirmed;
 use Laravel\Fortify\Events\TwoFactorAuthenticationDisabled;
 use Laravel\Fortify\Events\TwoFactorAuthenticationEnabled;
@@ -238,5 +241,30 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
 
         $this->assertNull($user->two_factor_secret);
         $this->assertNull($user->two_factor_recovery_codes);
+    }
+
+    public function test_two_factor_authentication_secret_key_can_be_retrieved_with_model_encrypter()
+    {
+        Event::fake();
+
+        Model::encryptUsing(new Encrypter(
+            base64_decode(Str::after('base64:FXvqP4Rg3XycgbIND25bhmjYiiFn1Z+AuAC98GU3Cew=', 'base64:')),
+            'aes-256-gcm',
+        ));
+
+        $user = UserWithTwoFactor::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+            'two_factor_secret' => Model::$encrypter->encrypt('foo'),
+        ]);
+
+        $response = $this->withoutExceptionHandling()->actingAs($user)->getJson(
+            '/user/two-factor-secret-key'
+        );
+
+        $response->assertStatus(200);
+
+        $this->assertEquals('foo', $response->original['secretKey']);
     }
 }
