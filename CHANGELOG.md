@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.27.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.28.0...1.x)
+
+## [v1.28.0](https://github.com/laravel/fortify/compare/v1.27.0...v1.28.0) - 2025-07-22
+
+* feat() : make Fortify honour Model::encryptUsing to enable app key rotation by [@sebestenyb](https://github.com/sebestenyb) in https://github.com/laravel/fortify/pull/601
 
 ## [v1.27.0](https://github.com/laravel/fortify/compare/v1.26.0...v1.27.0) - 2025-06-11
 
