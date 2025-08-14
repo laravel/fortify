@@ -18,7 +18,10 @@ class ConfirmedTwoFactorAuthenticationController extends Controller
      */
     public function store(Request $request, ConfirmTwoFactorAuthentication $confirm)
     {
-        $confirm($request->user(), $request->input('code'));
+
+        $code = "{$request->code1}{$request->code2}{$request->code3}{$request->code4}{$request->code5}{$request->code6}";
+
+        $confirm($request->user(), $code);
 
         return app(TwoFactorConfirmedResponse::class);
     }

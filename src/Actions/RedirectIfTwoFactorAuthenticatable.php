@@ -5,13 +5,12 @@ namespace Laravel\Fortify\Actions;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Validation\ValidationException;
-use Laravel\Fortify\Contracts\RedirectsIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\LoginRateLimiter;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
-class RedirectIfTwoFactorAuthenticatable implements RedirectsIfTwoFactorAuthenticatable
+class RedirectIfTwoFactorAuthenticatable
 {
     /**
      * The guard implementation.
@@ -87,17 +86,13 @@ class RedirectIfTwoFactorAuthenticatable implements RedirectsIfTwoFactorAuthenti
             });
         }
 
-        $provider = $this->guard->getProvider();
+        $model = $this->guard->getProvider()->getModel();
 
-        return tap($provider->retrieveByCredentials($request->only(Fortify::username(), 'password')), function ($user) use ($provider, $request) {
-            if (! $user || ! $provider->validateCredentials($user, ['password' => $request->password])) {
+        return tap($model::where(Fortify::username(), $request->{Fortify::username()})->first(), function ($user) use ($request) {
+            if (! $user || ! $this->guard->getProvider()->validateCredentials($user, ['password' => $request->password])) {
                 $this->fireFailedEvent($request, $user);
 
                 $this->throwFailedAuthenticationException($request);
-            }
-
-            if (config('hashing.rehash_on_login', true) && method_exists($provider, 'rehashPasswordIfRequired')) {
-                $provider->rehashPasswordIfRequired($user, ['password' => $request->password]);
             }
         });
     }
@@ -128,7 +123,7 @@ class RedirectIfTwoFactorAuthenticatable implements RedirectsIfTwoFactorAuthenti
      */
     protected function fireFailedEvent($request, $user = null)
     {
-        event(new Failed($this->guard?->name ?? config('fortify.guard'), $user, [
+        event(new Failed(config('fortify.guard'), $user, [
             Fortify::username() => $request->{Fortify::username()},
             'password' => $request->password,
         ]));

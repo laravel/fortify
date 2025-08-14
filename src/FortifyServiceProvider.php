@@ -7,7 +7,6 @@ use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Contracts\EmailVerificationNotificationSentResponse as EmailVerificationNotificationSentResponseContract;
 use Laravel\Fortify\Contracts\FailedPasswordConfirmationResponse as FailedPasswordConfirmationResponseContract;
 use Laravel\Fortify\Contracts\FailedPasswordResetLinkRequestResponse as FailedPasswordResetLinkRequestResponseContract;
@@ -21,7 +20,6 @@ use Laravel\Fortify\Contracts\PasswordResetResponse as PasswordResetResponseCont
 use Laravel\Fortify\Contracts\PasswordUpdateResponse as PasswordUpdateResponseContract;
 use Laravel\Fortify\Contracts\ProfileInformationUpdatedResponse as ProfileInformationUpdatedResponseContract;
 use Laravel\Fortify\Contracts\RecoveryCodesGeneratedResponse as RecoveryCodesGeneratedResponseContract;
-use Laravel\Fortify\Contracts\RedirectsIfTwoFactorAuthenticatable as RedirectsIfTwoFactorAuthenticatableContract;
 use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
 use Laravel\Fortify\Contracts\SuccessfulPasswordResetLinkRequestResponse as SuccessfulPasswordResetLinkRequestResponseContract;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider as TwoFactorAuthenticationProviderContract;
@@ -72,10 +70,6 @@ class FortifyServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->singleton(RedirectsIfTwoFactorAuthenticatableContract::class, function ($app) {
-            return $app->make(RedirectIfTwoFactorAuthenticatable::class);
-        });
-
         $this->app->bind(StatefulGuard::class, function () {
             return Auth::guard(config('fortify.guard', null));
         });
@@ -119,7 +113,6 @@ class FortifyServiceProvider extends ServiceProvider
     {
         $this->configurePublishing();
         $this->configureRoutes();
-        $this->registerCommands();
     }
 
     /**
@@ -143,9 +136,7 @@ class FortifyServiceProvider extends ServiceProvider
                 __DIR__.'/../stubs/UpdateUserPassword.php' => app_path('Actions/Fortify/UpdateUserPassword.php'),
             ], 'fortify-support');
 
-            $method = method_exists($this, 'publishesMigrations') ? 'publishesMigrations' : 'publishes';
-
-            $this->{$method}([
+            $this->publishes([
                 __DIR__.'/../database/migrations' => database_path('migrations'),
             ], 'fortify-migrations');
         }
@@ -166,18 +157,6 @@ class FortifyServiceProvider extends ServiceProvider
             ], function () {
                 $this->loadRoutesFrom(__DIR__.'/../routes/routes.php');
             });
-        }
-    }
-
-    /**
-     * Register the package's commands.
-     */
-    protected function registerCommands(): void
-    {
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                Console\InstallCommand::class,
-            ]);
         }
     }
 }

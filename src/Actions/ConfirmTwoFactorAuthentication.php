@@ -2,8 +2,6 @@
 
 namespace Laravel\Fortify\Actions;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
 use Laravel\Fortify\Events\TwoFactorAuthenticationConfirmed;
@@ -37,13 +35,28 @@ class ConfirmTwoFactorAuthentication
      */
     public function __invoke($user, $code)
     {
+
         if (empty($user->two_factor_secret) ||
             empty($code) ||
-            ! $this->provider->verify((Model::$encrypter ?? Crypt::getFacadeRoot())->decrypt($user->two_factor_secret), $code)) {
+            ! $this->provider->verify(decrypt($user->two_factor_secret), $code)) {
+
+            session([
+
+                "status" => "error"
+
+            ]);
+
             throw ValidationException::withMessages([
                 'code' => [__('The provided two factor authentication code was invalid.')],
             ])->errorBag('confirmTwoFactorAuthentication');
+
         }
+
+        session([
+
+            "2fa" => "authenticated"
+
+        ]);
 
         $user->forceFill([
             'two_factor_confirmed_at' => now(),

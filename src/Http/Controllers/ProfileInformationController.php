@@ -21,7 +21,7 @@ class ProfileInformationController extends Controller
     public function update(Request $request,
                            UpdatesUserProfileInformation $updater)
     {
-        if (config('fortify.lowercase_usernames') && $request->has(Fortify::username())) {
+        if (config('fortify.lowercase_usernames')) {
             $request->merge([
                 Fortify::username() => Str::lower($request->{Fortify::username()}),
             ]);

@@ -16,6 +16,7 @@ class TwoFactorConfirmedResponse implements TwoFactorConfirmedResponseContract
      */
     public function toResponse($request)
     {
+
         return $request->wantsJson()
                     ? new JsonResponse('', 200)
                     : back()->with('status', Fortify::TWO_FACTOR_AUTHENTICATION_CONFIRMED);

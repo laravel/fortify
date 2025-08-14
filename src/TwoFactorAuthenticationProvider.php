@@ -29,7 +29,7 @@ class TwoFactorAuthenticationProvider implements TwoFactorAuthenticationProvider
      * @param  \Illuminate\Contracts\Cache\Repository|null  $cache
      * @return void
      */
-    public function __construct(Google2FA $engine, ?Repository $cache = null)
+    public function __construct(Google2FA $engine, Repository $cache = null)
     {
         $this->engine = $engine;
         $this->cache = $cache;
@@ -38,12 +38,11 @@ class TwoFactorAuthenticationProvider implements TwoFactorAuthenticationProvider
     /**
      * Generate a new secret key.
      *
-     * @param  int  $secretLength
      * @return string
      */
-    public function generateSecretKey(int $secretLength = 16)
+    public function generateSecretKey()
     {
-        return $this->engine->generateSecretKey($secretLength);
+        return $this->engine->generateSecretKey();
     }
 
     /**
