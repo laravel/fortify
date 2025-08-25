@@ -21,7 +21,7 @@ class DisableTwoFactorAuthentication
             $user->forceFill([
                 'two_factor_secret' => null,
                 'two_factor_recovery_codes' => null,
-            ] + (Fortify::confirmsTwoFactorAuthentication() || ! is_null($user->two_factor_confirmed_at) ? [
+            ] + (Fortify::confirmsTwoFactorAuthentication() ? [
                 'two_factor_confirmed_at' => null,
             ] : []))->save();
 

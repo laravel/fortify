@@ -2,10 +2,8 @@
 
 namespace Laravel\Fortify\Http\Controllers;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Crypt;
 use Laravel\Fortify\Actions\GenerateNewRecoveryCodes;
 use Laravel\Fortify\Contracts\RecoveryCodesGeneratedResponse;
 
@@ -24,7 +22,7 @@ class RecoveryCodeController extends Controller
             return [];
         }
 
-        return response()->json(json_decode((Model::$encrypter ?? Crypt::getFacadeRoot())->decrypt(
+        return response()->json(json_decode(decrypt(
             $request->user()->two_factor_recovery_codes
         ), true));
     }

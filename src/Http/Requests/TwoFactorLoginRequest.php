@@ -3,10 +3,8 @@
 namespace Laravel\Fortify\Http\Requests;
 
 use Illuminate\Contracts\Auth\StatefulGuard;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Support\Facades\Crypt;
 use Laravel\Fortify\Contracts\FailedTwoFactorLoginResponse;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
 
@@ -57,7 +55,7 @@ class TwoFactorLoginRequest extends FormRequest
     public function hasValidCode()
     {
         return $this->code && tap(app(TwoFactorAuthenticationProvider::class)->verify(
-            (Model::$encrypter ?? Crypt::getFacadeRoot())->decrypt($this->challengedUser()->two_factor_secret), $this->code
+            decrypt($this->challengedUser()->two_factor_secret), $this->code
         ), function ($result) {
             if ($result) {
                 $this->session()->forget('login.id');
