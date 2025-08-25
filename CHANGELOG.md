@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.28.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.29.0...1.x)
+
+## [v1.29.0](https://github.com/laravel/fortify/compare/v1.28.0...v1.29.0) - 2025-08-14
+
+* fix: add missing route name to `/user/two-factor-recovery-codes` by [@Barbapapazes](https://github.com/Barbapapazes) in https://github.com/laravel/fortify/pull/602
 
 ## [v1.28.0](https://github.com/laravel/fortify/compare/v1.27.0...v1.28.0) - 2025-07-22
 
