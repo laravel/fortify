@@ -9,6 +9,11 @@ use Laravel\Fortify\Actions\DisableTwoFactorAuthentication;
  */
 trait InteractsWithTwoFactorState
 {
+    /**
+     * Ensure the two-factor authentication state is valid and handle transitions.
+     *
+     * @return void
+     */
     public function ensureStateIsValid()
     {
         if (! Fortify::confirmsTwoFactorAuthentication()) {
@@ -54,7 +59,7 @@ trait InteractsWithTwoFactorState
      */
     protected function neverFinishedConfirmingTwoFactorAuthentication(int $currentTime)
     {
-        return ! array_key_exists('code', $this->session()->getOldInput()) &&
+        return ! $this->session()->hasOldInput('code') &&
             is_null($this->user()->two_factor_confirmed_at) &&
             $this->session()->get('two_factor_confirming_at', 0) != $currentTime;
     }
