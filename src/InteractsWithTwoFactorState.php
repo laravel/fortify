@@ -2,7 +2,6 @@
 
 namespace Laravel\Fortify;
 
-use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Actions\DisableTwoFactorAuthentication;
 
 /**
@@ -10,7 +9,7 @@ use Laravel\Fortify\Actions\DisableTwoFactorAuthentication;
  */
 trait InteractsWithTwoFactorState
 {
-    public function ensureStateIsValid(): void
+    public function ensureStateIsValid()
     {
         if (! Fortify::confirmsTwoFactorAuthentication()) {
             return;
@@ -27,7 +26,7 @@ trait InteractsWithTwoFactorState
         }
 
         if ($this->neverFinishedConfirmingTwoFactorAuthentication($currentTime)) {
-            app(DisableTwoFactorAuthentication::class)(Auth::user());
+            app(DisableTwoFactorAuthentication::class)($this->user());
 
             $this->session()->put('two_factor_empty_at', $currentTime);
             $this->session()->remove('two_factor_confirming_at');

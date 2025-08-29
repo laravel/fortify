@@ -61,6 +61,7 @@ class InteractsWithTwoFactorStateTest extends OrchestraTestCase
     {
         return [
             'disabled' => [null, null, true],
+            'partial_setup' => ['secret', null, true],
             'enabled' => ['secret', 'confirmed', false],
         ];
     }
@@ -179,6 +180,41 @@ class InteractsWithTwoFactorStateTest extends OrchestraTestCase
         $this->assertNull($user->two_factor_secret);
         $this->assertTrue($formRequest->session()->has('two_factor_empty_at'));
         $this->assertFalse($formRequest->session()->has('two_factor_confirming_at'));
+    }
+
+    public function test_does_not_disable_when_code_in_old_input_is_present()
+    {
+        $user = $this->createUser([
+            'two_factor_secret' => encrypt('secret'),
+            'two_factor_confirmed_at' => null,
+        ]);
+        $formRequest = $this->createFormRequestWithUser($user);
+        $formRequest->session()->put('two_factor_confirming_at', time() - 10);
+        $formRequest->session()->flashInput(['code' => '123456']);
+
+        $formRequest->ensureStateIsValid();
+
+        $this->assertNotNull($user->two_factor_secret);
+        $this->assertTrue($formRequest->session()->has('two_factor_empty_at'));
+        $this->assertTrue($formRequest->session()->has('two_factor_confirming_at'));
+    }
+
+    public function test_confirming_at_timestamp_is_current_time()
+    {
+        $user = $this->createUser([
+            'two_factor_secret' => encrypt('secret'),
+            'two_factor_confirmed_at' => null,
+        ]);
+        $formRequest = $this->createFormRequestWithUser($user);
+        $formRequest->session()->put('two_factor_empty_at', time() - 10);
+
+        $beforeTime = time();
+        $formRequest->ensureStateIsValid();
+        $afterTime = time();
+
+        $timestamp = $formRequest->session()->get('two_factor_confirming_at');
+        $this->assertGreaterThanOrEqual($beforeTime, $timestamp);
+        $this->assertLessThanOrEqual($afterTime, $timestamp);
     }
 
     private function createUser(array $attributes = []): UserWithTwoFactor
