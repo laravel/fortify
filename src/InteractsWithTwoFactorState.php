@@ -41,7 +41,7 @@ trait InteractsWithTwoFactorState
      */
     protected function hasJustBegunConfirmingTwoFactorAuthentication()
     {
-        return !is_null($this->user()->two_factor_secret) &&
+        return ! is_null($this->user()->two_factor_secret) &&
             is_null($this->user()->two_factor_confirmed_at) &&
             $this->session()->has('two_factor_empty_at') &&
             is_null($this->session()->get('two_factor_confirming_at'));
@@ -50,12 +50,12 @@ trait InteractsWithTwoFactorState
     /**
      * Determine if two-factor authentication was never totally confirmed once confirmation started.
      *
-     * @param int $currentTime
+     * @param  int  $currentTime
      * @return bool
      */
     protected function neverFinishedConfirmingTwoFactorAuthentication(int $currentTime)
     {
-        return !array_key_exists('code', $this->session()->getOldInput()) &&
+        return ! array_key_exists('code', $this->session()->getOldInput()) &&
             is_null($this->user()->two_factor_confirmed_at) &&
             $this->session()->get('two_factor_confirming_at', 0) != $currentTime;
     }

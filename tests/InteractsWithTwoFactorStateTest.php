@@ -5,8 +5,8 @@ namespace Laravel\Fortify\Tests;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Features;
-use Laravel\Fortify\Tests\Requests\FormRequestInteractsWithTwoFactorState;
 use Laravel\Fortify\Tests\Models\UserWithTwoFactor;
+use Laravel\Fortify\Tests\Requests\FormRequestInteractsWithTwoFactorState;
 use Orchestra\Testbench\Attributes\WithMigration;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -199,7 +199,7 @@ class InteractsWithTwoFactorStateTest extends OrchestraTestCase
         Auth::shouldReceive('user')->andReturn($user);
 
         $formRequest = FormRequestInteractsWithTwoFactorState::create('test');
-        $formRequest->setUserResolver(fn () => $user);
+        $formRequest->setUserResolver(fn() => $user);
         $formRequest->setLaravelSession($this->app['session']->driver());
 
         return $formRequest;
