@@ -3,7 +3,6 @@
 namespace Laravel\Fortify\Tests;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Tests\Models\UserWithTwoFactor;
 use Laravel\Fortify\Tests\Requests\FormRequestInteractsWithTwoFactorState;
