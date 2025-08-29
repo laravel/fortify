@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.29.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.30.0...1.x)
+
+## [v1.30.0](https://github.com/laravel/fortify/compare/v1.29.0...v1.30.0) - 2025-08-29
+
+* [1.x] Add `InteractsWithTwoFactorState` Trait  to handle 2FA state between requests by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/fortify/pull/604
 
 ## [v1.29.0](https://github.com/laravel/fortify/compare/v1.28.0...v1.29.0) - 2025-08-14
 
