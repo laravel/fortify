@@ -232,8 +232,6 @@ class InteractsWithTwoFactorStateTest extends OrchestraTestCase
 
     private function createFormRequestWithUser(?UserWithTwoFactor $user = null): FormRequestInteractsWithTwoFactorState
     {
-        Auth::shouldReceive('user')->andReturn($user);
-
         $formRequest = FormRequestInteractsWithTwoFactorState::create('test');
         $formRequest->setUserResolver(fn () => $user);
         $formRequest->setLaravelSession($this->app['session']->driver());
