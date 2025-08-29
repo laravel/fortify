@@ -52,8 +52,9 @@ class ManagesTwoFactorConfirmationTest extends OrchestraTestCase
 
         $this->controller->callValidateTwoFactorAuthenticationState($request);
 
-        if (!$expectedDisabled) {
+        if (! $expectedDisabled) {
             $this->assertFalse($request->session()->has('two_factor_empty_at'));
+
             return;
         }
 
@@ -113,22 +114,22 @@ class ManagesTwoFactorConfirmationTest extends OrchestraTestCase
             'no_secret' => [
                 ['two_factor_secret' => null, 'two_factor_confirmed_at' => null],
                 ['two_factor_empty_at' => $pastTime],
-                'Should not set confirming_at without secret'
+                'Should not set confirming_at without secret',
             ],
             'already_confirmed' => [
                 ['two_factor_secret' => 'secret', 'two_factor_confirmed_at' => 'confirmed'],
                 ['two_factor_empty_at' => $pastTime],
-                'Should not set confirming_at when already confirmed'
+                'Should not set confirming_at when already confirmed',
             ],
             'no_empty_at_session' => [
                 ['two_factor_secret' => 'secret', 'two_factor_confirmed_at' => null],
                 [],
-                'Should not set confirming_at without empty_at session'
+                'Should not set confirming_at without empty_at session',
             ],
             'already_confirming' => [
                 ['two_factor_secret' => 'secret', 'two_factor_confirmed_at' => null],
                 ['two_factor_empty_at' => $pastTime, 'two_factor_confirming_at' => time() - 5],
-                'Should not overwrite existing confirming_at timestamp'
+                'Should not overwrite existing confirming_at timestamp',
             ],
         ];
     }
@@ -186,7 +187,6 @@ class ManagesTwoFactorConfirmationTest extends OrchestraTestCase
         return UserWithTwoFactor::forceCreate(array_merge($defaults, $attributes));
     }
 
-
     private function createRequestWithUser(?UserWithTwoFactor $user = null): Request
     {
         $user = $user ?: $this->createUser();
@@ -194,7 +194,7 @@ class ManagesTwoFactorConfirmationTest extends OrchestraTestCase
         Auth::shouldReceive('user')->andReturn($user);
 
         $request = Request::create('test');
-        $request->setUserResolver(fn() => $user);
+        $request->setUserResolver(fn () => $user);
         $request->setLaravelSession($this->app['session']->driver());
 
         return $request;

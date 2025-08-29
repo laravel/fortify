@@ -68,7 +68,7 @@ trait ManagesTwoFactorConfirmation
      * Determine if two-factor authentication was never totally confirmed once confirmation started.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  integer  $currentTime
+     * @param  int  $currentTime
      * @return bool
      */
     protected function neverFinishedConfirmingTwoFactorAuthentication(Request $request, int $currentTime): bool
