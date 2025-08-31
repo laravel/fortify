@@ -50,8 +50,8 @@ class PasswordResetLinkController extends Controller
         );
 
         return $status == Password::RESET_LINK_SENT
-                    ? app(SuccessfulPasswordResetLinkRequestResponse::class, ['status' => $status])
-                    : app(FailedPasswordResetLinkRequestResponse::class, ['status' => $status]);
+            ? app(SuccessfulPasswordResetLinkRequestResponse::class, ['status' => $status])
+            : app(FailedPasswordResetLinkRequestResponse::class, ['status' => $status]);
     }
 
     /**

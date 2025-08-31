@@ -17,7 +17,7 @@ class TwoFactorEnabledResponse implements TwoFactorLoginResponseContract
     public function toResponse($request)
     {
         return $request->wantsJson()
-                    ? new JsonResponse('', 200)
-                    : back()->with('status', Fortify::TWO_FACTOR_AUTHENTICATION_ENABLED);
+            ? new JsonResponse('', 200)
+            : back()->with('status', Fortify::TWO_FACTOR_AUTHENTICATION_ENABLED);
     }
 }

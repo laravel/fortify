@@ -17,7 +17,7 @@ class RecoveryCodesGeneratedResponse implements RecoveryCodesGeneratedResponseCo
     public function toResponse($request)
     {
         return $request->wantsJson()
-                    ? new JsonResponse('', 200)
-                    : back()->with('status', Fortify::RECOVERY_CODES_GENERATED);
+            ? new JsonResponse('', 200)
+            : back()->with('status', Fortify::RECOVERY_CODES_GENERATED);
     }
 }
