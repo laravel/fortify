@@ -20,8 +20,8 @@ class EmailVerificationNotificationController extends Controller
     {
         if ($request->user()->hasVerifiedEmail()) {
             return $request->wantsJson()
-                        ? new JsonResponse('', 204)
-                        : app(RedirectAsIntended::class, ['name' => 'email-verification']);
+                ? new JsonResponse('', 204)
+                : app(RedirectAsIntended::class, ['name' => 'email-verification']);
         }
 
         $request->user()->sendEmailVerificationNotification();

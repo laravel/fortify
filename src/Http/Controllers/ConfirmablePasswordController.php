@@ -59,7 +59,7 @@ class ConfirmablePasswordController extends Controller
         }
 
         return $confirmed
-                    ? app(PasswordConfirmedResponse::class)
-                    : app(FailedPasswordConfirmationResponse::class);
+            ? app(PasswordConfirmedResponse::class)
+            : app(FailedPasswordConfirmationResponse::class);
     }
 }

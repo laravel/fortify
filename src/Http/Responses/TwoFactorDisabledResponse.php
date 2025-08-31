@@ -17,7 +17,7 @@ class TwoFactorDisabledResponse implements TwoFactorLoginResponseContract
     public function toResponse($request)
     {
         return $request->wantsJson()
-                    ? new JsonResponse('', 200)
-                    : back()->with('status', Fortify::TWO_FACTOR_AUTHENTICATION_DISABLED);
+            ? new JsonResponse('', 200)
+            : back()->with('status', Fortify::TWO_FACTOR_AUTHENTICATION_DISABLED);
     }
 }

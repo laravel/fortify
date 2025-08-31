@@ -17,7 +17,7 @@ class ProfileInformationUpdatedResponse implements ProfileInformationUpdatedResp
     public function toResponse($request)
     {
         return $request->wantsJson()
-                    ? new JsonResponse('', 200)
-                    : back()->with('status', Fortify::PROFILE_INFORMATION_UPDATED);
+            ? new JsonResponse('', 200)
+            : back()->with('status', Fortify::PROFILE_INFORMATION_UPDATED);
     }
 }

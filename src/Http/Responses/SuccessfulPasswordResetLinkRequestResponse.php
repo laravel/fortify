@@ -34,7 +34,7 @@ class SuccessfulPasswordResetLinkRequestResponse implements SuccessfulPasswordRe
     public function toResponse($request)
     {
         return $request->wantsJson()
-                    ? new JsonResponse(['message' => trans($this->status)], 200)
-                    : back()->with('status', trans($this->status));
+            ? new JsonResponse(['message' => trans($this->status)], 200)
+            : back()->with('status', trans($this->status));
     }
 }

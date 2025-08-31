@@ -17,7 +17,7 @@ class EmailVerificationNotificationSentResponse implements EmailVerificationNoti
     public function toResponse($request)
     {
         return $request->wantsJson()
-                    ? new JsonResponse('', 202)
-                    : back()->with('status', Fortify::VERIFICATION_LINK_SENT);
+            ? new JsonResponse('', 202)
+            : back()->with('status', Fortify::VERIFICATION_LINK_SENT);
     }
 }
