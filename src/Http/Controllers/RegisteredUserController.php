@@ -63,7 +63,9 @@ class RegisteredUserController extends Controller
 
         $this->guard->login($user, $request->boolean('remember'));
 
-        $request->session()->regenerate();
+        if ($request->hasSession()) {
+            $request->session()->regenerate();
+        }
 
         return app(RegisterResponse::class);
     }
