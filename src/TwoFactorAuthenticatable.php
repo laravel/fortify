@@ -8,8 +8,6 @@ use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\Fill;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Crypt;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
 use Laravel\Fortify\Events\RecoveryCodeReplaced;
 
@@ -37,7 +35,7 @@ trait TwoFactorAuthenticatable
      */
     public function recoveryCodes()
     {
-        return json_decode((Model::$encrypter ?? Crypt::getFacadeRoot())->decrypt($this->two_factor_recovery_codes), true);
+        return json_decode(Fortify::currentEncrypter()->decrypt($this->two_factor_recovery_codes), true);
     }
 
     /**
@@ -49,10 +47,10 @@ trait TwoFactorAuthenticatable
     public function replaceRecoveryCode($code)
     {
         $this->forceFill([
-            'two_factor_recovery_codes' => (Model::$encrypter ?? Crypt::getFacadeRoot())->encrypt(str_replace(
+            'two_factor_recovery_codes' => Fortify::currentEncrypter()->encrypt(str_replace(
                 $code,
                 RecoveryCode::generate(),
-                (Model::$encrypter ?? Crypt::getFacadeRoot())->decrypt($this->two_factor_recovery_codes)
+                Fortify::currentEncrypter()->decrypt($this->two_factor_recovery_codes)
             )),
         ])->save();
 
@@ -86,7 +84,7 @@ trait TwoFactorAuthenticatable
         return app(TwoFactorAuthenticationProvider::class)->qrCodeUrl(
             config('app.name'),
             $this->{Fortify::username()},
-            (Model::$encrypter ?? Crypt::getFacadeRoot())->decrypt($this->two_factor_secret)
+            Fortify::currentEncrypter()->decrypt($this->two_factor_secret)
         );
     }
 }

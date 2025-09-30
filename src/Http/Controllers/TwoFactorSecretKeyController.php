@@ -2,10 +2,9 @@
 
 namespace Laravel\Fortify\Http\Controllers;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Crypt;
+use Laravel\Fortify\Fortify;
 
 class TwoFactorSecretKeyController extends Controller
 {
@@ -22,7 +21,7 @@ class TwoFactorSecretKeyController extends Controller
         }
 
         return response()->json([
-            'secretKey' => (Model::$encrypter ?? Crypt::getFacadeRoot())->decrypt($request->user()->two_factor_secret),
+            'secretKey' => Fortify::currentEncrypter()->decrypt($request->user()->two_factor_secret),
         ]);
     }
 }
