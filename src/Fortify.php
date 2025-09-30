@@ -2,6 +2,8 @@
 
 namespace Laravel\Fortify;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Crypt;
 use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Fortify\Contracts\LoginViewResponse;
@@ -45,6 +47,13 @@ class Fortify
      * @var bool
      */
     public static $registersRoutes = true;
+
+    /**
+     * The encrypter instance that is used to encrypt attributes.
+     *
+     * @var \Illuminate\Contracts\Encryption\Encrypter|null
+     */
+    public static $encrypter;
 
     const PASSWORD_UPDATED = 'password-updated';
     const PROFILE_INFORMATION_UPDATED = 'profile-information-updated';
@@ -312,6 +321,29 @@ class Fortify
     {
         return Features::enabled(Features::twoFactorAuthentication()) &&
                Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm');
+    }
+
+    /**
+     * Set the encrypter instance that will be used to encrypt attributes.
+     *
+     * @param  \Illuminate\Contracts\Encryption\Encrypter|null  $encrypter
+     * @return static
+     */
+    public static function encryptUsing($encrypter)
+    {
+        static::$encrypter = $encrypter;
+
+        return new static;
+    }
+
+    /**
+     * Get the current encrypter being used by the model.
+     *
+     * @return \Illuminate\Contracts\Encryption\Encrypter
+     */
+    public static function currentEncrypter()
+    {
+        return static::$encrypter ?? Model::$encrypter ?? Crypt::getFacadeRoot();
     }
 
     /**

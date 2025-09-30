@@ -2,11 +2,10 @@
 
 namespace Laravel\Fortify\Actions;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Crypt;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
 use Laravel\Fortify\Events\TwoFactorAuthenticationEnabled;
+use Laravel\Fortify\Fortify;
 use Laravel\Fortify\RecoveryCode;
 
 class EnableTwoFactorAuthentication
@@ -42,8 +41,8 @@ class EnableTwoFactorAuthentication
             $secretLength = (int) config('fortify-options.two-factor-authentication.secret-length', 16);
 
             $user->forceFill([
-                'two_factor_secret' => (Model::$encrypter ?? Crypt::getFacadeRoot())->encrypt($this->provider->generateSecretKey($secretLength)),
-                'two_factor_recovery_codes' => (Model::$encrypter ?? Crypt::getFacadeRoot())->encrypt(json_encode(Collection::times(8, function () {
+                'two_factor_secret' => Fortify::currentEncrypter()->encrypt($this->provider->generateSecretKey($secretLength)),
+                'two_factor_recovery_codes' => Fortify::currentEncrypter()->encrypt(json_encode(Collection::times(8, function () {
                     return RecoveryCode::generate();
                 })->all())),
             ])->save();
