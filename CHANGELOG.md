@@ -1,6 +1,14 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.30.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.31.0...1.x)
+
+## [v1.31.0](https://github.com/laravel/fortify/compare/v1.30.0...v1.31.0) - 2025-09-30
+
+* [1.x] single indentation on multiline ternarys by [@browner12](https://github.com/browner12) in https://github.com/laravel/fortify/pull/605
+* Validate password is a string when confirming password by [@devfrey](https://github.com/devfrey) in https://github.com/laravel/fortify/pull/606
+* Fix conflicts with app factories, causing recursive definitions in IDE by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/fortify/pull/609
+* Add `Fortify::encryptUsing()` to allow customising the default encryption by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/fortify/pull/611
+* Regenerate session on register by [@valorin](https://github.com/valorin) in https://github.com/laravel/fortify/pull/610
 
 ## [v1.30.0](https://github.com/laravel/fortify/compare/v1.29.0...v1.30.0) - 2025-08-29
 
