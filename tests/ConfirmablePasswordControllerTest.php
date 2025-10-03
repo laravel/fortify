@@ -205,16 +205,6 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
             ->assertHeaderMissing('X-Retry-After');
     }
 
-    public function test_password_must_be_a_string()
-    {
-        $response = $this->actingAs($this->user)->post('/user/confirm-password', [
-            'password' => [],
-        ]);
-
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors(['password']);
-    }
-
     protected function defineEnvironment($app)
     {
         parent::defineEnvironment($app);

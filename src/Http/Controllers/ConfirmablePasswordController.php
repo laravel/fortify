@@ -10,7 +10,6 @@ use Laravel\Fortify\Actions\ConfirmPassword;
 use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
 use Laravel\Fortify\Contracts\FailedPasswordConfirmationResponse;
 use Laravel\Fortify\Contracts\PasswordConfirmedResponse;
-use Laravel\Fortify\Http\Requests\ConfirmPasswordRequest;
 
 class ConfirmablePasswordController extends Controller
 {
@@ -46,10 +45,10 @@ class ConfirmablePasswordController extends Controller
     /**
      * Confirm the user's password.
      *
-     * @param  \Laravel\Fortify\Http\Requests\ConfirmPasswordRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Contracts\Support\Responsable
      */
-    public function store(ConfirmPasswordRequest $request)
+    public function store(Request $request)
     {
         $confirmed = app(ConfirmPassword::class)(
             $this->guard, $request->user(), $request->input('password')
