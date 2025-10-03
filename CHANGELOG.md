@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.31.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.31.1...1.x)
+
+## [v1.31.1](https://github.com/laravel/fortify/compare/v1.31.0...v1.31.1) - 2025-10-03
+
+* Breaking Change: Revert "Validate password is a string when confirming password" by [@themsaid](https://github.com/themsaid) in https://github.com/laravel/fortify/pull/612
 
 ## [v1.31.0](https://github.com/laravel/fortify/compare/v1.30.0...v1.31.0) - 2025-09-30
 
