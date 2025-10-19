@@ -2,17 +2,18 @@
 
 namespace Laravel\Fortify\Actions;
 
-use Illuminate\Auth\Events\Failed;
-use Illuminate\Contracts\Auth\StatefulGuard;
-use Illuminate\Validation\ValidationException;
-use Laravel\Fortify\Contracts\RedirectsIfTwoFactorAuthenticatable;
-use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\LoginRateLimiter;
+use Laravel\Fortify\ValidatesCredentials;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
+use Laravel\Fortify\Contracts\RedirectsIfTwoFactorAuthenticatable;
 
 class RedirectIfTwoFactorAuthenticatable implements RedirectsIfTwoFactorAuthenticatable
 {
+    use ValidatesCredentials;
+
     /**
      * The guard implementation.
      *
@@ -49,7 +50,7 @@ class RedirectIfTwoFactorAuthenticatable implements RedirectsIfTwoFactorAuthenti
      */
     public function handle($request, $next)
     {
-        $user = $this->validateCredentials($request);
+        $user = $this->guard->user() ?? $this->validateCredentials($request);
 
         if (Fortify::confirmsTwoFactorAuthentication() &&
             is_null(optional($user)->two_factor_confirmed_at)) {
@@ -62,71 +63,6 @@ class RedirectIfTwoFactorAuthenticatable implements RedirectsIfTwoFactorAuthenti
         }
 
         return $next($request);
-    }
-
-    /**
-     * Attempt to validate the incoming credentials.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return mixed
-     */
-    protected function validateCredentials($request)
-    {
-        if (Fortify::$authenticateUsingCallback) {
-            return tap(call_user_func(Fortify::$authenticateUsingCallback, $request), function ($user) use ($request) {
-                if (! $user) {
-                    $this->fireFailedEvent($request);
-
-                    $this->throwFailedAuthenticationException($request);
-                }
-            });
-        }
-
-        $provider = $this->guard->getProvider();
-
-        return tap($provider->retrieveByCredentials($request->only(Fortify::username(), 'password')), function ($user) use ($provider, $request) {
-            if (! $user || ! $provider->validateCredentials($user, ['password' => $request->password])) {
-                $this->fireFailedEvent($request, $user);
-
-                $this->throwFailedAuthenticationException($request);
-            }
-
-            if (config('hashing.rehash_on_login', true) && method_exists($provider, 'rehashPasswordIfRequired')) {
-                $provider->rehashPasswordIfRequired($user, ['password' => $request->password]);
-            }
-        });
-    }
-
-    /**
-     * Throw a failed authentication validation exception.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return void
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    protected function throwFailedAuthenticationException($request)
-    {
-        $this->limiter->increment($request);
-
-        throw ValidationException::withMessages([
-            Fortify::username() => [trans('auth.failed')],
-        ]);
-    }
-
-    /**
-     * Fire the failed authentication attempt event with the given arguments.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Contracts\Auth\Authenticatable|null  $user
-     * @return void
-     */
-    protected function fireFailedEvent($request, $user = null)
-    {
-        event(new Failed($this->guard?->name ?? config('fortify.guard'), $user, [
-            Fortify::username() => $request->{Fortify::username()},
-            'password' => $request->password,
-        ]));
     }
 
     /**
