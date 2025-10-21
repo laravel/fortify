@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.31.1...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.31.2...1.x)
+
+## [v1.31.2](https://github.com/laravel/fortify/compare/v1.31.1...v1.31.2) - 2025-10-21
+
+* [1.x] Add Laravel Fortify guidelines for boost by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/fortify/pull/614
 
 ## [v1.31.1](https://github.com/laravel/fortify/compare/v1.31.0...v1.31.1) - 2025-10-03
 
