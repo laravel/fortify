@@ -60,8 +60,6 @@ class TwoFactorAuthenticatedSessionController extends Controller
 
         if ($code = $request->validRecoveryCode()) {
             $user->replaceRecoveryCode($code);
-
-            event(new RecoveryCodeReplaced($user, $code));
         } elseif (! $request->hasValidCode()) {
             event(new TwoFactorAuthenticationFailed($user));
 
