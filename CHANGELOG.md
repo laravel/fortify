@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.31.2...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.31.3...1.x)
+
+## [v1.31.3](https://github.com/laravel/fortify/compare/v1.31.2...v1.31.3) - 2025-11-07
+
+* Resolves issue #592 - RecoveryCodeReplaced event dispatched twice by [@coolAlias](https://github.com/coolAlias) in https://github.com/laravel/fortify/pull/616
 
 ## [v1.31.2](https://github.com/laravel/fortify/compare/v1.31.1...v1.31.2) - 2025-10-21
 
