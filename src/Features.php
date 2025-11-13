@@ -62,6 +62,16 @@ class Features
     }
 
     /**
+     * Determine if the application can update a user's password.
+     *
+     * @return bool
+     */
+    public static function canUpdatePassword()
+    {
+        return static::enabled(static::updatePasswords());
+    }
+
+    /**
      * Determine if the application can manage two factor authentication.
      *
      * @return bool
