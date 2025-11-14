@@ -2,39 +2,26 @@
 
 namespace Laravel\Fortify\Actions;
 
-use Illuminate\Auth\Events\Failed;
-use Illuminate\Contracts\Auth\StatefulGuard;
-use Illuminate\Validation\ValidationException;
-use Laravel\Fortify\Fortify;
-use Laravel\Fortify\LoginRateLimiter;
+use Laravel\Fortify\CredentialsValidator;
 
 class AttemptToAuthenticate
 {
     /**
-     * The guard implementation.
+     * The credentials validator instance.
      *
-     * @var \Illuminate\Contracts\Auth\StatefulGuard
+     * @var \Laravel\Fortify\CredentialsValidator
      */
-    protected $guard;
-
-    /**
-     * The login rate limiter instance.
-     *
-     * @var \Laravel\Fortify\LoginRateLimiter
-     */
-    protected $limiter;
+    protected $validator;
 
     /**
      * Create a new controller instance.
      *
-     * @param  \Illuminate\Contracts\Auth\StatefulGuard  $guard
-     * @param  \Laravel\Fortify\LoginRateLimiter  $limiter
+     * @param  \Laravel\Fortify\CredentialsValidator  $validator
      * @return void
      */
-    public function __construct(StatefulGuard $guard, LoginRateLimiter $limiter)
+    public function __construct(CredentialsValidator $validator)
     {
-        $this->guard = $guard;
-        $this->limiter = $limiter;
+        $this->validator = $validator;
     }
 
     /**
@@ -46,70 +33,8 @@ class AttemptToAuthenticate
      */
     public function handle($request, $next)
     {
-        if (Fortify::$authenticateUsingCallback) {
-            return $this->handleUsingCustomCallback($request, $next);
-        }
-
-        if ($this->guard->attempt(
-            $request->only(Fortify::username(), 'password'),
-            $request->boolean('remember'))
-        ) {
-            return $next($request);
-        }
-
-        $this->throwFailedAuthenticationException($request);
-    }
-
-    /**
-     * Attempt to authenticate using a custom callback.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  callable  $next
-     * @return mixed
-     */
-    protected function handleUsingCustomCallback($request, $next)
-    {
-        $user = call_user_func(Fortify::$authenticateUsingCallback, $request);
-
-        if (! $user) {
-            $this->fireFailedEvent($request);
-
-            return $this->throwFailedAuthenticationException($request);
-        }
-
-        $this->guard->login($user, $request->boolean('remember'));
-
+        $this->validator->getGuard()->login($this->validator->validateCredentials($request), $request->boolean('remember'));
+        
         return $next($request);
-    }
-
-    /**
-     * Throw a failed authentication validation exception.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return void
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    protected function throwFailedAuthenticationException($request)
-    {
-        $this->limiter->increment($request);
-
-        throw ValidationException::withMessages([
-            Fortify::username() => [trans('auth.failed')],
-        ]);
-    }
-
-    /**
-     * Fire the failed authentication attempt event with the given arguments.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return void
-     */
-    protected function fireFailedEvent($request)
-    {
-        event(new Failed($this->guard?->name ?? config('fortify.guard'), null, [
-            Fortify::username() => $request->{Fortify::username()},
-            'password' => $request->password,
-        ]));
     }
 }
