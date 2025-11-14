@@ -62,7 +62,7 @@ class Features
     }
 
     /**
-     * Determine if the application can user passwords.
+     * Determine if the application can update user passwords.
      *
      * @return bool
      */
