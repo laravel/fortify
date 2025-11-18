@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.31.3...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.32.0...1.x)
+
+## [v1.32.0](https://github.com/laravel/fortify/compare/v1.31.3...v1.32.0) - 2025-11-16
+
+* [1.x] Add `Features::canUpdatePasswords()` method by [@jrd-lewis](https://github.com/jrd-lewis) in https://github.com/laravel/fortify/pull/617
+* [1.x] chore: bump to pragmarx/google2fa v9 by [@joostdebruijn](https://github.com/joostdebruijn) in https://github.com/laravel/fortify/pull/619
 
 ## [v1.31.3](https://github.com/laravel/fortify/compare/v1.31.2...v1.31.3) - 2025-11-07
 
