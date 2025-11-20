@@ -22,10 +22,8 @@
         "pragmarx/google2fa": "^9.0"
     },
     "require-dev": {
-        "mockery/mockery": "^1.0",
-        "orchestra/testbench": "^8.16|^9.0|^10.0",
-        "phpstan/phpstan": "^1.10",
-        "phpunit/phpunit": "^10.4|^11.3"
+        "orchestra/testbench": "^8.36|^9.15|^10.8",
+        "phpstan/phpstan": "^1.10"
     },
     "autoload": {
         "psr-4": {
