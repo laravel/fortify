@@ -61,8 +61,6 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/fortify.php', 'fortify');
-
         $this->registerResponseBindings();
 
         $this->app->singleton(TwoFactorAuthenticationProviderContract::class, function ($app) {
@@ -117,6 +115,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->mergeConfigFrom(__DIR__.'/../config/fortify.php', 'fortify');
         $this->configurePublishing();
         $this->configureRoutes();
         $this->registerCommands();
