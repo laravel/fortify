@@ -14,6 +14,7 @@ use Laravel\Fortify\Contracts\LoginViewResponse;
 use Laravel\Fortify\LoginRateLimiter;
 use Mockery;
 use Orchestra\Testbench\Attributes\WithMigration;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 #[WithMigration]
 class AuthenticatedSessionControllerTest extends OrchestraTestCase
@@ -81,9 +82,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $response->assertJsonValidationErrors(['email']);
     }
 
-    /**
-     * @dataProvider usernameProvider
-     */
+    #[DataProvider('usernameProvider')]
     public function test_cant_bypass_throttle_with_special_characters(string $username, string $expectedResult)
     {
         $loginRateLimiter = new LoginRateLimiter(
