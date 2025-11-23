@@ -27,7 +27,7 @@ class RecoveryCodeController extends Controller
         return app(TwoFactorRecoveryCodesResponse::class, [
             'recoveryCodes' => json_decode(Fortify::currentEncrypter()->decrypt(
                 $request->user()->two_factor_recovery_codes
-            ), true)
+            ), true),
         ]);
     }
 

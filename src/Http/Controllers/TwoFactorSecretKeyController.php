@@ -22,7 +22,7 @@ class TwoFactorSecretKeyController extends Controller
         }
 
         return app(TwoFactorSecretKeyResponse::class, [
-            'secretKey' => Fortify::currentEncrypter()->decrypt($request->user()->two_factor_secret)
+            'secretKey' => Fortify::currentEncrypter()->decrypt($request->user()->two_factor_secret),
         ]);
     }
 }

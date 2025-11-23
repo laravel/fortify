@@ -29,7 +29,7 @@ class ConfirmedPasswordStatusController extends Controller
 
         return app(ConfirmedPasswordStatusResponse::class, [
             'confirmed' => $confirmed,
-            'lastConfirmed' => $lastConfirmed
+            'lastConfirmed' => $lastConfirmed,
         ]);
     }
 }
