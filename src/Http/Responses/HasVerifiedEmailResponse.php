@@ -3,10 +3,10 @@
 namespace Laravel\Fortify\Http\Responses;
 
 use Illuminate\Http\JsonResponse;
-use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
+use Laravel\Fortify\Contracts\HasVerifiedEmailResponse as HasVerifiedEmailResponseContract;
 use Laravel\Fortify\Fortify;
 
-class LoginResponse implements LoginResponseContract
+class HasVerifiedEmailResponse implements HasVerifiedEmailResponseContract
 {
     /**
      * Create an HTTP response that represents the object.
@@ -17,7 +17,7 @@ class LoginResponse implements LoginResponseContract
     public function toResponse($request)
     {
         return $request->wantsJson()
-            ? new JsonResponse(['two_factor' => false])
-            : redirect()->intended(Fortify::redirects('login'));
+            ? new JsonResponse('', 204)
+            : redirect()->intended(Fortify::redirects('email-verification'));
     }
 }

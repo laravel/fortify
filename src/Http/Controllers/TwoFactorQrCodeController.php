@@ -4,6 +4,7 @@ namespace Laravel\Fortify\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Laravel\Fortify\Contracts\TwoFactorQrCodeResponse;
 
 class TwoFactorQrCodeController extends Controller
 {
@@ -11,17 +12,14 @@ class TwoFactorQrCodeController extends Controller
      * Get the SVG element for the user's two factor authentication QR code.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Laravel\Fortify\Contracts\TwoFactorQrCodeResponse
      */
     public function show(Request $request)
     {
-        if (is_null($request->user()->two_factor_secret)) {
-            return [];
+        if (! $request->user()->two_factor_secret) {
+            abort(404, 'Two factor authentication has not been enabled.');
         }
 
-        return response()->json([
-            'svg' => $request->user()->twoFactorQrCodeSvg(),
-            'url' => $request->user()->twoFactorQrCodeUrl(),
-        ]);
+        return app(TwoFactorQrCodeResponse::class);
     }
 }

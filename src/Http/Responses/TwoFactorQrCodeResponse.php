@@ -3,10 +3,9 @@
 namespace Laravel\Fortify\Http\Responses;
 
 use Illuminate\Http\JsonResponse;
-use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
-use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Contracts\TwoFactorQrCodeResponse as TwoFactorQrCodeResponseContract;
 
-class LoginResponse implements LoginResponseContract
+class TwoFactorQrCodeResponse implements TwoFactorQrCodeResponseContract
 {
     /**
      * Create an HTTP response that represents the object.
@@ -16,8 +15,9 @@ class LoginResponse implements LoginResponseContract
      */
     public function toResponse($request)
     {
-        return $request->wantsJson()
-            ? new JsonResponse(['two_factor' => false])
-            : redirect()->intended(Fortify::redirects('login'));
+        return new JsonResponse([
+            'svg' => $request->user()->twoFactorQrCodeSvg(),
+            'url' => $request->user()->twoFactorQrCodeUrl(),
+        ]);
     }
 }

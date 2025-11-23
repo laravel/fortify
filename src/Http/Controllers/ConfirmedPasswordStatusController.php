@@ -5,6 +5,7 @@ namespace Laravel\Fortify\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Date;
+use Laravel\Fortify\Contracts\ConfirmedPasswordStatusResponse;
 
 class ConfirmedPasswordStatusController extends Controller
 {
@@ -12,7 +13,7 @@ class ConfirmedPasswordStatusController extends Controller
      * Get the password confirmation status.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Laravel\Fortify\Contracts\ConfirmedPasswordStatusResponse
      */
     public function show(Request $request)
     {
@@ -26,10 +27,9 @@ class ConfirmedPasswordStatusController extends Controller
             'seconds', config('auth.password_timeout', 900)
         );
 
-        return response()->json([
+        return app(ConfirmedPasswordStatusResponse::class, [
             'confirmed' => $confirmed,
-        ], headers: array_filter([
-            'X-Retry-After' => $confirmed ? $lastConfirmed : null,
-        ]));
+            'lastConfirmed' => $lastConfirmed
+        ]);
     }
 }
