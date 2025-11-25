@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.32.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.32.1...1.x)
+
+## [v1.32.1](https://github.com/laravel/fortify/compare/v1.32.0...v1.32.1) - 2025-11-21
+
+* [1.x] PHP 8.5 Compatibility by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/fortify/pull/621
 
 ## [v1.32.0](https://github.com/laravel/fortify/compare/v1.31.3...v1.32.0) - 2025-11-16
 
