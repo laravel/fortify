@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Crypt;
 use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Fortify\Contracts\LoginViewResponse;
+use Laravel\Fortify\Contracts\ProfileViewResponse;
 use Laravel\Fortify\Contracts\RedirectsIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Contracts\RegisterViewResponse;
 use Laravel\Fortify\Contracts\RequestPasswordResetLinkViewResponse;
@@ -15,7 +16,6 @@ use Laravel\Fortify\Contracts\ResetsUserPasswords;
 use Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse;
 use Laravel\Fortify\Contracts\UpdatesUserPasswords;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
-use Laravel\Fortify\Contracts\UserProfileLinkViewResponse;
 use Laravel\Fortify\Contracts\VerifyEmailViewResponse;
 use Laravel\Fortify\Http\Responses\SimpleViewResponse;
 
@@ -115,6 +115,7 @@ class Fortify
         static::loginView( $prefix . 'login' );
         static::twoFactorChallengeView( $prefix . 'two-factor-challenge' );
         static::registerView( $prefix . 'register' );
+        static::profileView( $prefix . 'profile' );
         static::requestPasswordResetLinkView( $prefix . 'forgot-password' );
         static::resetPasswordView( $prefix . 'reset-password' );
         static::verifyEmailView( $prefix . 'verify-email' );
@@ -178,6 +179,20 @@ class Fortify
     }
 
     /**
+     * Specify which view should be used as the registration view.
+     *
+     * @param callable|string $view
+     *
+     * @return void
+     */
+    public static function profileView( $view )
+    {
+        app()->singleton( ProfileViewResponse::class, function () use ( $view ) {
+            return new SimpleViewResponse( $view );
+        } );
+    }
+
+    /**
      * Specify which view should be used as the email verification prompt.
      *
      * @param callable|string $view
@@ -215,20 +230,6 @@ class Fortify
     public static function requestPasswordResetLinkView( $view )
     {
         app()->singleton( RequestPasswordResetLinkViewResponse::class, function () use ( $view ) {
-            return new SimpleViewResponse( $view );
-        } );
-    }
-
-    /**
-     * Specify which view should be used as the user profile link view.
-     *
-     * @param callable|string $view
-     *
-     * @return void
-     */
-    public static function requestUserProfileLinkView( $view )
-    {
-        app()->singleton( UserProfileLinkViewResponse::class, function () use ( $view ) {
             return new SimpleViewResponse( $view );
         } );
     }

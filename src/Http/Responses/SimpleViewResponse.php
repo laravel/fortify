@@ -5,6 +5,7 @@ namespace Laravel\Fortify\Http\Responses;
 use Illuminate\Contracts\Support\Responsable;
 use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
 use Laravel\Fortify\Contracts\LoginViewResponse;
+use Laravel\Fortify\Contracts\ProfileViewResponse;
 use Laravel\Fortify\Contracts\RegisterViewResponse;
 use Laravel\Fortify\Contracts\RequestPasswordResetLinkViewResponse;
 use Laravel\Fortify\Contracts\ResetPasswordViewResponse;
@@ -15,6 +16,7 @@ class SimpleViewResponse implements
     LoginViewResponse,
     ResetPasswordViewResponse,
     RegisterViewResponse,
+    ProfileViewResponse,
     RequestPasswordResetLinkViewResponse,
     TwoFactorChallengeViewResponse,
     VerifyEmailViewResponse,
@@ -30,10 +32,11 @@ class SimpleViewResponse implements
     /**
      * Create a new response instance.
      *
-     * @param  callable|string  $view
+     * @param callable|string $view
+     *
      * @return void
      */
-    public function __construct($view)
+    public function __construct( $view )
     {
         $this->view = $view;
     }
@@ -41,19 +44,22 @@ class SimpleViewResponse implements
     /**
      * Create an HTTP response that represents the object.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function toResponse($request)
+    public function toResponse( $request )
     {
-        if (! is_callable($this->view) || is_string($this->view)) {
-            return view($this->view, ['request' => $request]);
+        if ( ! is_callable( $this->view ) || is_string( $this->view ) )
+        {
+            return view( $this->view, [ 'request' => $request ] );
         }
 
-        $response = call_user_func($this->view, $request);
+        $response = call_user_func( $this->view, $request );
 
-        if ($response instanceof Responsable) {
-            return $response->toResponse($request);
+        if ( $response instanceof Responsable )
+        {
+            return $response->toResponse( $request );
         }
 
         return $response;
