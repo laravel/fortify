@@ -106,9 +106,9 @@ Route::group( [ 'middleware' => config( 'fortify.middleware', [ 'web' ] ) ], fun
     // Profile Information...
     if ( Features::enabled( Features::updateProfileInformation() ) )
     {
-        Route::get( RoutePath::for( 'user-profile', '/user/profile' ), [ ProfileInformationController::class, 'create' ] )
+        Route::get( RoutePath::for( 'profile.edit', '/profile' ), [ ProfileInformationController::class, 'create' ] )
              ->middleware( [ config( 'fortify.auth_middleware', 'auth' ) . ':' . config( 'fortify.guard' ) ] )
-             ->name( 'user-profile' );
+             ->name( 'profile.edit' );
 
         Route::put( RoutePath::for( 'user-profile-information.update', '/user/profile-information' ), [ ProfileInformationController::class, 'update' ] )
              ->middleware( [ config( 'fortify.auth_middleware', 'auth' ) . ':' . config( 'fortify.guard' ) ] )
