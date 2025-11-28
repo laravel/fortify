@@ -15,53 +15,49 @@ use Laravel\Fortify\Contracts\ResetsUserPasswords;
 use Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse;
 use Laravel\Fortify\Contracts\UpdatesUserPasswords;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
+use Laravel\Fortify\Contracts\UserProfileLinkViewResponse;
 use Laravel\Fortify\Contracts\VerifyEmailViewResponse;
 use Laravel\Fortify\Http\Responses\SimpleViewResponse;
 
 class Fortify
 {
+    const PASSWORD_UPDATED                    = 'password-updated';
+    const PROFILE_INFORMATION_UPDATED         = 'profile-information-updated';
+    const RECOVERY_CODES_GENERATED            = 'recovery-codes-generated';
+    const TWO_FACTOR_AUTHENTICATION_CONFIRMED = 'two-factor-authentication-confirmed';
+    const TWO_FACTOR_AUTHENTICATION_DISABLED  = 'two-factor-authentication-disabled';
+    const TWO_FACTOR_AUTHENTICATION_ENABLED   = 'two-factor-authentication-enabled';
+    const VERIFICATION_LINK_SENT              = 'verification-link-sent';
     /**
      * The callback that is responsible for building the authentication pipeline array, if applicable.
      *
      * @var callable|null
      */
     public static $authenticateThroughCallback;
-
     /**
      * The callback that is responsible for validating authentication credentials, if applicable.
      *
      * @var callable|null
      */
     public static $authenticateUsingCallback;
-
     /**
      * The callback that is responsible for confirming user passwords.
      *
      * @var callable|null
      */
     public static $confirmPasswordsUsingCallback;
-
     /**
      * Indicates if Fortify routes will be registered.
      *
      * @var bool
      */
     public static $registersRoutes = true;
-
     /**
      * The encrypter instance that is used to encrypt attributes.
      *
      * @var \Illuminate\Contracts\Encryption\Encrypter|null
      */
     public static $encrypter;
-
-    const PASSWORD_UPDATED = 'password-updated';
-    const PROFILE_INFORMATION_UPDATED = 'profile-information-updated';
-    const RECOVERY_CODES_GENERATED = 'recovery-codes-generated';
-    const TWO_FACTOR_AUTHENTICATION_CONFIRMED = 'two-factor-authentication-confirmed';
-    const TWO_FACTOR_AUTHENTICATION_DISABLED = 'two-factor-authentication-disabled';
-    const TWO_FACTOR_AUTHENTICATION_ENABLED = 'two-factor-authentication-enabled';
-    const VERIFICATION_LINK_SENT = 'verification-link-sent';
 
     /**
      * Get the username used for authentication.
@@ -70,7 +66,7 @@ class Fortify
      */
     public static function username()
     {
-        return config('fortify.username', 'email');
+        return config( 'fortify.username', 'email' );
     }
 
     /**
@@ -80,157 +76,183 @@ class Fortify
      */
     public static function email()
     {
-        return config('fortify.email', 'email');
+        return config( 'fortify.email', 'email' );
     }
 
     /**
      * Get a completion redirect path for a specific feature.
      *
-     * @param  string  $redirect
+     * @param string $redirect
+     *
      * @return string
      */
-    public static function redirects(string $redirect, $default = null)
+    public static function redirects( string $redirect, $default = null )
     {
-        return config('fortify.redirects.'.$redirect) ?? $default ?? config('fortify.home');
+        return config( 'fortify.redirects.' . $redirect ) ?? $default ?? config( 'fortify.home' );
     }
 
     /**
      * Register the views for Fortify using conventional names under the given namespace.
      *
-     * @param  string  $namespace
+     * @param string $namespace
+     *
      * @return void
      */
-    public static function viewNamespace(string $namespace)
+    public static function viewNamespace( string $namespace )
     {
-        static::viewPrefix($namespace.'::');
+        static::viewPrefix( $namespace . '::' );
     }
 
     /**
      * Register the views for Fortify using conventional names under the given prefix.
      *
-     * @param  string  $prefix
+     * @param string $prefix
+     *
      * @return void
      */
-    public static function viewPrefix(string $prefix)
+    public static function viewPrefix( string $prefix )
     {
-        static::loginView($prefix.'login');
-        static::twoFactorChallengeView($prefix.'two-factor-challenge');
-        static::registerView($prefix.'register');
-        static::requestPasswordResetLinkView($prefix.'forgot-password');
-        static::resetPasswordView($prefix.'reset-password');
-        static::verifyEmailView($prefix.'verify-email');
-        static::confirmPasswordView($prefix.'confirm-password');
+        static::loginView( $prefix . 'login' );
+        static::twoFactorChallengeView( $prefix . 'two-factor-challenge' );
+        static::registerView( $prefix . 'register' );
+        static::requestPasswordResetLinkView( $prefix . 'forgot-password' );
+        static::resetPasswordView( $prefix . 'reset-password' );
+        static::verifyEmailView( $prefix . 'verify-email' );
+        static::confirmPasswordView( $prefix . 'confirm-password' );
     }
 
     /**
      * Specify which view should be used as the login view.
      *
-     * @param  callable|string  $view
+     * @param callable|string $view
+     *
      * @return void
      */
-    public static function loginView($view)
+    public static function loginView( $view )
     {
-        app()->singleton(LoginViewResponse::class, function () use ($view) {
-            return new SimpleViewResponse($view);
-        });
+        app()->singleton( LoginViewResponse::class, function () use ( $view ) {
+            return new SimpleViewResponse( $view );
+        } );
     }
 
     /**
      * Specify which view should be used as the two factor authentication challenge view.
      *
-     * @param  callable|string  $view
+     * @param callable|string $view
+     *
      * @return void
      */
-    public static function twoFactorChallengeView($view)
+    public static function twoFactorChallengeView( $view )
     {
-        app()->singleton(TwoFactorChallengeViewResponse::class, function () use ($view) {
-            return new SimpleViewResponse($view);
-        });
+        app()->singleton( TwoFactorChallengeViewResponse::class, function () use ( $view ) {
+            return new SimpleViewResponse( $view );
+        } );
     }
 
     /**
      * Specify which view should be used as the new password view.
      *
-     * @param  callable|string  $view
+     * @param callable|string $view
+     *
      * @return void
      */
-    public static function resetPasswordView($view)
+    public static function resetPasswordView( $view )
     {
-        app()->singleton(ResetPasswordViewResponse::class, function () use ($view) {
-            return new SimpleViewResponse($view);
-        });
+        app()->singleton( ResetPasswordViewResponse::class, function () use ( $view ) {
+            return new SimpleViewResponse( $view );
+        } );
     }
 
     /**
      * Specify which view should be used as the registration view.
      *
-     * @param  callable|string  $view
+     * @param callable|string $view
+     *
      * @return void
      */
-    public static function registerView($view)
+    public static function registerView( $view )
     {
-        app()->singleton(RegisterViewResponse::class, function () use ($view) {
-            return new SimpleViewResponse($view);
-        });
+        app()->singleton( RegisterViewResponse::class, function () use ( $view ) {
+            return new SimpleViewResponse( $view );
+        } );
     }
 
     /**
      * Specify which view should be used as the email verification prompt.
      *
-     * @param  callable|string  $view
+     * @param callable|string $view
+     *
      * @return void
      */
-    public static function verifyEmailView($view)
+    public static function verifyEmailView( $view )
     {
-        app()->singleton(VerifyEmailViewResponse::class, function () use ($view) {
-            return new SimpleViewResponse($view);
-        });
+        app()->singleton( VerifyEmailViewResponse::class, function () use ( $view ) {
+            return new SimpleViewResponse( $view );
+        } );
     }
 
     /**
      * Specify which view should be used as the password confirmation prompt.
      *
-     * @param  callable|string  $view
+     * @param callable|string $view
+     *
      * @return void
      */
-    public static function confirmPasswordView($view)
+    public static function confirmPasswordView( $view )
     {
-        app()->singleton(ConfirmPasswordViewResponse::class, function () use ($view) {
-            return new SimpleViewResponse($view);
-        });
+        app()->singleton( ConfirmPasswordViewResponse::class, function () use ( $view ) {
+            return new SimpleViewResponse( $view );
+        } );
     }
 
     /**
      * Specify which view should be used as the request password reset link view.
      *
-     * @param  callable|string  $view
+     * @param callable|string $view
+     *
      * @return void
      */
-    public static function requestPasswordResetLinkView($view)
+    public static function requestPasswordResetLinkView( $view )
     {
-        app()->singleton(RequestPasswordResetLinkViewResponse::class, function () use ($view) {
-            return new SimpleViewResponse($view);
-        });
+        app()->singleton( RequestPasswordResetLinkViewResponse::class, function () use ( $view ) {
+            return new SimpleViewResponse( $view );
+        } );
+    }
+
+    /**
+     * Specify which view should be used as the user profile link view.
+     *
+     * @param callable|string $view
+     *
+     * @return void
+     */
+    public static function requestUserProfileLinkView( $view )
+    {
+        app()->singleton( UserProfileLinkViewResponse::class, function () use ( $view ) {
+            return new SimpleViewResponse( $view );
+        } );
     }
 
     /**
      * Register a callback that is responsible for building the authentication pipeline array.
      *
-     * @param  callable  $callback
+     * @param callable $callback
+     *
      * @return void
      */
-    public static function loginThrough(callable $callback)
+    public static function loginThrough( callable $callback )
     {
-        static::authenticateThrough($callback);
+        static::authenticateThrough( $callback );
     }
 
     /**
      * Register a callback that is responsible for building the authentication pipeline array.
      *
-     * @param  callable  $callback
+     * @param callable $callback
+     *
      * @return void
      */
-    public static function authenticateThrough(callable $callback)
+    public static function authenticateThrough( callable $callback )
     {
         static::$authenticateThroughCallback = $callback;
     }
@@ -238,10 +260,11 @@ class Fortify
     /**
      * Register a callback that is responsible for validating incoming authentication credentials.
      *
-     * @param  callable  $callback
+     * @param callable $callback
+     *
      * @return void
      */
-    public static function authenticateUsing(callable $callback)
+    public static function authenticateUsing( callable $callback )
     {
         static::$authenticateUsingCallback = $callback;
     }
@@ -249,21 +272,23 @@ class Fortify
     /**
      * Register a class / callback that should be used to redirect users for two factor authentication.
      *
-     * @param  string  $callback
+     * @param string $callback
+     *
      * @return void
      */
-    public static function redirectUserForTwoFactorAuthenticationUsing(string $callback)
+    public static function redirectUserForTwoFactorAuthenticationUsing( string $callback )
     {
-        app()->singleton(RedirectsIfTwoFactorAuthenticatable::class, $callback);
+        app()->singleton( RedirectsIfTwoFactorAuthenticatable::class, $callback );
     }
 
     /**
      * Register a callback that is responsible for confirming existing user passwords as valid.
      *
-     * @param  callable  $callback
+     * @param callable $callback
+     *
      * @return void
      */
-    public static function confirmPasswordsUsing(callable $callback)
+    public static function confirmPasswordsUsing( callable $callback )
     {
         static::$confirmPasswordsUsingCallback = $callback;
     }
@@ -271,45 +296,49 @@ class Fortify
     /**
      * Register a class / callback that should be used to create new users.
      *
-     * @param  string  $callback
+     * @param string $callback
+     *
      * @return void
      */
-    public static function createUsersUsing(string $callback)
+    public static function createUsersUsing( string $callback )
     {
-        app()->singleton(CreatesNewUsers::class, $callback);
+        app()->singleton( CreatesNewUsers::class, $callback );
     }
 
     /**
      * Register a class / callback that should be used to update user profile information.
      *
-     * @param  string  $callback
+     * @param string $callback
+     *
      * @return void
      */
-    public static function updateUserProfileInformationUsing(string $callback)
+    public static function updateUserProfileInformationUsing( string $callback )
     {
-        app()->singleton(UpdatesUserProfileInformation::class, $callback);
+        app()->singleton( UpdatesUserProfileInformation::class, $callback );
     }
 
     /**
      * Register a class / callback that should be used to update user passwords.
      *
-     * @param  string  $callback
+     * @param string $callback
+     *
      * @return void
      */
-    public static function updateUserPasswordsUsing(string $callback)
+    public static function updateUserPasswordsUsing( string $callback )
     {
-        app()->singleton(UpdatesUserPasswords::class, $callback);
+        app()->singleton( UpdatesUserPasswords::class, $callback );
     }
 
     /**
      * Register a class / callback that should be used to reset user passwords.
      *
-     * @param  string  $callback
+     * @param string $callback
+     *
      * @return void
      */
-    public static function resetUserPasswordsUsing(string $callback)
+    public static function resetUserPasswordsUsing( string $callback )
     {
-        app()->singleton(ResetsUserPasswords::class, $callback);
+        app()->singleton( ResetsUserPasswords::class, $callback );
     }
 
     /**
@@ -319,17 +348,18 @@ class Fortify
      */
     public static function confirmsTwoFactorAuthentication()
     {
-        return Features::enabled(Features::twoFactorAuthentication()) &&
-               Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm');
+        return Features::enabled( Features::twoFactorAuthentication() ) &&
+               Features::optionEnabled( Features::twoFactorAuthentication(), 'confirm' );
     }
 
     /**
      * Set the encrypter instance that will be used to encrypt attributes.
      *
-     * @param  \Illuminate\Contracts\Encryption\Encrypter|null  $encrypter
+     * @param \Illuminate\Contracts\Encryption\Encrypter|null $encrypter
+     *
      * @return static
      */
-    public static function encryptUsing($encrypter)
+    public static function encryptUsing( $encrypter )
     {
         static::$encrypter = $encrypter;
 
