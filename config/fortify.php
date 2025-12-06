@@ -12,6 +12,7 @@ return [
     'views' => true,
     'home' => '/home',
     'prefix' => '',
+    'name_prefix' => '',
     'domain' => null,
     'lowercase_usernames' => false,
     'limiters' => [

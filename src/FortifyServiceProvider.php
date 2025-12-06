@@ -7,6 +7,7 @@ use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Contracts\EmailVerificationNotificationSentResponse as EmailVerificationNotificationSentResponseContract;
 use Laravel\Fortify\Contracts\FailedPasswordConfirmationResponse as FailedPasswordConfirmationResponseContract;
@@ -158,11 +159,15 @@ class FortifyServiceProvider extends ServiceProvider
      */
     protected function configureRoutes()
     {
+        $as = config('fortify.name_prefix', '');
+        $as = $as !== '' ? Str::finish($as, '.') : '';
+
         if (Fortify::$registersRoutes) {
             Route::group([
                 'namespace' => 'Laravel\Fortify\Http\Controllers',
                 'domain' => config('fortify.domain', null),
                 'prefix' => config('fortify.prefix'),
+                'as' => $as,
             ], function () {
                 $this->loadRoutesFrom(__DIR__.'/../routes/routes.php');
             });
