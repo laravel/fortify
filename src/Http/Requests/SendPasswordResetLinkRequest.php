@@ -5,7 +5,7 @@ namespace Laravel\Fortify\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Laravel\Fortify\Fortify;
 
-class PasswordResetLinkRequest extends FormRequest
+class SendPasswordResetLinkRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
