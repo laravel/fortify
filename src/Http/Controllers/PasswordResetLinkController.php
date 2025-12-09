@@ -12,6 +12,7 @@ use Laravel\Fortify\Contracts\FailedPasswordResetLinkRequestResponse;
 use Laravel\Fortify\Contracts\RequestPasswordResetLinkViewResponse;
 use Laravel\Fortify\Contracts\SuccessfulPasswordResetLinkRequestResponse;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Http\Requests\PasswordResetLinkRequest;
 
 class PasswordResetLinkController extends Controller
 {
@@ -29,13 +30,11 @@ class PasswordResetLinkController extends Controller
     /**
      * Send a reset link to the given user.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  PasswordResetLinkRequest  $request
      * @return \Illuminate\Contracts\Support\Responsable
      */
-    public function store(Request $request): Responsable
+    public function store(PasswordResetLinkRequest $request): Responsable
     {
-        $request->validate([Fortify::email() => 'required|email']);
-
         if (config('fortify.lowercase_usernames') && $request->has(Fortify::email())) {
             $request->merge([
                 Fortify::email() => Str::lower($request->{Fortify::email()}),
