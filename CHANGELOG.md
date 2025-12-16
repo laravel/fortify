@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.32.1...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.33.0...1.x)
+
+## [v1.33.0](https://github.com/laravel/fortify/compare/v1.32.1...v1.33.0) - 2025-12-15
+
+* Added dedicated Request object to PasswordResetLinkController by [@chrispage1](https://github.com/chrispage1) in https://github.com/laravel/fortify/pull/628
+* Change callback parameter type to callable|string by [@Propaganistas](https://github.com/Propaganistas) in https://github.com/laravel/fortify/pull/629
 
 ## [v1.32.1](https://github.com/laravel/fortify/compare/v1.32.0...v1.32.1) - 2025-11-21
 
