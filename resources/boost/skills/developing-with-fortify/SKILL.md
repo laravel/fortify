@@ -95,7 +95,7 @@ Modify `app/Actions/Fortify/CreateNewUser.php` to customize user creation logic,
 
 ### Rate Limiting
 
-Configure via `fortify.limiters.login` in config. Default throttles by username + IP combination.
+Configure via `fortify.limiters.login` in config. Default configuration throttles by username + IP combination.
 
 ## Key Endpoints
 
