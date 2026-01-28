@@ -1,6 +1,14 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.33.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.34.0...1.x)
+
+## [v1.34.0](https://github.com/laravel/fortify/compare/v1.33.0...v1.34.0) - 2026-01-26
+
+### What's Changed
+
+* [1.x] Add Skills support by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/fortify/pull/630
+
+**Full Changelog**: https://github.com/laravel/fortify/compare/v1.33.0...v1.34.0
 
 ## [v1.33.0](https://github.com/laravel/fortify/compare/v1.32.1...v1.33.0) - 2025-12-15
 
