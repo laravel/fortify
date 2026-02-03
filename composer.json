@@ -19,7 +19,7 @@
         "bacon/bacon-qr-code": "^3.0",
         "illuminate/console": "^10.0|^11.0|^12.0|^13.0",
         "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
-        "pragmarx/google2fa": "^8.0"
+        "pragmarx/google2fa": "^9.0"
     },
     "require-dev": {
         "orchestra/testbench": "^8.36|^9.15|^10.8|^11.0",
