@@ -8,7 +8,6 @@ use Illuminate\Routing\Controller;
 use Laravel\Fortify\Contracts\FailedTwoFactorLoginResponse;
 use Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse;
 use Laravel\Fortify\Contracts\TwoFactorLoginResponse;
-use Laravel\Fortify\Events\RecoveryCodeReplaced;
 use Laravel\Fortify\Events\TwoFactorAuthenticationFailed;
 use Laravel\Fortify\Events\ValidTwoFactorAuthenticationCodeProvided;
 use Laravel\Fortify\Http\Requests\TwoFactorLoginRequest;
@@ -60,8 +59,6 @@ class TwoFactorAuthenticatedSessionController extends Controller
 
         if ($code = $request->validRecoveryCode()) {
             $user->replaceRecoveryCode($code);
-
-            event(new RecoveryCodeReplaced($user, $code));
         } elseif (! $request->hasValidCode()) {
             event(new TwoFactorAuthenticationFailed($user));
 

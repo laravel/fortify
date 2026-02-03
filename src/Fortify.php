@@ -249,10 +249,10 @@ class Fortify
     /**
      * Register a class / callback that should be used to redirect users for two factor authentication.
      *
-     * @param  string  $callback
+     * @param  callable|string  $callback
      * @return void
      */
-    public static function redirectUserForTwoFactorAuthenticationUsing(string $callback)
+    public static function redirectUserForTwoFactorAuthenticationUsing($callback)
     {
         app()->singleton(RedirectsIfTwoFactorAuthenticatable::class, $callback);
     }
@@ -271,10 +271,10 @@ class Fortify
     /**
      * Register a class / callback that should be used to create new users.
      *
-     * @param  string  $callback
+     * @param  callable|string  $callback
      * @return void
      */
-    public static function createUsersUsing(string $callback)
+    public static function createUsersUsing($callback)
     {
         app()->singleton(CreatesNewUsers::class, $callback);
     }
@@ -282,10 +282,10 @@ class Fortify
     /**
      * Register a class / callback that should be used to update user profile information.
      *
-     * @param  string  $callback
+     * @param  callable|string  $callback
      * @return void
      */
-    public static function updateUserProfileInformationUsing(string $callback)
+    public static function updateUserProfileInformationUsing($callback)
     {
         app()->singleton(UpdatesUserProfileInformation::class, $callback);
     }
@@ -293,10 +293,10 @@ class Fortify
     /**
      * Register a class / callback that should be used to update user passwords.
      *
-     * @param  string  $callback
+     * @param  callable|string  $callback
      * @return void
      */
-    public static function updateUserPasswordsUsing(string $callback)
+    public static function updateUserPasswordsUsing($callback)
     {
         app()->singleton(UpdatesUserPasswords::class, $callback);
     }
@@ -304,10 +304,10 @@ class Fortify
     /**
      * Register a class / callback that should be used to reset user passwords.
      *
-     * @param  string  $callback
+     * @param  callable|string  $callback
      * @return void
      */
-    public static function resetUserPasswordsUsing(string $callback)
+    public static function resetUserPasswordsUsing($callback)
     {
         app()->singleton(ResetsUserPasswords::class, $callback);
     }

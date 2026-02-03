@@ -1,6 +1,36 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.31.1...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.34.0...1.x)
+
+## [v1.34.0](https://github.com/laravel/fortify/compare/v1.33.0...v1.34.0) - 2026-01-26
+
+### What's Changed
+
+* [1.x] Add Skills support by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/fortify/pull/630
+
+**Full Changelog**: https://github.com/laravel/fortify/compare/v1.33.0...v1.34.0
+
+## [v1.33.0](https://github.com/laravel/fortify/compare/v1.32.1...v1.33.0) - 2025-12-15
+
+* Added dedicated Request object to PasswordResetLinkController by [@chrispage1](https://github.com/chrispage1) in https://github.com/laravel/fortify/pull/628
+* Change callback parameter type to callable|string by [@Propaganistas](https://github.com/Propaganistas) in https://github.com/laravel/fortify/pull/629
+
+## [v1.32.1](https://github.com/laravel/fortify/compare/v1.32.0...v1.32.1) - 2025-11-21
+
+* [1.x] PHP 8.5 Compatibility by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/fortify/pull/621
+
+## [v1.32.0](https://github.com/laravel/fortify/compare/v1.31.3...v1.32.0) - 2025-11-16
+
+* [1.x] Add `Features::canUpdatePasswords()` method by [@jrd-lewis](https://github.com/jrd-lewis) in https://github.com/laravel/fortify/pull/617
+* [1.x] chore: bump to pragmarx/google2fa v9 by [@joostdebruijn](https://github.com/joostdebruijn) in https://github.com/laravel/fortify/pull/619
+
+## [v1.31.3](https://github.com/laravel/fortify/compare/v1.31.2...v1.31.3) - 2025-11-07
+
+* Resolves issue #592 - RecoveryCodeReplaced event dispatched twice by [@coolAlias](https://github.com/coolAlias) in https://github.com/laravel/fortify/pull/616
+
+## [v1.31.2](https://github.com/laravel/fortify/compare/v1.31.1...v1.31.2) - 2025-10-21
+
+* [1.x] Add Laravel Fortify guidelines for boost by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/fortify/pull/614
 
 ## [v1.31.1](https://github.com/laravel/fortify/compare/v1.31.0...v1.31.1) - 2025-10-03
 
