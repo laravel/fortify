@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.34.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.34.1...1.x)
+
+## [v1.34.1](https://github.com/laravel/fortify/compare/v1.34.0...v1.34.1) - 2026-02-03
+
+* Supports Laravel 13 by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/fortify/pull/631
 
 ## [v1.34.0](https://github.com/laravel/fortify/compare/v1.33.0...v1.34.0) - 2026-01-26
 
