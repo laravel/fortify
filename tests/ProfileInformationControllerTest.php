@@ -3,7 +3,6 @@
 namespace Laravel\Fortify\Tests;
 
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Http\Request;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use Mockery;
 
