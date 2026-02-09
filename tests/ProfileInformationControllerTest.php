@@ -3,6 +3,7 @@
 namespace Laravel\Fortify\Tests;
 
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Http\Request;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use Mockery;
 
@@ -13,8 +14,8 @@ class ProfileInformationControllerTest extends OrchestraTestCase
         $user = Mockery::mock(Authenticatable::class);
 
         $this->mock(UpdatesUserProfileInformation::class)
-                    ->shouldReceive('update')
-                    ->once();
+            ->shouldReceive('update')
+            ->once();
 
         $response = $this->withoutExceptionHandling()->actingAs($user)->putJson('/user/profile-information', [
             'name' => 'Taylor Otwell',
@@ -31,16 +32,35 @@ class ProfileInformationControllerTest extends OrchestraTestCase
         $user = Mockery::mock(Authenticatable::class);
 
         $this->mock(UpdatesUserProfileInformation::class)
-                    ->shouldReceive('update')
-                    ->with($user, [
-                        'name' => 'Taylor Otwell',
-                        'email' => 'taylor@laravel.com',
-                    ])
-                    ->once();
+            ->shouldReceive('update')
+            ->with($user, [
+                'name' => 'Taylor Otwell',
+                'email' => 'taylor@laravel.com',
+            ])
+            ->once();
 
         $response = $this->withoutExceptionHandling()->actingAs($user)->putJson('/user/profile-information', [
             'name' => 'Taylor Otwell',
             'email' => 'TAYLOR@LARAVEL.COM',
+        ]);
+
+        $response->assertStatus(200);
+    }
+
+    public function test_request_is_passed_when_updater_expects_request_instance()
+    {
+        $user = Mockery::mock(Authenticatable::class);
+        $updater = new class() implements UpdatesUserProfileInformation {
+            public function update($user, Request $input): void
+            {
+            }
+        };
+
+        $this->app->instance(UpdatesUserProfileInformation::class, $updater);
+
+        $response = $this->withoutExceptionHandling()->actingAs($user)->putJson('/user/profile-information', [
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
         ]);
 
         $response->assertStatus(200);
