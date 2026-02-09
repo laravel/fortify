@@ -48,7 +48,7 @@ class ProfileInformationController extends Controller
 
             $type = $parameter?->getType();
 
-            if ($type instanceof \ReflectionNamedType && !$type->isBuiltin()) {
+            if ($type instanceof \ReflectionNamedType && ! $type->isBuiltin()) {
                 $name = $type->getName();
 
                 if ($name === Request::class || is_subclass_of($name, Request::class)) {

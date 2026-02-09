@@ -50,9 +50,12 @@ class ProfileInformationControllerTest extends OrchestraTestCase
     public function test_request_is_passed_when_updater_expects_request_instance()
     {
         $user = Mockery::mock(Authenticatable::class);
-        $updater = new class() implements UpdatesUserProfileInformation {
-            public function update($user, Request $input): void
+
+        $updater = new class() implements UpdatesUserProfileInformation
+        {
+            public function update($user, \Illuminate\Http\Request $input): void
             {
+                //
             }
         };
 
