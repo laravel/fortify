@@ -44,7 +44,7 @@ trait TwoFactorAuthenticatable
      * @param  string  $code
      * @return void
      */
-    public function replaceRecoveryCode($code)
+    public function replaceRecoveryCode(string $code)
     {
         $this->forceFill([
             'two_factor_recovery_codes' => Fortify::currentEncrypter()->encrypt(str_replace(
