@@ -39,7 +39,7 @@ Enable in `config/fortify.php` features array:
 ```
 - [ ] Add TwoFactorAuthenticatable trait to User model
 - [ ] Enable feature in config/fortify.php
-- [ ] Add two_factor_secret and two_factor_recovery_codes columns to users table
+- [ ] If `*_add_two_factor_columns_to_users_table.php` migration is missing, publish: `php artisan vendor:publish --tag=fortify-migrations` and migrate
 - [ ] Set up view callbacks in FortifyServiceProvider
 - [ ] Create 2FA management UI
 - [ ] Test QR code and recovery codes
