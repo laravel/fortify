@@ -254,7 +254,7 @@ class Fortify
      */
     public static function redirectUserForTwoFactorAuthenticationUsing($callback)
     {
-        app()->singleton(RedirectsIfTwoFactorAuthenticatable::class, $callback);
+        app()->scoped(RedirectsIfTwoFactorAuthenticatable::class, $callback);
     }
 
     /**

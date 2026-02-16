@@ -72,7 +72,7 @@ class FortifyServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->singleton(RedirectsIfTwoFactorAuthenticatableContract::class, function ($app) {
+        $this->app->scoped(RedirectsIfTwoFactorAuthenticatableContract::class, function ($app) {
             return $app->make(RedirectIfTwoFactorAuthenticatable::class);
         });
 
