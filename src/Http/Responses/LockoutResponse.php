@@ -33,6 +33,8 @@ class LockoutResponse implements LockoutResponseContract
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function toResponse($request)
     {
