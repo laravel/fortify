@@ -94,6 +94,7 @@ If a user attempts to log in and two-factor authentication is enabled, the login
     "two_factor": true
 }
 ```
+
 ## Best Practices
 
 ### Custom Authentication Logic
