@@ -77,11 +77,25 @@ Enable in `config/fortify.php` features array:
 - [ ] Set 'views' => false in config/fortify.php
 - [ ] Install and configure Laravel Sanctum
 - [ ] Use the 'web' guard in config/fortify.php (required for session-based authentication)
+- [ ] Install and configure Laravel Sanctum for session-based SPA authentication
+- [ ] Use 'web' guard in fortify config
 - [ ] Set up CSRF token handling
 - [ ] Test XHR authentication flows
 ```
 
 > Use `search-docs` for integration and SPA authentication patterns.
+
+#### Two-Factor Authentication in SPA Mode
+
+When `views` is set to `false`, Fortify returns JSON responses instead of redirects.
+
+If a user attempts to log in and two-factor authentication is enabled, the login request will return a JSON response indicating that a two-factor challenge is required:
+
+```json
+{
+    "two_factor": true
+}
+```
 
 ## Best Practices
 
