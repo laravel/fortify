@@ -130,9 +130,7 @@ class Fortify
      */
     public static function loginView($view)
     {
-        app()->singleton(LoginViewResponse::class, function () use ($view) {
-            return new SimpleViewResponse($view);
-        });
+        static::registerViewResponse(LoginViewResponse::class, $view);
     }
 
     /**
@@ -143,9 +141,7 @@ class Fortify
      */
     public static function twoFactorChallengeView($view)
     {
-        app()->singleton(TwoFactorChallengeViewResponse::class, function () use ($view) {
-            return new SimpleViewResponse($view);
-        });
+        static::registerViewResponse(TwoFactorChallengeViewResponse::class, $view);
     }
 
     /**
@@ -156,9 +152,7 @@ class Fortify
      */
     public static function resetPasswordView($view)
     {
-        app()->singleton(ResetPasswordViewResponse::class, function () use ($view) {
-            return new SimpleViewResponse($view);
-        });
+        static::registerViewResponse(ResetPasswordViewResponse::class, $view);
     }
 
     /**
@@ -169,9 +163,7 @@ class Fortify
      */
     public static function registerView($view)
     {
-        app()->singleton(RegisterViewResponse::class, function () use ($view) {
-            return new SimpleViewResponse($view);
-        });
+        static::registerViewResponse(RegisterViewResponse::class, $view);
     }
 
     /**
@@ -182,9 +174,7 @@ class Fortify
      */
     public static function verifyEmailView($view)
     {
-        app()->singleton(VerifyEmailViewResponse::class, function () use ($view) {
-            return new SimpleViewResponse($view);
-        });
+        static::registerViewResponse(VerifyEmailViewResponse::class, $view);
     }
 
     /**
@@ -195,9 +185,7 @@ class Fortify
      */
     public static function confirmPasswordView($view)
     {
-        app()->singleton(ConfirmPasswordViewResponse::class, function () use ($view) {
-            return new SimpleViewResponse($view);
-        });
+        static::registerViewResponse(ConfirmPasswordViewResponse::class, $view);
     }
 
     /**
@@ -208,9 +196,7 @@ class Fortify
      */
     public static function requestPasswordResetLinkView($view)
     {
-        app()->singleton(RequestPasswordResetLinkViewResponse::class, function () use ($view) {
-            return new SimpleViewResponse($view);
-        });
+        static::registerViewResponse(RequestPasswordResetLinkViewResponse::class, $view);
     }
 
     /**
@@ -357,4 +343,19 @@ class Fortify
 
         return new static;
     }
+
+    /**
+     * Register a simple view response binding.
+     *
+     * @param  string  $contract
+     * @param  callable|string  $view
+     * @return void
+     */
+    protected static function registerViewResponse(string $contract, $view): void
+    {
+        app()->singleton($contract, function () use ($view) {
+            return new SimpleViewResponse($view);
+        });
+    }
+
 }
