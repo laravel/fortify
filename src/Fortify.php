@@ -357,5 +357,4 @@ class Fortify
             return new SimpleViewResponse($view);
         });
     }
-
 }
