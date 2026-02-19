@@ -40,8 +40,8 @@ class AttemptToAuthenticate
     /**
      * Handle the incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param callable $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  callable $next
      * @return mixed
      *
      * @throws ValidationException
@@ -65,8 +65,8 @@ class AttemptToAuthenticate
     /**
      * Attempt to authenticate using a custom callback.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param callable $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  callable $next
      * @return mixed
      *
      * @throws ValidationException
