@@ -40,9 +40,11 @@ class AttemptToAuthenticate
     /**
      * Handle the incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  callable  $next
+     * @param \Illuminate\Http\Request $request
+     * @param callable $next
      * @return mixed
+     *
+     * @throws ValidationException
      */
     public function handle($request, $next)
     {
@@ -63,9 +65,11 @@ class AttemptToAuthenticate
     /**
      * Attempt to authenticate using a custom callback.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  callable  $next
+     * @param \Illuminate\Http\Request $request
+     * @param callable $next
      * @return mixed
+     *
+     * @throws ValidationException
      */
     protected function handleUsingCustomCallback($request, $next)
     {
