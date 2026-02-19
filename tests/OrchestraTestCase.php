@@ -34,9 +34,47 @@ abstract class OrchestraTestCase extends TestCase
         tap($app['config'], function ($config) {
             $features = $config->get('fortify.features');
 
-            unset($features[array_search(Features::twoFactorAuthentication(), $features)]);
+            if (($key = array_search(Features::twoFactorAuthentication(), $features)) !== false) {
+                unset($features[$key]);
+            }
 
-            $config->set('fortify.features', $features);
+            $config->set('fortify.features', array_values($features));
+        });
+    }
+
+    protected function withPasskeys($app)
+    {
+        $app['config']->set('fortify.features', [
+            Features::passkeys(),
+        ]);
+    }
+
+    protected function withPasskeysConfirmingPasswords($app)
+    {
+        $app['config']->set('fortify.features', [
+            Features::passkeys(['confirmPassword' => true]),
+        ]);
+    }
+
+    protected function withPasskeysLimiter($app)
+    {
+        $app['config']->set('fortify.features', [
+            Features::passkeys(),
+        ]);
+
+        $app['config']->set('fortify.limiters.passkeys', 'passkeys');
+    }
+
+    protected function withoutPasskeys($app)
+    {
+        tap($app['config'], function ($config) {
+            $features = $config->get('fortify.features');
+
+            if (($key = array_search(Features::passkeys(), $features)) !== false) {
+                unset($features[$key]);
+            }
+
+            $config->set('fortify.features', array_values($features));
         });
     }
 }

@@ -19,6 +19,7 @@
         "bacon/bacon-qr-code": "^3.0",
         "illuminate/console": "^10.0|^11.0|^12.0|^13.0",
         "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
+        "laravel/passkeys": "dev-main#f3f8e93",
         "pragmarx/google2fa": "^9.0"
     },
     "require-dev": {
@@ -48,6 +49,12 @@
             ]
         }
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/laravel/passkeys-server"
+        }
+    ],
     "config": {
         "sort-packages": true
     },

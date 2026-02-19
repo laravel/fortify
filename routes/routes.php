@@ -20,6 +20,8 @@ use Laravel\Fortify\Http\Controllers\TwoFactorQrCodeController;
 use Laravel\Fortify\Http\Controllers\TwoFactorSecretKeyController;
 use Laravel\Fortify\Http\Controllers\VerifyEmailController;
 use Laravel\Fortify\RoutePath;
+use Laravel\Passkeys\Http\Controllers\PasskeyRegistrationController;
+use Laravel\Passkeys\Http\Controllers\PasskeyVerificationController;
 
 Route::group(['middleware' => config('fortify.middleware', ['web'])], function () {
     $enableViews = config('fortify.views', true);
@@ -33,6 +35,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
 
     $limiter = config('fortify.limiters.login');
     $twoFactorLimiter = config('fortify.limiters.two-factor');
+    $passkeyLimiter = config('fortify.limiters.passkeys');
     $verificationLimiter = config('fortify.limiters.verification', '6,1');
 
     Route::post(RoutePath::for('login', '/login'), [AuthenticatedSessionController::class, 'store'])
@@ -170,5 +173,40 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         Route::post(RoutePath::for('two-factor.recovery-codes', '/user/two-factor-recovery-codes'), [RecoveryCodeController::class, 'store'])
             ->middleware($twoFactorMiddleware)
             ->name('two-factor.regenerate-recovery-codes');
+    }
+
+    // Passkeys...
+    if (Features::enabled(Features::passkeys())) {
+        Route::get(RoutePath::for('passkey.verification-options', '/passkeys/options'), [PasskeyVerificationController::class, 'index'])
+            ->middleware(array_filter([
+                'guest:'.config('fortify.guard'),
+                $passkeyLimiter ? 'throttle:'.$passkeyLimiter : null,
+            ]))->name('passkey.verification-options');
+
+        Route::post(RoutePath::for('passkey.verify', '/passkeys/verify'), [PasskeyVerificationController::class, 'store'])
+            ->middleware(array_filter([
+                'guest:'.config('fortify.guard'),
+                $passkeyLimiter ? 'throttle:'.$passkeyLimiter : null,
+            ]))->name('passkey.verify');
+
+        $passkeyMiddleware = Features::optionEnabled(Features::passkeys(), 'confirmPassword')
+            ? [config('fortify.auth_middleware', 'auth').':'.config('fortify.guard'), 'password.confirm']
+            : [config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')];
+
+        Route::get(RoutePath::for('passkey.registration-options', '/user/passkeys/options'), [PasskeyRegistrationController::class, 'index'])
+            ->middleware(array_filter(array_merge($passkeyMiddleware, [
+                $passkeyLimiter ? 'throttle:'.$passkeyLimiter : null,
+            ])))
+            ->name('passkey.registration-options');
+
+        Route::post(RoutePath::for('passkey.store', '/user/passkeys'), [PasskeyRegistrationController::class, 'store'])
+            ->middleware(array_filter(array_merge($passkeyMiddleware, [
+                $passkeyLimiter ? 'throttle:'.$passkeyLimiter : null,
+            ])))
+            ->name('passkey.store');
+
+        Route::delete(RoutePath::for('passkey.destroy', '/user/passkeys/{passkey}'), [PasskeyRegistrationController::class, 'destroy'])
+            ->middleware($passkeyMiddleware)
+            ->name('passkey.destroy');
     }
 });
