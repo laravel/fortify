@@ -14,7 +14,7 @@ class RecoveryCodeController extends Controller
      * Get the two factor authentication recovery codes for authenticated user.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
