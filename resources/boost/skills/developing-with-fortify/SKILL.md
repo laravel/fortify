@@ -126,3 +126,85 @@ Configure via `fortify.limiters.login` in config. Default configuration throttle
 | 2FA Challenge          | POST     | `/two-factor-challenge`                     |
 | Get QR Code            | GET      | `/user/two-factor-qr-code`                  |
 | Recovery Codes         | GET/POST | `/user/two-factor-recovery-codes`           |
+
+## Error Handling
+
+Laravel Fortify returns standard Laravel validation and authentication error responses.  
+This section covers View mode and SPA (headless) mode.
+
+---
+
+### Validation Errors
+
+When validation fails, Fortify returns a `422 Unprocessable Entity` response.
+
+**View-enabled mode:**
+- Users are redirected back
+- Validation errors are flashed to the session
+
+**SPA mode (`'views' => false`):**
+- A JSON response is returned
+- Errors are included in the `errors` object
+
+Example JSON response:
+
+```json
+{
+    "message": "The given data was invalid.",
+    "errors": {
+        "email": [
+            "The email field is required."
+        ],
+        "password": [
+            "The password must be at least 8 characters."
+        ]
+    }
+}
+```
+
+---
+
+### Authentication Failures
+
+If authentication fails (invalid credentials):
+
+- **View mode:** Redirect back with errors
+- **SPA mode:** JSON response with validation error message (typically 422 status code)
+
+Example JSON response:
+
+```json
+{
+    "message": "These credentials do not match our records."
+}
+```
+
+---
+
+### Two-Factor Challenge Response (SPA Mode)
+
+If two-factor authentication is enabled and a challenge is required, the login attempt will return:
+
+```json
+{
+    "two_factor": true
+}
+```
+
+The client should then redirect the user to the `/two-factor-challenge` endpoint.
+
+---
+
+### Rate Limiting Errors
+
+If too many login attempts are made, Fortify returns a validation error.
+
+**SPA mode:** typically returns a `429 Too Many Requests` response
+
+Example JSON response:
+
+```json
+{
+    "message": "Too many login attempts. Please try again in 60 seconds."
+}
+```
