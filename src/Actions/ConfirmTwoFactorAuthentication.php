@@ -33,6 +33,8 @@ class ConfirmTwoFactorAuthentication
      * @param  mixed  $user
      * @param  string  $code
      * @return void
+     *
+     * @throws ValidationException
      */
     public function __invoke($user, $code)
     {
