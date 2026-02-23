@@ -51,8 +51,12 @@ use Laravel\Fortify\Http\Responses\TwoFactorEnabledResponse;
 use Laravel\Fortify\Http\Responses\TwoFactorLoginResponse;
 use Laravel\Fortify\Http\Responses\VerifyEmailResponse;
 use PragmaRX\Google2FA\Google2FA;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Str;
 
 class FortifyServiceProvider extends ServiceProvider
+
 {
     /**
      * Register any application services.
@@ -120,6 +124,7 @@ class FortifyServiceProvider extends ServiceProvider
         $this->configurePublishing();
         $this->configureRoutes();
         $this->registerCommands();
+        $this->configureRateLimiting();
     }
 
     /**
@@ -179,5 +184,34 @@ class FortifyServiceProvider extends ServiceProvider
                 Console\InstallCommand::class,
             ]);
         }
+    }
+
+    /**
+     * Configure rate limiting for Fortify features.
+     *
+     * @return void
+     */
+    protected function configureRateLimiting()
+    {
+
+        RateLimiter::for(config('fortify.limiters.login', 'login'), function (\Illuminate\Http\Request $request) {
+            $throttleKey = Str::transliterate(
+                Str::lower($request->input(Fortify::username())) . '|' . $request->ip()
+            );
+
+            return Limit::perMinute(5)->by($throttleKey);
+        });
+
+        RateLimiter::for(config('fortify.limiters.two-factor', 'two-factor'), function (\Illuminate\Http\Request $request) {
+            $throttleKey = $request->session()->get('login.id') . '|' . $request->ip();
+
+            return Limit::perMinute(5)->by($throttleKey);
+        });
+
+        RateLimiter::for(config('fortify.limiters.password-reset', 'password-reset'), function (\Illuminate\Http\Request $request) {
+            $throttleKey = Str::lower($request->input('email')) . '|' . $request->ip();
+
+            return Limit::perMinute(5)->by($throttleKey);
+        });
     }
 }
