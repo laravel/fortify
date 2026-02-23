@@ -2,11 +2,14 @@
 
 namespace Laravel\Fortify;
 
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Contracts\EmailVerificationNotificationSentResponse as EmailVerificationNotificationSentResponseContract;
 use Laravel\Fortify\Contracts\FailedPasswordConfirmationResponse as FailedPasswordConfirmationResponseContract;
@@ -51,9 +54,6 @@ use Laravel\Fortify\Http\Responses\TwoFactorEnabledResponse;
 use Laravel\Fortify\Http\Responses\TwoFactorLoginResponse;
 use Laravel\Fortify\Http\Responses\VerifyEmailResponse;
 use PragmaRX\Google2FA\Google2FA;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Support\Str;
 
 class FortifyServiceProvider extends ServiceProvider
 
@@ -196,20 +196,20 @@ class FortifyServiceProvider extends ServiceProvider
 
         RateLimiter::for(config('fortify.limiters.login', 'login'), function (\Illuminate\Http\Request $request) {
             $throttleKey = Str::transliterate(
-                Str::lower($request->input(Fortify::username())) . '|' . $request->ip()
+                Str::lower($request->input(Fortify::username())).'|'.$request->ip()
             );
 
             return Limit::perMinute(5)->by($throttleKey);
         });
 
         RateLimiter::for(config('fortify.limiters.two-factor', 'two-factor'), function (\Illuminate\Http\Request $request) {
-            $throttleKey = $request->session()->get('login.id') . '|' . $request->ip();
+            $throttleKey = $request->session()->get('login.id').'|'.$request->ip();
 
             return Limit::perMinute(5)->by($throttleKey);
         });
 
         RateLimiter::for(config('fortify.limiters.password-reset', 'password-reset'), function (\Illuminate\Http\Request $request) {
-            $throttleKey = Str::lower($request->input('email')) . '|' . $request->ip();
+            $throttleKey = Str::lower($request->input('email')).'|'.$request->ip();
 
             return Limit::perMinute(5)->by($throttleKey);
         });
