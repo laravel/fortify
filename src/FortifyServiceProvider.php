@@ -56,7 +56,6 @@ use Laravel\Fortify\Http\Responses\VerifyEmailResponse;
 use PragmaRX\Google2FA\Google2FA;
 
 class FortifyServiceProvider extends ServiceProvider
-
 {
     /**
      * Register any application services.
@@ -193,7 +192,6 @@ class FortifyServiceProvider extends ServiceProvider
      */
     protected function configureRateLimiting()
     {
-
         RateLimiter::for(config('fortify.limiters.login', 'login'), function (\Illuminate\Http\Request $request) {
             $throttleKey = Str::transliterate(
                 Str::lower($request->input(Fortify::username())).'|'.$request->ip()
