@@ -51,8 +51,10 @@ return [
             'recovery-codes' => null,
         ],
         'passkey' => [
-            'verification-options' => null,
-            'verify' => null,
+            'login-options' => null,
+            'login' => null,
+            'confirm-options' => null,
+            'confirm' => null,
             'registration-options' => null,
             'store' => null,
             'destroy' => null,

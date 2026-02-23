@@ -20,8 +20,9 @@ use Laravel\Fortify\Http\Controllers\TwoFactorQrCodeController;
 use Laravel\Fortify\Http\Controllers\TwoFactorSecretKeyController;
 use Laravel\Fortify\Http\Controllers\VerifyEmailController;
 use Laravel\Fortify\RoutePath;
+use Laravel\Passkeys\Http\Controllers\PasskeyConfirmationController;
+use Laravel\Passkeys\Http\Controllers\PasskeyLoginController;
 use Laravel\Passkeys\Http\Controllers\PasskeyRegistrationController;
-use Laravel\Passkeys\Http\Controllers\PasskeyVerificationController;
 
 Route::group(['middleware' => config('fortify.middleware', ['web'])], function () {
     $enableViews = config('fortify.views', true);
@@ -177,21 +178,35 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
 
     // Passkeys...
     if (Features::enabled(Features::passkeys())) {
-        Route::get(RoutePath::for('passkey.verification-options', '/passkeys/options'), [PasskeyVerificationController::class, 'index'])
+        Route::get(RoutePath::for('passkey.login-options', '/passkeys/login/options'), [PasskeyLoginController::class, 'index'])
             ->middleware(array_filter([
                 'guest:'.config('fortify.guard'),
                 $passkeyLimiter ? 'throttle:'.$passkeyLimiter : null,
-            ]))->name('passkey.verification-options');
+            ]))->name('passkey.login-options');
 
-        Route::post(RoutePath::for('passkey.verify', '/passkeys/verify'), [PasskeyVerificationController::class, 'store'])
+        Route::post(RoutePath::for('passkey.login', '/passkeys/login'), [PasskeyLoginController::class, 'store'])
             ->middleware(array_filter([
                 'guest:'.config('fortify.guard'),
                 $passkeyLimiter ? 'throttle:'.$passkeyLimiter : null,
-            ]))->name('passkey.verify');
+            ]))->name('passkey.login');
+
+        $passkeyAuthMiddleware = [config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')];
+
+        Route::get(RoutePath::for('passkey.confirm-options', '/passkeys/confirm/options'), [PasskeyConfirmationController::class, 'index'])
+            ->middleware(array_filter(array_merge($passkeyAuthMiddleware, [
+                $passkeyLimiter ? 'throttle:'.$passkeyLimiter : null,
+            ])))
+            ->name('passkey.confirm-options');
+
+        Route::post(RoutePath::for('passkey.confirm', '/passkeys/confirm'), [PasskeyConfirmationController::class, 'store'])
+            ->middleware(array_filter(array_merge($passkeyAuthMiddleware, [
+                $passkeyLimiter ? 'throttle:'.$passkeyLimiter : null,
+            ])))
+            ->name('passkey.confirm');
 
         $passkeyMiddleware = Features::optionEnabled(Features::passkeys(), 'confirmPassword')
-            ? [config('fortify.auth_middleware', 'auth').':'.config('fortify.guard'), 'password.confirm']
-            : [config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')];
+            ? [...$passkeyAuthMiddleware, 'password.confirm']
+            : $passkeyAuthMiddleware;
 
         Route::get(RoutePath::for('passkey.registration-options', '/user/passkeys/options'), [PasskeyRegistrationController::class, 'index'])
             ->middleware(array_filter(array_merge($passkeyMiddleware, [

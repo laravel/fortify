@@ -5,6 +5,8 @@ namespace Laravel\Fortify\Tests;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
+use Laravel\Passkeys\Http\Controllers\PasskeyConfirmationController;
+use Laravel\Passkeys\Http\Controllers\PasskeyLoginController;
 use Orchestra\Testbench\Attributes\DefineEnvironment;
 
 class PasskeyTest extends OrchestraTestCase
@@ -21,11 +23,24 @@ class PasskeyTest extends OrchestraTestCase
         $this->assertTrue(Features::hasSecurityFeatures());
         $this->assertTrue(Features::hasProfileFeatures());
 
-        $this->assertTrue(Route::has('passkey.verification-options'));
-        $this->assertTrue(Route::has('passkey.verify'));
+        $this->assertTrue(Route::has('passkey.login-options'));
+        $this->assertTrue(Route::has('passkey.login'));
+        $this->assertTrue(Route::has('passkey.confirm-options'));
+        $this->assertTrue(Route::has('passkey.confirm'));
         $this->assertTrue(Route::has('passkey.registration-options'));
         $this->assertTrue(Route::has('passkey.store'));
         $this->assertTrue(Route::has('passkey.destroy'));
+    }
+
+    public function test_passkeys_routes_use_the_expected_passkeys_controllers()
+    {
+        $verify = Route::getRoutes()->getByName('passkey.login');
+        $confirm = Route::getRoutes()->getByName('passkey.confirm');
+
+        $this->assertNotNull($verify);
+        $this->assertNotNull($confirm);
+        $this->assertSame(PasskeyLoginController::class.'@store', $verify->getActionName());
+        $this->assertSame(PasskeyConfirmationController::class.'@store', $confirm->getActionName());
     }
 
     #[DefineEnvironment('withoutPasskeys')]
@@ -33,8 +48,10 @@ class PasskeyTest extends OrchestraTestCase
     {
         $this->assertFalse(Features::enabled(Features::passkeys()));
 
-        $this->assertFalse(Route::has('passkey.verification-options'));
-        $this->assertFalse(Route::has('passkey.verify'));
+        $this->assertFalse(Route::has('passkey.login-options'));
+        $this->assertFalse(Route::has('passkey.login'));
+        $this->assertFalse(Route::has('passkey.confirm-options'));
+        $this->assertFalse(Route::has('passkey.confirm'));
         $this->assertFalse(Route::has('passkey.registration-options'));
         $this->assertFalse(Route::has('passkey.store'));
         $this->assertFalse(Route::has('passkey.destroy'));
@@ -57,7 +74,7 @@ class PasskeyTest extends OrchestraTestCase
     #[DefineEnvironment('withPasskeysLimiter')]
     public function test_passkeys_routes_use_the_passkeys_limiter()
     {
-        $route = Route::getRoutes()->getByName('passkey.verification-options');
+        $route = Route::getRoutes()->getByName('passkey.login-options');
 
         $this->assertNotNull($route);
         $this->assertContains('throttle:passkeys', $route->middleware());
@@ -70,5 +87,14 @@ class PasskeyTest extends OrchestraTestCase
 
         $this->assertNotNull($route);
         $this->assertContains('password.confirm', $route->middleware());
+    }
+
+    #[DefineEnvironment('withPasskeysConfirmingPasswords')]
+    public function test_passkey_confirmation_routes_are_not_protected_by_password_confirmation_middleware()
+    {
+        $route = Route::getRoutes()->getByName('passkey.confirm');
+
+        $this->assertNotNull($route);
+        $this->assertNotContains('password.confirm', $route->middleware());
     }
 }
