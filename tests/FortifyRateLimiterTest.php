@@ -4,6 +4,7 @@ namespace Laravel\Fortify\Tests;
 
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\RateLimiter;
 
 class FortifyRateLimiterTest extends OrchestraTestCase
 {
