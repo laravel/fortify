@@ -192,7 +192,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     protected function configureRateLimiting()
     {
-        RateLimiter::for(config('fortify.limiters.login', 'login'), function (\Illuminate\Http\Request $request) {
+        RateLimiter::for(config('fortify.limiters.login') ?: 'login', function (\Illuminate\Http\Request $request) {
             $throttleKey = Str::transliterate(
                 Str::lower($request->input(Fortify::username())).'|'.$request->ip()
             );
@@ -200,13 +200,13 @@ class FortifyServiceProvider extends ServiceProvider
             return Limit::perMinute(5)->by($throttleKey);
         });
 
-        RateLimiter::for(config('fortify.limiters.two-factor', 'two-factor'), function (\Illuminate\Http\Request $request) {
+        RateLimiter::for(config('fortify.limiters.two-factor') ?: 'two-factor', function (\Illuminate\Http\Request $request) {
             $throttleKey = $request->session()->get('login.id').'|'.$request->ip();
 
             return Limit::perMinute(5)->by($throttleKey);
         });
 
-        RateLimiter::for(config('fortify.limiters.password-reset', 'password-reset'), function (\Illuminate\Http\Request $request) {
+        RateLimiter::for(config('fortify.limiters.password-reset') ?: 'password-reset', function (\Illuminate\Http\Request $request) {
             $throttleKey = Str::lower($request->input('email')).'|'.$request->ip();
 
             return Limit::perMinute(5)->by($throttleKey);
