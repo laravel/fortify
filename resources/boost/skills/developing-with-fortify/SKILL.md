@@ -109,6 +109,18 @@ Modify `app/Actions/Fortify/CreateNewUser.php` to customize user creation logic,
 
 Configure via `fortify.limiters.login` in config. Default configuration throttles by username + IP combination.
 
+You can define a custom login rate limiter in `FortifyServiceProvider`:
+
+@boostsnippet("Custom Login Rate Limiter", "php")
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Http\Request;
+
+RateLimiter::for('login', function (Request $request) {
+return Limit::perMinute(5)->by($request->ip());
+});
+@endboostsnippet
+
 ## Key Endpoints
 
 | Feature                | Method   | Endpoint                                    |
