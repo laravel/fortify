@@ -11,7 +11,7 @@ class TwoFactorQrCodeController extends Controller
      * Get the SVG element for the user's two factor authentication QR code.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Http\JsonResponse|array
      */
     public function show(Request $request)
     {
