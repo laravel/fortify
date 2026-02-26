@@ -75,7 +75,7 @@ Enable in `config/fortify.php` features array:
 
 ```
 - [ ] Set 'views' => false in config/fortify.php
-- [ ] Install and configure Laravel Sanctum for session-based SPA authentication
+- [ ] Install and configure Laravel Sanctum for session-based SPA authentication.Sanctum is required when using Fortify with session-based authentication for SPAs.
 - [ ] Use the 'web' guard in config/fortify.php (required for session-based authentication)
 - [ ] Set up CSRF token handling
 - [ ] Test XHR authentication flows
