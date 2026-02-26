@@ -2,7 +2,9 @@
 
 namespace Laravel\Fortify\Contracts;
 
-interface PasskeyUser extends \Laravel\Passkeys\Contracts\PasskeyUser
+use Laravel\Passkeys\Contracts\PasskeyUser as BasePasskeyUser;
+
+interface PasskeyUser extends BasePasskeyUser
 {
     //
 }

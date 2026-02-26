@@ -9,6 +9,7 @@ use Laravel\Passkeys\Http\Controllers\PasskeyConfirmationController;
 use Laravel\Passkeys\Http\Controllers\PasskeyLoginController;
 use Orchestra\Testbench\Attributes\DefineEnvironment;
 
+#[DefineEnvironment('withPasskeys')]
 class PasskeyTest extends OrchestraTestCase
 {
     public function test_passkeys_package_passkey_model_is_used_by_default()
