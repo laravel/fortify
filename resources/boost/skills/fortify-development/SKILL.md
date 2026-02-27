@@ -1,5 +1,5 @@
 ---
-name: developing-with-fortify
+name: fortify-development
 description: Laravel Fortify headless authentication backend development. Activate when implementing authentication features including login, registration, password reset, email verification, two-factor authentication (2FA/TOTP), profile updates, headless auth, authentication scaffolding, or auth guards in Laravel applications.
 ---
 
