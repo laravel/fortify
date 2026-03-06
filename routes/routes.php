@@ -18,6 +18,8 @@ use Laravel\Fortify\Http\Controllers\TwoFactorAuthenticatedSessionController;
 use Laravel\Fortify\Http\Controllers\TwoFactorAuthenticationController;
 use Laravel\Fortify\Http\Controllers\TwoFactorQrCodeController;
 use Laravel\Fortify\Http\Controllers\TwoFactorSecretKeyController;
+use Laravel\Fortify\Http\Controllers\VerifiableTwoFactorCodeController;
+use Laravel\Fortify\Http\Controllers\VerifiedTwoFactorCodeStatusController;
 use Laravel\Fortify\Http\Controllers\VerifyEmailController;
 use Laravel\Fortify\RoutePath;
 
@@ -170,5 +172,19 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         Route::post(RoutePath::for('two-factor.recovery-codes', '/user/two-factor-recovery-codes'), [RecoveryCodeController::class, 'store'])
             ->middleware($twoFactorMiddleware)
             ->name('two-factor.regenerate-recovery-codes');
+
+        if ($enableViews) {
+            Route::get(RoutePath::for('two-factor.verify', '/user/verify-two-factor-code'), [VerifiableTwoFactorCodeController::class, 'show'])
+                ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
+                ->name('two-factor.verify');
+        }
+
+        Route::get(RoutePath::for('two-factor.verification', '/user/verified-two-factor-code-status'), [VerifiedTwoFactorCodeStatusController::class, 'show'])
+            ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
+            ->name('two-factor.verification');
+
+        Route::post(RoutePath::for('two-factor.verify', '/user/verify-two-factor-code'), [VerifiableTwoFactorCodeController::class, 'store'])
+            ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])
+            ->name('two-factor.verify.store');
     }
 });

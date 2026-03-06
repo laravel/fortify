@@ -12,6 +12,7 @@ use Laravel\Fortify\Contracts\EmailVerificationNotificationSentResponse as Email
 use Laravel\Fortify\Contracts\FailedPasswordConfirmationResponse as FailedPasswordConfirmationResponseContract;
 use Laravel\Fortify\Contracts\FailedPasswordResetLinkRequestResponse as FailedPasswordResetLinkRequestResponseContract;
 use Laravel\Fortify\Contracts\FailedPasswordResetResponse as FailedPasswordResetResponseContract;
+use Laravel\Fortify\Contracts\FailedTwoFactorCodeVerificationResponse as FailedTwoFactorCodeVerificationResponseContract;
 use Laravel\Fortify\Contracts\FailedTwoFactorLoginResponse as FailedTwoFactorLoginResponseContract;
 use Laravel\Fortify\Contracts\LockoutResponse as LockoutResponseContract;
 use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
@@ -25,6 +26,7 @@ use Laravel\Fortify\Contracts\RedirectsIfTwoFactorAuthenticatable as RedirectsIf
 use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
 use Laravel\Fortify\Contracts\SuccessfulPasswordResetLinkRequestResponse as SuccessfulPasswordResetLinkRequestResponseContract;
 use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider as TwoFactorAuthenticationProviderContract;
+use Laravel\Fortify\Contracts\TwoFactorCodeVerifiedResponse as TwoFactorCodeVerifiedResponseContract;
 use Laravel\Fortify\Contracts\TwoFactorConfirmedResponse as TwoFactorConfirmedResponseContract;
 use Laravel\Fortify\Contracts\TwoFactorDisabledResponse as TwoFactorDisabledResponseContract;
 use Laravel\Fortify\Contracts\TwoFactorEnabledResponse as TwoFactorEnabledResponseContract;
@@ -34,6 +36,7 @@ use Laravel\Fortify\Http\Responses\EmailVerificationNotificationSentResponse;
 use Laravel\Fortify\Http\Responses\FailedPasswordConfirmationResponse;
 use Laravel\Fortify\Http\Responses\FailedPasswordResetLinkRequestResponse;
 use Laravel\Fortify\Http\Responses\FailedPasswordResetResponse;
+use Laravel\Fortify\Http\Responses\FailedTwoFactorCodeVerificationResponse;
 use Laravel\Fortify\Http\Responses\FailedTwoFactorLoginResponse;
 use Laravel\Fortify\Http\Responses\LockoutResponse;
 use Laravel\Fortify\Http\Responses\LoginResponse;
@@ -45,6 +48,7 @@ use Laravel\Fortify\Http\Responses\ProfileInformationUpdatedResponse;
 use Laravel\Fortify\Http\Responses\RecoveryCodesGeneratedResponse;
 use Laravel\Fortify\Http\Responses\RegisterResponse;
 use Laravel\Fortify\Http\Responses\SuccessfulPasswordResetLinkRequestResponse;
+use Laravel\Fortify\Http\Responses\TwoFactorCodeVerifiedResponse;
 use Laravel\Fortify\Http\Responses\TwoFactorConfirmedResponse;
 use Laravel\Fortify\Http\Responses\TwoFactorDisabledResponse;
 use Laravel\Fortify\Http\Responses\TwoFactorEnabledResponse;
@@ -91,6 +95,7 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->singleton(FailedPasswordConfirmationResponseContract::class, FailedPasswordConfirmationResponse::class);
         $this->app->singleton(FailedPasswordResetLinkRequestResponseContract::class, FailedPasswordResetLinkRequestResponse::class);
         $this->app->singleton(FailedPasswordResetResponseContract::class, FailedPasswordResetResponse::class);
+        $this->app->singleton(FailedTwoFactorCodeVerificationResponseContract::class, FailedTwoFactorCodeVerificationResponse::class);
         $this->app->singleton(FailedTwoFactorLoginResponseContract::class, FailedTwoFactorLoginResponse::class);
         $this->app->singleton(LockoutResponseContract::class, LockoutResponse::class);
         $this->app->singleton(LoginResponseContract::class, LoginResponse::class);
@@ -103,6 +108,7 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->singleton(RegisterResponseContract::class, RegisterResponse::class);
         $this->app->singleton(EmailVerificationNotificationSentResponseContract::class, EmailVerificationNotificationSentResponse::class);
         $this->app->singleton(SuccessfulPasswordResetLinkRequestResponseContract::class, SuccessfulPasswordResetLinkRequestResponse::class);
+        $this->app->singleton(TwoFactorCodeVerifiedResponseContract::class, TwoFactorCodeVerifiedResponse::class);
         $this->app->singleton(TwoFactorConfirmedResponseContract::class, TwoFactorConfirmedResponse::class);
         $this->app->singleton(TwoFactorDisabledResponseContract::class, TwoFactorDisabledResponse::class);
         $this->app->singleton(TwoFactorEnabledResponseContract::class, TwoFactorEnabledResponse::class);

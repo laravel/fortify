@@ -16,6 +16,7 @@ use Laravel\Fortify\Contracts\TwoFactorChallengeViewResponse;
 use Laravel\Fortify\Contracts\UpdatesUserPasswords;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use Laravel\Fortify\Contracts\VerifyEmailViewResponse;
+use Laravel\Fortify\Contracts\VerifyTwoFactorCodeViewResponse;
 use Laravel\Fortify\Http\Responses\SimpleViewResponse;
 
 class Fortify
@@ -120,6 +121,7 @@ class Fortify
         static::resetPasswordView($prefix.'reset-password');
         static::verifyEmailView($prefix.'verify-email');
         static::confirmPasswordView($prefix.'confirm-password');
+        static::verifyTwoFactorCodeView($prefix.'verify-two-factor-code');
     }
 
     /**
@@ -196,6 +198,19 @@ class Fortify
     public static function confirmPasswordView($view)
     {
         app()->singleton(ConfirmPasswordViewResponse::class, function () use ($view) {
+            return new SimpleViewResponse($view);
+        });
+    }
+
+    /**
+     * Specify which view should be used as the two factor code verification view.
+     *
+     * @param  callable|string  $view
+     * @return void
+     */
+    public static function verifyTwoFactorCodeView($view)
+    {
+        app()->singleton(VerifyTwoFactorCodeViewResponse::class, function () use ($view) {
             return new SimpleViewResponse($view);
         });
     }
