@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.35.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.36.0...1.x)
+
+## [v1.36.0](https://github.com/laravel/fortify/compare/v1.35.0...v1.36.0) - 2026-02-27
+
+* Rename Skill by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/fortify/pull/657
 
 ## [v1.35.0](https://github.com/laravel/fortify/compare/v1.34.1...v1.35.0) - 2026-02-24
 
