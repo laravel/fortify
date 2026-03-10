@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.36.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.36.1...1.x)
+
+## [v1.36.1](https://github.com/laravel/fortify/compare/v1.36.0...v1.36.1) - 2026-03-10
+
+* [1.x] Makes imports consistent by [@nunomaduro](https://github.com/nunomaduro) in https://github.com/laravel/fortify/pull/659
 
 ## [v1.36.0](https://github.com/laravel/fortify/compare/v1.35.0...v1.36.0) - 2026-02-27
 
