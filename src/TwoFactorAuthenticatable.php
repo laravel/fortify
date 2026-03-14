@@ -28,7 +28,6 @@ trait TwoFactorAuthenticatable
         return ! is_null($this->two_factor_secret);
     }
 
-
     /**
      * Determine if the user must confirm two-factor authentication.
      *
