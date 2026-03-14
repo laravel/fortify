@@ -28,6 +28,19 @@ trait TwoFactorAuthenticatable
         return ! is_null($this->two_factor_secret);
     }
 
+
+    /**
+     * Determine if the user must confirm two-factor authentication.
+     *
+     * @return bool
+     */
+    public function mustConfirmTwoFactorAuthentication()
+    {
+        return Fortify::confirmsTwoFactorAuthentication() &&
+               ! is_null($this->two_factor_secret) &&
+               is_null($this->two_factor_confirmed_at);
+    }
+
     /**
      * Get the user's two factor authentication recovery codes.
      *
