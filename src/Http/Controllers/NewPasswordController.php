@@ -8,6 +8,7 @@ use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 use Laravel\Fortify\Actions\CompletePasswordReset;
 use Laravel\Fortify\Contracts\FailedPasswordResetResponse;
 use Laravel\Fortify\Contracts\PasswordResetResponse;
@@ -59,6 +60,12 @@ class NewPasswordController extends Controller
             Fortify::email() => 'required|email',
             'password' => 'required',
         ]);
+
+        if (config('fortify.lowercase_usernames') && $request->has(Fortify::email())) {
+            $request->merge([
+                Fortify::email() => Str::lower($request->{Fortify::email()}),
+            ]);
+        }
 
         // Here we will attempt to reset the user's password. If it is successful we
         // will update the password on an actual user model and persist it to the
