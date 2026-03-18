@@ -139,4 +139,38 @@ class NewPasswordControllerTest extends OrchestraTestCase
         $response->assertStatus(302);
         $response->assertSessionHasErrors(['password']);
     }
+
+    public function test_password_reset_lowercases_email_when_configured()
+    {
+        Config::set('fortify.lowercase_usernames', true);
+        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
+
+        $guard = $this->mock(StatefulGuard::class);
+        $user = Mockery::mock(Authenticatable::class);
+
+        $user->shouldReceive('setRememberToken')->once();
+        $user->shouldReceive('save')->once();
+
+        $guard->shouldReceive('login')->never();
+
+        $updater = $this->mock(ResetsUserPasswords::class);
+        $updater->shouldReceive('reset')->once()->with($user, Mockery::type('array'));
+
+        $broker->shouldReceive('reset')->andReturnUsing(function ($input, $callback) use ($user) {
+            $this->assertSame('taylor@laravel.com', $input['email']);
+
+            $callback($user, 'password');
+
+            return Password::PASSWORD_RESET;
+        });
+
+        $response = $this->withoutExceptionHandling()->post('/reset-password', [
+            'token' => 'token',
+            'email' => 'TAYLOR@laravel.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+
+        $response->assertStatus(302);
+    }
 }
