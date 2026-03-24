@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.36.1...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.36.2...1.x)
+
+## [v1.36.2](https://github.com/laravel/fortify/compare/v1.36.1...v1.36.2) - 2026-03-20
+
+* Rewrite Fortify core guidelines and skill descriptions in imperative style by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/fortify/pull/662
+* Update reference from Jetstream to Starter Kits by [@MrPunyapal](https://github.com/MrPunyapal) in https://github.com/laravel/fortify/pull/663
 
 ## [v1.36.1](https://github.com/laravel/fortify/compare/v1.36.0...v1.36.1) - 2026-03-10
 
