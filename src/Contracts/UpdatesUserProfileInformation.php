@@ -3,7 +3,9 @@
 namespace Laravel\Fortify\Contracts;
 
 /**
- * @method void update(\Illuminate\Foundation\Auth\User $user, array $input)
+ * @template TUser of \Illuminate\Database\Eloquent\Model = \Illuminate\Foundation\Auth\User
+ *
+ * @method void update(TUser $user, array $input)
  */
 interface UpdatesUserProfileInformation
 {

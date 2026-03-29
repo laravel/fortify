@@ -3,7 +3,9 @@
 namespace Laravel\Fortify\Contracts;
 
 /**
- * @method void reset(\Illuminate\Foundation\Auth\User $user, array $input)
+ * @template TUser of \Illuminate\Database\Eloquent\Model = \Illuminate\Foundation\Auth\User
+ *
+ * @method void reset(TUser $user, array $input)
  */
 interface ResetsUserPasswords
 {
