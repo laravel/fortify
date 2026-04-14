@@ -92,6 +92,51 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Fortify Route Paths
+    |--------------------------------------------------------------------------
+    |
+    | Here you may customize the paths for the authentication routes that are
+    | registered by Fortify. When a path is null, the Fortify default will
+    | be used as the path for the route within the application instead.
+    |
+    */
+
+    'paths' => [
+        'login' => '/login',
+        'logout' => '/logout',
+        'password' => [
+            'request' => '/forgot-password',
+            'reset' => '/reset-password/{token}',
+            'email' => '/forgot-password',
+            'update' => '/reset-password',
+            'confirm' => '/user/confirm-password',
+            'confirmation' => '/user/confirmed-password-status',
+        ],
+        'register' => '/register',
+        'verification' => [
+            'notice' => '/email/verify',
+            'verify' => '/email/verify/{id}/{hash}',
+            'send' => '/email/verification-notification',
+        ],
+        'user-profile-information' => [
+            'update' => '/user/profile-information',
+        ],
+        'user-password' => [
+            'update' => '/user/password',
+        ],
+        'two-factor' => [
+            'login' => '/two-factor-challenge',
+            'enable' => '/user/two-factor-authentication',
+            'confirm' => '/user/confirmed-two-factor-authentication',
+            'disable' => '/user/two-factor-authentication',
+            'qr-code' => '/user/two-factor-qr-code',
+            'secret-key' => '/user/two-factor-secret-key',
+            'recovery-codes' => '/user/two-factor-recovery-codes',
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Fortify Routes Middleware
     |--------------------------------------------------------------------------
     |
