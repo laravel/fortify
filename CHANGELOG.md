@@ -1,6 +1,37 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.34.1...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.36.2...1.x)
+
+## [v1.36.2](https://github.com/laravel/fortify/compare/v1.36.1...v1.36.2) - 2026-03-20
+
+* Rewrite Fortify core guidelines and skill descriptions in imperative style by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/fortify/pull/662
+* Update reference from Jetstream to Starter Kits by [@MrPunyapal](https://github.com/MrPunyapal) in https://github.com/laravel/fortify/pull/663
+
+## [v1.36.1](https://github.com/laravel/fortify/compare/v1.36.0...v1.36.1) - 2026-03-10
+
+* [1.x] Makes imports consistent by [@nunomaduro](https://github.com/nunomaduro) in https://github.com/laravel/fortify/pull/659
+
+## [v1.36.0](https://github.com/laravel/fortify/compare/v1.35.0...v1.36.0) - 2026-02-27
+
+* Rename Skill by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/fortify/pull/657
+
+## [v1.35.0](https://github.com/laravel/fortify/compare/v1.34.1...v1.35.0) - 2026-02-24
+
+* Add [@throws](https://github.com/throws) annotation to create() docblock by [@mohammadRezaei1380](https://github.com/mohammadRezaei1380) in https://github.com/laravel/fortify/pull/634
+* Add [@throws](https://github.com/throws) annotation to function() docblock by [@mohammadRezaei1380](https://github.com/mohammadRezaei1380) in https://github.com/laravel/fortify/pull/635
+* Use scoped bindings for Octane compatibility by [@vrodriguero](https://github.com/vrodriguero) in https://github.com/laravel/fortify/pull/637
+* Clarify Two-Factor Authentication database column requirements by [@mohammadRezaei1380](https://github.com/mohammadRezaei1380) in https://github.com/laravel/fortify/pull/638
+* add [@throws](https://github.com/throws) \Illuminate\Validation\ValidationException to functions() in Http\Responses by [@mohammadRezaei1380](https://github.com/mohammadRezaei1380) in https://github.com/laravel/fortify/pull/639
+* Clarify Sanctum usage in SPA authentication setup by [@mohammadRezaei1380](https://github.com/mohammadRezaei1380) in https://github.com/laravel/fortify/pull/641
+* Clarify Two-Factor Authentication JSON responses for SPA mode by [@mohammadRezaei1380](https://github.com/mohammadRezaei1380) in https://github.com/laravel/fortify/pull/640
+* Clarify required guard for SPA authentication setup by [@mohammadRezaei1380](https://github.com/mohammadRezaei1380) in https://github.com/laravel/fortify/pull/643
+* add [@throws](https://github.com/throws) in function UpdateUserProfileInformation.php by [@mohammadRezaei1380](https://github.com/mohammadRezaei1380) in https://github.com/laravel/fortify/pull/644
+* Update [@return](https://github.com/return) type of toResponse() to mixed for accuracy by [@mohammadRezaei1380](https://github.com/mohammadRezaei1380) in https://github.com/laravel/fortify/pull/645
+* add [@throws](https://github.com/throws) ValidationException function in AttemptToAuthenticate.php by [@mohammadRezaei1380](https://github.com/mohammadRezaei1380) in https://github.com/laravel/fortify/pull/646
+* Fix docblock for index() to reflect array or JsonResponse return type by [@mohammadRezaei1380](https://github.com/mohammadRezaei1380) in https://github.com/laravel/fortify/pull/650
+* add [@throws](https://github.com/throws) ValidationException function in ConfirmTwoFactorAuthentication.php by [@mohammadRezaei1380](https://github.com/mohammadRezaei1380) in https://github.com/laravel/fortify/pull/649
+* Fix two-factor QR code controller return type by [@mohammadRezaei1380](https://github.com/mohammadRezaei1380) in https://github.com/laravel/fortify/pull/652
+* Update docblock return type for email verification store method by [@mohammadRezaei1380](https://github.com/mohammadRezaei1380) in https://github.com/laravel/fortify/pull/654
 
 ## [v1.34.1](https://github.com/laravel/fortify/compare/v1.34.0...v1.34.1) - 2026-02-03
 
