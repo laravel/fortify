@@ -128,6 +128,8 @@ class FortifyServiceProvider extends ServiceProvider
 
         config([
             'passkeys.relying_party_id' => config('fortify.passkeys.relying_party_id', parse_url(config('app.url'), PHP_URL_HOST)),
+            'passkeys.allowed_origins' => config('fortify.passkeys.allowed_origins', [config('app.url')]),
+            'passkeys.user_handle_secret' => config('fortify.passkeys.user_handle_secret', config('app.key')),
             'passkeys.timeout' => config('fortify.passkeys.timeout', 60000),
             'passkeys.guard' => config('fortify.guard', 'web'),
             'passkeys.middleware' => config('fortify.middleware', ['web']),
