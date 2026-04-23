@@ -100,4 +100,36 @@ class PasskeyTest extends OrchestraTestCase
         $this->assertNotNull($route);
         $this->assertNotContains('password.confirm', $route->middleware());
     }
+
+    public function test_passkeys_user_model_resolves_from_custom_guard()
+    {
+        config([
+            'fortify.guard' => 'admin',
+            'auth.guards.admin' => ['driver' => 'session', 'provider' => 'admins'],
+            'auth.providers.admins' => ['driver' => 'eloquent', 'model' => 'App\\Models\\Admin'],
+        ]);
+
+        $this->assertSame('App\\Models\\Admin', $this->resolvePasskeyUserModel());
+    }
+
+    public function test_passkeys_user_model_falls_back_when_guard_has_no_provider()
+    {
+        config([
+            'fortify.guard' => 'ghost',
+            'auth.guards.ghost' => ['driver' => 'session'],
+            'auth.defaults.provider' => null,
+            'auth.providers.users.model' => 'App\\Models\\FallbackUser',
+        ]);
+
+        $this->assertSame('App\\Models\\FallbackUser', $this->resolvePasskeyUserModel());
+    }
+
+    protected function resolvePasskeyUserModel(): ?string
+    {
+        $provider = $this->app->getProvider(\Laravel\Fortify\FortifyServiceProvider::class);
+        $method = new \ReflectionMethod($provider, 'passkeyUserModel');
+        $method->setAccessible(true);
+
+        return $method->invoke($provider);
+    }
 }
