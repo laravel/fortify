@@ -15,14 +15,14 @@ body:
     attributes:
       label: Laravel Version
       description: Provide the Laravel version that you are using. [Please ensure it is still supported.](https://laravel.com/docs/releases#support-policy)
-      placeholder: 10.4.1
+      placeholder: 11.0.0
     validations:
       required: true
   - type: input
     attributes:
       label: PHP Version
       description: Provide the PHP version that you are using.
-      placeholder: 8.1.4
+      placeholder: 8.2.0
     validations:
       required: true
   - type: input
