@@ -33,4 +33,14 @@ class VerifyEmailRequest extends FormRequest
     {
         return [];
     }
+
+    /**
+     * Determine if fields not present in rules should fail validation.
+     *
+     * @return bool
+     */
+    protected function shouldFailOnUnknownFields(): bool
+    {
+        return false;
+    }
 }

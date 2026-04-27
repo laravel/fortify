@@ -27,6 +27,7 @@ class LoginRequest extends FormRequest
         return [
             Fortify::username() => 'required|string',
             'password' => 'required|string',
+            'remember' => 'sometimes',
         ];
     }
 }
