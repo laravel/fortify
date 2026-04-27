@@ -185,8 +185,8 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
             : $passkeyAuthMiddleware;
 
         $passkeyGuestMiddleware = ['guest:'.config('fortify.guard'), ...$throttle];
-        $passkeyConfirmMiddleware = [$passkeyAuthMiddleware, ...$throttle];
-        $passkeyManageMiddleware = [$passkeyMiddleware, ...$throttle];
+        $passkeyConfirmMiddleware = [...$passkeyAuthMiddleware, ...$throttle];
+        $passkeyManageMiddleware = [...$passkeyMiddleware, ...$throttle];
 
         Route::get(RoutePath::for('passkey.login-options', '/passkeys/login/options'), [PasskeyLoginController::class, 'index'])
             ->middleware($passkeyGuestMiddleware)
