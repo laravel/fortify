@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.36.2...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.37.0...1.x)
+
+## [v1.37.0](https://github.com/laravel/fortify/compare/v1.36.2...v1.37.0) - 2026-04-28
+
+* Drop support for PHP 8.1 and Laravel 10 by [@benbjurstrom](https://github.com/benbjurstrom) in https://github.com/laravel/fortify/pull/669
+* Fix incompatibility between Laravel Fortify and `FormRequest::failOnUnknownFields()` by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/fortify/pull/670
+* Feat/add passkeys by [@benbjurstrom](https://github.com/benbjurstrom) in https://github.com/laravel/fortify/pull/668
 
 ## [v1.36.2](https://github.com/laravel/fortify/compare/v1.36.1...v1.36.2) - 2026-03-20
 
