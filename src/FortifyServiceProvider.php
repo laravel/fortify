@@ -50,6 +50,7 @@ use Laravel\Fortify\Http\Responses\TwoFactorDisabledResponse;
 use Laravel\Fortify\Http\Responses\TwoFactorEnabledResponse;
 use Laravel\Fortify\Http\Responses\TwoFactorLoginResponse;
 use Laravel\Fortify\Http\Responses\VerifyEmailResponse;
+use Laravel\Passkeys\Passkeys as LaravelPasskeys;
 use PragmaRX\Google2FA\Google2FA;
 
 class FortifyServiceProvider extends ServiceProvider
@@ -62,6 +63,8 @@ class FortifyServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__.'/../config/fortify.php', 'fortify');
+
+        $this->configurePasskeys();
 
         $this->registerResponseBindings();
 
@@ -111,6 +114,60 @@ class FortifyServiceProvider extends ServiceProvider
     }
 
     /**
+     * Configure passkeys integration.
+     *
+     * @return void
+     */
+    protected function configurePasskeys()
+    {
+        LaravelPasskeys::ignoreRoutes();
+
+        if ($model = $this->passkeyUserModel()) {
+            LaravelPasskeys::useUserModel($model);
+        }
+
+        config([
+            'passkeys.relying_party_id' => config('fortify.passkeys.relying_party_id', parse_url(config('app.url'), PHP_URL_HOST)),
+            'passkeys.allowed_origins' => config('fortify.passkeys.allowed_origins', [config('app.url')]),
+            'passkeys.user_handle_secret' => config('fortify.passkeys.user_handle_secret', config('app.key')),
+            'passkeys.timeout' => config('fortify.passkeys.timeout', 60000),
+            'passkeys.guard' => config('fortify.guard', 'web'),
+            'passkeys.middleware' => config('fortify.middleware', ['web']),
+            'passkeys.redirect' => Fortify::redirects('login'),
+            'passkeys.throttle' => $this->passkeyThrottleMiddleware(),
+        ]);
+    }
+
+    /**
+     * Get the authentication model used by Fortify's guard.
+     *
+     * @return string|null
+     */
+    protected function passkeyUserModel()
+    {
+        $guard = config('fortify.guard', config('auth.defaults.guard', 'web'));
+        $provider = config("auth.guards.{$guard}.provider", config('auth.defaults.provider'));
+
+        if (! $provider) {
+            return config('auth.providers.users.model');
+        }
+
+        return config("auth.providers.{$provider}.model", config('auth.providers.users.model'));
+    }
+
+    /**
+     * Get the passkeys throttle middleware.
+     *
+     * @return string|null
+     */
+    protected function passkeyThrottleMiddleware()
+    {
+        $limiter = config('fortify.limiters.passkeys');
+
+        return $limiter ? 'throttle:'.$limiter : null;
+    }
+
+    /**
      * Bootstrap any application services.
      *
      * @return void
@@ -147,6 +204,7 @@ class FortifyServiceProvider extends ServiceProvider
 
             $this->{$method}([
                 __DIR__.'/../database/migrations' => database_path('migrations'),
+                LaravelPasskeys::migrationPath() => database_path('migrations'),
             ], 'fortify-migrations');
         }
     }

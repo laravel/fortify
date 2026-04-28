@@ -16,6 +16,7 @@ return [
     'lowercase_usernames' => false,
     'limiters' => [
         'login' => null,
+        'passkeys' => null,
     ],
     'paths' => [
         'login' => null,
@@ -49,6 +50,15 @@ return [
             'secret-key' => null,
             'recovery-codes' => null,
         ],
+        'passkey' => [
+            'login-options' => null,
+            'login' => null,
+            'confirm-options' => null,
+            'confirm' => null,
+            'registration-options' => null,
+            'store' => null,
+            'destroy' => null,
+        ],
     ],
     'redirects' => [
         'login' => null,
@@ -58,6 +68,12 @@ return [
         'email-verification' => null,
         'password-reset' => null,
     ],
+    'passkeys' => [
+        'relying_party_id' => parse_url(config('app.url'), PHP_URL_HOST),
+        'allowed_origins' => [config('app.url')],
+        'user_handle_secret' => env('PASSKEYS_USER_HANDLE_SECRET', config('app.key')),
+        'timeout' => 60000,
+    ],
     'features' => [
         Features::registration(),
         Features::resetPasswords(),
@@ -65,5 +81,6 @@ return [
         Features::updateProfileInformation(),
         Features::updatePasswords(),
         Features::twoFactorAuthentication(),
+        Features::passkeys(),
     ],
 ];

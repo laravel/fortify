@@ -20,6 +20,9 @@ use Laravel\Fortify\Http\Controllers\TwoFactorQrCodeController;
 use Laravel\Fortify\Http\Controllers\TwoFactorSecretKeyController;
 use Laravel\Fortify\Http\Controllers\VerifyEmailController;
 use Laravel\Fortify\RoutePath;
+use Laravel\Passkeys\Http\Controllers\PasskeyConfirmationController;
+use Laravel\Passkeys\Http\Controllers\PasskeyLoginController;
+use Laravel\Passkeys\Http\Controllers\PasskeyRegistrationController;
 
 Route::group(['middleware' => config('fortify.middleware', ['web'])], function () {
     $enableViews = config('fortify.views', true);
@@ -33,6 +36,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
 
     $limiter = config('fortify.limiters.login');
     $twoFactorLimiter = config('fortify.limiters.two-factor');
+    $passkeyLimiter = config('fortify.limiters.passkeys');
     $verificationLimiter = config('fortify.limiters.verification', '6,1');
 
     Route::post(RoutePath::for('login', '/login'), [AuthenticatedSessionController::class, 'store'])
@@ -170,5 +174,48 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         Route::post(RoutePath::for('two-factor.recovery-codes', '/user/two-factor-recovery-codes'), [RecoveryCodeController::class, 'store'])
             ->middleware($twoFactorMiddleware)
             ->name('two-factor.regenerate-recovery-codes');
+    }
+
+    // Passkeys...
+    if (Features::enabled(Features::passkeys())) {
+        $throttle = $passkeyLimiter ? ['throttle:'.$passkeyLimiter] : [];
+
+        $passkeyAuthMiddleware = [config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')];
+
+        $passkeyMiddleware = Features::optionEnabled(Features::passkeys(), 'confirmPassword')
+            ? [...$passkeyAuthMiddleware, 'password.confirm']
+            : $passkeyAuthMiddleware;
+
+        $passkeyGuestMiddleware = ['guest:'.config('fortify.guard'), ...$throttle];
+        $passkeyConfirmMiddleware = [...$passkeyAuthMiddleware, ...$throttle];
+        $passkeyManageMiddleware = [...$passkeyMiddleware, ...$throttle];
+
+        Route::get(RoutePath::for('passkey.login-options', '/passkeys/login/options'), [PasskeyLoginController::class, 'index'])
+            ->middleware($passkeyGuestMiddleware)
+            ->name('passkey.login-options');
+
+        Route::post(RoutePath::for('passkey.login', '/passkeys/login'), [PasskeyLoginController::class, 'store'])
+            ->middleware($passkeyGuestMiddleware)
+            ->name('passkey.login');
+
+        Route::get(RoutePath::for('passkey.confirm-options', '/passkeys/confirm/options'), [PasskeyConfirmationController::class, 'index'])
+            ->middleware($passkeyConfirmMiddleware)
+            ->name('passkey.confirm-options');
+
+        Route::post(RoutePath::for('passkey.confirm', '/passkeys/confirm'), [PasskeyConfirmationController::class, 'store'])
+            ->middleware($passkeyConfirmMiddleware)
+            ->name('passkey.confirm');
+
+        Route::get(RoutePath::for('passkey.registration-options', '/user/passkeys/options'), [PasskeyRegistrationController::class, 'index'])
+            ->middleware($passkeyManageMiddleware)
+            ->name('passkey.registration-options');
+
+        Route::post(RoutePath::for('passkey.store', '/user/passkeys'), [PasskeyRegistrationController::class, 'store'])
+            ->middleware($passkeyManageMiddleware)
+            ->name('passkey.store');
+
+        Route::delete(RoutePath::for('passkey.destroy', '/user/passkeys/{passkey}'), [PasskeyRegistrationController::class, 'destroy'])
+            ->middleware($passkeyMiddleware)
+            ->name('passkey.destroy');
     }
 });
