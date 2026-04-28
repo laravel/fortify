@@ -179,7 +179,9 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     // Passkeys...
     if (Features::enabled(Features::passkeys())) {
         $throttle = $passkeyLimiter ? ['throttle:'.$passkeyLimiter] : [];
+
         $passkeyAuthMiddleware = [config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')];
+
         $passkeyMiddleware = Features::optionEnabled(Features::passkeys(), 'confirmPassword')
             ? [...$passkeyAuthMiddleware, 'password.confirm']
             : $passkeyAuthMiddleware;

@@ -138,7 +138,9 @@ return [
     | Passkeys
     |--------------------------------------------------------------------------
     |
-    | These settings configure Fortify's passkey (WebAuthn) support.
+    | These settings configure Fortify's passkey (WebAuthn) support. Passkeys
+    | allow users to sign in without needing to remember credentials since
+    | they use public-key cryptography - making them immune to breaches.
     |
     */
 
