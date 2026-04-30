@@ -19,7 +19,7 @@
         "bacon/bacon-qr-code": "^3.0",
         "illuminate/console": "^11.0|^12.0|^13.0",
         "illuminate/support": "^11.0|^12.0|^13.0",
-        "laravel/passkeys": "^0.1.0",
+        "laravel/passkeys": "^0.2.0",
         "pragmarx/google2fa": "^9.0"
     },
     "require-dev": {

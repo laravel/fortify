@@ -67,6 +67,7 @@ class PasskeyTest extends OrchestraTestCase
         $this->assertSame(config('fortify.passkeys.allowed_origins'), config('passkeys.allowed_origins'));
         $this->assertSame(config('fortify.passkeys.user_handle_secret'), config('passkeys.user_handle_secret'));
         $this->assertSame(config('fortify.passkeys.timeout'), config('passkeys.timeout'));
+        $this->assertSame(['password.confirm'], config('passkeys.management_middleware'));
         $this->assertSame(Fortify::redirects('login'), config('passkeys.redirect'));
         $this->assertSame(
             config('fortify.limiters.passkeys') ? 'throttle:'.config('fortify.limiters.passkeys') : null,
