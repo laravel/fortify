@@ -81,8 +81,6 @@ return [
         Features::updateProfileInformation(),
         Features::updatePasswords(),
         Features::twoFactorAuthentication(),
-        Features::passkeys([
-            'confirmPassword' => true,
-        ]),
+        Features::passkeys(),
     ],
 ];
