@@ -1,6 +1,14 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.37.1...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.37.2...1.x)
+
+## [v1.37.2](https://github.com/laravel/fortify/compare/v1.37.1...v1.37.2) - 2026-05-15
+
+### What's Changed
+
+* [1.x] Fix passkey password confirmation defaults by [@benbjurstrom](https://github.com/benbjurstrom) in https://github.com/laravel/fortify/pull/678
+
+**Full Changelog**: https://github.com/laravel/fortify/compare/v1.37.1...v1.37.2
 
 ## [v1.37.1](https://github.com/laravel/fortify/compare/v1.37.0...v1.37.1) - 2026-05-15
 
