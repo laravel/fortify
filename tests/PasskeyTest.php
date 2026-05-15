@@ -74,6 +74,12 @@ class PasskeyTest extends OrchestraTestCase
             config('passkeys.throttle')
         );
     }
+    
+    #[DefineEnvironment('withPasskeysWithoutPasswordConfirmation')]
+    public function test_passkeys_management_middleware_is_empty_when_confirm_password_disabled()
+    {
+        $this->assertSame([], config('passkeys.management_middleware'));
+    }
 
     #[DefineEnvironment('withPasskeysLimiter')]
     public function test_passkeys_routes_use_the_passkeys_limiter()
