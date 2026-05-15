@@ -182,7 +182,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
 
         $passkeyAuthMiddleware = [config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')];
 
-        $passkeyMiddleware = Features::optionEnabled(Features::passkeys(), 'confirmPassword')
+        $passkeyMiddleware = config('fortify-options.passkeys.confirmPassword', true)
             ? [...$passkeyAuthMiddleware, 'password.confirm']
             : $passkeyAuthMiddleware;
 

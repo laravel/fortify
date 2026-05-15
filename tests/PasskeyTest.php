@@ -67,7 +67,7 @@ class PasskeyTest extends OrchestraTestCase
         $this->assertSame(config('fortify.passkeys.allowed_origins'), config('passkeys.allowed_origins'));
         $this->assertSame(config('fortify.passkeys.user_handle_secret'), config('passkeys.user_handle_secret'));
         $this->assertSame(config('fortify.passkeys.timeout'), config('passkeys.timeout'));
-        $this->assertSame([], config('passkeys.management_middleware'));
+        $this->assertSame(['password.confirm'], config('passkeys.management_middleware'));
         $this->assertSame(Fortify::redirects('login'), config('passkeys.redirect'));
         $this->assertSame(
             config('fortify.limiters.passkeys') ? 'throttle:'.config('fortify.limiters.passkeys') : null,
@@ -82,6 +82,14 @@ class PasskeyTest extends OrchestraTestCase
 
         $this->assertNotNull($route);
         $this->assertContains('throttle:passkeys', $route->middleware());
+    }
+
+    public function test_passkeys_management_routes_require_password_confirmation_by_default()
+    {
+        $route = Route::getRoutes()->getByName('passkey.registration-options');
+
+        $this->assertNotNull($route);
+        $this->assertContains('password.confirm', $route->middleware());
     }
 
     #[DefineEnvironment('withPasskeysConfirmingPasswords')]
@@ -100,6 +108,15 @@ class PasskeyTest extends OrchestraTestCase
 
         $this->assertNotNull($route);
         $this->assertNotContains('password.confirm', $route->middleware());
+    }
+
+    public function test_package_config_does_not_overwrite_app_passkey_options()
+    {
+        config(['fortify-options.passkeys' => ['confirmPassword' => false]]);
+
+        require __DIR__.'/../config/fortify.php';
+
+        $this->assertSame(['confirmPassword' => false], config('fortify-options.passkeys'));
     }
 
     #[DefineEnvironment('withPasskeysConfirmingPasswords')]
