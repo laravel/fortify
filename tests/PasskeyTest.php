@@ -74,7 +74,7 @@ class PasskeyTest extends OrchestraTestCase
             config('passkeys.throttle')
         );
     }
-    
+
     #[DefineEnvironment('withPasskeysWithoutPasswordConfirmation')]
     public function test_passkeys_management_middleware_is_empty_when_confirm_password_disabled()
     {
