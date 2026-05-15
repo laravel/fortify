@@ -1,6 +1,23 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.37.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.37.1...1.x)
+
+## [v1.37.1](https://github.com/laravel/fortify/compare/v1.37.0...v1.37.1) - 2026-05-15
+
+### What's Changed
+
+* [1.x] Bump actions/checkout from v4 to v6 by [@mon4ssi](https://github.com/mon4ssi) in https://github.com/laravel/fortify/pull/673
+* Pin GitHub Actions to commit SHAs and add Dependabot config by [@joetannenbaum](https://github.com/joetannenbaum) in https://github.com/laravel/fortify/pull/674
+* [1.x] update passkeys and set passkeys management middleware by [@benbjurstrom](https://github.com/benbjurstrom) in https://github.com/laravel/fortify/pull/676
+* Bump shivammathur/setup-php from 2.37.0 to 2.37.1 in the github-actions group by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/laravel/fortify/pull/677
+
+### New Contributors
+
+* [@mon4ssi](https://github.com/mon4ssi) made their first contribution in https://github.com/laravel/fortify/pull/673
+* [@joetannenbaum](https://github.com/joetannenbaum) made their first contribution in https://github.com/laravel/fortify/pull/674
+* [@dependabot](https://github.com/dependabot)[bot] made their first contribution in https://github.com/laravel/fortify/pull/677
+
+**Full Changelog**: https://github.com/laravel/fortify/compare/v1.37.0...v1.37.1
 
 ## [v1.37.0](https://github.com/laravel/fortify/compare/v1.36.2...v1.37.0) - 2026-04-28
 
