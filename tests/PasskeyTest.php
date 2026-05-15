@@ -84,6 +84,14 @@ class PasskeyTest extends OrchestraTestCase
         $this->assertContains('throttle:passkeys', $route->middleware());
     }
 
+    public function test_passkeys_management_routes_require_password_confirmation_by_default()
+    {
+        $route = Route::getRoutes()->getByName('passkey.registration-options');
+
+        $this->assertNotNull($route);
+        $this->assertContains('password.confirm', $route->middleware());
+    }
+
     #[DefineEnvironment('withPasskeysConfirmingPasswords')]
     public function test_passkeys_management_routes_can_require_password_confirmation()
     {
@@ -91,6 +99,24 @@ class PasskeyTest extends OrchestraTestCase
 
         $this->assertNotNull($route);
         $this->assertContains('password.confirm', $route->middleware());
+    }
+
+    #[DefineEnvironment('withPasskeysWithoutPasswordConfirmation')]
+    public function test_passkeys_management_routes_can_disable_password_confirmation()
+    {
+        $route = Route::getRoutes()->getByName('passkey.registration-options');
+
+        $this->assertNotNull($route);
+        $this->assertNotContains('password.confirm', $route->middleware());
+    }
+
+    public function test_package_config_does_not_overwrite_app_passkey_options()
+    {
+        config(['fortify-options.passkeys' => ['confirmPassword' => false]]);
+
+        require __DIR__.'/../config/fortify.php';
+
+        $this->assertSame(['confirmPassword' => false], config('fortify-options.passkeys'));
     }
 
     #[DefineEnvironment('withPasskeysConfirmingPasswords')]
