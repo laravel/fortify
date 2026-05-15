@@ -56,6 +56,13 @@ abstract class OrchestraTestCase extends TestCase
         ]);
     }
 
+    protected function withPasskeysWithoutPasswordConfirmation($app)
+    {
+        $app['config']->set('fortify.features', [
+            Features::passkeys(['confirmPassword' => false]),
+        ]);
+    }
+
     protected function withPasskeysLimiter($app)
     {
         $app['config']->set('fortify.features', [

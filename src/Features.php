@@ -167,7 +167,12 @@ class Features
     public static function passkeys(array $options = [])
     {
         if (! empty($options)) {
-            config(['fortify-options.passkeys' => $options]);
+            config([
+                'fortify-options.passkeys' => array_replace(
+                    config('fortify-options.passkeys', []),
+                    $options,
+                ),
+            ]);
         }
 
         return 'passkeys';

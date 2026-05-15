@@ -93,6 +93,15 @@ class PasskeyTest extends OrchestraTestCase
         $this->assertContains('password.confirm', $route->middleware());
     }
 
+    #[DefineEnvironment('withPasskeysWithoutPasswordConfirmation')]
+    public function test_passkeys_management_routes_can_disable_password_confirmation()
+    {
+        $route = Route::getRoutes()->getByName('passkey.registration-options');
+
+        $this->assertNotNull($route);
+        $this->assertNotContains('password.confirm', $route->middleware());
+    }
+
     #[DefineEnvironment('withPasskeysConfirmingPasswords')]
     public function test_passkey_confirmation_routes_are_not_protected_by_password_confirmation_middleware()
     {
