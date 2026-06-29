@@ -8,6 +8,7 @@ use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 use Laravel\Fortify\Actions\CompletePasswordReset;
 use Laravel\Fortify\Contracts\FailedPasswordResetResponse;
 use Laravel\Fortify\Contracts\PasswordResetResponse;
@@ -54,6 +55,12 @@ class NewPasswordController extends Controller
      */
     public function store(Request $request): Responsable
     {
+        if (config('fortify.lowercase_usernames') && $request->has(Fortify::email())) {
+            $request->merge([
+                Fortify::email() => Str::lower($request->{Fortify::email()}),
+            ]);
+        }
+
         $request->validate([
             'token' => 'required',
             Fortify::email() => 'required|email',
