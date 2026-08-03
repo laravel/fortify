@@ -7,6 +7,7 @@ use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Doctor\Doctor;
 use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Contracts\EmailVerificationNotificationSentResponse as EmailVerificationNotificationSentResponseContract;
 use Laravel\Fortify\Contracts\FailedPasswordConfirmationResponse as FailedPasswordConfirmationResponseContract;
@@ -180,6 +181,25 @@ class FortifyServiceProvider extends ServiceProvider
         $this->configurePublishing();
         $this->configureRoutes();
         $this->registerCommands();
+        $this->registerDiagnostics();
+    }
+
+    /**
+     * Register the package's Doctor diagnostics.
+     *
+     * @return void
+     */
+    protected function registerDiagnostics()
+    {
+        if ($this->app->bound(Doctor::class)) {
+            $this->app->make(Doctor::class)->diagnostics([
+                Diagnostics\FortifyGuardIsStateful::class,
+                Diagnostics\FortifyEmailVerificationIsImplemented::class,
+                Diagnostics\FortifyPasswordResetRouteIsDefined::class,
+                Diagnostics\FortifyTwoFactorIsImplemented::class,
+                Diagnostics\FortifyPasskeysAreConfigured::class,
+            ]);
+        }
     }
 
     /**
