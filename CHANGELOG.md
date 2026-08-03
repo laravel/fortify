@@ -1,6 +1,16 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.37.2...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.37.3...1.x)
+
+## [v1.37.3](https://github.com/laravel/fortify/compare/v1.37.2...v1.37.3) - 2026-06-29
+
+* Add Dependabot cooldown of 5 days by [@nunomaduro](https://github.com/nunomaduro) in https://github.com/laravel/fortify/pull/679
+* Enable Dependabot auto-merge by [@nunomaduro](https://github.com/nunomaduro) in https://github.com/laravel/fortify/pull/680
+* Bump actions/checkout from 6.0.2 to 6.0.3 in the github-actions group by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/laravel/fortify/pull/681
+* Bump shivammathur/setup-php from 2.37.1 to 2.37.2 in the github-actions group by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/laravel/fortify/pull/684
+* Bump actions/checkout from 6.0.3 to 7.0.0 in the github-actions group by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/laravel/fortify/pull/686
+* [1.x] Use literal status code in LockoutResponse to fix PHPStan analysis by [@jklejczyk](https://github.com/jklejczyk) in https://github.com/laravel/fortify/pull/688
+* [1.x] Respect lowercase_usernames config when resetting password by [@jklejczyk](https://github.com/jklejczyk) in https://github.com/laravel/fortify/pull/687
 
 ## [v1.37.2](https://github.com/laravel/fortify/compare/v1.37.1...v1.37.2) - 2026-05-15
 
