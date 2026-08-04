@@ -20,8 +20,10 @@ jobs:
       fail-fast: true
       matrix:
         php: [8.2, 8.3, 8.4, 8.5]
-        laravel: [12, 13]
+        laravel: [11, 12, 13]
         exclude:
+          - php: 8.5
+            laravel: 11
           - php: 8.2
             laravel: 13
 
@@ -42,8 +44,8 @@ jobs:
           tools: composer:v2
           coverage: none
 
-      - name: Remove laravel/doctor on PHP 8.2
-        if: matrix.php == 8.2
+      - name: Remove incompatible dependencies
+        if: matrix.laravel < 12 || matrix.php < 8.3
         run: composer remove laravel/doctor --dev --no-update --no-interaction
 
       - name: Install dependencies
