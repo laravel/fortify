@@ -5,7 +5,6 @@ namespace Laravel\Fortify\Tests;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Fortify\Contracts\RecoveryCode as RecoveryCodeContract;
 use Laravel\Fortify\Contracts\RedirectsIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\RecoveryCode;
@@ -91,16 +90,13 @@ class FortifyServiceProviderTest extends OrchestraTestCase
         $this->assertNotSame($instanceA, $instanceB);
     }
 
-    public function test_recovery_code_contract_is_bound_by_default()
+    public function test_recovery_code_generation_can_be_customized()
     {
-        $this->assertInstanceOf(RecoveryCode::class, $this->app->make(RecoveryCodeContract::class));
-    }
+        Fortify::generateRecoveryCodesUsing(fn () => 'recovery-code');
 
-    public function test_recovery_code_contract_can_be_customized()
-    {
-        Fortify::useRecoveryCode(TestRecoveryCode::class);
+        $this->assertSame('recovery-code', RecoveryCode::generate());
 
-        $this->assertInstanceOf(TestRecoveryCode::class, $this->app->make(RecoveryCodeContract::class));
+        Fortify::$recoveryCodeGenerator = null;
     }
 }
 
@@ -109,13 +105,5 @@ class TestRedirectIfTwoFactorAuthenticatable implements RedirectsIfTwoFactorAuth
     public function handle($request, $next)
     {
         return $next($request);
-    }
-}
-
-class TestRecoveryCode implements RecoveryCodeContract
-{
-    public static function generate()
-    {
-        return 'recovery-code';
     }
 }

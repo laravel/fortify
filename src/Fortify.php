@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Crypt;
 use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Fortify\Contracts\LoginViewResponse;
-use Laravel\Fortify\Contracts\RecoveryCode;
 use Laravel\Fortify\Contracts\RedirectsIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Contracts\RegisterViewResponse;
 use Laravel\Fortify\Contracts\RequestPasswordResetLinkViewResponse;
@@ -41,6 +40,13 @@ class Fortify
      * @var callable|null
      */
     public static $confirmPasswordsUsingCallback;
+
+    /**
+     * The callback that is responsible for generating recovery codes.
+     *
+     * @var callable|null
+     */
+    public static $recoveryCodeGenerator;
 
     /**
      * Indicates if Fortify routes will be registered.
@@ -314,14 +320,14 @@ class Fortify
     }
 
     /**
-     * Register a class / callback that should be used to generate recovery codes.
+     * Register a callback that should be used to generate recovery codes.
      *
-     * @param  callable|string  $callback
+     * @param  callable  $callback
      * @return void
      */
-    public static function useRecoveryCode($callback)
+    public static function generateRecoveryCodesUsing(callable $callback)
     {
-        app()->singleton(RecoveryCode::class, $callback);
+        static::$recoveryCodeGenerator = $callback;
     }
 
     /**

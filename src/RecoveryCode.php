@@ -4,7 +4,7 @@ namespace Laravel\Fortify;
 
 use Illuminate\Support\Str;
 
-class RecoveryCode implements Contracts\RecoveryCode
+class RecoveryCode
 {
     /**
      * Generate a new recovery code.
@@ -13,6 +13,10 @@ class RecoveryCode implements Contracts\RecoveryCode
      */
     public static function generate()
     {
+        if (Fortify::$recoveryCodeGenerator) {
+            return call_user_func(Fortify::$recoveryCodeGenerator);
+        }
+
         return Str::random(10).'-'.Str::random(10);
     }
 }
