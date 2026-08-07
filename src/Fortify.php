@@ -42,6 +42,13 @@ class Fortify
     public static $confirmPasswordsUsingCallback;
 
     /**
+     * The callback that is responsible for generating recovery codes.
+     *
+     * @var callable|null
+     */
+    public static $recoveryCodeGenerator;
+
+    /**
      * Indicates if Fortify routes will be registered.
      *
      * @var bool
@@ -310,6 +317,17 @@ class Fortify
     public static function resetUserPasswordsUsing($callback)
     {
         app()->singleton(ResetsUserPasswords::class, $callback);
+    }
+
+    /**
+     * Register a callback that should be used to generate recovery codes.
+     *
+     * @param  callable  $callback
+     * @return void
+     */
+    public static function generateRecoveryCodesUsing(callable $callback)
+    {
+        static::$recoveryCodeGenerator = $callback;
     }
 
     /**

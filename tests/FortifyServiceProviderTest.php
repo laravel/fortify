@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Contracts\RedirectsIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\RecoveryCode;
 use Orchestra\Testbench\Attributes\DefineEnvironment;
 
 class FortifyServiceProviderTest extends OrchestraTestCase
@@ -87,6 +88,15 @@ class FortifyServiceProviderTest extends OrchestraTestCase
         $instanceB = $this->app->make(RedirectsIfTwoFactorAuthenticatable::class);
 
         $this->assertNotSame($instanceA, $instanceB);
+    }
+
+    public function test_recovery_code_generation_can_be_customized()
+    {
+        Fortify::generateRecoveryCodesUsing(fn () => 'recovery-code');
+
+        $this->assertSame('recovery-code', RecoveryCode::generate());
+
+        Fortify::$recoveryCodeGenerator = null;
     }
 }
 
