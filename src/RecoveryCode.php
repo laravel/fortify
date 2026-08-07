@@ -4,7 +4,7 @@ namespace Laravel\Fortify;
 
 use Illuminate\Support\Str;
 
-class RecoveryCode
+class RecoveryCode implements Contracts\RecoveryCode
 {
     /**
      * Generate a new recovery code.

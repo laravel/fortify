@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Crypt;
 use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Fortify\Contracts\LoginViewResponse;
+use Laravel\Fortify\Contracts\RecoveryCode;
 use Laravel\Fortify\Contracts\RedirectsIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Contracts\RegisterViewResponse;
 use Laravel\Fortify\Contracts\RequestPasswordResetLinkViewResponse;
@@ -310,6 +311,17 @@ class Fortify
     public static function resetUserPasswordsUsing($callback)
     {
         app()->singleton(ResetsUserPasswords::class, $callback);
+    }
+
+    /**
+     * Register a class / callback that should be used to generate recovery codes
+     *
+     * @param  callable|string  $callback
+     * @return void
+     */
+    public static function useRecoveryCode($callback)
+    {
+        app()->singleton(RecoveryCode::class, $callback);
     }
 
     /**

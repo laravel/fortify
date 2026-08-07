@@ -20,6 +20,7 @@ use Laravel\Fortify\Contracts\PasswordConfirmedResponse as PasswordConfirmedResp
 use Laravel\Fortify\Contracts\PasswordResetResponse as PasswordResetResponseContract;
 use Laravel\Fortify\Contracts\PasswordUpdateResponse as PasswordUpdateResponseContract;
 use Laravel\Fortify\Contracts\ProfileInformationUpdatedResponse as ProfileInformationUpdatedResponseContract;
+use Laravel\Fortify\Contracts\RecoveryCode as RecoveryCodeContract;
 use Laravel\Fortify\Contracts\RecoveryCodesGeneratedResponse as RecoveryCodesGeneratedResponseContract;
 use Laravel\Fortify\Contracts\RedirectsIfTwoFactorAuthenticatable as RedirectsIfTwoFactorAuthenticatableContract;
 use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
@@ -67,6 +68,8 @@ class FortifyServiceProvider extends ServiceProvider
         $this->configurePasskeys();
 
         $this->registerResponseBindings();
+
+        $this->app->singleton(RecoveryCodeContract::class, RecoveryCode::class);
 
         $this->app->singleton(TwoFactorAuthenticationProviderContract::class, function ($app) {
             return new TwoFactorAuthenticationProvider(
