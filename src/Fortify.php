@@ -314,7 +314,7 @@ class Fortify
     }
 
     /**
-     * Register a class / callback that should be used to generate recovery codes
+     * Register a class / callback that should be used to generate recovery codes.
      *
      * @param  callable|string  $callback
      * @return void
