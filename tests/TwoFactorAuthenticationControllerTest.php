@@ -5,12 +5,16 @@ namespace Laravel\Fortify\Tests;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Encryption\Encrypter;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
+use Laravel\Fortify\Actions\EnableTwoFactorAuthentication;
 use Laravel\Fortify\Events\TwoFactorAuthenticationConfirmed;
 use Laravel\Fortify\Events\TwoFactorAuthenticationDisabled;
 use Laravel\Fortify\Events\TwoFactorAuthenticationEnabled;
+use Laravel\Fortify\Http\Controllers\TwoFactorAuthenticationController;
 use Laravel\Fortify\Tests\Models\UserWithTwoFactor;
+use Laravel\Fortify\Tests\Requests\FormRequestInteractsWithTwoFactorState;
 use Orchestra\Testbench\Attributes\DefineEnvironment;
 use Orchestra\Testbench\Attributes\ResetRefreshDatabaseState;
 use Orchestra\Testbench\Attributes\WithMigration;
@@ -83,6 +87,51 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
         $this->assertNull($user->two_factor_confirmed_at);
         $this->assertIsArray(json_decode(decrypt($user->two_factor_recovery_codes), true));
         $this->assertNotNull($user->twoFactorQrCodeSvg());
+    }
+
+    #[DefineEnvironment('withConfirmedTwoFactorAuthentication')]
+    #[ResetRefreshDatabaseState]
+    public function test_repeating_two_factor_authentication_enable_preserves_pending_setup()
+    {
+        Event::fake();
+
+        $user = UserWithTwoFactor::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+        ]);
+
+        $session = $this->app['session']->driver();
+        $stateRequest = FormRequestInteractsWithTwoFactorState::create('/settings/security');
+        $stateRequest->setUserResolver(fn () => $user);
+        $stateRequest->setLaravelSession($session);
+
+        $enableRequest = Request::create('/user/two-factor-authentication', 'POST');
+        $enableRequest->setUserResolver(fn () => $user);
+        $enableRequest->setLaravelSession($session);
+
+        $stateRequest->ensureStateIsValid();
+
+        app(TwoFactorAuthenticationController::class)->store(
+            $enableRequest,
+            app(EnableTwoFactorAuthentication::class),
+        );
+
+        $stateRequest->ensureStateIsValid();
+
+        $secret = $user->fresh()->two_factor_secret;
+
+        $session->put('two_factor_confirming_at', time() - 10);
+
+        app(TwoFactorAuthenticationController::class)->store(
+            $enableRequest,
+            app(EnableTwoFactorAuthentication::class),
+        );
+
+        $stateRequest->ensureStateIsValid();
+
+        $this->assertSame($secret, $user->fresh()->two_factor_secret);
+        $this->assertTrue($session->has('two_factor_confirming_at'));
     }
 
     #[ResetRefreshDatabaseState]
