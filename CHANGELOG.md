@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.37.3...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.38.0...1.x)
+
+## [v1.38.0](https://github.com/laravel/fortify/compare/v1.37.3...v1.38.0) - 2026-08-07
+
+* Bump actions/checkout from 7.0.0 to 7.0.1 in the github-actions group by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/laravel/fortify/pull/690
+* [1.x] Supports PHPStan 2 by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/fortify/pull/691
+* Add option to override RecoveryCode class by [@TobiasNagel01](https://github.com/TobiasNagel01) in https://github.com/laravel/fortify/pull/694
 
 ## [v1.37.3](https://github.com/laravel/fortify/compare/v1.37.2...v1.37.3) - 2026-06-29
 
