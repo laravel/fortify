@@ -3,7 +3,10 @@
 namespace Laravel\Fortify\Tests;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Request;
+use Laravel\Fortify\Actions\EnableTwoFactorAuthentication;
 use Laravel\Fortify\Features;
+use Laravel\Fortify\Http\Controllers\TwoFactorAuthenticationController;
 use Laravel\Fortify\Tests\Models\UserWithTwoFactor;
 use Laravel\Fortify\Tests\Requests\FormRequestInteractsWithTwoFactorState;
 use Orchestra\Testbench\Attributes\WithMigration;
@@ -214,6 +217,45 @@ class InteractsWithTwoFactorStateTest extends OrchestraTestCase
         $timestamp = $formRequest->session()->get('two_factor_confirming_at');
         $this->assertGreaterThanOrEqual($beforeTime, $timestamp);
         $this->assertLessThanOrEqual($afterTime, $timestamp);
+    }
+
+    public function test_repeat_enable_request_does_not_disable_pending_confirmation()
+    {
+        $user = $this->createUser([
+            'two_factor_secret' => encrypt('secret'),
+            'two_factor_confirmed_at' => null,
+        ]);
+        $formRequest = $this->createFormRequestWithUser($user);
+        $formRequest->session()->put('two_factor_empty_at', time() - 10);
+
+        // The settings page is loaded right after the secret was generated, so
+        // confirming_at gets stamped for the first time here.
+        $formRequest->ensureStateIsValid();
+        $this->assertTrue($formRequest->session()->has('two_factor_confirming_at'));
+
+        $secret = $user->two_factor_secret;
+
+        // A moment later the user clicks "Enable 2FA" again without ever confirming.
+        // The secret already exists, so EnableTwoFactorAuthentication no-ops, but the
+        // controller should still clear the now-stale confirming_at value.
+        $enableRequest = Request::create('/user/two-factor-authentication', 'POST');
+        $enableRequest->setUserResolver(fn () => $user);
+        $enableRequest->setLaravelSession($formRequest->session());
+
+        app(TwoFactorAuthenticationController::class)->store(
+            $enableRequest,
+            app(EnableTwoFactorAuthentication::class)
+        );
+
+        $this->assertFalse($formRequest->session()->has('two_factor_confirming_at'));
+
+        // The settings page loads again, sees a fresh confirmation attempt starting,
+        // and should not treat it as abandoned.
+        $formRequest = $this->createFormRequestWithUser($user);
+        $formRequest->ensureStateIsValid();
+
+        $this->assertEquals($secret, $user->fresh()->two_factor_secret);
+        $this->assertTrue($formRequest->session()->has('two_factor_confirming_at'));
     }
 
     private function createUser(array $attributes = []): UserWithTwoFactor
