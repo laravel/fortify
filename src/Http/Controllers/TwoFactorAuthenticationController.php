@@ -25,10 +25,6 @@ class TwoFactorAuthenticationController extends Controller
 
         $enable($user, $request->boolean('force', false));
 
-        // If the user already had a pending, unconfirmed secret, EnableTwoFactorAuthentication
-        // is a no-op above and leaves the previous "confirming_at" session value in place.
-        // InteractsWithTwoFactorState reads that as an abandoned setup on the very next
-        // request and deletes the secret, so we clear it and let the state be re-established.
         if (Fortify::confirmsTwoFactorAuthentication() &&
             ! is_null($user->two_factor_secret) &&
             is_null($user->two_factor_confirmed_at)) {
