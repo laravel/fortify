@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.38.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.39.0...1.x)
+
+## [v1.39.0](https://github.com/laravel/fortify/compare/v1.38.0...v1.39.0) - 2026-08-23
+
+* Fix repeat 2FA enable deleting pending secret by [@wakqasahmed](https://github.com/wakqasahmed) in https://github.com/laravel/fortify/pull/696
 
 ## [v1.38.0](https://github.com/laravel/fortify/compare/v1.37.3...v1.38.0) - 2026-08-07
 
