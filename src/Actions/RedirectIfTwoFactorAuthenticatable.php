@@ -51,9 +51,9 @@ class RedirectIfTwoFactorAuthenticatable implements RedirectsIfTwoFactorAuthenti
      */
     public function __construct(StatefulGuard $guard, LoginRateLimiter $limiter, ?Timebox $timebox = null, int $timeboxDuration = 200000)
     {
-        $this->guard           = $guard;
-        $this->limiter         = $limiter;
-        $this->timebox         = $timebox ?: new Timebox;
+        $this->guard = $guard;
+        $this->limiter = $limiter;
+        $this->timebox = $timebox ?: new Timebox;
         $this->timeboxDuration = $timeboxDuration;
     }
 
@@ -70,7 +70,7 @@ class RedirectIfTwoFactorAuthenticatable implements RedirectsIfTwoFactorAuthenti
 
         if (Fortify::confirmsTwoFactorAuthentication()) {
             if (optional($user)->two_factor_secret &&
-                !is_null(optional($user)->two_factor_confirmed_at) &&
+                ! is_null(optional($user)->two_factor_confirmed_at) &&
                 in_array(TwoFactorAuthenticatable::class, class_uses_recursive($user))) {
                 return $this->twoFactorChallengeResponse($request, $user);
             } else {
@@ -96,7 +96,7 @@ class RedirectIfTwoFactorAuthenticatable implements RedirectsIfTwoFactorAuthenti
     {
         if (Fortify::$authenticateUsingCallback) {
             return tap(call_user_func(Fortify::$authenticateUsingCallback, $request), function ($user) use ($request) {
-                if (!$user) {
+                if (! $user) {
                     $this->fireFailedEvent($request);
 
                     $this->throwFailedAuthenticationException($request);
@@ -108,7 +108,7 @@ class RedirectIfTwoFactorAuthenticatable implements RedirectsIfTwoFactorAuthenti
 
         return $this->timebox->call(function () use ($request, $provider) {
             return tap($provider->retrieveByCredentials($request->only(Fortify::username(), 'password')), function ($user) use ($provider, $request) {
-                if (!$user || !$provider->validateCredentials($user, ['password' => $request->password])) {
+                if (! $user || !$provider->validateCredentials($user, ['password' => $request->password])) {
                     $this->fireFailedEvent($request, $user);
 
                     $this->throwFailedAuthenticationException($request);
@@ -149,7 +149,7 @@ class RedirectIfTwoFactorAuthenticatable implements RedirectsIfTwoFactorAuthenti
     {
         event(new Failed($this->guard?->name ?? config('fortify.guard'), $user, [
             Fortify::username() => $request->{Fortify::username()},
-            'password'          => $request->password,
+            'password' => $request->password,
         ]));
     }
 
@@ -163,7 +163,7 @@ class RedirectIfTwoFactorAuthenticatable implements RedirectsIfTwoFactorAuthenti
     protected function twoFactorChallengeResponse($request, $user)
     {
         $request->session()->put([
-            'login.id'       => $user->getKey(),
+            'login.id' => $user->getKey(),
             'login.remember' => $request->boolean('remember'),
         ]);
 
