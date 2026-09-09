@@ -108,7 +108,7 @@ class RedirectIfTwoFactorAuthenticatable implements RedirectsIfTwoFactorAuthenti
 
         return $this->timebox->call(function () use ($request, $provider) {
             return tap($provider->retrieveByCredentials($request->only(Fortify::username(), 'password')), function ($user) use ($provider, $request) {
-                if (! $user || !$provider->validateCredentials($user, ['password' => $request->password])) {
+                if (! $user || ! $provider->validateCredentials($user, ['password' => $request->password])) {
                     $this->fireFailedEvent($request, $user);
 
                     $this->throwFailedAuthenticationException($request);
