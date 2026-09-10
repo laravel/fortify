@@ -4,6 +4,7 @@ namespace Laravel\Fortify\Actions;
 
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Support\Timebox;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\RedirectsIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
@@ -89,17 +90,19 @@ class RedirectIfTwoFactorAuthenticatable implements RedirectsIfTwoFactorAuthenti
 
         $provider = $this->guard->getProvider();
 
-        return tap($provider->retrieveByCredentials($request->only(Fortify::username(), 'password')), function ($user) use ($provider, $request) {
-            if (! $user || ! $provider->validateCredentials($user, ['password' => $request->password])) {
-                $this->fireFailedEvent($request, $user);
+        return (new Timebox())->call(function () use ($request, $provider) {
+            return tap($provider->retrieveByCredentials($request->only(Fortify::username(), 'password')), function ($user) use ($provider, $request) {
+                if (! $user || ! $provider->validateCredentials($user, ['password' => $request->password])) {
+                    $this->fireFailedEvent($request, $user);
 
-                $this->throwFailedAuthenticationException($request);
-            }
+                    $this->throwFailedAuthenticationException($request);
+                }
 
-            if (config('hashing.rehash_on_login', true) && method_exists($provider, 'rehashPasswordIfRequired')) {
-                $provider->rehashPasswordIfRequired($user, ['password' => $request->password]);
-            }
-        });
+                if (config('hashing.rehash_on_login', true) && method_exists($provider, 'rehashPasswordIfRequired')) {
+                    $provider->rehashPasswordIfRequired($user, ['password' => $request->password]);
+                }
+            });
+        }, 200000);
     }
 
     /**
