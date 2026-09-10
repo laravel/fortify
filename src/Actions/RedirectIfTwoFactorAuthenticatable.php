@@ -29,32 +29,16 @@ class RedirectIfTwoFactorAuthenticatable implements RedirectsIfTwoFactorAuthenti
     protected $limiter;
 
     /**
-     * The timebox instance.
-     *
-     * @var \Illuminate\Support\Timebox
-     */
-    protected $timebox;
-
-    /**
-     * The number of microseconds that the timebox should wait for.
-     *
-     * @var int
-     */
-    protected $timeboxDuration;
-
-    /**
      * Create a new controller instance.
      *
      * @param  \Illuminate\Contracts\Auth\StatefulGuard  $guard
      * @param  \Laravel\Fortify\LoginRateLimiter  $limiter
      * @return void
      */
-    public function __construct(StatefulGuard $guard, LoginRateLimiter $limiter, ?Timebox $timebox = null, int $timeboxDuration = 200000)
+    public function __construct(StatefulGuard $guard, LoginRateLimiter $limiter)
     {
         $this->guard = $guard;
         $this->limiter = $limiter;
-        $this->timebox = $timebox ?: new Timebox;
-        $this->timeboxDuration = $timeboxDuration;
     }
 
     /**
@@ -106,7 +90,7 @@ class RedirectIfTwoFactorAuthenticatable implements RedirectsIfTwoFactorAuthenti
 
         $provider = $this->guard->getProvider();
 
-        return $this->timebox->call(function () use ($request, $provider) {
+        return (new Timebox())->call(function () use ($request, $provider) {
             return tap($provider->retrieveByCredentials($request->only(Fortify::username(), 'password')), function ($user) use ($provider, $request) {
                 if (! $user || ! $provider->validateCredentials($user, ['password' => $request->password])) {
                     $this->fireFailedEvent($request, $user);
@@ -118,7 +102,7 @@ class RedirectIfTwoFactorAuthenticatable implements RedirectsIfTwoFactorAuthenti
                     $provider->rehashPasswordIfRequired($user, ['password' => $request->password]);
                 }
             });
-        }, $this->timeboxDuration);
+        }, 200000);
     }
 
     /**
