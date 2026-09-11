@@ -23,6 +23,7 @@
         "pragmarx/google2fa": "^9.0"
     },
     "require-dev": {
+        "laravel/doctor": "^0.1",
         "orchestra/testbench": "^9.15|^10.8|^11.0",
         "phpstan/phpstan": "^2.2.6"
     },
