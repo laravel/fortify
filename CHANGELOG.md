@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.39.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.40.0...1.x)
+
+## [v1.40.0](https://github.com/laravel/fortify/compare/v1.39.0...v1.40.0) - 2026-09-10
+
+* Introduction of Timebox to prevent Timing-based Username Enumeration by [@bretto36](https://github.com/bretto36) in https://github.com/laravel/fortify/pull/697
 
 ## [v1.39.0](https://github.com/laravel/fortify/compare/v1.38.0...v1.39.0) - 2026-08-23
 
