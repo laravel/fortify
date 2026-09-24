@@ -34,15 +34,15 @@ class NewPasswordControllerTest extends OrchestraTestCase
         $guard = $this->mock(StatefulGuard::class);
         $user = Double::for(Authenticatable::class);
 
-        $user->shouldReceive('setRememberToken')->once();
-        $user->shouldReceive('save')->once();
+        $user->expects('setRememberToken');
+        $user->expects('save');
 
-        $guard->shouldReceive('login')->never();
+        $guard->expects('login')->never();
 
         $updater = $this->mock(ResetsUserPasswords::class);
-        $updater->shouldReceive('reset')->once()->with($user, Mockery::type('array'));
+        $updater->expects('reset')->with($user, Mockery::type('array'));
 
-        $broker->shouldReceive('reset')->andReturnUsing(function ($input, $callback) use ($user) {
+        $broker->allows('reset')->resolves(function ($input, $callback) use ($user) {
             $callback($user, 'password');
 
             return Password::PASSWORD_RESET;
@@ -63,7 +63,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
     {
         Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
-        $broker->shouldReceive('reset')->andReturnUsing(function ($input, $callback) {
+        $broker->allows('reset')->resolves(function ($input, $callback) {
             return Password::INVALID_TOKEN;
         });
 
@@ -82,7 +82,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
     {
         Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
-        $broker->shouldReceive('reset')->andReturnUsing(function ($input, $callback) {
+        $broker->allows('reset')->resolves(function ($input, $callback) {
             return Password::INVALID_TOKEN;
         });
 
@@ -105,15 +105,15 @@ class NewPasswordControllerTest extends OrchestraTestCase
         $guard = $this->mock(StatefulGuard::class);
         $user = Double::for(Authenticatable::class);
 
-        $user->shouldReceive('setRememberToken')->once();
-        $user->shouldReceive('save')->once();
+        $user->expects('setRememberToken');
+        $user->expects('save');
 
-        $guard->shouldReceive('login')->never();
+        $guard->expects('login')->never();
 
         $updater = $this->mock(ResetsUserPasswords::class);
-        $updater->shouldReceive('reset')->once()->with($user, Mockery::type('array'));
+        $updater->expects('reset')->with($user, Mockery::type('array'));
 
-        $broker->shouldReceive('reset')->andReturnUsing(function ($input, $callback) use ($user) {
+        $broker->allows('reset')->resolves(function ($input, $callback) use ($user) {
             $callback($user, 'password');
 
             return Password::PASSWORD_RESET;
@@ -149,20 +149,15 @@ class NewPasswordControllerTest extends OrchestraTestCase
         $guard = $this->mock(StatefulGuard::class);
         $user = Double::for(Authenticatable::class);
 
-        $user->shouldReceive('setRememberToken')->once();
-        $user->shouldReceive('save')->once();
-        $guard->shouldReceive('login')->never();
+        $user->expects('setRememberToken');
+        $user->expects('save');
+        $guard->expects('login')->never();
 
         $updater = $this->mock(ResetsUserPasswords::class);
-        $updater->shouldReceive('reset')->once()->with($user, Mockery::type('array'));
+        $updater->expects('reset')->with($user, Mockery::type('array'));
 
-        $broker->shouldReceive('reset')
-            ->once()
-            ->with(
-                Mockery::on(fn ($credentials) => $credentials['email'] === 'john.doe@example.com'),
-                Mockery::type('callable')
-            )
-            ->andReturnUsing(function ($input, $callback) use ($user) {
+        $broker->expects('reset')->with(Mockery::on(fn ($credentials) => $credentials['email'] === 'john.doe@example.com'),
+                Mockery::type('callable'))->resolves(function ($input, $callback) use ($user) {
                 $callback($user, 'password');
 
                 return Password::PASSWORD_RESET;

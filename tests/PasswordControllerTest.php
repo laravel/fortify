@@ -22,9 +22,7 @@ class PasswordControllerTest extends OrchestraTestCase
 
         Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
-        $broker->shouldReceive('deleteToken')
-            ->once()
-            ->with($user);
+        $broker->expects('deleteToken')->with($user);
 
         $this->mock(UpdatesUserPasswords::class)
             ->shouldReceive('update')

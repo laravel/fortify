@@ -64,11 +64,11 @@ class VerifyEmailControllerTest extends OrchestraTestCase
         );
 
         $user = Double::for(Authenticatable::class);
-        $user->shouldReceive('getKey')->andReturn(1);
-        $user->shouldReceive('getAuthIdentifier')->andReturn(1);
-        $user->shouldReceive('getEmailForVerification')->andReturn('taylor@laravel.com');
-        $user->shouldReceive('hasVerifiedEmail')->andReturn(true);
-        $user->shouldReceive('markEmailAsVerified')->never();
+        $user->allows('getKey')->returns(1);
+        $user->allows('getAuthIdentifier')->returns(1);
+        $user->allows('getEmailForVerification')->returns('taylor@laravel.com');
+        $user->allows('hasVerifiedEmail')->returns(true);
+        $user->expects('markEmailAsVerified')->never();
 
         $response = $this->actingAs($user)->get($url);
 
@@ -87,9 +87,9 @@ class VerifyEmailControllerTest extends OrchestraTestCase
         );
 
         $user = Double::for(Authenticatable::class);
-        $user->shouldReceive('getKey')->andReturn(1);
-        $user->shouldReceive('getAuthIdentifier')->andReturn(1);
-        $user->shouldReceive('getEmailForVerification')->andReturn('taylor@laravel.com');
+        $user->allows('getKey')->returns(1);
+        $user->allows('getAuthIdentifier')->returns(1);
+        $user->allows('getEmailForVerification')->returns('taylor@laravel.com');
 
         $response = $this->actingAs($user)->get($url);
 
@@ -108,9 +108,9 @@ class VerifyEmailControllerTest extends OrchestraTestCase
         );
 
         $user = Double::for(Authenticatable::class);
-        $user->shouldReceive('getKey')->andReturn(1);
-        $user->shouldReceive('getAuthIdentifier')->andReturn(1);
-        $user->shouldReceive('getEmailForVerification')->andReturn('taylor@laravel.com');
+        $user->allows('getKey')->returns(1);
+        $user->allows('getAuthIdentifier')->returns(1);
+        $user->allows('getEmailForVerification')->returns('taylor@laravel.com');
 
         $response = $this->actingAs($user)->get($url);
 

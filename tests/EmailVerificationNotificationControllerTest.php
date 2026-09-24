@@ -12,9 +12,9 @@ class EmailVerificationNotificationControllerTest extends OrchestraTestCase
     {
         $user = Double::for(Authenticatable::class);
 
-        $user->shouldReceive('hasVerifiedEmail')->andReturn(false);
-        $user->shouldReceive('getAuthIdentifier')->andReturn(1);
-        $user->shouldReceive('sendEmailVerificationNotification')->once();
+        $user->allows('hasVerifiedEmail')->returns(false);
+        $user->allows('getAuthIdentifier')->returns(1);
+        $user->expects('sendEmailVerificationNotification');
 
         $response = $this->from('/email/verify')
                         ->actingAs($user)
@@ -27,9 +27,9 @@ class EmailVerificationNotificationControllerTest extends OrchestraTestCase
     {
         $user = Double::for(Authenticatable::class);
 
-        $user->shouldReceive('hasVerifiedEmail')->andReturn(true);
-        $user->shouldReceive('getAuthIdentifier')->andReturn(1);
-        $user->shouldReceive('sendEmailVerificationNotification')->never();
+        $user->allows('hasVerifiedEmail')->returns(true);
+        $user->allows('getAuthIdentifier')->returns(1);
+        $user->expects('sendEmailVerificationNotification')->never();
 
         $response = $this->from('/email/verify')
                         ->actingAs($user)
@@ -42,9 +42,9 @@ class EmailVerificationNotificationControllerTest extends OrchestraTestCase
     {
         $user = Double::for(Authenticatable::class);
 
-        $user->shouldReceive('hasVerifiedEmail')->andReturn(true);
-        $user->shouldReceive('getAuthIdentifier')->andReturn(1);
-        $user->shouldReceive('sendEmailVerificationNotification')->never();
+        $user->allows('hasVerifiedEmail')->returns(true);
+        $user->allows('getAuthIdentifier')->returns(1);
+        $user->expects('sendEmailVerificationNotification')->never();
 
         $response = $this->from('/email/verify')
                         ->actingAs($user)

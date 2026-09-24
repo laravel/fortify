@@ -16,7 +16,7 @@ class EmailVerificationPromptControllerTest extends OrchestraTestCase
                 ->andReturn(response('hello world'));
 
         $user = Double::for(Authenticatable::class);
-        $user->shouldReceive('hasVerifiedEmail')->andReturn(false);
+        $user->allows('hasVerifiedEmail')->returns(false);
 
         $response = $this->actingAs($user)->get('/email/verify');
 
@@ -31,7 +31,7 @@ class EmailVerificationPromptControllerTest extends OrchestraTestCase
                 ->andReturn(response('hello world'));
 
         $user = Double::for(Authenticatable::class);
-        $user->shouldReceive('hasVerifiedEmail')->andReturn(true);
+        $user->allows('hasVerifiedEmail')->returns(true);
 
         $response = $this->actingAs($user)->get('/email/verify');
 
@@ -45,7 +45,7 @@ class EmailVerificationPromptControllerTest extends OrchestraTestCase
                 ->andReturn(response('hello world'));
 
         $user = Double::for(Authenticatable::class);
-        $user->shouldReceive('hasVerifiedEmail')->andReturn(true);
+        $user->allows('hasVerifiedEmail')->returns(true);
 
         $response = $this->actingAs($user)
             ->withSession(['url.intended' => 'http://foo.com/bar'])
