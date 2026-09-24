@@ -3,7 +3,7 @@
 namespace Laravel\Fortify\Tests;
 
 use Database\Factories\UserFactory;
-use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\URL;
@@ -62,7 +62,7 @@ class VerifyEmailControllerTest extends OrchestraTestCase
             ]
         );
 
-        $user = Double::for(Authenticatable::class);
+        $user = Double::for(User::class);
         $user->allows('getKey')->returns(1);
         $user->allows('getAuthIdentifier')->returns(1);
         $user->allows('getEmailForVerification')->returns('taylor@laravel.com');
@@ -85,7 +85,7 @@ class VerifyEmailControllerTest extends OrchestraTestCase
             ]
         );
 
-        $user = Double::for(Authenticatable::class);
+        $user = Double::for(User::class);
         $user->allows('getKey')->returns(1);
         $user->allows('getAuthIdentifier')->returns(1);
         $user->allows('getEmailForVerification')->returns('taylor@laravel.com');
@@ -106,7 +106,7 @@ class VerifyEmailControllerTest extends OrchestraTestCase
             ]
         );
 
-        $user = Double::for(Authenticatable::class);
+        $user = Double::for(User::class);
         $user->allows('getKey')->returns(1);
         $user->allows('getAuthIdentifier')->returns(1);
         $user->allows('getEmailForVerification')->returns('taylor@laravel.com');

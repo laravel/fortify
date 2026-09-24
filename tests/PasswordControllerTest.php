@@ -4,7 +4,7 @@ namespace Laravel\Fortify\Tests;
 
 use App\Actions\Fortify\UpdateUserPassword;
 use Database\Factories\UserFactory;
-use Illuminate\Contracts\Auth\PasswordBroker;
+use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;

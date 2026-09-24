@@ -2,14 +2,14 @@
 
 namespace Laravel\Fortify\Tests;
 
-use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Foundation\Auth\User;
 use JMac\Testing\Double;
 
 class EmailVerificationNotificationControllerTest extends OrchestraTestCase
 {
     public function test_email_verification_notification_can_be_sent()
     {
-        $user = Double::for(Authenticatable::class);
+        $user = Double::for(User::class);
 
         $user->allows('hasVerifiedEmail')->returns(false);
         $user->allows('getAuthIdentifier')->returns(1);
@@ -24,7 +24,7 @@ class EmailVerificationNotificationControllerTest extends OrchestraTestCase
 
     public function test_user_is_redirect_if_already_verified()
     {
-        $user = Double::for(Authenticatable::class);
+        $user = Double::for(User::class);
 
         $user->allows('hasVerifiedEmail')->returns(true);
         $user->allows('getAuthIdentifier')->returns(1);
@@ -39,7 +39,7 @@ class EmailVerificationNotificationControllerTest extends OrchestraTestCase
 
     public function test_user_is_redirect_to_intended_url_if_already_verified()
     {
-        $user = Double::for(Authenticatable::class);
+        $user = Double::for(User::class);
 
         $user->allows('hasVerifiedEmail')->returns(true);
         $user->allows('getAuthIdentifier')->returns(1);

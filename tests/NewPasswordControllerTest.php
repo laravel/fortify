@@ -2,7 +2,7 @@
 
 namespace Laravel\Fortify\Tests;
 
-use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Support\Facades\Config;
@@ -32,7 +32,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
         Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
         $guard = $this->mock(StatefulGuard::class);
-        $user = Double::for(Authenticatable::class);
+        $user = Double::for(User::class);
 
         $user->expects('setRememberToken');
         $user->expects('save');
@@ -103,7 +103,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
         Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
         $guard = $this->mock(StatefulGuard::class);
-        $user = Double::for(Authenticatable::class);
+        $user = Double::for(User::class);
 
         $user->expects('setRememberToken');
         $user->expects('save');
@@ -147,7 +147,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
         Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
         $guard = $this->mock(StatefulGuard::class);
-        $user = Double::for(Authenticatable::class);
+        $user = Double::for(User::class);
 
         $user->expects('setRememberToken');
         $user->expects('save');
