@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify\Tests;
 
+use JMac\Testing\Double;
 use App\Actions\Fortify\UpdateUserPassword;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\PasswordBroker;
@@ -19,7 +20,7 @@ class PasswordControllerTest extends OrchestraTestCase
     {
         $user = UserFactory::new()->create();
 
-        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
+        Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
         $broker->shouldReceive('deleteToken')
             ->once()

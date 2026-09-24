@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify\Tests;
 
+use JMac\Testing\Double;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
@@ -26,7 +27,7 @@ class RegisteredUserControllerTest extends OrchestraTestCase
     {
         $this->mock(CreatesNewUsers::class)
                     ->shouldReceive('create')
-                    ->andReturn(Mockery::mock(Authenticatable::class));
+                    ->andReturn(Double::for(Authenticatable::class));
 
         $this->mock(StatefulGuard::class)
                     ->shouldReceive('login')
@@ -41,7 +42,7 @@ class RegisteredUserControllerTest extends OrchestraTestCase
     {
         $this->mock(CreatesNewUsers::class)
                     ->shouldReceive('create')
-                    ->andReturn(Mockery::mock(Authenticatable::class));
+                    ->andReturn(Double::for(Authenticatable::class));
 
         $this->mock(StatefulGuard::class)
                     ->shouldReceive('login')
@@ -64,7 +65,7 @@ class RegisteredUserControllerTest extends OrchestraTestCase
                         'password' => 'password',
                     ])
                     ->once()
-                    ->andReturn(Mockery::mock(Authenticatable::class));
+                    ->andReturn(Double::for(Authenticatable::class));
 
         $this->mock(StatefulGuard::class)
                     ->shouldReceive('login')
@@ -83,7 +84,7 @@ class RegisteredUserControllerTest extends OrchestraTestCase
         $this->mock(CreatesNewUsers::class)
                     ->shouldReceive('create')
                     ->once()
-                    ->andReturn(Mockery::mock(Authenticatable::class));
+                    ->andReturn(Double::for(Authenticatable::class));
 
         $this->mock(StatefulGuard::class)
                     ->shouldReceive('login')

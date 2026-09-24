@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify\Tests;
 
+use JMac\Testing\Double;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Laravel\Fortify\Contracts\VerifyEmailViewResponse;
 use Mockery;
@@ -14,7 +15,7 @@ class EmailVerificationPromptControllerTest extends OrchestraTestCase
                 ->shouldReceive('toResponse')
                 ->andReturn(response('hello world'));
 
-        $user = Mockery::mock(Authenticatable::class);
+        $user = Double::for(Authenticatable::class);
         $user->shouldReceive('hasVerifiedEmail')->andReturn(false);
 
         $response = $this->actingAs($user)->get('/email/verify');
@@ -29,7 +30,7 @@ class EmailVerificationPromptControllerTest extends OrchestraTestCase
                 ->shouldReceive('toResponse')
                 ->andReturn(response('hello world'));
 
-        $user = Mockery::mock(Authenticatable::class);
+        $user = Double::for(Authenticatable::class);
         $user->shouldReceive('hasVerifiedEmail')->andReturn(true);
 
         $response = $this->actingAs($user)->get('/email/verify');
@@ -43,7 +44,7 @@ class EmailVerificationPromptControllerTest extends OrchestraTestCase
                 ->shouldReceive('toResponse')
                 ->andReturn(response('hello world'));
 
-        $user = Mockery::mock(Authenticatable::class);
+        $user = Double::for(Authenticatable::class);
         $user->shouldReceive('hasVerifiedEmail')->andReturn(true);
 
         $response = $this->actingAs($user)

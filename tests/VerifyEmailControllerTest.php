@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify\Tests;
 
+use JMac\Testing\Double;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Http\FormRequest;
@@ -62,7 +63,7 @@ class VerifyEmailControllerTest extends OrchestraTestCase
             ]
         );
 
-        $user = Mockery::mock(Authenticatable::class);
+        $user = Double::for(Authenticatable::class);
         $user->shouldReceive('getKey')->andReturn(1);
         $user->shouldReceive('getAuthIdentifier')->andReturn(1);
         $user->shouldReceive('getEmailForVerification')->andReturn('taylor@laravel.com');
@@ -85,7 +86,7 @@ class VerifyEmailControllerTest extends OrchestraTestCase
             ]
         );
 
-        $user = Mockery::mock(Authenticatable::class);
+        $user = Double::for(Authenticatable::class);
         $user->shouldReceive('getKey')->andReturn(1);
         $user->shouldReceive('getAuthIdentifier')->andReturn(1);
         $user->shouldReceive('getEmailForVerification')->andReturn('taylor@laravel.com');
@@ -106,7 +107,7 @@ class VerifyEmailControllerTest extends OrchestraTestCase
             ]
         );
 
-        $user = Mockery::mock(Authenticatable::class);
+        $user = Double::for(Authenticatable::class);
         $user->shouldReceive('getKey')->andReturn(1);
         $user->shouldReceive('getAuthIdentifier')->andReturn(1);
         $user->shouldReceive('getEmailForVerification')->andReturn('taylor@laravel.com');

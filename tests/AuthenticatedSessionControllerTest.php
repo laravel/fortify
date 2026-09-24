@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify\Tests;
 
+use JMac\Testing\Double;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -140,7 +141,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
     public function test_the_user_can_logout_of_the_application()
     {
         Auth::guard()->setUser(
-            Mockery::mock(Authenticatable::class)->shouldIgnoreMissing()
+            Double::for(Authenticatable::class)
         );
 
         $response = $this->post('/logout');
@@ -152,7 +153,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
     public function test_the_user_can_logout_of_the_application_using_json_request()
     {
         Auth::guard()->setUser(
-            Mockery::mock(Authenticatable::class)->shouldIgnoreMissing()
+            Double::for(Authenticatable::class)
         );
 
         $response = $this->postJson('/logout');

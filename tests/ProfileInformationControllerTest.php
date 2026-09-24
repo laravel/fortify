@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify\Tests;
 
+use JMac\Testing\Double;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 use Mockery;
@@ -10,7 +11,7 @@ class ProfileInformationControllerTest extends OrchestraTestCase
 {
     public function test_contact_information_can_be_updated()
     {
-        $user = Mockery::mock(Authenticatable::class);
+        $user = Double::for(Authenticatable::class);
 
         $this->mock(UpdatesUserProfileInformation::class)
                     ->shouldReceive('update')
@@ -28,7 +29,7 @@ class ProfileInformationControllerTest extends OrchestraTestCase
     {
         app('config')->set('fortify.lowercase_usernames', true);
 
-        $user = Mockery::mock(Authenticatable::class);
+        $user = Double::for(Authenticatable::class);
 
         $this->mock(UpdatesUserProfileInformation::class)
                     ->shouldReceive('update')

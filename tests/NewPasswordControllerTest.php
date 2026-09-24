@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify\Tests;
 
+use JMac\Testing\Double;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Auth\StatefulGuard;
@@ -28,10 +29,10 @@ class NewPasswordControllerTest extends OrchestraTestCase
 
     public function test_password_can_be_reset()
     {
-        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
+        Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
         $guard = $this->mock(StatefulGuard::class);
-        $user = Mockery::mock(Authenticatable::class);
+        $user = Double::for(Authenticatable::class);
 
         $user->shouldReceive('setRememberToken')->once();
         $user->shouldReceive('save')->once();
@@ -60,7 +61,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
 
     public function test_password_reset_can_fail()
     {
-        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
+        Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
         $broker->shouldReceive('reset')->andReturnUsing(function ($input, $callback) {
             return Password::INVALID_TOKEN;
@@ -79,7 +80,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
 
     public function test_password_reset_can_fail_with_json()
     {
-        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
+        Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
         $broker->shouldReceive('reset')->andReturnUsing(function ($input, $callback) {
             return Password::INVALID_TOKEN;
@@ -99,10 +100,10 @@ class NewPasswordControllerTest extends OrchestraTestCase
     public function test_password_can_be_reset_with_customized_email_address_field()
     {
         Config::set('fortify.email', 'emailAddress');
-        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
+        Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
         $guard = $this->mock(StatefulGuard::class);
-        $user = Mockery::mock(Authenticatable::class);
+        $user = Double::for(Authenticatable::class);
 
         $user->shouldReceive('setRememberToken')->once();
         $user->shouldReceive('save')->once();
@@ -143,10 +144,10 @@ class NewPasswordControllerTest extends OrchestraTestCase
     public function test_case_insensitive_usernames_can_be_used()
     {
         Config::set('fortify.lowercase_usernames', true);
-        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
+        Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
         $guard = $this->mock(StatefulGuard::class);
-        $user = Mockery::mock(Authenticatable::class);
+        $user = Double::for(Authenticatable::class);
 
         $user->shouldReceive('setRememberToken')->once();
         $user->shouldReceive('save')->once();

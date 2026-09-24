@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify\Tests;
 
+use JMac\Testing\Double;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Password;
@@ -24,7 +25,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
 
     public function test_reset_link_can_be_successfully_requested()
     {
-        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
+        Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
         $broker->shouldReceive('sendResetLink')->andReturn(Password::RESET_LINK_SENT);
 
@@ -39,7 +40,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
 
     public function test_reset_link_request_can_fail()
     {
-        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
+        Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
         $broker->shouldReceive('sendResetLink')->andReturn(Password::INVALID_USER);
 
@@ -53,7 +54,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
 
     public function test_reset_link_request_can_fail_with_json()
     {
-        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
+        Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
         $broker->shouldReceive('sendResetLink')->andReturn(Password::INVALID_USER);
 
@@ -67,7 +68,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
     public function test_reset_link_can_be_successfully_requested_with_customized_email_field()
     {
         Config::set('fortify.email', 'emailAddress');
-        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
+        Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
         $broker->shouldReceive('sendResetLink')->andReturn(Password::RESET_LINK_SENT);
 
@@ -83,7 +84,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
     public function test_case_insensitive_usernames_can_be_used()
     {
         Config::set('fortify.lowercase_usernames', true);
-        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
+        Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
         $broker->shouldReceive('sendResetLink')->andReturn(Password::RESET_LINK_SENT);
 
