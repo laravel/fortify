@@ -23,9 +23,8 @@ class PasswordControllerTest extends OrchestraTestCase
 
         $broker->expects('deleteToken')->with($user);
 
-        $this->mock(UpdatesUserPasswords::class)
-            ->shouldReceive('update')
-            ->once()
+        $this->double(UpdatesUserPasswords::class, UpdateUserPassword::class)
+            ->expects('update')
             ->with($user, [
                 'current_password' => 'password',
                 'password' => 'new-password',

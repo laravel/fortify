@@ -29,9 +29,9 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
 
     public function test_the_confirm_password_view_is_returned()
     {
-        $this->mock(ConfirmPasswordViewResponse::class)
-            ->shouldReceive('toResponse')
-            ->andReturn(response('hello world'));
+        $this->double(ConfirmPasswordViewResponse::class)
+            ->allows('toResponse')
+            ->returns(response('hello world'));
 
         $response = $this->withoutExceptionHandling()->actingAs($this->user)->get(
             '/user/confirm-password'

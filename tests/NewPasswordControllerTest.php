@@ -2,7 +2,8 @@
 
 namespace Laravel\Fortify\Tests;
 
-use Illuminate\Foundation\Auth\User;
+use App\Actions\Fortify\ResetUserPassword;
+use App\Models\User;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Support\Facades\Config;
@@ -17,9 +18,9 @@ class NewPasswordControllerTest extends OrchestraTestCase
 {
     public function test_the_new_password_view_is_returned()
     {
-        $this->mock(ResetPasswordViewResponse::class)
-            ->shouldReceive('toResponse')
-            ->andReturn(response('hello world'));
+        $this->double(ResetPasswordViewResponse::class)
+            ->allows('toResponse')
+            ->returns(response('hello world'));
 
         $response = $this->get('/reset-password/token');
 
@@ -31,7 +32,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
     {
         Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
-        $guard = $this->mock(StatefulGuard::class);
+        $guard = $this->double(StatefulGuard::class);
         $user = Double::for(User::class);
 
         $user->expects('setRememberToken');
@@ -39,7 +40,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
 
         $guard->expects('login')->never();
 
-        $updater = $this->mock(ResetsUserPasswords::class);
+        $updater = $this->double(ResetsUserPasswords::class, ResetUserPassword::class);
         $updater->expects('reset')->with($user, Argument::type('array'));
 
         $broker->expects('reset')->resolves(function ($input, $callback) use ($user) {
@@ -102,7 +103,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
         Config::set('fortify.email', 'emailAddress');
         Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
-        $guard = $this->mock(StatefulGuard::class);
+        $guard = $this->double(StatefulGuard::class);
         $user = Double::for(User::class);
 
         $user->expects('setRememberToken');
@@ -110,7 +111,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
 
         $guard->expects('login')->never();
 
-        $updater = $this->mock(ResetsUserPasswords::class);
+        $updater = $this->double(ResetsUserPasswords::class, ResetUserPassword::class);
         $updater->expects('reset')->with($user, Argument::type('array'));
 
         $broker->expects('reset')->resolves(function ($input, $callback) use ($user) {
@@ -146,14 +147,14 @@ class NewPasswordControllerTest extends OrchestraTestCase
         Config::set('fortify.lowercase_usernames', true);
         Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
-        $guard = $this->mock(StatefulGuard::class);
+        $guard = $this->double(StatefulGuard::class);
         $user = Double::for(User::class);
 
         $user->expects('setRememberToken');
         $user->expects('save');
         $guard->expects('login')->never();
 
-        $updater = $this->mock(ResetsUserPasswords::class);
+        $updater = $this->double(ResetsUserPasswords::class, ResetUserPassword::class);
         $updater->expects('reset')->with($user, Argument::type('array'));
 
         $broker->expects('reset')->with(Argument::satisfies(fn ($credentials) => $credentials['email'] === 'john.doe@example.com'),

@@ -2,7 +2,8 @@
 
 namespace Laravel\Fortify\Tests;
 
-use Illuminate\Contracts\Auth\Authenticatable;
+use App\Actions\Fortify\UpdateUserProfileInformation;
+use App\Models\User;
 use JMac\Testing\Double;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 
@@ -10,11 +11,10 @@ class ProfileInformationControllerTest extends OrchestraTestCase
 {
     public function test_contact_information_can_be_updated()
     {
-        $user = Double::for(Authenticatable::class);
+        $user = Double::for(User::class);
 
-        $this->mock(UpdatesUserProfileInformation::class)
-            ->shouldReceive('update')
-            ->once();
+        $this->double(UpdatesUserProfileInformation::class, UpdateUserProfileInformation::class)
+            ->expects('update');
 
         $response = $this->withoutExceptionHandling()->actingAs($user)->putJson('/user/profile-information', [
             'name' => 'Taylor Otwell',
@@ -28,15 +28,14 @@ class ProfileInformationControllerTest extends OrchestraTestCase
     {
         app('config')->set('fortify.lowercase_usernames', true);
 
-        $user = Double::for(Authenticatable::class);
+        $user = Double::for(User::class);
 
-        $this->mock(UpdatesUserProfileInformation::class)
-            ->shouldReceive('update')
+        $this->double(UpdatesUserProfileInformation::class, UpdateUserProfileInformation::class)
+            ->expects('update')
             ->with($user, [
                 'name' => 'Taylor Otwell',
                 'email' => 'taylor@laravel.com',
-            ])
-            ->once();
+            ]);
 
         $response = $this->withoutExceptionHandling()->actingAs($user)->putJson('/user/profile-information', [
             'name' => 'Taylor Otwell',

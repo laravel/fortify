@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify\Tests;
 
+use JMac\Testing\Double;
 use JMac\Testing\Integrations\PHPUnit\VerifiesDoubles;
 use Laravel\Fortify\Features;
 use Orchestra\Testbench\Concerns\WithWorkbench;
@@ -12,6 +13,18 @@ abstract class OrchestraTestCase extends TestCase
     use VerifiesDoubles;
 
     use WithWorkbench;
+
+    /**
+     * Register a test double for the given abstract in the container.
+     *
+     * @param  class-string  $abstract
+     * @param  class-string|null  $target
+     * @return \JMac\Testing\DoubleInterface
+     */
+    protected function double(string $abstract, ?string $target = null): object
+    {
+        return $this->instance($abstract, Double::for($target ?? $abstract));
+    }
 
     protected function defineEnvironment($app)
     {

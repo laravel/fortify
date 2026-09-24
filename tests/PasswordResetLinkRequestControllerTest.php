@@ -12,9 +12,9 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
 {
     public function test_the_reset_link_request_view_is_returned()
     {
-        $this->mock(RequestPasswordResetLinkViewResponse::class)
-            ->shouldReceive('toResponse')
-            ->andReturn(response('hello world'));
+        $this->double(RequestPasswordResetLinkViewResponse::class)
+            ->allows('toResponse')
+            ->returns(response('hello world'));
 
         $response = $this->get('/forgot-password');
 

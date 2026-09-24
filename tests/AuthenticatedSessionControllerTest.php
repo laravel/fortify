@@ -26,9 +26,9 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
     public function test_the_login_view_is_returned()
     {
-        $this->mock(LoginViewResponse::class)
-            ->shouldReceive('toResponse')
-            ->andReturn(response('hello world'));
+        $this->double(LoginViewResponse::class)
+            ->allows('toResponse')
+            ->returns(response('hello world'));
 
         $response = $this->get('/login');
 
@@ -91,10 +91,9 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
     public function test_login_attempts_are_throttled()
     {
-        $this->mock(LoginRateLimiter::class, function ($mock) {
-            $mock->shouldReceive('tooManyAttempts')->andReturn(true);
-            $mock->shouldReceive('availableIn')->andReturn(10);
-        });
+        $limiter = $this->double(LoginRateLimiter::class);
+        $limiter->allows('tooManyAttempts')->returns(true);
+        $limiter->allows('availableIn')->returns(10);
 
         $response = $this->postJson('/login', [
             'email' => 'taylor@laravel.com',
@@ -109,22 +108,18 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
     public function test_cant_bypass_throttle_with_special_characters(string $username, string $expectedResult)
     {
         $loginRateLimiter = new LoginRateLimiter(
-            $this->mock(RateLimiter::class)
+            Double::for(RateLimiter::class)
         );
 
         $reflection = new \ReflectionClass($loginRateLimiter);
         $method = $reflection->getMethod('throttleKey');
         $method->setAccessible(true);
 
-        $request = $this->mock(
-            Request::class,
-            static function ($mock) use ($username) {
-                $mock->shouldReceive('input')->andReturn($username);
-                $mock->shouldReceive('ip')->andReturn('192.168.0.1');
-            }
-        );
+        $request = Double::for(Request::class, override: true);
+        $request->allows('input')->returns($username);
+        $request->allows('ip')->returns('192.168.0.1');
 
-        self::assertSame($expectedResult.'|192.168.0.1', $method->invoke($loginRateLimiter, $request));
+        self::assertSame($expectedResult.'|192.168.0.1', $method->invoke($loginRateLimiter, $request->instance()));
     }
 
     public static function usernameProvider(): array

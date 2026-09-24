@@ -10,9 +10,9 @@ class EmailVerificationPromptControllerTest extends OrchestraTestCase
 {
     public function test_the_email_verification_prompt_view_is_returned()
     {
-        $this->mock(VerifyEmailViewResponse::class)
-            ->shouldReceive('toResponse')
-            ->andReturn(response('hello world'));
+        $this->double(VerifyEmailViewResponse::class)
+            ->allows('toResponse')
+            ->returns(response('hello world'));
 
         $user = Double::for(User::class);
         $user->expects('hasVerifiedEmail')->returns(false);
@@ -25,9 +25,9 @@ class EmailVerificationPromptControllerTest extends OrchestraTestCase
 
     public function test_user_is_redirect_home_if_already_verified()
     {
-        $this->mock(VerifyEmailViewResponse::class)
-            ->shouldReceive('toResponse')
-            ->andReturn(response('hello world'));
+        $this->double(VerifyEmailViewResponse::class)
+            ->allows('toResponse')
+            ->returns(response('hello world'));
 
         $user = Double::for(User::class);
         $user->expects('hasVerifiedEmail')->returns(true);
@@ -39,9 +39,9 @@ class EmailVerificationPromptControllerTest extends OrchestraTestCase
 
     public function test_user_is_redirect_to_intended_url_if_already_verified()
     {
-        $this->mock(VerifyEmailViewResponse::class)
-            ->shouldReceive('toResponse')
-            ->andReturn(response('hello world'));
+        $this->double(VerifyEmailViewResponse::class)
+            ->allows('toResponse')
+            ->returns(response('hello world'));
 
         $user = Double::for(User::class);
         $user->expects('hasVerifiedEmail')->returns(true);
