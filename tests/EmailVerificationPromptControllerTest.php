@@ -2,20 +2,21 @@
 
 namespace Laravel\Fortify\Tests;
 
-use Illuminate\Contracts\Auth\Authenticatable;
-use Laravel\Fortify\Contracts\VerifyEmailViewResponse;
-use Mockery;
+use Database\Factories\UserFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Fortify\Fortify;
+use Orchestra\Testbench\Attributes\WithMigration;
 
+#[WithMigration]
 class EmailVerificationPromptControllerTest extends OrchestraTestCase
 {
+    use RefreshDatabase;
+
     public function test_the_email_verification_prompt_view_is_returned()
     {
-        $this->mock(VerifyEmailViewResponse::class)
-                ->shouldReceive('toResponse')
-                ->andReturn(response('hello world'));
+        Fortify::verifyEmailView(fn () => 'hello world');
 
-        $user = Mockery::mock(Authenticatable::class);
-        $user->shouldReceive('hasVerifiedEmail')->andReturn(false);
+        $user = UserFactory::new()->unverified()->create();
 
         $response = $this->actingAs($user)->get('/email/verify');
 
@@ -25,12 +26,7 @@ class EmailVerificationPromptControllerTest extends OrchestraTestCase
 
     public function test_user_is_redirect_home_if_already_verified()
     {
-        $this->mock(VerifyEmailViewResponse::class)
-                ->shouldReceive('toResponse')
-                ->andReturn(response('hello world'));
-
-        $user = Mockery::mock(Authenticatable::class);
-        $user->shouldReceive('hasVerifiedEmail')->andReturn(true);
+        $user = UserFactory::new()->create();
 
         $response = $this->actingAs($user)->get('/email/verify');
 
@@ -39,12 +35,7 @@ class EmailVerificationPromptControllerTest extends OrchestraTestCase
 
     public function test_user_is_redirect_to_intended_url_if_already_verified()
     {
-        $this->mock(VerifyEmailViewResponse::class)
-                ->shouldReceive('toResponse')
-                ->andReturn(response('hello world'));
-
-        $user = Mockery::mock(Authenticatable::class);
-        $user->shouldReceive('hasVerifiedEmail')->andReturn(true);
+        $user = UserFactory::new()->create();
 
         $response = $this->actingAs($user)
             ->withSession(['url.intended' => 'http://foo.com/bar'])

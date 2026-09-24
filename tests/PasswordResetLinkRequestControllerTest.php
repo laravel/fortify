@@ -2,19 +2,26 @@
 
 namespace Laravel\Fortify\Tests;
 
+use Database\Factories\UserFactory;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Auth\Passwords\PasswordBrokerManager;
 use Illuminate\Contracts\Auth\PasswordBroker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
-use Laravel\Fortify\Contracts\RequestPasswordResetLinkViewResponse;
-use Mockery;
+use JMac\Testing\Double;
+use Laravel\Fortify\Fortify;
+use Orchestra\Testbench\Attributes\WithMigration;
 
+#[WithMigration]
 class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
 {
+    use RefreshDatabase;
+
     public function test_the_reset_link_request_view_is_returned()
     {
-        $this->mock(RequestPasswordResetLinkViewResponse::class)
-                ->shouldReceive('toResponse')
-                ->andReturn(response('hello world'));
+        Fortify::requestPasswordResetLinkView(fn () => 'hello world');
 
         $response = $this->get('/forgot-password');
 
@@ -24,52 +31,53 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
 
     public function test_reset_link_can_be_successfully_requested()
     {
-        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
+        Notification::fake();
 
-        $broker->shouldReceive('sendResetLink')->andReturn(Password::RESET_LINK_SENT);
+        $user = UserFactory::new()->create(['email' => 'taylor@laravel.com']);
 
         $response = $this->from(url('/forgot-password'))
-                        ->post('/forgot-password', ['email' => 'taylor@laravel.com']);
+            ->post('/forgot-password', ['email' => 'taylor@laravel.com']);
 
         $response->assertStatus(302);
         $response->assertRedirect('/forgot-password');
         $response->assertSessionHasNoErrors();
         $response->assertSessionHas('status', trans(Password::RESET_LINK_SENT));
+        Notification::assertSentTo($user, ResetPassword::class);
     }
 
     public function test_reset_link_request_can_fail()
     {
-        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
-
-        $broker->shouldReceive('sendResetLink')->andReturn(Password::INVALID_USER);
+        Notification::fake();
 
         $response = $this->from(url('/forgot-password'))
-                        ->post('/forgot-password', ['email' => 'taylor@laravel.com']);
+            ->post('/forgot-password', ['email' => 'taylor@laravel.com']);
 
         $response->assertStatus(302);
         $response->assertRedirect('/forgot-password');
         $response->assertSessionHasErrors('email');
+        Notification::assertNothingSent();
     }
 
     public function test_reset_link_request_can_fail_with_json()
     {
-        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
-
-        $broker->shouldReceive('sendResetLink')->andReturn(Password::INVALID_USER);
+        Notification::fake();
 
         $response = $this->from(url('/forgot-password'))
-                        ->postJson('/forgot-password', ['email' => 'taylor@laravel.com']);
+            ->postJson('/forgot-password', ['email' => 'taylor@laravel.com']);
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors('email');
+        Notification::assertNothingSent();
     }
 
     public function test_reset_link_can_be_successfully_requested_with_customized_email_field()
     {
         Config::set('fortify.email', 'emailAddress');
-        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
+        $manager = Double::for(PasswordBrokerManager::class);
+        $manager->allows('broker')->returns($broker = Double::for(PasswordBroker::class));
+        Password::swap($manager);
 
-        $broker->shouldReceive('sendResetLink')->andReturn(Password::RESET_LINK_SENT);
+        $broker->expects('sendResetLink')->returns(Password::RESET_LINK_SENT);
 
         $response = $this->from(url('/forgot-password'))
             ->post('/forgot-password', ['emailAddress' => 'taylor@laravel.com']);
@@ -83,9 +91,9 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
     public function test_case_insensitive_usernames_can_be_used()
     {
         Config::set('fortify.lowercase_usernames', true);
-        Password::shouldReceive('broker')->andReturn($broker = Mockery::mock(PasswordBroker::class));
+        Notification::fake();
 
-        $broker->shouldReceive('sendResetLink')->andReturn(Password::RESET_LINK_SENT);
+        $user = UserFactory::new()->create(['email' => 'taylor@laravel.com']);
 
         $response = $this->from(url('/forgot-password'))
             ->post('/forgot-password', ['email' => 'TAYLOR@laravel.com']);
@@ -94,5 +102,6 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
         $response->assertRedirect('/forgot-password');
         $response->assertSessionHasNoErrors();
         $response->assertSessionHas('status', trans(Password::RESET_LINK_SENT));
+        Notification::assertSentTo($user, ResetPassword::class);
     }
 }

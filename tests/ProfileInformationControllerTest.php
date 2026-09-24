@@ -2,19 +2,23 @@
 
 namespace Laravel\Fortify\Tests;
 
-use Illuminate\Contracts\Auth\Authenticatable;
+use App\Actions\Fortify\UpdateUserProfileInformation;
+use Database\Factories\UserFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
-use Mockery;
+use Orchestra\Testbench\Attributes\WithMigration;
 
+#[WithMigration]
 class ProfileInformationControllerTest extends OrchestraTestCase
 {
+    use RefreshDatabase;
+
     public function test_contact_information_can_be_updated()
     {
-        $user = Mockery::mock(Authenticatable::class);
+        $user = UserFactory::new()->create();
 
-        $this->mock(UpdatesUserProfileInformation::class)
-                    ->shouldReceive('update')
-                    ->once();
+        $this->double(UpdatesUserProfileInformation::class, UpdateUserProfileInformation::class)
+            ->expects('update');
 
         $response = $this->withoutExceptionHandling()->actingAs($user)->putJson('/user/profile-information', [
             'name' => 'Taylor Otwell',
@@ -28,15 +32,14 @@ class ProfileInformationControllerTest extends OrchestraTestCase
     {
         app('config')->set('fortify.lowercase_usernames', true);
 
-        $user = Mockery::mock(Authenticatable::class);
+        $user = UserFactory::new()->create();
 
-        $this->mock(UpdatesUserProfileInformation::class)
-                    ->shouldReceive('update')
-                    ->with($user, [
-                        'name' => 'Taylor Otwell',
-                        'email' => 'taylor@laravel.com',
-                    ])
-                    ->once();
+        $this->double(UpdatesUserProfileInformation::class, UpdateUserProfileInformation::class)
+            ->expects('update')
+            ->with($user, [
+                'name' => 'Taylor Otwell',
+                'email' => 'taylor@laravel.com',
+            ]);
 
         $response = $this->withoutExceptionHandling()->actingAs($user)->putJson('/user/profile-information', [
             'name' => 'Taylor Otwell',

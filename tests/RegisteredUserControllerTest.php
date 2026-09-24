@@ -2,19 +2,21 @@
 
 namespace Laravel\Fortify\Tests;
 
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\StatefulGuard;
+use Database\Factories\UserFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
-use Laravel\Fortify\Contracts\RegisterViewResponse;
-use Mockery;
+use Laravel\Fortify\Fortify;
+use Orchestra\Testbench\Attributes\WithMigration;
 
+#[WithMigration]
 class RegisteredUserControllerTest extends OrchestraTestCase
 {
+    use RefreshDatabase;
+
     public function test_the_register_view_is_returned()
     {
-        $this->mock(RegisterViewResponse::class)
-                ->shouldReceive('toResponse')
-                ->andReturn(response('hello world'));
+        Fortify::registerView(fn () => 'hello world');
 
         $response = $this->get('/register');
 
@@ -24,51 +26,40 @@ class RegisteredUserControllerTest extends OrchestraTestCase
 
     public function test_users_can_be_created()
     {
-        $this->mock(CreatesNewUsers::class)
-                    ->shouldReceive('create')
-                    ->andReturn(Mockery::mock(Authenticatable::class));
-
-        $this->mock(StatefulGuard::class)
-                    ->shouldReceive('login')
-                    ->once();
+        $this->double(CreatesNewUsers::class)
+            ->allows('create')
+            ->returns($user = UserFactory::new()->create());
 
         $response = $this->post('/register', []);
 
         $response->assertRedirect('/home');
+        $this->assertAuthenticatedAs($user);
     }
 
     public function test_users_can_be_created_and_redirected_to_intended_url()
     {
-        $this->mock(CreatesNewUsers::class)
-                    ->shouldReceive('create')
-                    ->andReturn(Mockery::mock(Authenticatable::class));
-
-        $this->mock(StatefulGuard::class)
-                    ->shouldReceive('login')
-                    ->once();
+        $this->double(CreatesNewUsers::class)
+            ->allows('create')
+            ->returns($user = UserFactory::new()->create());
 
         $response = $this->withSession(['url.intended' => 'http://foo.com/bar'])
-                        ->post('/register', []);
+            ->post('/register', []);
 
         $response->assertRedirect('http://foo.com/bar');
+        $this->assertAuthenticatedAs($user);
     }
 
     public function test_usernames_will_be_stored_case_insensitive()
     {
         app('config')->set('fortify.lowercase_usernames', true);
 
-        $this->mock(CreatesNewUsers::class)
-                    ->shouldReceive('create')
-                    ->with([
-                        'email' => 'taylor@laravel.com',
-                        'password' => 'password',
-                    ])
-                    ->once()
-                    ->andReturn(Mockery::mock(Authenticatable::class));
-
-        $this->mock(StatefulGuard::class)
-                    ->shouldReceive('login')
-                    ->once();
+        $this->double(CreatesNewUsers::class)
+            ->expects('create')
+            ->with([
+                'email' => 'taylor@laravel.com',
+                'password' => 'password',
+            ])
+            ->returns($user = UserFactory::new()->create());
 
         $response = $this->post('/register', [
             'email' => 'TAYLOR@LARAVEL.COM',
@@ -76,19 +67,14 @@ class RegisteredUserControllerTest extends OrchestraTestCase
         ]);
 
         $response->assertRedirect('/home');
+        $this->assertAuthenticatedAs($user);
     }
 
     public function test_users_can_be_created_with_remember_option()
     {
-        $this->mock(CreatesNewUsers::class)
-                    ->shouldReceive('create')
-                    ->once()
-                    ->andReturn(Mockery::mock(Authenticatable::class));
-
-        $this->mock(StatefulGuard::class)
-                    ->shouldReceive('login')
-                    ->with(Mockery::type(Authenticatable::class), true)
-                    ->once();
+        $this->double(CreatesNewUsers::class)
+            ->expects('create')
+            ->returns($user = UserFactory::new()->create());
 
         $response = $this->post('/register', [
             'email' => 'taylor@laravel.com',
@@ -97,5 +83,7 @@ class RegisteredUserControllerTest extends OrchestraTestCase
         ]);
 
         $response->assertRedirect('/home');
+        $this->assertAuthenticatedAs($user);
+        $response->assertCookie(Auth::guard()->getRecallerName());
     }
 }
