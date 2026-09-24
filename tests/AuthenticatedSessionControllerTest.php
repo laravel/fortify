@@ -87,8 +87,11 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
     public function test_login_attempts_are_throttled()
     {
-        for ($i = 0; $i < 5; $i++) {
-            app(RateLimiter::class)->hit('taylor@laravel.com|127.0.0.1');
+        foreach (range(1, 5) as $attempt) {
+            $this->postJson('/login', [
+                'email' => 'taylor@laravel.com',
+                'password' => 'secret',
+            ])->assertStatus(422);
         }
 
         $response = $this->postJson('/login', [
