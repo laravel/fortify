@@ -2,20 +2,23 @@
 
 namespace Laravel\Fortify\Tests;
 
-use Illuminate\Foundation\Auth\User;
-use JMac\Testing\Double;
+use Database\Factories\UserFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Fortify\Contracts\VerifyEmailViewResponse;
+use Orchestra\Testbench\Attributes\WithMigration;
 
+#[WithMigration]
 class EmailVerificationPromptControllerTest extends OrchestraTestCase
 {
+    use RefreshDatabase;
+
     public function test_the_email_verification_prompt_view_is_returned()
     {
         $this->double(VerifyEmailViewResponse::class)
             ->allows('toResponse')
             ->returns(response('hello world'));
 
-        $user = Double::for(User::class);
-        $user->expects('hasVerifiedEmail')->returns(false);
+        $user = UserFactory::new()->unverified()->create();
 
         $response = $this->actingAs($user)->get('/email/verify');
 
@@ -29,8 +32,7 @@ class EmailVerificationPromptControllerTest extends OrchestraTestCase
             ->allows('toResponse')
             ->returns(response('hello world'));
 
-        $user = Double::for(User::class);
-        $user->expects('hasVerifiedEmail')->returns(true);
+        $user = UserFactory::new()->create();
 
         $response = $this->actingAs($user)->get('/email/verify');
 
@@ -43,8 +45,7 @@ class EmailVerificationPromptControllerTest extends OrchestraTestCase
             ->allows('toResponse')
             ->returns(response('hello world'));
 
-        $user = Double::for(User::class);
-        $user->expects('hasVerifiedEmail')->returns(true);
+        $user = UserFactory::new()->create();
 
         $response = $this->actingAs($user)
             ->withSession(['url.intended' => 'http://foo.com/bar'])

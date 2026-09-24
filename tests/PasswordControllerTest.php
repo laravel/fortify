@@ -4,11 +4,9 @@ namespace Laravel\Fortify\Tests;
 
 use App\Actions\Fortify\UpdateUserPassword;
 use Database\Factories\UserFactory;
-use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
-use JMac\Testing\Double;
 use Laravel\Fortify\Contracts\UpdatesUserPasswords;
 
 class PasswordControllerTest extends OrchestraTestCase
@@ -19,9 +17,7 @@ class PasswordControllerTest extends OrchestraTestCase
     {
         $user = UserFactory::new()->create();
 
-        Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
-
-        $broker->expects('deleteToken')->with($user);
+        Password::broker()->createToken($user);
 
         $this->double(UpdatesUserPasswords::class, UpdateUserPassword::class)
             ->expects('update')
@@ -38,6 +34,7 @@ class PasswordControllerTest extends OrchestraTestCase
         ]);
 
         $response->assertStatus(200);
+        $this->assertDatabaseMissing('password_reset_tokens', ['email' => $user->email]);
     }
 
     public function test_passwords_cannot_be_updated_without_current_password()
