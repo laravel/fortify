@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify\Tests;
 
+use JMac\Testing\Matching\Argument;
 use JMac\Testing\Double;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\StatefulGuard;
@@ -88,7 +89,7 @@ class RegisteredUserControllerTest extends OrchestraTestCase
 
         $this->mock(StatefulGuard::class)
                     ->shouldReceive('login')
-                    ->with(Mockery::type(Authenticatable::class), true)
+                    ->with(Argument::type(Authenticatable::class), true)
                     ->once();
 
         $response = $this->post('/register', [

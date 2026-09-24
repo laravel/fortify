@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify\Tests;
 
+use JMac\Testing\Matching\Argument;
 use JMac\Testing\Double;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\PasswordBroker;
@@ -40,7 +41,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
         $guard->expects('login')->never();
 
         $updater = $this->mock(ResetsUserPasswords::class);
-        $updater->expects('reset')->with($user, Mockery::type('array'));
+        $updater->expects('reset')->with($user, Argument::type('array'));
 
         $broker->allows('reset')->resolves(function ($input, $callback) use ($user) {
             $callback($user, 'password');
@@ -111,7 +112,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
         $guard->expects('login')->never();
 
         $updater = $this->mock(ResetsUserPasswords::class);
-        $updater->expects('reset')->with($user, Mockery::type('array'));
+        $updater->expects('reset')->with($user, Argument::type('array'));
 
         $broker->allows('reset')->resolves(function ($input, $callback) use ($user) {
             $callback($user, 'password');
@@ -154,10 +155,10 @@ class NewPasswordControllerTest extends OrchestraTestCase
         $guard->expects('login')->never();
 
         $updater = $this->mock(ResetsUserPasswords::class);
-        $updater->expects('reset')->with($user, Mockery::type('array'));
+        $updater->expects('reset')->with($user, Argument::type('array'));
 
-        $broker->expects('reset')->with(Mockery::on(fn ($credentials) => $credentials['email'] === 'john.doe@example.com'),
-                Mockery::type('callable'))->resolves(function ($input, $callback) use ($user) {
+        $broker->expects('reset')->with(Argument::satisfies(fn ($credentials) => $credentials['email'] === 'john.doe@example.com'),
+                Argument::type('callable'))->resolves(function ($input, $callback) use ($user) {
                 $callback($user, 'password');
 
                 return Password::PASSWORD_RESET;
