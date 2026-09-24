@@ -42,7 +42,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
         $updater = $this->mock(ResetsUserPasswords::class);
         $updater->expects('reset')->with($user, Argument::type('array'));
 
-        $broker->allows('reset')->resolves(function ($input, $callback) use ($user) {
+        $broker->expects('reset')->resolves(function ($input, $callback) use ($user) {
             $callback($user, 'password');
 
             return Password::PASSWORD_RESET;
@@ -63,7 +63,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
     {
         Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
-        $broker->allows('reset')->resolves(function ($input, $callback) {
+        $broker->expects('reset')->resolves(function ($input, $callback) {
             return Password::INVALID_TOKEN;
         });
 
@@ -82,7 +82,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
     {
         Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
-        $broker->allows('reset')->resolves(function ($input, $callback) {
+        $broker->expects('reset')->resolves(function ($input, $callback) {
             return Password::INVALID_TOKEN;
         });
 
@@ -113,7 +113,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
         $updater = $this->mock(ResetsUserPasswords::class);
         $updater->expects('reset')->with($user, Argument::type('array'));
 
-        $broker->allows('reset')->resolves(function ($input, $callback) use ($user) {
+        $broker->expects('reset')->resolves(function ($input, $callback) use ($user) {
             $callback($user, 'password');
 
             return Password::PASSWORD_RESET;

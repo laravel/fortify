@@ -63,10 +63,10 @@ class VerifyEmailControllerTest extends OrchestraTestCase
         );
 
         $user = Double::for(User::class);
-        $user->allows('getKey')->returns(1);
+        $user->expects('getKey')->returns(1);
         $user->allows('getAuthIdentifier')->returns(1);
-        $user->allows('getEmailForVerification')->returns('taylor@laravel.com');
-        $user->allows('hasVerifiedEmail')->returns(true);
+        $user->expects('getEmailForVerification')->returns('taylor@laravel.com');
+        $user->expects('hasVerifiedEmail')->returns(true);
         $user->expects('markEmailAsVerified')->never();
 
         $response = $this->actingAs($user)->get($url);
@@ -86,7 +86,7 @@ class VerifyEmailControllerTest extends OrchestraTestCase
         );
 
         $user = Double::for(User::class);
-        $user->allows('getKey')->returns(1);
+        $user->expects('getKey')->returns(1);
         $user->allows('getAuthIdentifier')->returns(1);
         $user->allows('getEmailForVerification')->returns('taylor@laravel.com');
 
@@ -107,9 +107,9 @@ class VerifyEmailControllerTest extends OrchestraTestCase
         );
 
         $user = Double::for(User::class);
-        $user->allows('getKey')->returns(1);
+        $user->expects('getKey')->returns(1);
         $user->allows('getAuthIdentifier')->returns(1);
-        $user->allows('getEmailForVerification')->returns('taylor@laravel.com');
+        $user->expects('getEmailForVerification')->returns('taylor@laravel.com');
 
         $response = $this->actingAs($user)->get($url);
 

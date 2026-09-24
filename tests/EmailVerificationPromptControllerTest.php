@@ -15,7 +15,7 @@ class EmailVerificationPromptControllerTest extends OrchestraTestCase
             ->andReturn(response('hello world'));
 
         $user = Double::for(User::class);
-        $user->allows('hasVerifiedEmail')->returns(false);
+        $user->expects('hasVerifiedEmail')->returns(false);
 
         $response = $this->actingAs($user)->get('/email/verify');
 
@@ -30,7 +30,7 @@ class EmailVerificationPromptControllerTest extends OrchestraTestCase
             ->andReturn(response('hello world'));
 
         $user = Double::for(User::class);
-        $user->allows('hasVerifiedEmail')->returns(true);
+        $user->expects('hasVerifiedEmail')->returns(true);
 
         $response = $this->actingAs($user)->get('/email/verify');
 
@@ -44,7 +44,7 @@ class EmailVerificationPromptControllerTest extends OrchestraTestCase
             ->andReturn(response('hello world'));
 
         $user = Double::for(User::class);
-        $user->allows('hasVerifiedEmail')->returns(true);
+        $user->expects('hasVerifiedEmail')->returns(true);
 
         $response = $this->actingAs($user)
             ->withSession(['url.intended' => 'http://foo.com/bar'])

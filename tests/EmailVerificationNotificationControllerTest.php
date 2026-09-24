@@ -11,7 +11,7 @@ class EmailVerificationNotificationControllerTest extends OrchestraTestCase
     {
         $user = Double::for(User::class);
 
-        $user->allows('hasVerifiedEmail')->returns(false);
+        $user->expects('hasVerifiedEmail')->returns(false);
         $user->allows('getAuthIdentifier')->returns(1);
         $user->expects('sendEmailVerificationNotification');
 
@@ -26,7 +26,7 @@ class EmailVerificationNotificationControllerTest extends OrchestraTestCase
     {
         $user = Double::for(User::class);
 
-        $user->allows('hasVerifiedEmail')->returns(true);
+        $user->expects('hasVerifiedEmail')->returns(true);
         $user->allows('getAuthIdentifier')->returns(1);
         $user->expects('sendEmailVerificationNotification')->never();
 
@@ -41,7 +41,7 @@ class EmailVerificationNotificationControllerTest extends OrchestraTestCase
     {
         $user = Double::for(User::class);
 
-        $user->allows('hasVerifiedEmail')->returns(true);
+        $user->expects('hasVerifiedEmail')->returns(true);
         $user->allows('getAuthIdentifier')->returns(1);
         $user->expects('sendEmailVerificationNotification')->never();
 

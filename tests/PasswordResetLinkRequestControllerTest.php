@@ -26,7 +26,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
     {
         Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
-        $broker->allows('sendResetLink')->returns(Password::RESET_LINK_SENT);
+        $broker->expects('sendResetLink')->returns(Password::RESET_LINK_SENT);
 
         $response = $this->from(url('/forgot-password'))
             ->post('/forgot-password', ['email' => 'taylor@laravel.com']);
@@ -41,7 +41,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
     {
         Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
-        $broker->allows('sendResetLink')->returns(Password::INVALID_USER);
+        $broker->expects('sendResetLink')->returns(Password::INVALID_USER);
 
         $response = $this->from(url('/forgot-password'))
             ->post('/forgot-password', ['email' => 'taylor@laravel.com']);
@@ -55,7 +55,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
     {
         Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
-        $broker->allows('sendResetLink')->returns(Password::INVALID_USER);
+        $broker->expects('sendResetLink')->returns(Password::INVALID_USER);
 
         $response = $this->from(url('/forgot-password'))
             ->postJson('/forgot-password', ['email' => 'taylor@laravel.com']);
@@ -69,7 +69,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
         Config::set('fortify.email', 'emailAddress');
         Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
-        $broker->allows('sendResetLink')->returns(Password::RESET_LINK_SENT);
+        $broker->expects('sendResetLink')->returns(Password::RESET_LINK_SENT);
 
         $response = $this->from(url('/forgot-password'))
             ->post('/forgot-password', ['emailAddress' => 'taylor@laravel.com']);
@@ -85,7 +85,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
         Config::set('fortify.lowercase_usernames', true);
         Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
 
-        $broker->allows('sendResetLink')->returns(Password::RESET_LINK_SENT);
+        $broker->expects('sendResetLink')->returns(Password::RESET_LINK_SENT);
 
         $response = $this->from(url('/forgot-password'))
             ->post('/forgot-password', ['email' => 'TAYLOR@laravel.com']);
