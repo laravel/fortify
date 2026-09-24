@@ -2,12 +2,15 @@
 
 namespace Laravel\Fortify\Tests;
 
+use JMac\Testing\Integrations\PHPUnit\VerifiesDoubles;
 use Laravel\Fortify\Features;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase;
 
 abstract class OrchestraTestCase extends TestCase
 {
+    use VerifiesDoubles;
+
     use WithWorkbench;
 
     protected function defineEnvironment($app)
