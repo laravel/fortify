@@ -3,15 +3,19 @@
 namespace Laravel\Fortify\Tests;
 
 use App\Actions\Fortify\UpdateUserProfileInformation;
-use App\Models\User;
-use JMac\Testing\Double;
+use Database\Factories\UserFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
+use Orchestra\Testbench\Attributes\WithMigration;
 
+#[WithMigration]
 class ProfileInformationControllerTest extends OrchestraTestCase
 {
+    use RefreshDatabase;
+
     public function test_contact_information_can_be_updated()
     {
-        $user = Double::for(User::class);
+        $user = UserFactory::new()->create();
 
         $this->double(UpdatesUserProfileInformation::class, UpdateUserProfileInformation::class)
             ->expects('update');
@@ -28,7 +32,7 @@ class ProfileInformationControllerTest extends OrchestraTestCase
     {
         app('config')->set('fortify.lowercase_usernames', true);
 
-        $user = Double::for(User::class);
+        $user = UserFactory::new()->create();
 
         $this->double(UpdatesUserProfileInformation::class, UpdateUserProfileInformation::class)
             ->expects('update')

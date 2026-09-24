@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
 use JMac\Testing\Double;
-use Laravel\Fortify\Contracts\RequestPasswordResetLinkViewResponse;
+use Laravel\Fortify\Fortify;
 use Orchestra\Testbench\Attributes\WithMigration;
 
 #[WithMigration]
@@ -21,9 +21,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
 
     public function test_the_reset_link_request_view_is_returned()
     {
-        $this->double(RequestPasswordResetLinkViewResponse::class)
-            ->allows('toResponse')
-            ->returns(response('hello world'));
+        Fortify::requestPasswordResetLinkView(fn () => 'hello world');
 
         $response = $this->get('/forgot-password');
 

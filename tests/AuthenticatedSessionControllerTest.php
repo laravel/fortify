@@ -2,17 +2,15 @@
 
 namespace Laravel\Fortify\Tests;
 
+use Database\Factories\UserFactory;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Cache\RateLimiter;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
-use JMac\Testing\Double;
-use Laravel\Fortify\Contracts\LoginViewResponse;
+use Laravel\Fortify\Fortify;
 use Laravel\Fortify\LoginRateLimiter;
 use Orchestra\Testbench\Attributes\RequiresLaravel;
 use Orchestra\Testbench\Attributes\WithMigration;
@@ -26,9 +24,7 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
     public function test_the_login_view_is_returned()
     {
-        $this->double(LoginViewResponse::class)
-            ->allows('toResponse')
-            ->returns(response('hello world'));
+        Fortify::loginView(fn () => 'hello world');
 
         $response = $this->get('/login');
 
@@ -91,9 +87,9 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
     public function test_login_attempts_are_throttled()
     {
-        $limiter = $this->double(LoginRateLimiter::class);
-        $limiter->allows('tooManyAttempts')->returns(true);
-        $limiter->allows('availableIn')->returns(10);
+        for ($i = 0; $i < 5; $i++) {
+            app(RateLimiter::class)->hit('taylor@laravel.com|127.0.0.1');
+        }
 
         $response = $this->postJson('/login', [
             'email' => 'taylor@laravel.com',
@@ -108,18 +104,16 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
     public function test_cant_bypass_throttle_with_special_characters(string $username, string $expectedResult)
     {
         $loginRateLimiter = new LoginRateLimiter(
-            Double::for(RateLimiter::class)
+            app(RateLimiter::class)
         );
 
         $reflection = new \ReflectionClass($loginRateLimiter);
         $method = $reflection->getMethod('throttleKey');
         $method->setAccessible(true);
 
-        $request = Double::for(Request::class, override: true);
-        $request->allows('input')->returns($username);
-        $request->allows('ip')->returns('192.168.0.1');
+        $request = Request::create('/login', 'POST', ['email' => $username], server: ['REMOTE_ADDR' => '192.168.0.1']);
 
-        self::assertSame($expectedResult.'|192.168.0.1', $method->invoke($loginRateLimiter, $request->instance()));
+        self::assertSame($expectedResult.'|192.168.0.1', $method->invoke($loginRateLimiter, $request));
     }
 
     public static function usernameProvider(): array
@@ -134,26 +128,22 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
 
     public function test_the_user_can_logout_of_the_application()
     {
-        Auth::guard()->setUser(
-            Double::for(Authenticatable::class)
-        );
+        $user = UserFactory::new()->create();
 
-        $response = $this->post('/logout');
+        $response = $this->actingAs($user)->post('/logout');
 
         $response->assertRedirect('/');
-        $this->assertNull(Auth::guard()->getUser());
+        $this->assertGuest();
     }
 
     public function test_the_user_can_logout_of_the_application_using_json_request()
     {
-        Auth::guard()->setUser(
-            Double::for(Authenticatable::class)
-        );
+        $user = UserFactory::new()->create();
 
-        $response = $this->postJson('/logout');
+        $response = $this->actingAs($user)->postJson('/logout');
 
         $response->assertStatus(204);
-        $this->assertNull(Auth::guard()->getUser());
+        $this->assertGuest();
     }
 
     public function test_case_insensitive_usernames_can_be_used()

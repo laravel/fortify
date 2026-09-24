@@ -3,19 +3,16 @@
 namespace Laravel\Fortify\Tests;
 
 use App\Actions\Fortify\ResetUserPassword;
-use App\Models\User;
 use Database\Factories\UserFactory;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Passwords\PasswordBrokerManager;
 use Illuminate\Contracts\Auth\PasswordBroker;
-use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Password;
 use JMac\Testing\Double;
 use JMac\Testing\Matching\Argument;
-use Laravel\Fortify\Contracts\ResetPasswordViewResponse;
 use Laravel\Fortify\Contracts\ResetsUserPasswords;
 use Laravel\Fortify\Fortify;
 use Orchestra\Testbench\Attributes\WithMigration;
@@ -27,9 +24,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
 
     public function test_the_new_password_view_is_returned()
     {
-        $this->double(ResetPasswordViewResponse::class)
-            ->allows('toResponse')
-            ->returns(response('hello world'));
+        Fortify::resetPasswordView(fn () => 'hello world');
 
         $response = $this->get('/reset-password/token');
 
@@ -99,16 +94,12 @@ class NewPasswordControllerTest extends OrchestraTestCase
         $manager->allows('broker')->returns($broker = Double::for(PasswordBroker::class));
         Password::swap($manager);
 
-        $guard = $this->double(StatefulGuard::class);
-        $user = Double::for(User::class);
+        $user = UserFactory::new()->create();
+        $rememberToken = $user->remember_token;
 
-        $user->expects('setRememberToken');
-        $user->expects('save');
-
-        $guard->expects('login')->never();
-
-        $updater = $this->double(ResetsUserPasswords::class, ResetUserPassword::class);
-        $updater->expects('reset')->with($user, Argument::type('array'));
+        $this->double(ResetsUserPasswords::class, ResetUserPassword::class)
+            ->expects('reset')
+            ->with($user, Argument::type('array'));
 
         $broker->expects('reset')->resolves(function ($input, $callback) use ($user) {
             $callback($user, 'password');
@@ -125,6 +116,8 @@ class NewPasswordControllerTest extends OrchestraTestCase
 
         $response->assertStatus(302);
         $response->assertRedirect(Fortify::redirects('password-reset', route('login')));
+        $this->assertGuest();
+        $this->assertNotSame($rememberToken, $user->remember_token);
     }
 
     public function test_password_is_required()

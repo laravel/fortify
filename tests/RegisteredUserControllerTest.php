@@ -2,20 +2,21 @@
 
 namespace Laravel\Fortify\Tests;
 
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\StatefulGuard;
-use JMac\Testing\Double;
-use JMac\Testing\Matching\Argument;
+use Database\Factories\UserFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
-use Laravel\Fortify\Contracts\RegisterViewResponse;
+use Laravel\Fortify\Fortify;
+use Orchestra\Testbench\Attributes\WithMigration;
 
+#[WithMigration]
 class RegisteredUserControllerTest extends OrchestraTestCase
 {
+    use RefreshDatabase;
+
     public function test_the_register_view_is_returned()
     {
-        $this->double(RegisterViewResponse::class)
-            ->allows('toResponse')
-            ->returns(response('hello world'));
+        Fortify::registerView(fn () => 'hello world');
 
         $response = $this->get('/register');
 
@@ -27,29 +28,25 @@ class RegisteredUserControllerTest extends OrchestraTestCase
     {
         $this->double(CreatesNewUsers::class)
             ->allows('create')
-            ->returns(Double::for(Authenticatable::class));
-
-        $this->double(StatefulGuard::class)
-            ->expects('login');
+            ->returns($user = UserFactory::new()->create());
 
         $response = $this->post('/register', []);
 
         $response->assertRedirect('/home');
+        $this->assertAuthenticatedAs($user);
     }
 
     public function test_users_can_be_created_and_redirected_to_intended_url()
     {
         $this->double(CreatesNewUsers::class)
             ->allows('create')
-            ->returns(Double::for(Authenticatable::class));
-
-        $this->double(StatefulGuard::class)
-            ->expects('login');
+            ->returns($user = UserFactory::new()->create());
 
         $response = $this->withSession(['url.intended' => 'http://foo.com/bar'])
             ->post('/register', []);
 
         $response->assertRedirect('http://foo.com/bar');
+        $this->assertAuthenticatedAs($user);
     }
 
     public function test_usernames_will_be_stored_case_insensitive()
@@ -62,10 +59,7 @@ class RegisteredUserControllerTest extends OrchestraTestCase
                 'email' => 'taylor@laravel.com',
                 'password' => 'password',
             ])
-            ->returns(Double::for(Authenticatable::class));
-
-        $this->double(StatefulGuard::class)
-            ->expects('login');
+            ->returns($user = UserFactory::new()->create());
 
         $response = $this->post('/register', [
             'email' => 'TAYLOR@LARAVEL.COM',
@@ -73,17 +67,14 @@ class RegisteredUserControllerTest extends OrchestraTestCase
         ]);
 
         $response->assertRedirect('/home');
+        $this->assertAuthenticatedAs($user);
     }
 
     public function test_users_can_be_created_with_remember_option()
     {
         $this->double(CreatesNewUsers::class)
             ->expects('create')
-            ->returns(Double::for(Authenticatable::class));
-
-        $this->double(StatefulGuard::class)
-            ->expects('login')
-            ->with(Argument::type(Authenticatable::class), true);
+            ->returns($user = UserFactory::new()->create());
 
         $response = $this->post('/register', [
             'email' => 'taylor@laravel.com',
@@ -92,5 +83,7 @@ class RegisteredUserControllerTest extends OrchestraTestCase
         ]);
 
         $response->assertRedirect('/home');
+        $this->assertAuthenticatedAs($user);
+        $response->assertCookie(Auth::guard()->getRecallerName());
     }
 }

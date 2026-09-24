@@ -6,7 +6,6 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Date;
-use Laravel\Fortify\Contracts\ConfirmPasswordViewResponse;
 use Laravel\Fortify\Fortify;
 use Orchestra\Testbench\Attributes\WithConfig;
 use Orchestra\Testbench\Attributes\WithMigration;
@@ -29,9 +28,7 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
 
     public function test_the_confirm_password_view_is_returned()
     {
-        $this->double(ConfirmPasswordViewResponse::class)
-            ->allows('toResponse')
-            ->returns(response('hello world'));
+        Fortify::confirmPasswordView(fn () => 'hello world');
 
         $response = $this->withoutExceptionHandling()->actingAs($this->user)->get(
             '/user/confirm-password'
