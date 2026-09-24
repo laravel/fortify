@@ -6,6 +6,7 @@ use App\Actions\Fortify\ResetUserPassword;
 use App\Models\User;
 use Database\Factories\UserFactory;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Auth\Passwords\PasswordBrokerManager;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -94,7 +95,9 @@ class NewPasswordControllerTest extends OrchestraTestCase
     public function test_password_can_be_reset_with_customized_email_address_field()
     {
         Config::set('fortify.email', 'emailAddress');
-        Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
+        $manager = Double::for(PasswordBrokerManager::class);
+        $manager->allows('broker')->returns($broker = Double::for(PasswordBroker::class));
+        Password::swap($manager);
 
         $guard = $this->double(StatefulGuard::class);
         $user = Double::for(User::class);

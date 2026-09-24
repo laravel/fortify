@@ -4,6 +4,7 @@ namespace Laravel\Fortify\Tests;
 
 use Database\Factories\UserFactory;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Auth\Passwords\PasswordBrokerManager;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
@@ -74,7 +75,9 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
     public function test_reset_link_can_be_successfully_requested_with_customized_email_field()
     {
         Config::set('fortify.email', 'emailAddress');
-        Password::shouldReceive('broker')->andReturn($broker = Double::for(PasswordBroker::class));
+        $manager = Double::for(PasswordBrokerManager::class);
+        $manager->allows('broker')->returns($broker = Double::for(PasswordBroker::class));
+        Password::swap($manager);
 
         $broker->expects('sendResetLink')->returns(Password::RESET_LINK_SENT);
 
