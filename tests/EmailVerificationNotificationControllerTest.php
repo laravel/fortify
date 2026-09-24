@@ -2,48 +2,50 @@
 
 namespace Laravel\Fortify\Tests;
 
-use Illuminate\Foundation\Auth\User;
-use JMac\Testing\Double;
+use Database\Factories\UserFactory;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Notification;
+use Orchestra\Testbench\Attributes\WithMigration;
 
+#[WithMigration]
 class EmailVerificationNotificationControllerTest extends OrchestraTestCase
 {
+    use RefreshDatabase;
+
     public function test_email_verification_notification_can_be_sent()
     {
-        $user = Double::for(User::class);
+        Notification::fake();
 
-        $user->expects('hasVerifiedEmail')->returns(false);
-        $user->allows('getAuthIdentifier')->returns(1);
-        $user->expects('sendEmailVerificationNotification');
+        $user = UserFactory::new()->unverified()->create();
 
         $response = $this->from('/email/verify')
             ->actingAs($user)
             ->post('/email/verification-notification');
 
         $response->assertRedirect('/email/verify');
+        Notification::assertSentTo($user, VerifyEmail::class);
     }
 
     public function test_user_is_redirect_if_already_verified()
     {
-        $user = Double::for(User::class);
+        Notification::fake();
 
-        $user->expects('hasVerifiedEmail')->returns(true);
-        $user->allows('getAuthIdentifier')->returns(1);
-        $user->expects('sendEmailVerificationNotification')->never();
+        $user = UserFactory::new()->create();
 
         $response = $this->from('/email/verify')
             ->actingAs($user)
             ->post('/email/verification-notification');
 
         $response->assertRedirect('/home');
+        Notification::assertNothingSent();
     }
 
     public function test_user_is_redirect_to_intended_url_if_already_verified()
     {
-        $user = Double::for(User::class);
+        Notification::fake();
 
-        $user->expects('hasVerifiedEmail')->returns(true);
-        $user->allows('getAuthIdentifier')->returns(1);
-        $user->expects('sendEmailVerificationNotification')->never();
+        $user = UserFactory::new()->create();
 
         $response = $this->from('/email/verify')
             ->actingAs($user)
@@ -51,5 +53,6 @@ class EmailVerificationNotificationControllerTest extends OrchestraTestCase
             ->post('/email/verification-notification');
 
         $response->assertRedirect('http://foo.com/bar');
+        Notification::assertNothingSent();
     }
 }

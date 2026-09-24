@@ -3,11 +3,11 @@
 namespace Laravel\Fortify\Tests;
 
 use Database\Factories\UserFactory;
-use Illuminate\Foundation\Auth\User;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
-use JMac\Testing\Double;
 use Orchestra\Testbench\Attributes\RequiresLaravel;
 use Orchestra\Testbench\Attributes\WithMigration;
 
@@ -53,66 +53,66 @@ class VerifyEmailControllerTest extends OrchestraTestCase
 
     public function test_redirected_if_email_is_already_verified()
     {
+        Event::fake([Verified::class]);
+
+        $user = UserFactory::new()->create([
+            'email' => 'taylor@laravel.com',
+        ]);
+
         $url = URL::temporarySignedRoute(
             'verification.verify',
             now()->addMinutes(60),
             [
-                'id' => 1,
+                'id' => $user->getKey(),
                 'hash' => sha1('taylor@laravel.com'),
             ]
         );
-
-        $user = Double::for(User::class);
-        $user->expects('getKey')->returns(1);
-        $user->allows('getAuthIdentifier')->returns(1);
-        $user->expects('getEmailForVerification')->returns('taylor@laravel.com');
-        $user->expects('hasVerifiedEmail')->returns(true);
-        $user->expects('markEmailAsVerified')->never();
 
         $response = $this->actingAs($user)->get($url);
 
         $response->assertStatus(302);
+        Event::assertNotDispatched(Verified::class);
     }
 
     public function test_email_is_not_verified_if_id_does_not_match()
     {
+        $user = UserFactory::new()->unverified()->create([
+            'email' => 'taylor@laravel.com',
+        ]);
+
         $url = URL::temporarySignedRoute(
             'verification.verify',
             now()->addMinutes(60),
             [
-                'id' => 2,
+                'id' => $user->getKey() + 1,
                 'hash' => sha1('taylor@laravel.com'),
             ]
         );
 
-        $user = Double::for(User::class);
-        $user->expects('getKey')->returns(1);
-        $user->allows('getAuthIdentifier')->returns(1);
-        $user->allows('getEmailForVerification')->returns('taylor@laravel.com');
-
         $response = $this->actingAs($user)->get($url);
 
         $response->assertStatus(403);
+        $this->assertFalse($user->fresh()->hasVerifiedEmail());
     }
 
     public function test_email_is_not_verified_if_email_does_not_match()
     {
+        $user = UserFactory::new()->unverified()->create([
+            'email' => 'taylor@laravel.com',
+        ]);
+
         $url = URL::temporarySignedRoute(
             'verification.verify',
             now()->addMinutes(60),
             [
-                'id' => 1,
+                'id' => $user->getKey(),
                 'hash' => sha1('abigail@laravel.com'),
             ]
         );
 
-        $user = Double::for(User::class);
-        $user->expects('getKey')->returns(1);
-        $user->allows('getAuthIdentifier')->returns(1);
-        $user->expects('getEmailForVerification')->returns('taylor@laravel.com');
-
         $response = $this->actingAs($user)->get($url);
 
         $response->assertStatus(403);
+        $this->assertFalse($user->fresh()->hasVerifiedEmail());
     }
 }
