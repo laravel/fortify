@@ -2,15 +2,14 @@
 
 namespace Laravel\Fortify\Tests;
 
-use JMac\Testing\Double;
 use App\Actions\Fortify\UpdateUserPassword;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
+use JMac\Testing\Double;
 use Laravel\Fortify\Contracts\UpdatesUserPasswords;
-use Mockery;
 
 class PasswordControllerTest extends OrchestraTestCase
 {

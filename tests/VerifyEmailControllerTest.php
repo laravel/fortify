@@ -2,13 +2,12 @@
 
 namespace Laravel\Fortify\Tests;
 
-use JMac\Testing\Double;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\URL;
-use Mockery;
+use JMac\Testing\Double;
 use Orchestra\Testbench\Attributes\RequiresLaravel;
 use Orchestra\Testbench\Attributes\WithMigration;
 

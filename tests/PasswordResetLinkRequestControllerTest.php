@@ -2,20 +2,19 @@
 
 namespace Laravel\Fortify\Tests;
 
-use JMac\Testing\Double;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Password;
+use JMac\Testing\Double;
 use Laravel\Fortify\Contracts\RequestPasswordResetLinkViewResponse;
-use Mockery;
 
 class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
 {
     public function test_the_reset_link_request_view_is_returned()
     {
         $this->mock(RequestPasswordResetLinkViewResponse::class)
-                ->shouldReceive('toResponse')
-                ->andReturn(response('hello world'));
+            ->shouldReceive('toResponse')
+            ->andReturn(response('hello world'));
 
         $response = $this->get('/forgot-password');
 
@@ -30,7 +29,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
         $broker->allows('sendResetLink')->returns(Password::RESET_LINK_SENT);
 
         $response = $this->from(url('/forgot-password'))
-                        ->post('/forgot-password', ['email' => 'taylor@laravel.com']);
+            ->post('/forgot-password', ['email' => 'taylor@laravel.com']);
 
         $response->assertStatus(302);
         $response->assertRedirect('/forgot-password');
@@ -45,7 +44,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
         $broker->allows('sendResetLink')->returns(Password::INVALID_USER);
 
         $response = $this->from(url('/forgot-password'))
-                        ->post('/forgot-password', ['email' => 'taylor@laravel.com']);
+            ->post('/forgot-password', ['email' => 'taylor@laravel.com']);
 
         $response->assertStatus(302);
         $response->assertRedirect('/forgot-password');
@@ -59,7 +58,7 @@ class PasswordResetLinkRequestControllerTest extends OrchestraTestCase
         $broker->allows('sendResetLink')->returns(Password::INVALID_USER);
 
         $response = $this->from(url('/forgot-password'))
-                        ->postJson('/forgot-password', ['email' => 'taylor@laravel.com']);
+            ->postJson('/forgot-password', ['email' => 'taylor@laravel.com']);
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors('email');

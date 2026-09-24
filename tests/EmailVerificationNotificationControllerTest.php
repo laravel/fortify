@@ -2,9 +2,8 @@
 
 namespace Laravel\Fortify\Tests;
 
-use JMac\Testing\Double;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Mockery;
+use JMac\Testing\Double;
 
 class EmailVerificationNotificationControllerTest extends OrchestraTestCase
 {
@@ -17,8 +16,8 @@ class EmailVerificationNotificationControllerTest extends OrchestraTestCase
         $user->expects('sendEmailVerificationNotification');
 
         $response = $this->from('/email/verify')
-                        ->actingAs($user)
-                        ->post('/email/verification-notification');
+            ->actingAs($user)
+            ->post('/email/verification-notification');
 
         $response->assertRedirect('/email/verify');
     }
@@ -32,8 +31,8 @@ class EmailVerificationNotificationControllerTest extends OrchestraTestCase
         $user->expects('sendEmailVerificationNotification')->never();
 
         $response = $this->from('/email/verify')
-                        ->actingAs($user)
-                        ->post('/email/verification-notification');
+            ->actingAs($user)
+            ->post('/email/verification-notification');
 
         $response->assertRedirect('/home');
     }
@@ -47,9 +46,9 @@ class EmailVerificationNotificationControllerTest extends OrchestraTestCase
         $user->expects('sendEmailVerificationNotification')->never();
 
         $response = $this->from('/email/verify')
-                        ->actingAs($user)
-                        ->withSession(['url.intended' => 'http://foo.com/bar'])
-                        ->post('/email/verification-notification');
+            ->actingAs($user)
+            ->withSession(['url.intended' => 'http://foo.com/bar'])
+            ->post('/email/verification-notification');
 
         $response->assertRedirect('http://foo.com/bar');
     }

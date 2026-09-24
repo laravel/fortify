@@ -2,10 +2,9 @@
 
 namespace Laravel\Fortify\Tests;
 
-use JMac\Testing\Double;
 use Illuminate\Contracts\Auth\Authenticatable;
+use JMac\Testing\Double;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
-use Mockery;
 
 class ProfileInformationControllerTest extends OrchestraTestCase
 {
@@ -14,8 +13,8 @@ class ProfileInformationControllerTest extends OrchestraTestCase
         $user = Double::for(Authenticatable::class);
 
         $this->mock(UpdatesUserProfileInformation::class)
-                    ->shouldReceive('update')
-                    ->once();
+            ->shouldReceive('update')
+            ->once();
 
         $response = $this->withoutExceptionHandling()->actingAs($user)->putJson('/user/profile-information', [
             'name' => 'Taylor Otwell',
@@ -32,12 +31,12 @@ class ProfileInformationControllerTest extends OrchestraTestCase
         $user = Double::for(Authenticatable::class);
 
         $this->mock(UpdatesUserProfileInformation::class)
-                    ->shouldReceive('update')
-                    ->with($user, [
-                        'name' => 'Taylor Otwell',
-                        'email' => 'taylor@laravel.com',
-                    ])
-                    ->once();
+            ->shouldReceive('update')
+            ->with($user, [
+                'name' => 'Taylor Otwell',
+                'email' => 'taylor@laravel.com',
+            ])
+            ->once();
 
         $response = $this->withoutExceptionHandling()->actingAs($user)->putJson('/user/profile-information', [
             'name' => 'Taylor Otwell',

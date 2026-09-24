@@ -2,25 +2,24 @@
 
 namespace Laravel\Fortify\Tests;
 
-use JMac\Testing\Matching\Argument;
-use JMac\Testing\Double;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Password;
+use JMac\Testing\Double;
+use JMac\Testing\Matching\Argument;
 use Laravel\Fortify\Contracts\ResetPasswordViewResponse;
 use Laravel\Fortify\Contracts\ResetsUserPasswords;
 use Laravel\Fortify\Fortify;
-use Mockery;
 
 class NewPasswordControllerTest extends OrchestraTestCase
 {
     public function test_the_new_password_view_is_returned()
     {
         $this->mock(ResetPasswordViewResponse::class)
-                ->shouldReceive('toResponse')
-                ->andReturn(response('hello world'));
+            ->shouldReceive('toResponse')
+            ->andReturn(response('hello world'));
 
         $response = $this->get('/reset-password/token');
 
@@ -158,7 +157,7 @@ class NewPasswordControllerTest extends OrchestraTestCase
         $updater->expects('reset')->with($user, Argument::type('array'));
 
         $broker->expects('reset')->with(Argument::satisfies(fn ($credentials) => $credentials['email'] === 'john.doe@example.com'),
-                Argument::type('callable'))->resolves(function ($input, $callback) use ($user) {
+            Argument::type('callable'))->resolves(function ($input, $callback) use ($user) {
                 $callback($user, 'password');
 
                 return Password::PASSWORD_RESET;
