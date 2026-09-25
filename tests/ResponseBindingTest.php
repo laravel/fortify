@@ -47,6 +47,4 @@ class ResponseBindingTest extends OrchestraTestCase
             "The [{$response}] class should implement the [{$contract}] contract."
         );
     }
-
-
 }
