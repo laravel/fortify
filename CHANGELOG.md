@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.40.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.41.0...1.x)
+
+## [v1.41.0](https://github.com/laravel/fortify/compare/v1.40.0...v1.41.0) - 2026-09-28
+
+* Migration from Mockery to Double by [@jasonmccreary](https://github.com/jasonmccreary) in https://github.com/laravel/fortify/pull/699
+* TwoFactorEnabledResponse and TwoFactorDisabledResponse implement wrong interface by [@SameOldNick](https://github.com/SameOldNick) in https://github.com/laravel/fortify/pull/701
+* Apply fixes from StyleCI by [@taylorotwell](https://github.com/taylorotwell) in https://github.com/laravel/fortify/pull/702
+* Bump to Double v1 by [@jasonmccreary](https://github.com/jasonmccreary) in https://github.com/laravel/fortify/pull/703
 
 ## [v1.40.0](https://github.com/laravel/fortify/compare/v1.39.0...v1.40.0) - 2026-09-10
 
