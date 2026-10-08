@@ -29,6 +29,7 @@ class ResponseBindingTest extends OrchestraTestCase
             'PasswordUpdateResponse' => [Contracts\PasswordUpdateResponse::class, Responses\PasswordUpdateResponse::class],
             'ProfileInformationUpdatedResponse' => [Contracts\ProfileInformationUpdatedResponse::class, Responses\ProfileInformationUpdatedResponse::class],
             'RecoveryCodesGeneratedResponse' => [Contracts\RecoveryCodesGeneratedResponse::class, Responses\RecoveryCodesGeneratedResponse::class],
+            'RecoveryCodesResponse' => [Contracts\RecoveryCodesResponse::class, Responses\RecoveryCodesResponse::class],
             'RegisterResponse' => [Contracts\RegisterResponse::class, Responses\RegisterResponse::class],
             'SuccessfulPasswordResetLinkRequestResponse' => [Contracts\SuccessfulPasswordResetLinkRequestResponse::class, Responses\SuccessfulPasswordResetLinkRequestResponse::class],
             'TwoFactorConfirmedResponse' => [Contracts\TwoFactorConfirmedResponse::class, Responses\TwoFactorConfirmedResponse::class],
