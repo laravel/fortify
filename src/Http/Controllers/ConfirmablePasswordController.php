@@ -50,6 +50,10 @@ class ConfirmablePasswordController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'password' => 'nullable|string',
+        ]);
+
         $confirmed = app(ConfirmPassword::class)(
             $this->guard, $request->user(), $request->input('password')
         );
