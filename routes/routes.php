@@ -30,6 +30,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     // Authentication...
     if ($enableViews) {
         Route::get(RoutePath::for('login', '/login'), [AuthenticatedSessionController::class, 'create'])
+            ->withoutMiddleware(config('fortify.auth_middleware', 'auth'))
             ->middleware(['guest:'.config('fortify.guard')])
             ->name('login');
     }
@@ -40,6 +41,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     $verificationLimiter = config('fortify.limiters.verification', '6,1');
 
     Route::post(RoutePath::for('login', '/login'), [AuthenticatedSessionController::class, 'store'])
+        ->withoutMiddleware(config('fortify.auth_middleware', 'auth'))
         ->middleware(array_filter([
             'guest:'.config('fortify.guard'),
             $limiter ? 'throttle:'.$limiter : null,
@@ -53,19 +55,23 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     if (Features::enabled(Features::resetPasswords())) {
         if ($enableViews) {
             Route::get(RoutePath::for('password.request', '/forgot-password'), [PasswordResetLinkController::class, 'create'])
+                ->withoutMiddleware(config('fortify.auth_middleware', 'auth'))
                 ->middleware(['guest:'.config('fortify.guard')])
                 ->name('password.request');
 
             Route::get(RoutePath::for('password.reset', '/reset-password/{token}'), [NewPasswordController::class, 'create'])
+                ->withoutMiddleware(config('fortify.auth_middleware', 'auth'))
                 ->middleware(['guest:'.config('fortify.guard')])
                 ->name('password.reset');
         }
 
         Route::post(RoutePath::for('password.email', '/forgot-password'), [PasswordResetLinkController::class, 'store'])
+            ->withoutMiddleware(config('fortify.auth_middleware', 'auth'))
             ->middleware(['guest:'.config('fortify.guard')])
             ->name('password.email');
 
         Route::post(RoutePath::for('password.update', '/reset-password'), [NewPasswordController::class, 'store'])
+            ->withoutMiddleware(config('fortify.auth_middleware', 'auth'))
             ->middleware(['guest:'.config('fortify.guard')])
             ->name('password.update');
     }
@@ -74,11 +80,13 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     if (Features::enabled(Features::registration())) {
         if ($enableViews) {
             Route::get(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'create'])
+                ->withoutMiddleware(config('fortify.auth_middleware', 'auth'))
                 ->middleware(['guest:'.config('fortify.guard')])
                 ->name('register');
         }
 
         Route::post(RoutePath::for('register', '/register'), [RegisteredUserController::class, 'store'])
+            ->withoutMiddleware(config('fortify.auth_middleware', 'auth'))
             ->middleware(['guest:'.config('fortify.guard')])
             ->name('register.store');
     }
@@ -133,11 +141,13 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
     if (Features::enabled(Features::twoFactorAuthentication())) {
         if ($enableViews) {
             Route::get(RoutePath::for('two-factor.login', '/two-factor-challenge'), [TwoFactorAuthenticatedSessionController::class, 'create'])
+                ->withoutMiddleware(config('fortify.auth_middleware', 'auth'))
                 ->middleware(['guest:'.config('fortify.guard')])
                 ->name('two-factor.login');
         }
 
         Route::post(RoutePath::for('two-factor.login', '/two-factor-challenge'), [TwoFactorAuthenticatedSessionController::class, 'store'])
+            ->withoutMiddleware(config('fortify.auth_middleware', 'auth'))
             ->middleware(array_filter([
                 'guest:'.config('fortify.guard'),
                 $twoFactorLimiter ? 'throttle:'.$twoFactorLimiter : null,
@@ -191,10 +201,12 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         $passkeyManageMiddleware = [...$passkeyMiddleware, ...$throttle];
 
         Route::get(RoutePath::for('passkey.login-options', '/passkeys/login/options'), [PasskeyLoginController::class, 'index'])
+            ->withoutMiddleware(config('fortify.auth_middleware', 'auth'))
             ->middleware($passkeyGuestMiddleware)
             ->name('passkey.login-options');
 
         Route::post(RoutePath::for('passkey.login', '/passkeys/login'), [PasskeyLoginController::class, 'store'])
+            ->withoutMiddleware(config('fortify.auth_middleware', 'auth'))
             ->middleware($passkeyGuestMiddleware)
             ->name('passkey.login');
 
