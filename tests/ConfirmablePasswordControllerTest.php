@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Date;
 use Laravel\Fortify\Fortify;
 use Orchestra\Testbench\Attributes\WithConfig;
 use Orchestra\Testbench\Attributes\WithMigration;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 #[WithMigration]
 class ConfirmablePasswordControllerTest extends OrchestraTestCase
@@ -86,6 +87,19 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
         $this->assertNotEquals($response->getTargetUrl(), 'http://foo.com/bar');
     }
 
+    #[DataProvider('invalidPasswordInputProvider')]
+    public function test_password_confirmation_can_fail_with_invalid_input(array $input)
+    {
+        $response = $this->actingAs($this->user)
+            ->withSession(['url.intended' => 'http://foo.com/bar'])
+            ->post('/user/confirm-password', $input);
+
+        $response->assertSessionHasErrors(['password']);
+        $response->assertSessionMissing('auth.password_confirmed_at');
+        $response->assertRedirect();
+        $this->assertNotEquals($response->getTargetUrl(), 'http://foo.com/bar');
+    }
+
     public function test_password_confirmation_can_be_customized()
     {
         $this->freezeSecond();
@@ -141,15 +155,33 @@ class ConfirmablePasswordControllerTest extends OrchestraTestCase
         $response->assertStatus(201);
     }
 
-    public function test_password_confirmation_can_fail_with_json()
+    #[DataProvider('invalidPasswordInputProvider')]
+    public function test_password_confirmation_can_fail_with_json(array $input)
     {
         $response = $this->actingAs($this->user)
-            ->postJson(
-                '/user/confirm-password',
-                ['password' => 'invalid']
-            );
+            ->postJson('/user/confirm-password', $input);
 
+        $response->assertStatus(422);
         $response->assertJsonValidationErrors('password');
+        $response->assertSessionMissing('auth.password_confirmed_at');
+    }
+
+    public static function invalidPasswordInputProvider(): array
+    {
+        return [
+            'missing password' => [[]],
+            'null password' => [['password' => null]],
+            'empty password' => [['password' => '']],
+            'incorrect password' => [['password' => 'invalid']],
+            'empty array' => [['password' => []]],
+            'array' => [['password' => ['secret']]],
+            'associative array' => [['password' => ['password' => 'secret']]],
+            'nested array' => [['password' => [['secret']]]],
+            'boolean true' => [['password' => true]],
+            'boolean false' => [['password' => false]],
+            'integer' => [['password' => 123]],
+            'float' => [['password' => 1.23]],
+        ];
     }
 
     #[WithConfig('auth.password_timeout', 120)]
