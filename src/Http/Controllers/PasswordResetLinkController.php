@@ -42,7 +42,8 @@ class PasswordResetLinkController extends Controller
             $request->only(Fortify::email())
         );
 
-        return $status == Password::RESET_LINK_SENT
+        // "passwords.requested" is returned instead when the broker hides whether the user exists...
+        return in_array($status, [Password::RESET_LINK_SENT, 'passwords.requested'], true)
             ? app(SuccessfulPasswordResetLinkRequestResponse::class, ['status' => $status])
             : app(FailedPasswordResetLinkRequestResponse::class, ['status' => $status]);
     }
