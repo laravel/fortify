@@ -1,6 +1,17 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.41.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.42.0...1.x)
+
+## [v1.42.0](https://github.com/laravel/fortify/compare/v1.41.0...v1.42.0) - 2026-10-21
+
+### What's Changed
+
+* Remove security policy in favor of the org-wide default by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/fortify/pull/706
+* Experimental supports for PHP 8.6 by [@crynobone](https://github.com/crynobone) in https://github.com/laravel/fortify/pull/705
+* Bump shivammathur/setup-php from 2.37.2 to 2.40.0 in the github-actions group by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/laravel/fortify/pull/707
+* Validate password confirmation input before checking credentials by [@ricklambrechts](https://github.com/ricklambrechts) in https://github.com/laravel/fortify/pull/709
+
+**Full Changelog**: https://github.com/laravel/fortify/compare/v1.41.0...v1.42.0
 
 ## [v1.41.0](https://github.com/laravel/fortify/compare/v1.40.0...v1.41.0) - 2026-09-28
 
