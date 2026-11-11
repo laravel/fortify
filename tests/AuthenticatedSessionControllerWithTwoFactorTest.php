@@ -2,7 +2,6 @@
 
 namespace Laravel\Fortify\Tests;
 
-use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
@@ -106,10 +105,6 @@ class AuthenticatedSessionControllerWithTwoFactorTest extends OrchestraTestCase
 
     public function test_rehash_user_password_when_redirecting_to_two_factor_challenge_if_rehashing_on_login_is_enabled()
     {
-        if (version_compare(Application::VERSION, '11.0.0', '<')) {
-            $this->markTestSkipped('Only on Laravel 11 and later');
-        }
-
         $this->app['config']->set('hashing.rehash_on_login', true);
 
         $user = UserWithTwoFactor::forceCreate([
@@ -132,10 +127,6 @@ class AuthenticatedSessionControllerWithTwoFactorTest extends OrchestraTestCase
 
     public function test_does_not_rehash_user_password_when_redirecting_to_two_factor_challenge_if_rehashing_on_login_is_disabled()
     {
-        if (version_compare(Application::VERSION, '11.0.0', '<')) {
-            $this->markTestSkipped('Only on Laravel 11 and later');
-        }
-
         $this->app['config']->set('hashing.rehash_on_login', false);
 
         $user = UserWithTwoFactor::forceCreate([

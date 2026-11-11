@@ -45,10 +45,6 @@ class InstallCommand extends Command
      */
     protected function registerFortifyServiceProvider(): void
     {
-        if (! method_exists(ServiceProvider::class, 'addProviderToBootstrapFile')) {
-            return;
-        }
-
         ServiceProvider::addProviderToBootstrapFile(\App\Providers\FortifyServiceProvider::class);
     }
 }
