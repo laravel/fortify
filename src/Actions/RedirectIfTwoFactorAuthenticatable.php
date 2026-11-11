@@ -98,7 +98,7 @@ class RedirectIfTwoFactorAuthenticatable implements RedirectsIfTwoFactorAuthenti
                     $this->throwFailedAuthenticationException($request);
                 }
 
-                if (config('hashing.rehash_on_login', true) && method_exists($provider, 'rehashPasswordIfRequired')) {
+                if (config('hashing.rehash_on_login', true)) {
                     $provider->rehashPasswordIfRequired($user, ['password' => $request->password]);
                 }
             });
