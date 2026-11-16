@@ -115,8 +115,37 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         $method->setAccessible(true);
 
         $request = Request::create('/login', 'POST', ['email' => $username], server: ['REMOTE_ADDR' => '192.168.0.1']);
+        $canonical = Request::create('/login', 'POST', ['email' => $expectedResult], server: ['REMOTE_ADDR' => '192.168.0.1']);
 
-        self::assertSame($expectedResult.'|192.168.0.1', $method->invoke($loginRateLimiter, $request));
+        $key = $method->invoke($loginRateLimiter, $request);
+
+        $this->assertSame($method->invoke($loginRateLimiter, $canonical), $key);
+        $this->assertSame(hash_hmac('sha256', $expectedResult.'|192.168.0.1', config('app.key')), $key);
+        $this->assertStringNotContainsString($expectedResult, $key);
+        $this->assertStringNotContainsString('192.168.0.1', $key);
+    }
+
+    public function test_throttle_key_does_not_contain_the_username_or_ip()
+    {
+        $loginRateLimiter = new LoginRateLimiter(
+            app(RateLimiter::class)
+        );
+
+        $reflection = new \ReflectionClass($loginRateLimiter);
+        $method = $reflection->getMethod('throttleKey');
+
+        $request = Request::create('/login', 'POST', ['email' => 'jane@example.com'], server: ['REMOTE_ADDR' => '203.0.113.10']);
+
+        $key = $method->invoke($loginRateLimiter, $request);
+
+        $this->assertSame(64, strlen($key));
+        $this->assertStringNotContainsString('jane@example.com', $key);
+        $this->assertStringNotContainsString('203.0.113.10', $key);
+
+        $loginRateLimiter->increment($request);
+
+        $this->assertSame(1, $loginRateLimiter->attempts($request));
+        $this->assertNull(app('cache')->get('jane@example.com|203.0.113.10'));
     }
 
     public static function usernameProvider(): array

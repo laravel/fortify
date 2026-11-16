@@ -89,6 +89,10 @@ class LoginRateLimiter
      */
     protected function throttleKey(Request $request)
     {
-        return Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
+        return hash_hmac(
+            'sha256',
+            Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip()),
+            config('app.key')
+        );
     }
 }
