@@ -1,6 +1,19 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.42.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.43.0...1.x)
+
+## [v1.43.0](https://github.com/laravel/fortify/compare/v1.42.0...v1.43.0) - 2026-11-14
+
+### What's Changed
+
+* Dependency floor bump by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/fortify/pull/712
+* [1.x] Allow laravel/passkeys 0.3 by [@kobykorman](https://github.com/kobykorman) in https://github.com/laravel/fortify/pull/713
+
+### New Contributors
+
+* [@kobykorman](https://github.com/kobykorman) made their first contribution in https://github.com/laravel/fortify/pull/713
+
+**Full Changelog**: https://github.com/laravel/fortify/compare/v1.42.0...v1.43.0
 
 ## [v1.42.0](https://github.com/laravel/fortify/compare/v1.41.0...v1.42.0) - 2026-10-21
 
