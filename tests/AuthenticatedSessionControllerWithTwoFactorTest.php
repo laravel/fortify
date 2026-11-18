@@ -6,14 +6,17 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Sleep;
 use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
 use Laravel\Fortify\Events\TwoFactorAuthenticationFailed;
 use Laravel\Fortify\Events\ValidTwoFactorAuthenticationCodeProvided;
 use Laravel\Fortify\Features;
+use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Tests\Models\UserWithTwoFactor;
 use Orchestra\Testbench\Attributes\DefineEnvironment;
 use Orchestra\Testbench\Attributes\WithConfig;
 use Orchestra\Testbench\Attributes\WithMigration;
+use PHPUnit\Framework\Attributes\TestWith;
 use PragmaRX\Google2FA\Google2FA;
 
 #[WithMigration]
@@ -22,6 +25,69 @@ use PragmaRX\Google2FA\Google2FA;
 class AuthenticatedSessionControllerWithTwoFactorTest extends OrchestraTestCase
 {
     use RefreshDatabase;
+
+    #[TestWith([false])]
+    #[TestWith([true])]
+    public function test_failed_login_is_timeboxed_using_the_configured_duration(bool $usingCallback)
+    {
+        UserWithTwoFactor::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+        ]);
+
+        if ($usingCallback) {
+            $this->authenticateUsingCallback();
+        }
+
+        config(['auth.timebox_duration' => 1_000_000]);
+        Sleep::fake();
+
+        $this->post('/login', [
+            'email' => 'nobody@laravel.com',
+            'password' => 'secret',
+        ])->assertSessionHasErrors('email');
+
+        Sleep::assertSlept(fn ($duration) => $duration->totalMicroseconds > 900_000);
+    }
+
+    #[TestWith([false])]
+    #[TestWith([true])]
+    public function test_successful_login_returns_early_from_the_timebox(bool $usingCallback)
+    {
+        UserWithTwoFactor::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+            'two_factor_secret' => 'test-secret',
+        ]);
+
+        if ($usingCallback) {
+            $this->authenticateUsingCallback();
+        }
+
+        Sleep::fake();
+
+        $this->post('/login', [
+            'email' => 'taylor@laravel.com',
+            'password' => 'secret',
+        ])->assertRedirect('/two-factor-challenge');
+
+        Sleep::assertNeverSlept();
+    }
+
+    protected function authenticateUsingCallback(): void
+    {
+        Fortify::authenticateUsing(function ($request) {
+            $user = UserWithTwoFactor::where('email', $request->email)->first();
+
+            if ($user && Hash::check($request->password, $user->password)) {
+                return $user;
+            }
+        });
+
+        $this->beforeApplicationDestroyed(fn () => Fortify::$authenticateUsingCallback = null);
+    }
 
     public function test_user_is_redirected_to_challenge_when_using_two_factor_authentication()
     {

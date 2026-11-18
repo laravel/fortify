@@ -4,6 +4,7 @@ namespace Laravel\Fortify\Actions;
 
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Support\Timebox;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\LoginRateLimiter;
@@ -73,13 +74,17 @@ class AttemptToAuthenticate
      */
     protected function handleUsingCustomCallback($request, $next)
     {
-        $user = call_user_func(Fortify::$authenticateUsingCallback, $request);
+        $user = (new Timebox)->call(function ($timebox) use ($request) {
+            return tap(call_user_func(Fortify::$authenticateUsingCallback, $request), function ($user) use ($request, $timebox) {
+                if (! $user) {
+                    $this->fireFailedEvent($request);
 
-        if (! $user) {
-            $this->fireFailedEvent($request);
+                    $this->throwFailedAuthenticationException($request);
+                }
 
-            return $this->throwFailedAuthenticationException($request);
-        }
+                $timebox->returnEarly();
+            });
+        }, config('auth.timebox_duration', 200000));
 
         $this->guard->login($user, $request->boolean('remember'));
 
