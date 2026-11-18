@@ -79,19 +79,23 @@ class RedirectIfTwoFactorAuthenticatable implements RedirectsIfTwoFactorAuthenti
     protected function validateCredentials($request)
     {
         if (Fortify::$authenticateUsingCallback) {
-            return tap(call_user_func(Fortify::$authenticateUsingCallback, $request), function ($user) use ($request) {
-                if (! $user) {
-                    $this->fireFailedEvent($request);
+            return (new Timebox)->call(function ($timebox) use ($request) {
+                return tap(call_user_func(Fortify::$authenticateUsingCallback, $request), function ($user) use ($request, $timebox) {
+                    if (! $user) {
+                        $this->fireFailedEvent($request);
 
-                    $this->throwFailedAuthenticationException($request);
-                }
-            });
+                        $this->throwFailedAuthenticationException($request);
+                    }
+
+                    $timebox->returnEarly();
+                });
+            }, config('auth.timebox_duration', 200000));
         }
 
         $provider = $this->guard->getProvider();
 
-        return (new Timebox())->call(function () use ($request, $provider) {
-            return tap($provider->retrieveByCredentials($request->only(Fortify::username(), 'password')), function ($user) use ($provider, $request) {
+        return (new Timebox)->call(function ($timebox) use ($request, $provider) {
+            return tap($provider->retrieveByCredentials($request->only(Fortify::username(), 'password')), function ($user) use ($provider, $request, $timebox) {
                 if (! $user || ! $provider->validateCredentials($user, ['password' => $request->password])) {
                     $this->fireFailedEvent($request, $user);
 
@@ -101,8 +105,10 @@ class RedirectIfTwoFactorAuthenticatable implements RedirectsIfTwoFactorAuthenti
                 if (config('hashing.rehash_on_login', true)) {
                     $provider->rehashPasswordIfRequired($user, ['password' => $request->password]);
                 }
+
+                $timebox->returnEarly();
             });
-        }, 200000);
+        }, config('auth.timebox_duration', 200000));
     }
 
     /**

@@ -10,8 +10,11 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Sleep;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\LoginRateLimiter;
+use Orchestra\Testbench\Attributes\DefineEnvironment;
 use Orchestra\Testbench\Attributes\RequiresLaravel;
 use Orchestra\Testbench\Attributes\WithMigration;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -66,6 +69,45 @@ class AuthenticatedSessionControllerTest extends OrchestraTestCase
         ]));
 
         $response->assertRedirect('/home');
+    }
+
+    #[DefineEnvironment('withoutTwoFactorAuthentication')]
+    public function test_custom_authentication_callback_is_timeboxed_using_the_configured_duration()
+    {
+        User::forceCreate([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@laravel.com',
+            'password' => bcrypt('secret'),
+        ]);
+
+        Fortify::authenticateUsing(function (Request $request) {
+            $user = User::where('email', $request->email)->first();
+
+            if ($user && Hash::check($request->password, $user->password)) {
+                return $user;
+            }
+        });
+
+        $this->beforeApplicationDestroyed(fn () => Fortify::$authenticateUsingCallback = null);
+
+        config(['auth.timebox_duration' => 1_000_000]);
+        Sleep::fake();
+
+        $this->post('/login', [
+            'email' => 'nobody@laravel.com',
+            'password' => 'secret',
+        ])->assertSessionHasErrors('email');
+
+        Sleep::assertSlept(fn ($duration) => $duration->totalMicroseconds > 900_000);
+
+        Sleep::fake();
+
+        $this->post('/login', [
+            'email' => 'taylor@laravel.com',
+            'password' => 'secret',
+        ])->assertRedirect('/home');
+
+        Sleep::assertNeverSlept();
     }
 
     public function test_validation_exception_returned_on_failure()
