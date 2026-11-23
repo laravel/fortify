@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Sleep;
+use Laravel\Fortify\Events\RecoveryCodeReplaced;
 use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
 use Laravel\Fortify\Events\TwoFactorAuthenticationFailed;
 use Laravel\Fortify\Events\ValidTwoFactorAuthenticationCodeProvided;
@@ -296,14 +297,14 @@ class AuthenticatedSessionControllerWithTwoFactorTest extends OrchestraTestCase
 
     public function test_two_factor_challenge_can_be_passed_via_recovery_code()
     {
-        Event::fake();
-
         $user = UserWithTwoFactor::forceCreate([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@laravel.com',
             'password' => bcrypt('secret'),
             'two_factor_recovery_codes' => encrypt(json_encode(['invalid-code', 'valid-code'])),
         ]);
+
+        Event::fake();
 
         $response = $this->withSession([
             'login.id' => $user->id,
@@ -313,6 +314,13 @@ class AuthenticatedSessionControllerWithTwoFactorTest extends OrchestraTestCase
         ]);
 
         Event::assertDispatched(ValidTwoFactorAuthenticationCodeProvided::class);
+        Event::assertDispatched(
+            RecoveryCodeReplaced::class,
+            fn (RecoveryCodeReplaced $event) => $event->user->id === $user->id && $event->code === 'valid-code',
+        );
+
+        Event::assertNotDispatched('eloquent.saving: '.UserWithTwoFactor::class);
+        Event::assertNotDispatched('eloquent.saved: '.UserWithTwoFactor::class);
 
         $response->assertRedirect('/home')
             ->assertSessionMissing('login.id');

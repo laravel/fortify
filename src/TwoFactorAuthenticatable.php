@@ -52,7 +52,7 @@ trait TwoFactorAuthenticatable
                 RecoveryCode::generate(),
                 Fortify::currentEncrypter()->decrypt($this->two_factor_recovery_codes)
             )),
-        ])->save();
+        ])->saveQuietly();
 
         RecoveryCodeReplaced::dispatch($this, $code);
     }
