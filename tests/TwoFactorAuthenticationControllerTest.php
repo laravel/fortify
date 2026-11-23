@@ -43,8 +43,10 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
 
         $this->assertNotNull($user->two_factor_secret);
         $this->assertNotNull($user->two_factor_recovery_codes);
-        $this->assertNull($user->two_factor_confirmed_at);
         $this->assertIsArray(json_decode(decrypt($user->two_factor_recovery_codes), true));
+        $this->assertTrue($user->hasRecoveryCodes());
+        $this->assertNotEmpty($user->recoveryCodes());
+        $this->assertNull($user->two_factor_confirmed_at);
         $this->assertNotNull($user->twoFactorQrCodeSvg());
     }
 
@@ -79,9 +81,11 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
 
         $this->assertNotNull($user->two_factor_secret);
         $this->assertNotNull($user->two_factor_recovery_codes);
+        $this->assertIsArray(json_decode(decrypt($user->two_factor_recovery_codes), true));
+        $this->assertTrue($user->hasRecoveryCodes());
+        $this->assertNotEmpty($user->recoveryCodes());
         $this->assertEquals($old_value, $user->fresh()->two_factor_secret);
         $this->assertNull($user->two_factor_confirmed_at);
-        $this->assertIsArray(json_decode(decrypt($user->two_factor_recovery_codes), true));
         $this->assertNotNull($user->twoFactorQrCodeSvg());
     }
 
@@ -124,9 +128,11 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
 
         $this->assertNotNull($user->two_factor_secret);
         $this->assertNotNull($user->two_factor_recovery_codes);
+        $this->assertIsArray(json_decode(decrypt($user->two_factor_recovery_codes), true));
+        $this->assertTrue($user->hasRecoveryCodes());
+        $this->assertNotEmpty($user->recoveryCodes());
         $this->assertNotEquals($old_value, $user->fresh()->two_factor_secret);
         $this->assertNull($user->two_factor_confirmed_at);
-        $this->assertIsArray(json_decode(decrypt($user->two_factor_recovery_codes), true));
         $this->assertNotNull($user->twoFactorQrCodeSvg());
     }
 
@@ -241,6 +247,8 @@ class TwoFactorAuthenticationControllerTest extends OrchestraTestCase
 
         $this->assertNull($user->two_factor_secret);
         $this->assertNull($user->two_factor_recovery_codes);
+        $this->assertFalse($user->hasRecoveryCodes());
+        $this->assertEmpty($user->recoveryCodes());
     }
 
     public function test_two_factor_authentication_secret_key_can_be_retrieved_with_model_encrypter()
