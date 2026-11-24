@@ -1,6 +1,19 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/fortify/compare/v1.43.0...1.x)
+## [Unreleased](https://github.com/laravel/fortify/compare/v1.44.0...1.x)
+
+## [v1.44.0](https://github.com/laravel/fortify/compare/v1.43.0...v1.44.0) - 2026-11-23
+
+### What's Changed
+
+* Use configured timebox duration for login credential checks by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/fortify/pull/716
+* Handle null recovery codes in recoveryCodes() by [@khalilst](https://github.com/khalilst) in https://github.com/laravel/fortify/pull/717
+
+### New Contributors
+
+* [@khalilst](https://github.com/khalilst) made their first contribution in https://github.com/laravel/fortify/pull/717
+
+**Full Changelog**: https://github.com/laravel/fortify/compare/v1.43.0...v1.44.0
 
 ## [v1.43.0](https://github.com/laravel/fortify/compare/v1.42.0...v1.43.0) - 2026-11-14
 
