@@ -29,7 +29,7 @@ class PasswordResetLinkController extends Controller
      */
     public function store(SendPasswordResetLinkRequest $request): Responsable
     {
-        if (config('fortify.lowercase_usernames') && $request->has(Fortify::email())) {
+        if (config('fortify.lowercase_usernames') && Fortify::email() === Fortify::username() && $request->has(Fortify::email())) {
             $request->merge([
                 Fortify::email() => Str::lower($request->{Fortify::email()}),
             ]);

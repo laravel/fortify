@@ -152,4 +152,27 @@ class NewPasswordControllerTest extends OrchestraTestCase
         $response->assertStatus(302);
         $response->assertRedirect(Fortify::redirects('password-reset', route('login')));
     }
+
+    public function test_emails_are_not_lowercased_when_the_username_is_not_the_email()
+    {
+        Config::set('fortify.lowercase_usernames', true);
+        Config::set('fortify.username', 'name');
+
+        $user = UserFactory::new()->create(['email' => 'John.Doe@example.com']);
+        $token = Password::broker()->createToken($user);
+
+        $this->double(ResetsUserPasswords::class, ResetUserPassword::class)
+            ->expects('reset')
+            ->with(Argument::satisfies(fn ($resetUser) => $resetUser->is($user)), Argument::type('array'));
+
+        $response = $this->withoutExceptionHandling()->post('/reset-password', [
+            'token' => $token,
+            'email' => 'John.Doe@example.com',
+            'password' => 'new-password',
+            'password_confirmation' => 'new-password',
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertRedirect(Fortify::redirects('password-reset', route('login')));
+    }
 }
