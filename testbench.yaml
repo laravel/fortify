@@ -1,5 +1,6 @@
 providers:
   - Laravel\Fortify\FortifyServiceProvider
+  - Laravel\Passkeys\PasskeysServiceProvider
 
 migrations:
   - database/migrations

@@ -2,6 +2,7 @@
 
 namespace Laravel\Fortify\Tests;
 
+use Database\Factories\UserFactory;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
@@ -126,6 +127,33 @@ class PasskeyTest extends OrchestraTestCase
 
         $this->assertNotNull($route);
         $this->assertNotContains('password.confirm', $route->middleware());
+    }
+
+    public function test_passkey_login_options_are_returned_to_authenticated_users()
+    {
+        $response = $this->actingAs(UserFactory::new()->make())
+            ->getJson('/passkeys/login/options');
+
+        $response->assertOk();
+        $response->assertJsonStructure(['options' => ['challenge', 'rpId']]);
+    }
+
+    public function test_passkey_login_answers_authenticated_requests_with_the_login_response()
+    {
+        // The credential is deliberately invalid: reaching the controller would answer 422.
+        $response = $this->actingAs(UserFactory::new()->make())
+            ->postJson('/passkeys/login', ['credential' => ['id' => 'dGVzdC1pZA']]);
+
+        $response->assertOk();
+        $response->assertExactJson(['redirect' => url(config('passkeys.redirect'))]);
+    }
+
+    public function test_passkey_login_redirects_authenticated_requests_that_do_not_expect_json()
+    {
+        $response = $this->actingAs(UserFactory::new()->make())
+            ->post('/passkeys/login');
+
+        $response->assertRedirect(config('passkeys.redirect'));
     }
 
     public function test_passkeys_user_model_resolves_from_custom_guard()
