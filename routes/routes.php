@@ -19,6 +19,7 @@ use Laravel\Fortify\Http\Controllers\TwoFactorAuthenticationController;
 use Laravel\Fortify\Http\Controllers\TwoFactorQrCodeController;
 use Laravel\Fortify\Http\Controllers\TwoFactorSecretKeyController;
 use Laravel\Fortify\Http\Controllers\VerifyEmailController;
+use Laravel\Fortify\Http\Middleware\SkipPasskeyLoginIfAuthenticated;
 use Laravel\Fortify\RoutePath;
 use Laravel\Passkeys\Http\Controllers\PasskeyConfirmationController;
 use Laravel\Passkeys\Http\Controllers\PasskeyLoginController;
@@ -186,16 +187,15 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
             ? [...$passkeyAuthMiddleware, 'password.confirm']
             : $passkeyAuthMiddleware;
 
-        $passkeyGuestMiddleware = ['guest:'.config('fortify.guard'), ...$throttle];
         $passkeyConfirmMiddleware = [...$passkeyAuthMiddleware, ...$throttle];
         $passkeyManageMiddleware = [...$passkeyMiddleware, ...$throttle];
 
         Route::get(RoutePath::for('passkey.login-options', '/passkeys/login/options'), [PasskeyLoginController::class, 'index'])
-            ->middleware($passkeyGuestMiddleware)
+            ->middleware($throttle)
             ->name('passkey.login-options');
 
         Route::post(RoutePath::for('passkey.login', '/passkeys/login'), [PasskeyLoginController::class, 'store'])
-            ->middleware($passkeyGuestMiddleware)
+            ->middleware([SkipPasskeyLoginIfAuthenticated::class, ...$throttle])
             ->name('passkey.login');
 
         Route::get(RoutePath::for('passkey.confirm-options', '/passkeys/confirm/options'), [PasskeyConfirmationController::class, 'index'])
